@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>The Rationale for Domain-Driven Design</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="the-rationale-for-domain-driven-design" role="text-justify">
+<title>The Rationale for Domain-Driven Design</title>
+<blockquote>
+<attribution>
+Mary Wollstonecraft
+</attribution>
+<simpara>The being cannot be termed rational or virtuous, who obeys any authority, but that of reason.</simpara>
+</blockquote>
+<section xml:id="introduction">
+<title>Introduction</title>
+<simpara>According to the Project Management Institute&#8217;s (PMI) <link xl:href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908"><emphasis>Pulse of the Profession</emphasis></link> report published in February 2020, only <emphasis role="strong">77%</emphasis> of all projects meet their intended goals&#8201;&#8212;&#8201;and even this is true only in the most mature organizations. For less mature organizations, this number falls to just <emphasis role="strong">56%</emphasis> i.e. approximately one in every two projects does not meet its intended goals. Furthermore, approximately one in every five projects is declared an outright failure. At the same time, we also seem to be embarking on our most ambitious and complex projects.</simpara>
+<simpara>In this chapter, we will examine the main causes for project failure and look at how applying domain-driven design provides a set of guidelines and techniques to improve the odds of success in our favor. While Eric Evans wrote his classic book on the subject way back in 2003, we look at why that work is still extremely relevant in today&#8217;s times.</simpara>
+</section>
+<section xml:id="why-do-software-projects-fail">
+<title>Why do software projects fail?</title>
+<blockquote>
+<attribution>
+Henry Ford
+</attribution>
+<simpara>Failure is simply the opportunity to begin again, this time more intelligently.</simpara>
+</blockquote>
+<simpara>According to the <link xl:href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460">project success report</link> published in the Project Management Journal of the PMI, the following six factors need to be true for a project to be deemed successful:</simpara>
+<table role="stretch" frame="all" rowsep="1" colsep="1">
+<title>Project Success Factors</title>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="33.3333*"/>
+<colspec colname="col_2" colwidth="33.3333*"/>
+<colspec colname="col_3" colwidth="33.3334*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Category</entry>
+<entry align="left" valign="top">Criterion</entry>
+<entry align="left" valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top" morerows="2"><simpara>Project</simpara></entry>
+<entry align="left" valign="top"><simpara>Time</simpara></entry>
+<entry align="left" valign="top"><simpara>It meets the desired time schedules</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Cost</simpara></entry>
+<entry align="left" valign="top"><simpara>Its cost does not exceed budget</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Performance</simpara></entry>
+<entry align="left" valign="top"><simpara>It works as intended</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top" morerows="2"><simpara>Client</simpara></entry>
+<entry align="left" valign="top"><simpara>Use</simpara></entry>
+<entry align="left" valign="top"><simpara>Its intended clients use it</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Satisfaction</simpara></entry>
+<entry align="left" valign="top"><simpara>Its intended clients are happy</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Effectiveness</simpara></entry>
+<entry align="left" valign="top"><simpara>Its intended clients derive direct benefits through its implementation</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<simpara>With all of these criteria being applied to assess project success, a large percentage of projects fail for one reason or another. Let&#8217;s examine some of the top reasons in more detail:</simpara>
+<section xml:id="inaccurate-requirements">
+<title>Inaccurate requirements</title>
+<simpara>PMI&#8217;s <emphasis>Pulse of the Profession</emphasis> report from 2017 highlights a very starking fact&#8201;&#8212;&#8201;a vast majority of projects fail due to inaccurate or misinterpreted requirements. It follows that it is impossible to build something that clients can use, are happy with and makes them more effective at their jobs if the wrong thing gets built&#8201;&#8212;&#8201;even much less for the project to be built on time, and under budget.</simpara>
+<simpara>IT teams, especially in large organizations are staffed with mono-skilled roles such as UX designer, developer, tester, architect, business analyst, project manager, product owner, business sponsor, etc.In a lot of cases, these people are parts of distinct organization units/departments&#8201;&#8212;&#8201;each with its own set of priorities and motivations. To make matters even worse, the geographical separation between these people only keeps increasing. The need to keep costs down and the current COVID-19 ecosystem does not help matters either.</simpara>
+<figure>
+<title>Silo mentality and the loss of information fidelity</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/silo-mentality.png" width="75%"/>
+</imageobject>
+<textobject><phrase>silo mentality</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>All this results in a loss in fidelity of information at every stage in the <emphasis>assembly line</emphasis>, which then results in misconceptions, inaccuracies, delays and eventually failure!</simpara>
+</section>
+<section xml:id="too-much-architecture">
+<title>Too much architecture</title>
+<simpara>Writing complex software is quite a task.One cannot just hope to sit down and start typing code&#8201;&#8212;&#8201;although that approach might work in some trivial cases.Before translating business ideas into working software, a thorough understanding of the problem at hand is necessary.For example, it is not possible (or at least extremely hard) to build credit card software without understanding how credit cards work in the first place.To communicate one&#8217;s understanding of a problem, it is not uncommon to create software models of the problem, before writing code.This model or collection of models represents the understanding of the problem and the architecture of the solution.</simpara>
+<simpara>Efforts to create a perfect model of the problem&#8201;&#8212;&#8201;one that is accurate in a very broad context, are not dissimilar to the proverbial holy grail quest.Those accountable to produce the architecture can get stuck in <link xl:href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis">analysis paralysis</link> and/or <link xl:href="https://wiki.c2.com/?BigDesignUpFront">big design up front</link>, producing artifacts that are one or more of too high level, wishful, gold plated, buzzword-driven, disconnected from the real world&#8201;&#8212;&#8201;while not solving any real business problems.This kind of <emphasis>lock-in</emphasis> can be especially detrimental during the early phases of the project when knowledge levels of team members are still up and coming.Needless to say, projects adopting such approaches find it hard to meet with success consistently.</simpara>
+<note>
+<simpara>For a more comprehensive list of <link xl:href="http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm">modeling anti-patterns</link>, refer to Scott W. Ambler&#8217;s <link xl:href="http://agilemodeling.com">website</link> (<link xl:href="http://agilemodeling.com">http://agilemodeling.com</link>) and <link xl:href="https://www.amazon.com/Agile-Modeling-Effective-Practices-Programming/dp/0471202827">book</link> dedicated to the subject.</simpara>
+</note>
+</section>
+<section xml:id="too-little-architecture">
+<title>Too little architecture</title>
+<simpara>Agile software delivery methods manifested themselves in the late 90s, early 2000s in response to heavyweight processes collectively known as <emphasis>waterfall</emphasis>. These processes seemed to favor <link xl:href="https://en.wikipedia.org/wiki/Big_Design_Up_Front">big design up front</link> and abstract ivory tower thinking based on wishful, ideal world scenarios. This was based on the premise that thinking things out well in advance ends up saving serious development headaches later on as the project progresses.</simpara>
+<simpara>In contrast, agile methods seem to favor a much more nimble and iterative approach to software development with a high focus on working software over other artifacts such as documentation. Most teams these days claim to practice some form of iterative software development. However, this obsession to claim conformance to a specific family of <link xl:href="https://thedigitalprojectmanager.com/agile-methodologies">agile methodologies</link> as opposed to the underlying principles, a lot of teams misconstrue having just enough architecture with having no perceptible architecture. This results in a situation where adding new features or enhancing existing ones takes a lot longer than what it previously used to&#8201;&#8212;&#8201;which then accelerates the devolution of the solution to become the dreaded <link xl:href="http://www.laputan.org/mud/mud.html#BigBallOfMud">big ball of mud</link>.</simpara>
+</section>
+<section xml:id="excessive-incidental-complexity">
+<title>Excessive incidental complexity</title>
+<simpara>Mike Cohn popularized the notion of the <link xl:href="https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid">test pyramid</link> where he talks about how a large number of unit tests should form the foundation of a sound testing strategy&#8201;&#8212;&#8201;with numbers decreasing significantly as one moves up the pyramid. The rationale here is that as one moves up the pyramid, the cost of upkeep goes up copiously while speed of execution slows down manifold. In reality though, a lot of teams seem to adopt a strategy that is the exact opposite of this&#8201;&#8212;&#8201;known as the testing ice cream cone as depicted below:</simpara>
+<figure>
+<title>Testing Strategy: Expectation vs. Reality</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/test-pyramid-reality.png"/>
+</imageobject>
+<textobject><phrase>test pyramid reality</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>The testing ice cream cone is a classic case of what Fred Brooks calls incidental complexity in his seminal paper titled <link xl:href="http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf">No Silver Bullet&#8201;&#8212;&#8201;Essence and Accident in Software Engineering</link>. All software has some amount of <link xl:href="https://en.wikipedia.org/wiki/Essential_complexity">essential complexity</link> that is inherent to the problem being solved. This is especially true when creating solutions for non-trivial problems.  However, incidental or accidental complexity is not directly attributable to the problem itself&#8201;&#8212;&#8201;but is caused by limitations of the people involved, their skill levels, the tools and/or abstractions being used. Not keeping tabs on incidental complexity causes teams to veer away from focusing on the real problems, solving which provide the most value. It naturally follows that such teams minimize their odds of success appreciably.</simpara>
+</section>
+<section xml:id="uncontrolled-technical-debt">
+<title>Uncontrolled technical debt</title>
+<simpara>Financial debt is the act of borrowing money from an outside party to quickly finance the operations of a business&#8201;&#8212;&#8201;with the promise to repay the principal plus the agreed upon rate of interest in a timely manner. Under the right circumstances, this can accelerate the growth of a business considerably while allowing the owner to retain ownership, reduced taxes and lower interest rates. On the other hand, the inability to pay back this debt on time can adversely affect credit rating, result in higher interest rates, cash flow difficulties, and other restrictions.</simpara>
+<simpara>Technical debt is what results when development teams take arguably sub-optimal actions to expedite the delivery of a set of features or projects. For a period of time, just like borrowed money allows you to do things sooner than you could otherwise, technical debt can result in short term speed. In the long term, however, software teams will have to dedicate a lot more time and effort towards simply managing complexity as opposed to thinking about producing architecturally sound solutions. This can result in a vicious negative cycle as illustrated in the diagram below:</simpara>
+<figure role="text-center">
+<title>Technical Debt&#8201;&#8212;&#8201;Implications</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/tech-debt.png"/>
+</imageobject>
+<textobject><phrase>tech debt</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>In a recent <link xl:href="https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity">McKinsey survey</link> sent out to CIOs, around 60% reported that the amount of tech debt increased over the past three years. At the same time, over 90% of CIOs allocated less than a fifth of their tech budget towards paying it off. Martin Fowler <link xl:href="https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost">explores</link> the deep correlation between high software quality (or the lack thereof) and the ability to enhance software predictably. While carrying a certain amount of tech debt is inevitable and part of doing business, not having a plan to systematically pay off this debt can have significantly detrimental effects on team productivity and ability to deliver value.</simpara>
+</section>
+<section xml:id="ignoring-non-functional-requirements-nfrs">
+<title>Ignoring Non-Functional Requirements (NFRs)</title>
+<simpara>Stakeholders often want software teams to spend a majority (if not all) of their time working on features that provide enhanced functionality. This is understandable given that such features provide the highest ROI. These features are called functional requirements.</simpara>
+<simpara>Non-functional requirements, on the other hand, are those aspects of the system that do not affect functionality directly, but have a profound effect on the efficacy of those using these using and maintaining these systems. There are many kinds of NFRs. A partial list of common NFRs is depicted below:</simpara>
+<figure role="text-center">
+<title>Non-Functional Requirements</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/nfrs.png"/>
+</imageobject>
+<textobject><phrase>nfrs</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Very rarely do users explicitly request non-functional requirements, but almost always expect these features to be part of any system they use. Oftentimes, systems may continue to function without NFRs being met, but not without having an adverse impact on the <emphasis>quality</emphasis> of the user experience. For example, the home page of a web site that loads in under 1 second under low load and takes upwards of 30 seconds under higher loads may not be usable during those times of stress. Needless to say, not treating non-functional requirements with the same amount of rigor as explicit, value-adding functional features, can lead to unusable systems&#8201;&#8212;&#8201;and subsequently failure.</simpara>
+</section>
+<section xml:id="where-to-from-here">
+<title>Where To From Here?</title>
+<simpara>In this section we examined some common reasons that cause software projects to fail. In the upcoming section, we will look at characteristics of modern systems and look at more effective ways to deal with software complexity. In upcoming chapters, we will look at how applying domain-driven design helps mitigate these causes of failure.</simpara>
+</section>
+</section>
+<section xml:id="modern-systems-and-dealing-with-complexity">
+<title>Modern Systems and Dealing with Complexity</title>
+<blockquote>
+<attribution>
+Albert Einstein
+</attribution>
+<simpara>We can not solve our problems with the same level of thinking that created them.</simpara>
+</blockquote>
+<simpara>We find ourselves in the midst of the fourth industrial revolution where the world is becoming more and more digital&#8201;&#8212;&#8201;with technology being a significant driver of value for businesses. Exponential advances in computing technology as illustrated by Moore&#8217;s Law below,</simpara>
+<figure>
+<title>Moore&#8217;s Law</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/moores-law.png"/>
+</imageobject>
+<textobject><phrase>Moore&#8217;s Law</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>along with the rise of the internet as illustrated below,</simpara>
+<figure>
+<title>Global Internet Traffic</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/global-internet-traffic.png"/>
+</imageobject>
+<textobject><phrase>Global Internet Traffic</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>has meant that companies are being required to modernize their software systems much more rapidly than they ever have. Along with all this, the onset of commodity computing services such as the public cloud has led to a move away from expensive centralized computing systems to more distributed computing ecosystems. As we attempt building our most complex solutions, monoliths are being replaced by an environ of distributed, collaborating microservices. Modern philosophies and practices such as automated testing, architecture fitness functions, continuous integration, continuous delivery, devops, security automation, infrastructure as code, to name a few, are disrupting the way we deliver software solutions.</simpara>
+<simpara>As we enter an age of encountering our most complex business problems, we need to embrace new ways of thinking, a development philosophy and an arsenal of techniques to iteratively evolve mature software solutions that will stand the test of time. We need better ways of communicating, analyzing problems, arriving at a collective understanding, creating and modeling abstractions, and then implementing, enhancing the solution.</simpara>
+<simpara>Domain-driven design promises to provide answers on how to do this in a systematic manner. In the upcoming section, and indeed the rest of this book, we will examine what DDD is and why it is indispensable when working to provide solutions for non-trivial problems in today&#8217;s world of massively distributed teams and applications.</simpara>
+</section>
+<section xml:id="what-is-domain-driven-design">
+<title>What is Domain-Driven Design?</title>
+<blockquote>
+<attribution>
+Confucius
+</attribution>
+<simpara>Life is really simple, but we insist on making it complicated.</simpara>
+</blockquote>
+<simpara>In the previous section, we saw how a myriad of reasons coupled with system complexity get in the way of software project success. The idea of domain-driven design, originally conceived by Eric Evans in his 2003 book, is an approach to software development that focuses on expressing software solutions in the form of a model that closely embodies the core of the problem being solved. It provides a set of principles and systematic techniques to analyze, architect and implement software solutions in a manner that enhances chances of success.</simpara>
+<simpara>While Evans' work was indeed seminal, ground-breaking, and way ahead of its time, over the years, practical application has continued to remain a challenge. In this section, we will look at some of the foundational terms and concepts behind domain-driven design. Elaboration and practical application of these concepts will happen in upcoming chapters of this book.</simpara>
+<simpara>To understand DDD, first and foremost, we need to understand what we mean by the first "D"&#8201;&#8212;&#8201;<emphasis role="strong">domain</emphasis>.</simpara>
+<section xml:id="what-is-a-domain">
+<title>What is a Domain?</title>
+<simpara>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <link xl:href="https://en.wiktionary.org/wiki/domain"><emphasis role="marked"><emphasis>domain</emphasis></emphasis></link>, which has its <link xl:href="https://www.etymonline.com/word/domain">origins</link> in the 1600s to the Old French word <emphasis>domaine</emphasis> (power), Latin word <emphasis>dominium</emphasis> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</simpara>
+<figure>
+<title><emphasis role="strong">Domain</emphasis>: Means many things depending on context</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/domain-definition.png" width="75%"/>
+</imageobject>
+<textobject><phrase>Domain</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <emphasis role="strong"><emphasis>problem domain</emphasis></emphasis>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others.</simpara>
+</section>
+<section xml:id="what-is-a-subdomain">
+<title>What is a Subdomain?</title>
+<simpara>The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. With a view to better deal with this complexity, domain-driven design advises decomposing the domain of a business into multiple manageable parts called <emphasis role="strong">subdomains</emphasis>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</simpara>
+<figure role="text-center">
+<title>Subdomains in the Retail domain</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/domains.png"/>
+</imageobject>
+<textobject><phrase>domains</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>In certain businesses, subdomains themselves may turn out to become very complex on their own and may require further decomposition. For instance, in the retail example above, it may be required to break the products subdomain into further constituent subdomains such as catalog, search, recommendations, reviews, etc. as shown below:</simpara>
+<figure role="text-center">
+<title>Subdomains in the Products subdomain</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/subdomains.png"/>
+</imageobject>
+<textobject><phrase>subdomains</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Further breakdown of subdomains may be needed until we reach a level of manageable complexity.</simpara>
+</section>
+<section xml:id="types-of-subdomains">
+<title>Types of Subdomains</title>
+<simpara>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Core</emphasis>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core sub-domains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above,</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Supporting</emphasis>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Generic</emphasis>: When working with business applications, one is required to provide a set of capabilities <emphasis role="strong">not</emphasis> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</simpara>
+</listitem>
+</itemizedlist>
+<caution>
+<simpara>It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.</simpara>
+</caution>
+</section>
+<section xml:id="domain-experts">
+<title>Domain Experts</title>
+<simpara>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</simpara>
+<simpara>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the the <emphasis role="strong">why</emphasis> and the <emphasis role="strong"><emphasis>what</emphasis></emphasis>, technical experts (software developers) specify the <emphasis role="strong"><emphasis>how</emphasis></emphasis>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</simpara>
+</section>
+<section xml:id="promoting-a-shared-understanding">
+<title>Promoting a Shared Understanding</title>
+<simpara>Previously, we saw how <link linkend="_silo_mentality">organizational silos</link> can result in valuable information getting diluted. At a credit card company I used to work with, the words plastic, payment instrument, account, PAN (Primary Account Number), BIN (Bank Identification Number), card were all used by different team members to mean the exact same thing - the <emphasis role="strong"><emphasis>credit card</emphasis></emphasis> when working in the same area of the application. To make matters worse, a lot of this muddled use of terms got implemented in code as well. While this might feel like a trivial thing, it had far-reaching consequences. Product experts, architects, developers, all came and went, each regressively contributing to more confusion, muddled designs, implementation and technical debt with every new enhancement&#8201;&#8212;&#8201;accelerating the journey towards the dreaded, unmaintainable, <link xl:href="http://www.laputan.org/mud/">big ball of mud</link>.</simpara>
+<simpara>DDD advocates breaking down these artificial barriers, and putting the domain experts and the developers on the same level footing by working collaboratively towards creating what DDD calls a <emphasis role="strong"><emphasis>ubiquitous language</emphasis></emphasis>&#8201;&#8212;&#8201;a shared vocabulary of terms, words, phrases to continuously enhance the collective understanding of the entire team. This phraseology is then used actively in every aspect of the solution: the everyday vocabulary, the designs, the code&#8201;&#8212;&#8201;in short by <emphasis role="strong">everyone</emphasis> and <emphasis role="strong">everywhere</emphasis>. Consistent use of the common ubiquitous language helps reinforce a shared understanding and  produce solutions that better reflect the mental model of the domain experts.</simpara>
+</section>
+<section xml:id="evolving-a-domain-model-and-a-solution">
+<title>Evolving a Domain Model and a Solution</title>
+<simpara>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <emphasis role="strong"><emphasis>domain model</emphasis></emphasis> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This solution is termed as a <emphasis role="strong"><emphasis>bounded context</emphasis></emphasis> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <emphasis role="strong"><emphasis>context maps</emphasis></emphasis>.</simpara>
+<simpara>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <emphasis role="strong">not</emphasis> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</simpara>
+<simpara>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <link xl:href="https://domainstorytelling.org/">domain storytelling</link>, <link xl:href="https://www.eventstorming.com/">event storming</link>, and <link xl:href="https://evolutionaryarchitecture.com/">evolutionary architecture</link> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</simpara>
+<important>
+<simpara>The thrust of DDD is that <emphasis role="strong">one single model</emphasis> form the bedrock of team communication, design, and implementation. While teams may and will indeed require a variety of means to express the model, it is very important to keep the executable code and the various representations up to date at all times.</simpara>
+</important>
+</section>
+<section xml:id="the-essence-of-ddd">
+<title>The Essence of DDD</title>
+<simpara>In this section we have taken a look at DDD at a very high level. Enclosed below is an attempt to capture the essence of what domain-driven design means.</simpara>
+<figure role="text-center">
+<title>Essence of DDD</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/ddd-essence.png"/>
+</imageobject>
+<textobject><phrase>ddd essence</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>In subsequent chapters we will reinforce all of the concepts introduced here in a lot more detail. In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</simpara>
+</section>
+</section>
+<section xml:id="why-is-ddd-relevant-why-now">
+<title>Why is DDD Relevant? Why Now?</title>
+<blockquote>
+<attribution>
+Friedrich Nietzsche
+</attribution>
+<simpara>He who has a why to live for can bear almost any how.</simpara>
+</blockquote>
+<simpara>In a lot of ways, domain-driven design was way ahead of its time when Eric Evans introduced the concepts and principles back in 2003. DDD seems to have gone from strength to strength. In this section, we will examine why DDD is even more relevant today, than it was when Eric Evans wrote his book on the subject way back in 2003.</simpara>
+<section xml:id="rise-of-open-source">
+<title>Rise of Open Source</title>
+<simpara>Eric Evans, during his keynote address at the Explore DDD conference in 2017, lamented about how difficult it was to implement even the simplest concepts like immutability in value objects when his book had released. In contrast though, nowadays, it&#8217;s simply a matter of importing a mature, well documented, tested library like <link xl:href="https://projectlombok.org/">Project Lombok</link> or <link xl:href="https://immutables.github.io/">Immutables</link> to be productive, literally in a matter of minutes. To say that open source software has revolutionized the software industry would be an understatement! At the time of this writing, the public maven repository (<link xl:href="https://mvnrepository.com">https://mvnrepository.com</link>) indexes no less than a staggering <emphasis role="strong">18.3 million artifacts</emphasis> in a large assortment of popular categories ranging from databases, language runtimes to test frameworks and many many more as shown in the chart below:</simpara>
+<figure role="text-center">
+<title>Open source Java over the years. Source: <link xl:href="https://mvnrepository.com/">https://mvnrepository.com/</link></title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/oss-stats.png" width="75%"/>
+</imageobject>
+<textobject><phrase>oss stats</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Java stalwarts like the <link xl:href="https://spring.io/">spring framework</link> and more recent innovations like <link xl:href="https://start.spring.io/">spring boot</link>, <link xl:href="https://quarkus.io/">quarkus</link>, etc. make it a no-brainer to create production grade applications, literally in a matter of minutes. Furtheremore, frameworks like <link xl:href="https://axoniq.io/product-overview/axon-framework">Axon</link>, <link xl:href="https://www.lagomframework.com">Lagom</link>, etc. make it relatively simple to implement advanced architecture patterns such are CQRS, event sourcing, that are very complementary to implementing DDD-based solutions.</simpara>
+</section>
+<section xml:id="advances-in-technology">
+<title>Advances in Technology</title>
+<simpara>DDD by no means is just about technology, it could not be completely agnostic to the choices available at the time. 2003 was the heyday of heavyweight and ceremony-heavy frameworks like J2EE (Java 2 Enterprise Edition), EJBs (Enterprise JavaBeans), SQL databases, ORMs (Object Relational Mappers) and the like&#8201;&#8212;&#8201;with not much choice beyond that when it came to enterprise tools and patterns to build complex software&#8201;&#8212;&#8201;at least out in the public domain. The software world has evolved and come a very long way from there. In fact, modern game changers like Ruby on Rails and the public cloud were just getting released. In contrast though, we now have no shortage of application frameworks, NoSQL databases, programmatic APIs to create infrastructure components with a lot more releasing with monotonous regularity.</simpara>
+<simpara>All these innovations allow for rapid experimentation, continuous learning and iteration at pace. These game changing advances in technology have also coincided with the exponential rise of the internet and ecommerce as viable means to carry out successful businesses. In fact the impact of the internet is so pervasive that it is almost inconceivable to launch businesses without a digital component being an integral component. Finally, the consumerization and wide scale penetration of smartphones, IoT devices and social media has meant that data is being produced at rates inconceivable as recent as a decade ago. This means that we are buiding for and solving the most complicated problems by several orders of magnitude.</simpara>
+</section>
+<section xml:id="rise-of-distributed-computing">
+<title>Rise of Distributed Computing</title>
+<simpara>There was a time when building large monoliths was very much the default. But an exponential rise in computing technology, public cloud, (IaaS, PaaS, SaaS, FaaS), big data storage and processing volumes, which has coincided with an arguable slowdown in the ability to continue creating faster CPUs, have all meant a turn towards more decentralized methods of solving problems.</simpara>
+<figure role="text-center">
+<title>Global Information Storage Capacity</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="https://upload.wikimedia.org/wikipedia/commons/7/7c/Hilbert_InfoGrowth.png" width="75%"/>
+</imageobject>
+<textobject><phrase>Hilbert InfoGrowth</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Domain-driven design with its emphasis on dealing with complexity by breaking unwieldy monoliths into more manageable units in the form of subdomains and bounded contexts, fits naturally to this style of programming. Hence it is no surprise to see a renewed interest in adopting DDD principles and techniques when crafting modern solutions. To quote Eric Evans, it is no surprise that Domain-Driven Design is even more relevant now than when it was originally conceived!</simpara>
+</section>
+</section>
+<section xml:id="summary">
+<title>Summary</title>
+<simpara>In this chapter we examined some common reasons for why software projects fail. We saw how inaccurate or misinterpreted requirements, architecture (or the lack thereof), excessive technical debt, etc. can get in the way of meeting business goals and success.</simpara>
+<simpara>We looked at the basic building blocks of domain-driven design such as domains, subdomains, ubiquitous language, domain models, bounded contexts and context maps. We also examined why the principles and techniques of domain-driven design are still very much relevant in the modern age of microservices and serverless. You should now be able to appreciate the basic terms of DDD and understand why it is important in today’s context.</simpara>
+<simpara>In the next chapter we will take a closer look at the real-world mechanics of domain-driven design. We will delve deeper into the strategic and tactical design elements of DDD and look at how using these can help form the basis for better communication and create more robust designs.</simpara>
+</section>
+<section xml:id="questions">
+<title>Questions</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>What are the most common reasons for software projects to fail?</simpara>
+</listitem>
+<listitem>
+<simpara>What do the terms domain and sub-domain mean?</simpara>
+</listitem>
+<listitem>
+<simpara>What are the different types of sub-domains?</simpara>
+</listitem>
+<listitem>
+<simpara>What is the difference between sub-domains and bounded contexts?</simpara>
+</listitem>
+<listitem>
+<simpara>Why is DDD relevant in today’s context?</simpara>
+</listitem>
+</orderedlist>
+</section>
+<section xml:id="further-reading">
+<title>Further Reading</title>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="36.3636*"/>
+<colspec colname="col_2" colwidth="9.0909*"/>
+<colspec colname="col_3" colwidth="54.5455*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Title</entry>
+<entry align="left" valign="top">Author</entry>
+<entry align="left" valign="top">Location</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Pulse of the Profession - 2017</simpara></entry>
+<entry align="left" valign="top"><simpara>PMI</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.pmi.org/-/media/pmi/documents/public/pdf/learning/thought-leadership/pulse/pulse-of-the-profession-2017.pdf">https://www.pmi.org/-/media/pmi/documents/public/pdf/learning/thought-leadership/pulse/pulse-of-the-profession-2017.pdf</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Pulse of the Profession - 2020</simpara></entry>
+<entry align="left" valign="top"><simpara>PMI</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908">https://www.pmi.org/learning/library/forging-future-focused-culture-11908</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Project success: Definitions and Measurement Techniques</simpara></entry>
+<entry align="left" valign="top"><simpara>PMI</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460">https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Project success: definitions and measurement techniques</simpara></entry>
+<entry align="left" valign="top"><simpara>JK Pinto, DP Slevin</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460">https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Analysis Paralysis</simpara></entry>
+<entry align="left" valign="top"><simpara>Ward Cunningham</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis">https://proxy.c2.com/cgi/wiki?AnalysisParalysis</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Big Design Upfront</simpara></entry>
+<entry align="left" valign="top"><simpara>Ward Cunningham</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://wiki.c2.com/?BigDesignUpFront">https://wiki.c2.com/?BigDesignUpFront</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Enterprise Modeling Anti-Patterns</simpara></entry>
+<entry align="left" valign="top"><simpara>Scott W. Ambler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm">http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>A Project Manager’s Guide To 42 Agile Methodologies</simpara></entry>
+<entry align="left" valign="top"><simpara>Henny Portman</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://thedigitalprojectmanager.com/agile-methodologies">https://thedigitalprojectmanager.com/agile-methodologies</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Domain-Driven Design Even More Relevant Now</simpara></entry>
+<entry align="left" valign="top"><simpara>Eric Evans</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.youtube.com/watch?v=kIKwPNKXaLU">https://www.youtube.com/watch?v=kIKwPNKXaLU</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Introducing Deliberate Discovery</simpara></entry>
+<entry align="left" valign="top"><simpara>Dan North</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://dannorth.net/2010/08/30/introducing-deliberate-discovery/">https://dannorth.net/2010/08/30/introducing-deliberate-discovery/</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>No Silver Bullet&#8201;&#8212;&#8201;Essence and Accident in Software Engineering</simpara></entry>
+<entry align="left" valign="top"><simpara>Fred Brooks</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf">http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Mastering Non-Functional Requirements</simpara></entry>
+<entry align="left" valign="top"><simpara>Sameer Paradkar</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.packtpub.com/product/mastering-non-functional-requirements/9781788299237">https://www.packtpub.com/product/mastering-non-functional-requirements/9781788299237</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Big Ball Of Mud</simpara></entry>
+<entry align="left" valign="top"><simpara>Brian Foote &amp; Joseph Yoder</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="http://www.laputan.org/mud/">http://www.laputan.org/mud/</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>The Forgotten Layer of the Test Automation Pyramid</simpara></entry>
+<entry align="left" valign="top"><simpara>Mike Cohn</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid">https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Tech debt: Reclaiming tech equity</simpara></entry>
+<entry align="left" valign="top"><simpara>Vishal Dalal et al</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity">https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Is High Quality Software Worth the Cost</simpara></entry>
+<entry align="left" valign="top"><simpara>Martin Fowler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost">https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost</link></simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="answers">
+<title>Answers</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Refer to section 1.2</simpara>
+</listitem>
+<listitem>
+<simpara>Refer to sections 1.4.1 and 1.4.2</simpara>
+</listitem>
+<listitem>
+<simpara>Refer to section 1.4.3</simpara>
+</listitem>
+<listitem>
+<simpara>Refer to section 1.4.7</simpara>
+</listitem>
+<listitem>
+<simpara>Refer to section 1.5</simpara>
+</listitem>
+</orderedlist>
+</section>
+</section>
+</article>

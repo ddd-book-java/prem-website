@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Non-Functional Requirements (25 pages)</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="non-functional-requirements-25-pages">
+<title>Non-Functional Requirements (25 pages)</title>
+<blockquote>
+<attribution>
+Anonymous
+</attribution>
+<simpara>Sometimes I feel like I am being forgotten.</simpara>
+</blockquote>
+<simpara>While the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</simpara>
+<section xml:id="dealing-with-eventual-consistency">
+<title>Dealing With Eventual Consistency</title>
+
+</section>
+<section xml:id="scaling-the-event-store-with-snapshots">
+<title>Scaling the Event Store with Snapshots</title>
+
+</section>
+<section xml:id="event-versioning-and-upcasting">
+<title>Event Versioning and Upcasting</title>
+
+</section>
+<section xml:id="monitoring-metrics-and-tracing">
+<title>Monitoring, Metrics and Tracing</title>
+
+</section>
+<section xml:id="enhancing-performance">
+<title>Enhancing Performance</title>
+
+</section>
+</section>
+</article>

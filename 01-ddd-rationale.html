@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.14">
+<title>The Rationale for Domain-Driven Design</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment @import statement to use as custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
+ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:50%;border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#the-rationale-for-domain-driven-design">The Rationale for Domain-Driven Design</a>
+<ul class="sectlevel2">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#why-do-software-projects-fail">Why do software projects fail?</a>
+<ul class="sectlevel3">
+<li><a href="#inaccurate-requirements">Inaccurate requirements</a></li>
+<li><a href="#too-much-architecture">Too much architecture</a></li>
+<li><a href="#too-little-architecture">Too little architecture</a></li>
+<li><a href="#excessive-incidental-complexity">Excessive incidental complexity</a></li>
+<li><a href="#uncontrolled-technical-debt">Uncontrolled technical debt</a></li>
+<li><a href="#ignoring-non-functional-requirements-nfrs">Ignoring Non-Functional Requirements (NFRs)</a></li>
+<li><a href="#where-to-from-here">Where To From Here?</a></li>
+</ul>
+</li>
+<li><a href="#modern-systems-and-dealing-with-complexity">Modern Systems and Dealing with Complexity</a></li>
+<li><a href="#what-is-domain-driven-design">What is Domain-Driven Design?</a>
+<ul class="sectlevel3">
+<li><a href="#what-is-a-domain">What is a Domain?</a></li>
+<li><a href="#what-is-a-subdomain">What is a Subdomain?</a></li>
+<li><a href="#types-of-subdomains">Types of Subdomains</a></li>
+<li><a href="#domain-experts">Domain Experts</a></li>
+<li><a href="#promoting-a-shared-understanding">Promoting a Shared Understanding</a></li>
+<li><a href="#evolving-a-domain-model-and-a-solution">Evolving a Domain Model and a Solution</a></li>
+<li><a href="#the-essence-of-ddd">The Essence of DDD</a></li>
+</ul>
+</li>
+<li><a href="#why-is-ddd-relevant-why-now">Why is DDD Relevant? Why Now?</a>
+<ul class="sectlevel3">
+<li><a href="#rise-of-open-source">Rise of Open Source</a></li>
+<li><a href="#advances-in-technology">Advances in Technology</a></li>
+<li><a href="#rise-of-distributed-computing">Rise of Distributed Computing</a></li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#questions">Questions</a></li>
+<li><a href="#further-reading">Further Reading</a></li>
+<li><a href="#answers">Answers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1 text-justify">
+<h2 id="the-rationale-for-domain-driven-design"><a class="anchor" href="#the-rationale-for-domain-driven-design"></a>The Rationale for Domain-Driven Design</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+The being cannot be termed rational or virtuous, who obeys any authority, but that of reason.
+</blockquote>
+<div class="attribution">
+&#8212; Mary Wollstonecraft
+</div>
+</div>
+<div class="sect2">
+<h3 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h3>
+<div class="paragraph">
+<p>According to the Project Management Institute&#8217;s (PMI) <a href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908"><em>Pulse of the Profession</em></a> report published in February 2020, only <strong>77%</strong> of all projects meet their intended goals&#8201;&#8212;&#8201;and even this is true only in the most mature organizations. For less mature organizations, this number falls to just <strong>56%</strong> i.e. approximately one in every two projects does not meet its intended goals. Furthermore, approximately one in every five projects is declared an outright failure. At the same time, we also seem to be embarking on our most ambitious and complex projects.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter, we will examine the main causes for project failure and look at how applying domain-driven design provides a set of guidelines and techniques to improve the odds of success in our favor. While Eric Evans wrote his classic book on the subject way back in 2003, we look at why that work is still extremely relevant in today&#8217;s times.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="why-do-software-projects-fail"><a class="anchor" href="#why-do-software-projects-fail"></a>Why do software projects fail?</h3>
+<div class="quoteblock">
+<blockquote>
+Failure is simply the opportunity to begin again, this time more intelligently.
+</blockquote>
+<div class="attribution">
+&#8212; Henry Ford
+</div>
+</div>
+<div class="paragraph">
+<p>According to the <a href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460">project success report</a> published in the Project Management Journal of the PMI, the following six factors need to be true for a project to be deemed successful:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<caption class="title">Table 1. Project Success Factors</caption>
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Category</th>
+<th class="tableblock halign-left valign-top">Criterion</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Project</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It meets the desired time schedules</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cost</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its cost does not exceed budget</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Performance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It works as intended</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Client</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its intended clients use it</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Satisfaction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its intended clients are happy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Effectiveness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its intended clients derive direct benefits through its implementation</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>With all of these criteria being applied to assess project success, a large percentage of projects fail for one reason or another. Let&#8217;s examine some of the top reasons in more detail:</p>
+</div>
+<div class="sect3">
+<h4 id="inaccurate-requirements"><a class="anchor" href="#inaccurate-requirements"></a>Inaccurate requirements</h4>
+<div class="paragraph">
+<p>PMI&#8217;s <em>Pulse of the Profession</em> report from 2017 highlights a very starking fact&#8201;&#8212;&#8201;a vast majority of projects fail due to inaccurate or misinterpreted requirements. It follows that it is impossible to build something that clients can use, are happy with and makes them more effective at their jobs if the wrong thing gets built&#8201;&#8212;&#8201;even much less for the project to be built on time, and under budget.</p>
+</div>
+<div class="paragraph">
+<p>IT teams, especially in large organizations are staffed with mono-skilled roles such as UX designer, developer, tester, architect, business analyst, project manager, product owner, business sponsor, etc.In a lot of cases, these people are parts of distinct organization units/departments&#8201;&#8212;&#8201;each with its own set of priorities and motivations. To make matters even worse, the geographical separation between these people only keeps increasing. The need to keep costs down and the current COVID-19 ecosystem does not help matters either.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/silo-mentality.png" alt="silo mentality">
+</div>
+<div class="title">Figure 1- 1. Silo mentality and the loss of information fidelity</div>
+</div>
+<div class="paragraph">
+<p>All this results in a loss in fidelity of information at every stage in the <em>assembly line</em>, which then results in misconceptions, inaccuracies, delays and eventually failure!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="too-much-architecture"><a class="anchor" href="#too-much-architecture"></a>Too much architecture</h4>
+<div class="paragraph">
+<p>Writing complex software is quite a task.One cannot just hope to sit down and start typing code&#8201;&#8212;&#8201;although that approach might work in some trivial cases.Before translating business ideas into working software, a thorough understanding of the problem at hand is necessary.For example, it is not possible (or at least extremely hard) to build credit card software without understanding how credit cards work in the first place.To communicate one&#8217;s understanding of a problem, it is not uncommon to create software models of the problem, before writing code.This model or collection of models represents the understanding of the problem and the architecture of the solution.</p>
+</div>
+<div class="paragraph">
+<p>Efforts to create a perfect model of the problem&#8201;&#8212;&#8201;one that is accurate in a very broad context, are not dissimilar to the proverbial holy grail quest.Those accountable to produce the architecture can get stuck in <a href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis">analysis paralysis</a> and/or <a href="https://wiki.c2.com/?BigDesignUpFront">big design up front</a>, producing artifacts that are one or more of too high level, wishful, gold plated, buzzword-driven, disconnected from the real world&#8201;&#8212;&#8201;while not solving any real business problems.This kind of <em>lock-in</em> can be especially detrimental during the early phases of the project when knowledge levels of team members are still up and coming.Needless to say, projects adopting such approaches find it hard to meet with success consistently.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For a more comprehensive list of <a href="http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm">modeling anti-patterns</a>, refer to Scott W. Ambler&#8217;s <a href="http://agilemodeling.com">website</a> (<a href="http://agilemodeling.com" class="bare">http://agilemodeling.com</a>) and <a href="https://www.amazon.com/Agile-Modeling-Effective-Practices-Programming/dp/0471202827">book</a> dedicated to the subject.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="too-little-architecture"><a class="anchor" href="#too-little-architecture"></a>Too little architecture</h4>
+<div class="paragraph">
+<p>Agile software delivery methods manifested themselves in the late 90s, early 2000s in response to heavyweight processes collectively known as <em>waterfall</em>. These processes seemed to favor <a href="https://en.wikipedia.org/wiki/Big_Design_Up_Front">big design up front</a> and abstract ivory tower thinking based on wishful, ideal world scenarios. This was based on the premise that thinking things out well in advance ends up saving serious development headaches later on as the project progresses.</p>
+</div>
+<div class="paragraph">
+<p>In contrast, agile methods seem to favor a much more nimble and iterative approach to software development with a high focus on working software over other artifacts such as documentation. Most teams these days claim to practice some form of iterative software development. However, this obsession to claim conformance to a specific family of <a href="https://thedigitalprojectmanager.com/agile-methodologies">agile methodologies</a> as opposed to the underlying principles, a lot of teams misconstrue having just enough architecture with having no perceptible architecture. This results in a situation where adding new features or enhancing existing ones takes a lot longer than what it previously used to&#8201;&#8212;&#8201;which then accelerates the devolution of the solution to become the dreaded <a href="http://www.laputan.org/mud/mud.html#BigBallOfMud">big ball of mud</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="excessive-incidental-complexity"><a class="anchor" href="#excessive-incidental-complexity"></a>Excessive incidental complexity</h4>
+<div class="paragraph">
+<p>Mike Cohn popularized the notion of the <a href="https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid">test pyramid</a> where he talks about how a large number of unit tests should form the foundation of a sound testing strategy&#8201;&#8212;&#8201;with numbers decreasing significantly as one moves up the pyramid. The rationale here is that as one moves up the pyramid, the cost of upkeep goes up copiously while speed of execution slows down manifold. In reality though, a lot of teams seem to adopt a strategy that is the exact opposite of this&#8201;&#8212;&#8201;known as the testing ice cream cone as depicted below:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test-pyramid-reality.png" alt="test pyramid reality">
+</div>
+<div class="title">Figure 1- 2. Testing Strategy: Expectation vs. Reality</div>
+</div>
+<div class="paragraph">
+<p>The testing ice cream cone is a classic case of what Fred Brooks calls incidental complexity in his seminal paper titled <a href="http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf">No Silver Bullet&#8201;&#8212;&#8201;Essence and Accident in Software Engineering</a>. All software has some amount of <a href="https://en.wikipedia.org/wiki/Essential_complexity">essential complexity</a> that is inherent to the problem being solved. This is especially true when creating solutions for non-trivial problems.  However, incidental or accidental complexity is not directly attributable to the problem itself&#8201;&#8212;&#8201;but is caused by limitations of the people involved, their skill levels, the tools and/or abstractions being used. Not keeping tabs on incidental complexity causes teams to veer away from focusing on the real problems, solving which provide the most value. It naturally follows that such teams minimize their odds of success appreciably.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="uncontrolled-technical-debt"><a class="anchor" href="#uncontrolled-technical-debt"></a>Uncontrolled technical debt</h4>
+<div class="paragraph">
+<p>Financial debt is the act of borrowing money from an outside party to quickly finance the operations of a business&#8201;&#8212;&#8201;with the promise to repay the principal plus the agreed upon rate of interest in a timely manner. Under the right circumstances, this can accelerate the growth of a business considerably while allowing the owner to retain ownership, reduced taxes and lower interest rates. On the other hand, the inability to pay back this debt on time can adversely affect credit rating, result in higher interest rates, cash flow difficulties, and other restrictions.</p>
+</div>
+<div class="paragraph">
+<p>Technical debt is what results when development teams take arguably sub-optimal actions to expedite the delivery of a set of features or projects. For a period of time, just like borrowed money allows you to do things sooner than you could otherwise, technical debt can result in short term speed. In the long term, however, software teams will have to dedicate a lot more time and effort towards simply managing complexity as opposed to thinking about producing architecturally sound solutions. This can result in a vicious negative cycle as illustrated in the diagram below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/tech-debt.png" alt="tech debt" width="844" height="406">
+</div>
+<div class="title">Figure 1- 3. Technical Debt&#8201;&#8212;&#8201;Implications</div>
+</div>
+<div class="paragraph">
+<p>In a recent <a href="https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity">McKinsey survey</a> sent out to CIOs, around 60% reported that the amount of tech debt increased over the past three years. At the same time, over 90% of CIOs allocated less than a fifth of their tech budget towards paying it off. Martin Fowler <a href="https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost">explores</a> the deep correlation between high software quality (or the lack thereof) and the ability to enhance software predictably. While carrying a certain amount of tech debt is inevitable and part of doing business, not having a plan to systematically pay off this debt can have significantly detrimental effects on team productivity and ability to deliver value.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ignoring-non-functional-requirements-nfrs"><a class="anchor" href="#ignoring-non-functional-requirements-nfrs"></a>Ignoring Non-Functional Requirements (NFRs)</h4>
+<div class="paragraph">
+<p>Stakeholders often want software teams to spend a majority (if not all) of their time working on features that provide enhanced functionality. This is understandable given that such features provide the highest ROI. These features are called functional requirements.</p>
+</div>
+<div class="paragraph">
+<p>Non-functional requirements, on the other hand, are those aspects of the system that do not affect functionality directly, but have a profound effect on the efficacy of those using these using and maintaining these systems. There are many kinds of NFRs. A partial list of common NFRs is depicted below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/nfrs.png" alt="nfrs" width="413" height="358">
+</div>
+<div class="title">Figure 1- 4. Non-Functional Requirements</div>
+</div>
+<div class="paragraph">
+<p>Very rarely do users explicitly request non-functional requirements, but almost always expect these features to be part of any system they use. Oftentimes, systems may continue to function without NFRs being met, but not without having an adverse impact on the <em>quality</em> of the user experience. For example, the home page of a web site that loads in under 1 second under low load and takes upwards of 30 seconds under higher loads may not be usable during those times of stress. Needless to say, not treating non-functional requirements with the same amount of rigor as explicit, value-adding functional features, can lead to unusable systems&#8201;&#8212;&#8201;and subsequently failure.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="where-to-from-here"><a class="anchor" href="#where-to-from-here"></a>Where To From Here?</h4>
+<div class="paragraph">
+<p>In this section we examined some common reasons that cause software projects to fail. In the upcoming section, we will look at characteristics of modern systems and look at more effective ways to deal with software complexity. In upcoming chapters, we will look at how applying domain-driven design helps mitigate these causes of failure.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="modern-systems-and-dealing-with-complexity"><a class="anchor" href="#modern-systems-and-dealing-with-complexity"></a>Modern Systems and Dealing with Complexity</h3>
+<div class="quoteblock">
+<blockquote>
+We can not solve our problems with the same level of thinking that created them.
+</blockquote>
+<div class="attribution">
+&#8212; Albert Einstein
+</div>
+</div>
+<div class="paragraph">
+<p>We find ourselves in the midst of the fourth industrial revolution where the world is becoming more and more digital&#8201;&#8212;&#8201;with technology being a significant driver of value for businesses. Exponential advances in computing technology as illustrated by Moore&#8217;s Law below,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/moores-law.png" alt="Moore&#8217;s Law">
+</div>
+<div class="title">Figure 1- 5. Moore&#8217;s Law</div>
+</div>
+<div class="paragraph">
+<p>along with the rise of the internet as illustrated below,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/global-internet-traffic.png" alt="Global Internet Traffic">
+</div>
+<div class="title">Figure 1- 6. Global Internet Traffic</div>
+</div>
+<div class="paragraph">
+<p>has meant that companies are being required to modernize their software systems much more rapidly than they ever have. Along with all this, the onset of commodity computing services such as the public cloud has led to a move away from expensive centralized computing systems to more distributed computing ecosystems. As we attempt building our most complex solutions, monoliths are being replaced by an environ of distributed, collaborating microservices. Modern philosophies and practices such as automated testing, architecture fitness functions, continuous integration, continuous delivery, devops, security automation, infrastructure as code, to name a few, are disrupting the way we deliver software solutions.</p>
+</div>
+<div class="paragraph">
+<p>As we enter an age of encountering our most complex business problems, we need to embrace new ways of thinking, a development philosophy and an arsenal of techniques to iteratively evolve mature software solutions that will stand the test of time. We need better ways of communicating, analyzing problems, arriving at a collective understanding, creating and modeling abstractions, and then implementing, enhancing the solution.</p>
+</div>
+<div class="paragraph">
+<p>Domain-driven design promises to provide answers on how to do this in a systematic manner. In the upcoming section, and indeed the rest of this book, we will examine what DDD is and why it is indispensable when working to provide solutions for non-trivial problems in today&#8217;s world of massively distributed teams and applications.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="what-is-domain-driven-design"><a class="anchor" href="#what-is-domain-driven-design"></a>What is Domain-Driven Design?</h3>
+<div class="quoteblock">
+<blockquote>
+Life is really simple, but we insist on making it complicated.
+</blockquote>
+<div class="attribution">
+&#8212; Confucius
+</div>
+</div>
+<div class="paragraph">
+<p>In the previous section, we saw how a myriad of reasons coupled with system complexity get in the way of software project success. The idea of domain-driven design, originally conceived by Eric Evans in his 2003 book, is an approach to software development that focuses on expressing software solutions in the form of a model that closely embodies the core of the problem being solved. It provides a set of principles and systematic techniques to analyze, architect and implement software solutions in a manner that enhances chances of success.</p>
+</div>
+<div class="paragraph">
+<p>While Evans' work was indeed seminal, ground-breaking, and way ahead of its time, over the years, practical application has continued to remain a challenge. In this section, we will look at some of the foundational terms and concepts behind domain-driven design. Elaboration and practical application of these concepts will happen in upcoming chapters of this book.</p>
+</div>
+<div class="paragraph">
+<p>To understand DDD, first and foremost, we need to understand what we mean by the first "D"&#8201;&#8212;&#8201;<strong>domain</strong>.</p>
+</div>
+<div class="sect3">
+<h4 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a>What is a Domain?</h4>
+<div class="paragraph">
+<p>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <a href="https://en.wiktionary.org/wiki/domain"><mark><em>domain</em></mark></a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://en.wiktionary.org/wiki/domain#Noun" target="_blank" rel="noopener"><img src="./images/domain-definition.png" alt="Domain"></a>
+</div>
+<div class="title">Figure 1- 7. <strong>Domain</strong>: Means many things depending on context</div>
+</div>
+<div class="paragraph">
+<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <strong><em>problem domain</em></strong>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a>What is a Subdomain?</h4>
+<div class="paragraph">
+<p>The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. With a view to better deal with this complexity, domain-driven design advises decomposing the domain of a business into multiple manageable parts called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/domains.png" alt="domains" width="588" height="358">
+</div>
+<div class="title">Figure 1- 8. Subdomains in the Retail domain</div>
+</div>
+<div class="paragraph">
+<p>In certain businesses, subdomains themselves may turn out to become very complex on their own and may require further decomposition. For instance, in the retail example above, it may be required to break the products subdomain into further constituent subdomains such as catalog, search, recommendations, reviews, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/subdomains.png" alt="subdomains" width="468" height="248">
+</div>
+<div class="title">Figure 1- 9. Subdomains in the Products subdomain</div>
+</div>
+<div class="paragraph">
+<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a>Types of Subdomains</h4>
+<div class="paragraph">
+<p>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core sub-domains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above,</p>
+</li>
+<li>
+<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
+</li>
+<li>
+<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="domain-experts"><a class="anchor" href="#domain-experts"></a>Domain Experts</h4>
+<div class="paragraph">
+<p>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
+</div>
+<div class="paragraph">
+<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="promoting-a-shared-understanding"><a class="anchor" href="#promoting-a-shared-understanding"></a>Promoting a Shared Understanding</h4>
+<div class="paragraph">
+<p>Previously, we saw how <a href="#_silo_mentality">organizational silos</a> can result in valuable information getting diluted. At a credit card company I used to work with, the words plastic, payment instrument, account, PAN (Primary Account Number), BIN (Bank Identification Number), card were all used by different team members to mean the exact same thing - the <strong><em>credit card</em></strong> when working in the same area of the application. To make matters worse, a lot of this muddled use of terms got implemented in code as well. While this might feel like a trivial thing, it had far-reaching consequences. Product experts, architects, developers, all came and went, each regressively contributing to more confusion, muddled designs, implementation and technical debt with every new enhancement&#8201;&#8212;&#8201;accelerating the journey towards the dreaded, unmaintainable, <a href="http://www.laputan.org/mud/">big ball of mud</a>.</p>
+</div>
+<div class="paragraph">
+<p>DDD advocates breaking down these artificial barriers, and putting the domain experts and the developers on the same level footing by working collaboratively towards creating what DDD calls a <strong><em>ubiquitous language</em></strong>&#8201;&#8212;&#8201;a shared vocabulary of terms, words, phrases to continuously enhance the collective understanding of the entire team. This phraseology is then used actively in every aspect of the solution: the everyday vocabulary, the designs, the code&#8201;&#8212;&#8201;in short by <strong>everyone</strong> and <strong>everywhere</strong>. Consistent use of the common ubiquitous language helps reinforce a shared understanding and  produce solutions that better reflect the mental model of the domain experts.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="evolving-a-domain-model-and-a-solution"><a class="anchor" href="#evolving-a-domain-model-and-a-solution"></a>Evolving a Domain Model and a Solution</h4>
+<div class="paragraph">
+<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This solution is termed as a <strong><em>bounded context</em></strong> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>.</p>
+</div>
+<div class="paragraph">
+<p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
+</div>
+<div class="paragraph">
+<p>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <a href="https://domainstorytelling.org/">domain storytelling</a>, <a href="https://www.eventstorming.com/">event storming</a>, and <a href="https://evolutionaryarchitecture.com/">evolutionary architecture</a> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The thrust of DDD is that <strong>one single model</strong> form the bedrock of team communication, design, and implementation. While teams may and will indeed require a variety of means to express the model, it is very important to keep the executable code and the various representations up to date at all times.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="the-essence-of-ddd"><a class="anchor" href="#the-essence-of-ddd"></a>The Essence of DDD</h4>
+<div class="paragraph">
+<p>In this section we have taken a look at DDD at a very high level. Enclosed below is an attempt to capture the essence of what domain-driven design means.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ddd-essence.png" alt="ddd essence">
+</div>
+<div class="title">Figure 1- 10. Essence of DDD</div>
+</div>
+<div class="paragraph">
+<p>In subsequent chapters we will reinforce all of the concepts introduced here in a lot more detail. In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="why-is-ddd-relevant-why-now"><a class="anchor" href="#why-is-ddd-relevant-why-now"></a>Why is DDD Relevant? Why Now?</h3>
+<div class="quoteblock">
+<blockquote>
+He who has a why to live for can bear almost any how.
+</blockquote>
+<div class="attribution">
+&#8212; Friedrich Nietzsche
+</div>
+</div>
+<div class="paragraph">
+<p>In a lot of ways, domain-driven design was way ahead of its time when Eric Evans introduced the concepts and principles back in 2003. DDD seems to have gone from strength to strength. In this section, we will examine why DDD is even more relevant today, than it was when Eric Evans wrote his book on the subject way back in 2003.</p>
+</div>
+<div class="sect3">
+<h4 id="rise-of-open-source"><a class="anchor" href="#rise-of-open-source"></a>Rise of Open Source</h4>
+<div class="paragraph">
+<p>Eric Evans, during his keynote address at the Explore DDD conference in 2017, lamented about how difficult it was to implement even the simplest concepts like immutability in value objects when his book had released. In contrast though, nowadays, it&#8217;s simply a matter of importing a mature, well documented, tested library like <a href="https://projectlombok.org/">Project Lombok</a> or <a href="https://immutables.github.io/">Immutables</a> to be productive, literally in a matter of minutes. To say that open source software has revolutionized the software industry would be an understatement! At the time of this writing, the public maven repository (<a href="https://mvnrepository.com" class="bare">https://mvnrepository.com</a>) indexes no less than a staggering <strong>18.3 million artifacts</strong> in a large assortment of popular categories ranging from databases, language runtimes to test frameworks and many many more as shown in the chart below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<a class="image" href="https://mvnrepository.com/" target="_blank" rel="noopener"><img src="./images/oss-stats.png" alt="oss stats"></a>
+</div>
+<div class="title">Figure 1- 11. Open source Java over the years. Source: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></div>
+</div>
+<div class="paragraph">
+<p>Java stalwarts like the <a href="https://spring.io/">spring framework</a> and more recent innovations like <a href="https://start.spring.io/">spring boot</a>, <a href="https://quarkus.io/">quarkus</a>, etc. make it a no-brainer to create production grade applications, literally in a matter of minutes. Furtheremore, frameworks like <a href="https://axoniq.io/product-overview/axon-framework">Axon</a>, <a href="https://www.lagomframework.com">Lagom</a>, etc. make it relatively simple to implement advanced architecture patterns such are CQRS, event sourcing, that are very complementary to implementing DDD-based solutions.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="advances-in-technology"><a class="anchor" href="#advances-in-technology"></a>Advances in Technology</h4>
+<div class="paragraph">
+<p>DDD by no means is just about technology, it could not be completely agnostic to the choices available at the time. 2003 was the heyday of heavyweight and ceremony-heavy frameworks like J2EE (Java 2 Enterprise Edition), EJBs (Enterprise JavaBeans), SQL databases, ORMs (Object Relational Mappers) and the like&#8201;&#8212;&#8201;with not much choice beyond that when it came to enterprise tools and patterns to build complex software&#8201;&#8212;&#8201;at least out in the public domain. The software world has evolved and come a very long way from there. In fact, modern game changers like Ruby on Rails and the public cloud were just getting released. In contrast though, we now have no shortage of application frameworks, NoSQL databases, programmatic APIs to create infrastructure components with a lot more releasing with monotonous regularity.</p>
+</div>
+<div class="paragraph">
+<p>All these innovations allow for rapid experimentation, continuous learning and iteration at pace. These game changing advances in technology have also coincided with the exponential rise of the internet and ecommerce as viable means to carry out successful businesses. In fact the impact of the internet is so pervasive that it is almost inconceivable to launch businesses without a digital component being an integral component. Finally, the consumerization and wide scale penetration of smartphones, IoT devices and social media has meant that data is being produced at rates inconceivable as recent as a decade ago. This means that we are buiding for and solving the most complicated problems by several orders of magnitude.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="rise-of-distributed-computing"><a class="anchor" href="#rise-of-distributed-computing"></a>Rise of Distributed Computing</h4>
+<div class="paragraph">
+<p>There was a time when building large monoliths was very much the default. But an exponential rise in computing technology, public cloud, (IaaS, PaaS, SaaS, FaaS), big data storage and processing volumes, which has coincided with an arguable slowdown in the ability to continue creating faster CPUs, have all meant a turn towards more decentralized methods of solving problems.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Hilbert_InfoGrowth.png" alt="Hilbert InfoGrowth">
+</div>
+<div class="title">Figure 1- 12. Global Information Storage Capacity</div>
+</div>
+<div class="paragraph">
+<p>Domain-driven design with its emphasis on dealing with complexity by breaking unwieldy monoliths into more manageable units in the form of subdomains and bounded contexts, fits naturally to this style of programming. Hence it is no surprise to see a renewed interest in adopting DDD principles and techniques when crafting modern solutions. To quote Eric Evans, it is no surprise that Domain-Driven Design is even more relevant now than when it was originally conceived!</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p>In this chapter we examined some common reasons for why software projects fail. We saw how inaccurate or misinterpreted requirements, architecture (or the lack thereof), excessive technical debt, etc. can get in the way of meeting business goals and success.</p>
+</div>
+<div class="paragraph">
+<p>We looked at the basic building blocks of domain-driven design such as domains, subdomains, ubiquitous language, domain models, bounded contexts and context maps. We also examined why the principles and techniques of domain-driven design are still very much relevant in the modern age of microservices and serverless. You should now be able to appreciate the basic terms of DDD and understand why it is important in today’s context.</p>
+</div>
+<div class="paragraph">
+<p>In the next chapter we will take a closer look at the real-world mechanics of domain-driven design. We will delve deeper into the strategic and tactical design elements of DDD and look at how using these can help form the basis for better communication and create more robust designs.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>What are the most common reasons for software projects to fail?</p>
+</li>
+<li>
+<p>What do the terms domain and sub-domain mean?</p>
+</li>
+<li>
+<p>What are the different types of sub-domains?</p>
+</li>
+<li>
+<p>What is the difference between sub-domains and bounded contexts?</p>
+</li>
+<li>
+<p>Why is DDD relevant in today’s context?</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="further-reading"><a class="anchor" href="#further-reading"></a>Further Reading</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 9.0909%;">
+<col style="width: 54.5455%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Title</th>
+<th class="tableblock halign-left valign-top">Author</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pulse of the Profession - 2017</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PMI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.pmi.org/-/media/pmi/documents/public/pdf/learning/thought-leadership/pulse/pulse-of-the-profession-2017.pdf" class="bare">https://www.pmi.org/-/media/pmi/documents/public/pdf/learning/thought-leadership/pulse/pulse-of-the-profession-2017.pdf</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pulse of the Profession - 2020</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PMI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908" class="bare">https://www.pmi.org/learning/library/forging-future-focused-culture-11908</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project success: Definitions and Measurement Techniques</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PMI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460" class="bare">https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project success: definitions and measurement techniques</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JK Pinto, DP Slevin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460" class="bare">https://www.pmi.org/learning/library/project-success-definitions-measurement-techniques-5460</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Analysis Paralysis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ward Cunningham</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis" class="bare">https://proxy.c2.com/cgi/wiki?AnalysisParalysis</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Big Design Upfront</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ward Cunningham</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://wiki.c2.com/?BigDesignUpFront" class="bare">https://wiki.c2.com/?BigDesignUpFront</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enterprise Modeling Anti-Patterns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scott W. Ambler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm" class="bare">http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Project Manager’s Guide To 42 Agile Methodologies</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Henny Portman</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://thedigitalprojectmanager.com/agile-methodologies" class="bare">https://thedigitalprojectmanager.com/agile-methodologies</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Domain-Driven Design Even More Relevant Now</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eric Evans</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.youtube.com/watch?v=kIKwPNKXaLU" class="bare">https://www.youtube.com/watch?v=kIKwPNKXaLU</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Introducing Deliberate Discovery</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dan North</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://dannorth.net/2010/08/30/introducing-deliberate-discovery/" class="bare">https://dannorth.net/2010/08/30/introducing-deliberate-discovery/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No Silver Bullet&#8201;&#8212;&#8201;Essence and Accident in Software Engineering</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fred Brooks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf" class="bare">http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mastering Non-Functional Requirements</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sameer Paradkar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.packtpub.com/product/mastering-non-functional-requirements/9781788299237" class="bare">https://www.packtpub.com/product/mastering-non-functional-requirements/9781788299237</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Big Ball Of Mud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Brian Foote &amp; Joseph Yoder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.laputan.org/mud/" class="bare">http://www.laputan.org/mud/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Forgotten Layer of the Test Automation Pyramid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mike Cohn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid" class="bare">https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tech debt: Reclaiming tech equity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vishal Dalal et al</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity" class="bare">https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/tech-debt-reclaiming-tech-equity</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Is High Quality Software Worth the Cost</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Martin Fowler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost" class="bare">https://martinfowler.com/articles/is-quality-worth-cost.html#WeAreUsedToATrade-offBetweenQualityAndCost</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="answers"><a class="anchor" href="#answers"></a>Answers</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Refer to section 1.2</p>
+</li>
+<li>
+<p>Refer to sections 1.4.1 and 1.4.2</p>
+</li>
+<li>
+<p>Refer to section 1.4.3</p>
+</li>
+<li>
+<p>Refer to section 1.4.7</p>
+</li>
+<li>
+<p>Refer to section 1.5</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2021-07-16 16:05:47 UTC
+</div>
+</div>
+</body>
+</html>

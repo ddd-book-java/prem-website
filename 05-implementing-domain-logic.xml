@@ -1,0 +1,1077 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Implementing Domain Logic</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="implementing-domain-logic" role="text-justify">
+<title>Implementing Domain Logic</title>
+<blockquote>
+<attribution>
+Eric Evans
+</attribution>
+<simpara>To communicate effectively, the code must be based on the same language used to write the requirements—the same language that the developers speak with each other and with domain experts.</simpara>
+</blockquote>
+<simpara>In the Command Query Responsibility Segregation (CQRS) section, we  describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates. The list of topics to be covered is as follows:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Identifying aggregates</simpara>
+</listitem>
+<listitem>
+<simpara>Handling commands and emitting events</simpara>
+</listitem>
+<listitem>
+<simpara>Test-driving the application</simpara>
+</listitem>
+<listitem>
+<simpara>Persisting aggregates</simpara>
+</listitem>
+<listitem>
+<simpara>Performing validations</simpara>
+</listitem>
+</itemizedlist>
+<simpara>By the end of this chapter, you would have learnt how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
+<section xml:id="technical-requirements">
+<title>Technical Requirements</title>
+<itemizedlist>
+<listitem>
+<simpara>JDK 1.8+ (We have used Java 16 to compile sample sources)</simpara>
+</listitem>
+<listitem>
+<simpara>Maven 3.x</simpara>
+</listitem>
+<listitem>
+<simpara>Spring Boot 2.4.x</simpara>
+</listitem>
+<listitem>
+<simpara>JUnit 5.7.x (Included with spring boot)</simpara>
+</listitem>
+<listitem>
+<simpara>Axon Framework 4.4.7 (DDD and CQRS Framework)</simpara>
+</listitem>
+<listitem>
+<simpara>Project Lombok (To reduce verbosity)</simpara>
+</listitem>
+<listitem>
+<simpara>Moneta 1.4.x (Money and currency reference implementation - JSR 354)</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="command-query-responsibility-segregation-cqrs">
+<title>Command Query Responsibility Segregation (CQRS)</title>
+<simpara>In this chapter, we will make use of the Command Query Responsibility Segregation (CQRS) architecture pattern to express the domain logic for our solution. The CQRS pattern strictly separates <emphasis role="strong">write</emphasis> (those that mutate state) and <emphasis role="strong">read</emphasis> (those that answer questions) operations.</simpara>
+<section xml:id="recap-what-is-cqrs">
+<title>Recap: What is CQRS</title>
+<simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates and enquiries. This is depicted in the following diagram:</simpara>
+<figure>
+<title>Traditional vs. CQRS Architecture</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/cqrs/traditional-vs-cqrs-architecture.png"/>
+</imageobject>
+<textobject><phrase>traditional vs cqrs architecture</phrase></textobject>
+</mediaobject>
+</figure>
+<note>
+<simpara>We depict multiple read models above because it is possible (but not necessary) to create more than one read model, depending on the kinds of query use cases that need to be supported.</simpara>
+</note>
+<simpara>For this to work predictably, the read model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
+</section>
+<section xml:id="_why_cqrs">
+<title>Why CQRS?</title>
+<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios. We discuss some of these scenarios below:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Volume imbalance between read and writes</emphasis>: In most systems, read operations often outnumber write operations by significant orders of magnitude. For example, consider the number of times a trader checks stock prices vs. the number of times they actually transact (buy or sell stock trades). It is also usually true that write operations are the ones that make businesses money. Having a single model for both reads and writes in a system with a majority of read operations can overwhelm a system to an extent where write performance can start getting affected.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Need for multiple read representations</emphasis>: When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view. While these views can be computed on the fly from the <emphasis>raw</emphasis> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system. Several times, it is not possible to predict ahead of time, the nature of these requirements. By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements. Creating domain models specifically designed to meet a focused set of requirements can be much easier.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Different security requirements</emphasis>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a single model to serve all use cases means that they can now be focused towards solving a single concern and thereby reduce complexity. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
+</listitem>
+</itemizedlist>
+<note>
+<simpara>Implementing CQRS does not require the use of any framework. However, in this book we will look at using Axon Framework because in our opinion it provides a set of conveniences to do so while staying out of the way. There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
+</note>
+</section>
+</section>
+<section xml:id="bootstrapping-the-application">
+<title>Bootstrapping the application</title>
+<simpara>To get started, let&#8217;s create a simple spring boot application using the following command:</simpara>
+<programlisting language="bash" linenumbering="numbered">curl -G https://start.spring.io/starter.zip \ <co xml:id="CO1-1"/>
+       -d dependencies=web,data-jpa,lombok,validation,h2,actuator \ <co xml:id="CO1-2"/>
+       -d name=lc-issuance-api \
+       -d artifactId=lc-issuance-api \
+       -d groupId=com.example.api \
+       -d packaging=jar \
+       -d description='LC Issuance API' \
+       -d package-name=com.example.api \
+       -o lc-issuance-api.zip <co xml:id="CO1-3"/></programlisting>
+<calloutlist>
+<callout arearefs="CO1-1">
+<para>The spring initializr to create the application archive in zip form</para>
+</callout>
+<callout arearefs="CO1-2">
+<para>The list of dependencies separated by a comma</para>
+</callout>
+<callout arearefs="CO1-3">
+<para>The name of the archive containing the generated sources</para>
+</callout>
+</calloutlist>
+<note>
+<simpara>Alternatively, you can use use the spring initializr directly at <link xl:href="https://start.spring.io">https://start.spring.io</link> or the spring boot CLI to generate the application.</simpara>
+</note>
+<simpara>This should create a file named <literal>lc-issuance-api.zip</literal> in the current directory. Unzip this file to a location of your choice and add a dependency on the Axon framework in the <literal>dependencies</literal> section of the <literal>pom.xml</literal> file:</simpara>
+<programlisting language="xml" linenumbering="numbered">    &lt;dependency&gt;
+        &lt;groupId&gt;org.axonframework&lt;/groupId&gt;
+        &lt;artifactId&gt;axon-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;${axon-framework.version}&lt;/version&gt; <co xml:id="CO2-1"/>
+    &lt;/dependency&gt;</programlisting>
+<calloutlist>
+<callout arearefs="CO2-1">
+<para>You may need to change the version</para>
+</callout>
+</calloutlist>
+<simpara>Also, add the following dependency on the <literal>axon-test</literal> library to enable unit testing of aggregates:</simpara>
+<programlisting language="xml" linenumbering="numbered">    &lt;dependency&gt;
+        &lt;groupId&gt;org.axonframework&lt;/groupId&gt;
+        &lt;artifactId&gt;axon-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+        &lt;version&gt;${axon-framework.version}&lt;/version&gt;
+    &lt;/dependency&gt;</programlisting>
+<simpara>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</simpara>
+<simpara>As a reminder, this is the output produced from our eventstorming session:</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/event-storming/05-read-models.png"/>
+</imageobject>
+<textobject><phrase>05 read models</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</simpara>
+</section>
+<section xml:id="identifying-commands">
+<title>Identifying Commands</title>
+<simpara>From the eventstorming session, we have the following commands to start with:</simpara>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/potential-commands.png"/>
+</imageobject>
+<textobject><phrase>potential commands</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>Commands are always directed to an aggregate for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</simpara>
+<section xml:id="_identifying_aggregates">
+<title>Identifying Aggregates</title>
+<simpara>Looking at the output of the eventstorming session, one potential grouping can be as follows:</simpara>
+<figure>
+<title>First cut attempt at aggregate design</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/aggregate-design/aggregate-design-01.png"/>
+</imageobject>
+<textobject><phrase>aggregate design 01</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>At first glance, it appears that we have four potential entities to handle these commands:</simpara>
+<figure role="text-center">
+<title>Potential aggregates at first glance</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/potential-aggregates.png"/>
+</imageobject>
+<textobject><phrase>potential aggregates</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <literal>LC Application</literal> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <literal>Product</literal> and <literal>Applicant</literal> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <literal>LC Application</literal>. If the answer is a <emphasis role="strong">yes</emphasis>, then <literal>Product</literal> and <literal>Applicant</literal> <emphasis>may</emphasis> be classified as aggregates. But both <literal>Product</literal> and <literal>Applicant</literal> do not seem to require being operated on without an enveloping <literal>LC Application</literal> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<literal>LC</literal> and <literal>LC Application</literal>.</simpara>
+<figure role="text-center">
+<title>Slightly more refined aggregate structure</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/lc-application.png"/>
+</imageobject>
+<textobject><phrase>lc application</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>When we look at the output of our eventstorming session, the <literal>LC Application</literal> transitions to become an <literal>LC</literal> much later in the lifecycle. Let&#8217;s work on the <literal>LC Application</literal> right now, and suspend further analysis on the need for the <literal>LC</literal> aggregate to a later time.</simpara>
+<note>
+<simpara>For a more detailed explanation of the differences between aggregates, aggregate roots, entities and value objects, refer to Chapter 2.</simpara>
+</note>
+<simpara>Let&#8217;s start writing our first command to see how this manifests itself in code.</simpara>
+</section>
+<section xml:id="test-driving-the-system">
+<title>Test-driving the system</title>
+<simpara>While we have a reasonably good conceptual understanding of the system, we are still in the process of refining this understanding. Test-driving the system allows us to exercise our understanding by acting as the first client of the solution that we are producing.</simpara>
+<note>
+<simpara>This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<emphasis>Growing Object-Oriented Software, Guided by Tests</emphasis> by authors Nat Price and Steve Freeman. This is worth looking at, to gain a deeper understanding of this practice.</simpara>
+</note>
+<simpara>So let&#8217;s start with the first test. To the external world, an event-driven system typically works in a manner depicted below:</simpara>
+<figure role="text-center">
+<title>An event-driven system</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/event-driven-system.png"/>
+</imageobject>
+<textobject><phrase>event driven system</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>An optional set of events may have occurred in the past. A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus. The system will react in one of two ways when it handles a command:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Emit one or more events</simpara>
+</listitem>
+<listitem>
+<simpara>Throw an exception</simpara>
+</listitem>
+</itemizedlist>
+<simpara>The Axon framework allows us to express tests in this form. This is outlined below:</simpara>
+<programlisting language="java" linenumbering="numbered">public class LCApplicationAggregateTests {
+
+    private FixtureConfiguration&lt;LCApplication&gt; fixture;                          <co xml:id="CO3-1"/>
+
+    @BeforeEach
+    void setUp() {
+        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);                <co xml:id="CO3-2"/>
+    }
+
+    @Test
+    void shouldPublishLCApplicationCreated() {
+        fixture.given()                                                           <co xml:id="CO3-3"/>
+
+                .when(new CreateLCApplicationCommand())                           <co xml:id="CO3-4"/>
+
+                .expectEventsMatching(exactSequenceOf(                            <co xml:id="CO3-5"/>
+                        messageWithPayload(any(LCApplicationCreatedEvent.class)), <co xml:id="CO3-6"/>
+                        andNoMore()                                               <co xml:id="CO3-7"/>
+                ));
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO3-1">
+<para><literal>FixtureConfiguration</literal> is an Axon framework utility to aid testing of aggregate behaviour using a BDD style given-when-then syntax.</para>
+</callout>
+<callout arearefs="CO3-2">
+<para><literal>AggregateTestFixture</literal> is a concrete implementation of <literal>FixtureConfiguration</literal> where you need to register your aggregate class&#8201;&#8212;&#8201;<literal>LCApplication</literal> in our case as the candidate to handle commands directed to our solution.</para>
+</callout>
+<callout arearefs="CO3-3">
+<para>Since this is the start of the business process, there are no events that have occurred thus far. This is signified by the fact that we do not pass any arguments to the <literal>given</literal> method. In other examples we will discuss later, there will likely be events that have already occurred prior to receiving this command.</para>
+</callout>
+<callout arearefs="CO3-4">
+<para>This is where we instantiate a new instance of the command object. Command objects are usually similar to data transfer objects, carrying a set of information. This command will be routed to our aggregate for handling. We will take a look at how this works in detail shortly.</para>
+</callout>
+<callout arearefs="CO3-5">
+<para>Here we are declaring that we expect events matching an exact sequence.</para>
+</callout>
+<callout arearefs="CO3-6">
+<para>Here we are expecting an event of type <literal>LCApplicationCreated</literal> to be emitted as a result of successfully handling the command.</para>
+</callout>
+<callout arearefs="CO3-7">
+<para>We are finally saying that we do not expect any more events&#8201;&#8212;&#8201;which means that we expect exactly one event to be emitted.</para>
+</callout>
+</calloutlist>
+</section>
+<section xml:id="implementing-the-command">
+<title>Implementing the command</title>
+<simpara>The <literal>CreateLCApplicationCommand</literal> in the previous simplistic example does not carry any state. Realistically, the command will likely look something like what is depicted as follows:</simpara>
+<programlisting language="java" linenumbering="numbered">import lombok.Data;
+
+@Data
+public class CreateLCApplicationCommand {  <co xml:id="CO4-1"/>
+
+    private LCApplicationId id;            <co xml:id="CO4-2"/>
+    private ClientId clientId;
+    private Party applicant;               <co xml:id="CO4-3"/>
+    private Party beneficiary;
+    private AdvisingBank advisingBank;     <co xml:id="CO4-4"/>
+    private LocalDate issueDate;
+    private MonetaryAmount amount;
+    private String merchandiseDescription;
+
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO4-1">
+<para>The command class. When naming commands, we typically use an imperative style i.e. they usually begin with a verb denoting the action required. Note that this is a data transfer object. In other words, it is simply a bag of data attributes. Also note how it is devoid of any logic (at least at the moment).</para>
+</callout>
+<callout arearefs="CO4-2">
+<para>The identifier for the LC Application. We are assuming client generated identifiers in this case. The topic of using server-generated versus client-generated identifiers is out of scope for the subject of this book. You may use either depending on what is advantageous in your context. Also note that we are using a strong type for the identifier <literal>LCApplicationId</literal> as opposed to a primitive such as a numeric or a string value. It is also common in some cases to use UUIDs as the identifier. However, we prefer using strong types to be able to differentiate between identifier types. Notice how we are using a type <literal>ClientId</literal> to represent the creator of the application.</para>
+</callout>
+<callout arearefs="CO4-3 CO4-4">
+<para>The <literal>Party</literal> and <literal>AdvisingBank</literal> types are complex types to represent those concepts in our solution. Care should be taken to consistently use names that are relevant in the problem (business) domain as opposed to using names that only make sense in the solution (technology) domain. Note the attempt to make use of the <emphasis>ubiquitous language</emphasis> of the domain experts in both cases. This is a practice that we should always be conscious of when naming things in the system.</para>
+</callout>
+</calloutlist>
+<simpara>It is worth noting that the <literal>merchandiseDescription</literal> is left as a primitive <literal>String</literal> type. This may feel contradictory to the commentary we present above. We will address this in the upcoming section on validations.</simpara>
+<simpara>Now let’s look at what the event we will emit as a result of successfully processing the command will look like.</simpara>
+</section>
+<section xml:id="implementing-the-event">
+<title>Implementing the event</title>
+<simpara>In an event-driven system, mutating system state by successfully processing a command usually results in a domain event being emitted to signal the state mutation to the rest of the system. A simplified representation of a real-world <literal>LCApplicationCreatedEvent</literal> is shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">import lombok.Data;
+
+@Data
+public class LCApplicationCreatedEvent {   <co xml:id="CO5-1"/>
+
+    private LCApplicationId id;
+    private ClientId clientId;
+    private Party applicant;
+    private Party beneficiary;
+    private AdvisingBank advisingBank;
+    private LocalDate issueDate;
+    private MonetaryAmount amount;
+    private String merchandiseDescription;
+
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO5-1">
+<para>The event type. When naming events, we typically use names in the past tense to denote things that have already occurred and are to be accepted unconditionally as empirical facts that cannot be changed.</para>
+</callout>
+</calloutlist>
+<simpara>You will likely notice that the structure of the event is currently identical to that of the command. While this is true in this case, it may not always be that way. The amount of information that we choose to disclose in an event is context-dependent. It is important to consult with domain experts when publishing information as part of events. One may choose to withhold certain information in the event payload. For example, consider a <literal>ChangePasswordCommand</literal> which contains the newly changed password. It might be prudent to not include the changed password in the resulting <literal>PasswordChangedEvent</literal>.</simpara>
+<simpara>We have looked at the command and the resulting event in the previous test. Let&#8217;s look at how this is implemented under the hood by looking at the aggregate implementation.</simpara>
+</section>
+<section xml:id="designing-the-aggregate">
+<title>Designing the aggregate</title>
+<simpara>The aggregate is the place where commands are handled and events are emitted. The good thing about the test that we have written is that it is expressed in a manner that hides the implementation details. But let&#8217;s look at the implementation to be able to appreciate how we can get our tests to pass and meet the business requirement.</simpara>
+<programlisting language="java" linenumbering="numbered">public class LCApplication {
+
+    @AggregateIdentifier                                                            <co xml:id="CO6-1"/>
+    private LCApplicationId id;
+
+    @SuppressWarnings("unused")
+    private LCApplication() {
+        // Required by the framework
+    }
+
+    @CommandHandler                                                                 <co xml:id="CO6-2"/>
+    public LCApplication(CreateLCApplicationCommand command) {                      <co xml:id="CO6-3"/>
+        // TODO: perform validations here
+        AggregateLifecycle.apply(new LCApplicationCreatedEvent(command.getId()));   <co xml:id="CO6-4"/>
+    }
+
+    @EventSourcingHandler                                                           <co xml:id="CO6-5"/>
+    private void on(LCApplicationCreatedEvent event) {
+        this.id = event.getId();
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO6-1">
+<para>The aggregate identifier for the <literal>LCApplication</literal> aggregate. All aggregates are required to declare an identifier and mark it so using the <literal>@AggregateIdentifier</literal> annotation provided by the framework.</para>
+</callout>
+<callout arearefs="CO6-2">
+<para>The method that is handling the command needs to be annotated with the <literal>@CommandHandler</literal> annotation. In this case, the command handler happens to be the constructor of the class given that this the first command that can be received by this aggregate. We will see examples of subsequent commands being handled by other methods later in the chapter.</para>
+</callout>
+<callout arearefs="CO6-3">
+<para>The <literal>@CommandHandler</literal> annotation marks a method as being a command handler. The exact command that this method can handle needs to be passed as a parameter to the method. Do note that there can only be one command handler in the <emphasis role="strong">entire</emphasis> system for any given command.</para>
+</callout>
+<callout arearefs="CO6-4">
+<para>Here, we are emitting the <literal>LCApplicationCreatedEvent</literal> using the <literal>AggregateLifecycle</literal> utility provided by the framework. In this very simple case, we are emitting an event unconditionally on receipt of the command. In a real-world scenario, it is conceivable that a set of validations will be performed before deciding to either emit one or more events or failing the command with an exception. We will look at more realistic examples later in the chapter.</para>
+</callout>
+<callout arearefs="CO6-5">
+<para>The need for the <literal>@EventSourcingHandler</literal> and its role are likely very unclear at this time. We will explain the need for this in detail in an upcoming section of this chapter.</para>
+</callout>
+</calloutlist>
+<simpara>This was a whirlwind introduction to a simple event-driven system. We still need to understand the role of the
+<literal>@EventSourcingHandler</literal>. To understand that, we will need to appreciate how aggregate persistence works and the implications it has on our overall design.</simpara>
+</section>
+</section>
+<section xml:id="_persisting_aggregates">
+<title>Persisting aggregates</title>
+<simpara>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc. So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>State stored</simpara>
+</listitem>
+<listitem>
+<simpara>Event sourced</simpara>
+</listitem>
+</orderedlist>
+<simpara>Let&#8217;s examine each of these techniques in more detail below:</simpara>
+<section xml:id="state-stored-aggregates">
+<title>State stored aggregates</title>
+<simpara>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate. And there is good reason for this ubiquity. Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations. For example, for our <literal>LCApplication</literal>, it is conceivable that we could use a relational database with a structure that would look something like below:</simpara>
+<figure role="text-center">
+<title>Typical entity relationship model</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/relational-structure.png"/>
+</imageobject>
+<textobject><phrase>relational structure</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <emphasis>state stored</emphasis>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</simpara>
+</section>
+<section xml:id="event-sourced-aggregates">
+<title>Event sourced aggregates</title>
+<simpara>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time. Similarly, relational databases have been employing commit logs to store information durably almost since their inception. However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</simpara>
+<note>
+<simpara>A log is an extremely simple, append-only sequence of immutable records ordered by time.</simpara>
+</note>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/log-records.png"/>
+</imageobject>
+<textobject><phrase>log records</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above. Consider the example of an online order flow below:</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="25*"/>
+<colspec colname="col_2" colwidth="37.5*"/>
+<colspec colname="col_3" colwidth="37.5*"/>
+<thead>
+<row>
+<entry align="left" valign="top">User Action</entry>
+<entry align="left" valign="top">Traditional Store</entry>
+<entry align="left" valign="top">Event Store</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Add milk to cart</simpara></entry>
+<entry align="left" valign="top"><simpara>Order 123: Milk in cart</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added to cart</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Add white bread to cart</simpara></entry>
+<entry align="left" valign="top"><simpara>Order 123: Milk, White bread in cart</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added to cart<?asciidoc-br?>
+E3: White bread added to cart</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Remove White bread from cart</simpara></entry>
+<entry align="left" valign="top"><simpara>Order 123: Milk in cart</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added to cart<?asciidoc-br?>
+E3: White bread added to cart<?asciidoc-br?>
+E4: White bread removed from cart</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Add Wheat bread to cart</simpara></entry>
+<entry align="left" valign="top"><simpara>Order 123: Milk, Wheat bread in cart</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added to cart<?asciidoc-br?>
+E3: White bread added to cart<?asciidoc-br?>
+E4: White bread removed from cart<?asciidoc-br?>
+E5: Wheat bread added to cart</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Confirm cart checkout</simpara></entry>
+<entry align="left" valign="top"><simpara>Order 123: Ordered Milk, Wheat bread</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added to cart<?asciidoc-br?>
+E3: White bread added to cart<?asciidoc-br?>
+E4: White bread removed from cart<?asciidoc-br?>
+E5: Wheat bread added to cart<?asciidoc-br?>
+E6: Order 123 confirmed</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>As you can see, in the event store, we continue to have full visibility of all user actions performed. This allows us to reason about these behaviors more holistically. In the traditional store, we lost the information that the user replaced white with wheat bread. While this does not impact the order itself, we lose the opportunity to gather insights from this user behavior. We recognize that this information can be captured in other ways using specialized analytical solutions, however, the event log mechanism provides a natural way to do this without requiring any additional effort, thereby reducing the complexity of the system being built. It also acts as an audit log providing full history of all events that have occurred thus far. This fits well with the essence of domain-driven design where we are constantly exploring ways in which to reduce complexity.</simpara>
+<simpara>However, there are implications to persisting data in the form of a simple event log. Before processing any command, we will need to hydrate past events in exact order of occurrence and reconstruct aggregate state to allow us to perform validations. For example, when confirming checkout, just having the ordered set of elapsed events will not suffice. We still need to compute the exact items that are in the cart before allowing the order to be placed. This <emphasis>event replay</emphasis> to restore aggregate state (at least those attributes that are required to validate said command) is necessary before processing that command. For example, we need to know which items are in the cart currently before processing the <literal>RemoveItemFromCartCommand</literal>. This is illustrated in the following table:</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="29.4117*"/>
+<colspec colname="col_2" colwidth="17.647*"/>
+<colspec colname="col_3" colwidth="23.5294*"/>
+<colspec colname="col_4" colwidth="29.4119*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Elapsed Events</entry>
+<entry align="left" valign="top">Aggregate State</entry>
+<entry align="left" valign="top">Command</entry>
+<entry align="left" valign="top">Event(s) Emitted</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>Add item: milk</simpara></entry>
+<entry align="left" valign="top"><simpara>E1: Cart#<emphasis>123</emphasis> created<?asciidoc-br?>
+E2: Milk added</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Cart Items</emphasis>:<?asciidoc-br?>
+Milk</simpara></entry>
+<entry align="left" valign="top"><simpara>Add item: white bread</simpara></entry>
+<entry align="left" valign="top"><simpara>E2: White bread added</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added<?asciidoc-br?>
+E3: White bread added</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Cart Items</emphasis>:<?asciidoc-br?>
+Milk,<?asciidoc-br?>
+White Bread</simpara></entry>
+<entry align="left" valign="top"><simpara>Remove item: white bread</simpara></entry>
+<entry align="left" valign="top"><simpara>E3: White bread removed</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added<?asciidoc-br?>
+E3: White bread added<?asciidoc-br?>
+E4: White bread removed</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Cart Items</emphasis>:<?asciidoc-br?>
+Milk</simpara></entry>
+<entry align="left" valign="top"><simpara>Add item: wheat bread</simpara></entry>
+<entry align="left" valign="top"><simpara>E4: Wheat bread added</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>E1: Cart#123 created<?asciidoc-br?>
+E2: Milk added<?asciidoc-br?>
+E3: White bread added<?asciidoc-br?>
+E4: White bread removed<?asciidoc-br?>
+E5: Wheat bread added</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Cart Items</emphasis>:<?asciidoc-br?>
+Milk<?asciidoc-br?>
+Wheat bread</simpara></entry>
+<entry align="left" valign="top"><simpara>Confirm checkout for Cart#123</simpara></entry>
+<entry align="left" valign="top"><simpara>E5: Order created!</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>The corresponding source code for the whole scenario is illustrated in the following code snippet:</simpara>
+<programlisting language="java" linenumbering="numbered">public class Cart {
+
+    private boolean isNew;
+    private CartItems items;
+    //..
+
+    private Cart() {                                             <co xml:id="CO7-1"/>
+        // Required by the framework
+    }
+
+    @CommandHandler
+    public void addItem(AddItemToCartCommand command) {
+        // Business validations here
+        if (this.isNew) {
+            apply(new CartCreatedEvent(command.getId()));        <co xml:id="CO7-2"/>
+        }
+        apply(new ItemAddedEvent(id, command.getItem()));        <co xml:id="CO7-3"/>
+    }
+
+    @CommandHandler
+    public void removeItem(RemoveItemFromCartCommand command) {
+        // Business validations here
+        apply(new ItemRemovedEvent(id, commmand.getItem()));
+    }
+
+    @CommandHandler
+    public void checkout(ConfirmCheckoutCommand command) {
+        // Business validations here
+        apply(new OrderCreatedEvent(this.items));
+    }
+
+    @EventSourcingHandler                                        <co xml:id="CO7-4"/>
+    private void on(CartCreatedEvent event) {
+        this.id = event.getCartId();
+        this.items = new CartItems();
+        this.isNew = true;
+    }
+
+    @EventSourcingHandler                                        <co xml:id="CO7-5"/>
+    private void on(ItemAddedEvent event) {
+        this.items.add(event.getItem());
+        this.isNew = false;
+    }
+
+    @EventSourcingHandler                                        <co xml:id="CO7-6"/>
+    private void on(ItemRemovedEvent event) {
+        this.items.remove(event.getItem());
+    }
+
+    @EventSourcingHandler                                        <co xml:id="CO7-7"/>
+    private void on(CheckoutConfirmedEvent event) {
+        // ..
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO7-1">
+<para>Before processing any command, the aggregate loading process commences by first invoking the no-args constructor. For this reason, we need the no-args constructor to be <emphasis role="strong">empty</emphasis> i.e. it should <emphasis role="strong">not</emphasis> have any code that restores state. State restoration <emphasis role="strong">must</emphasis> happen only in those methods that trigger an event replay. In the case of the Axon framework, this translates to methods embellished with the <literal>@EventSourcingHandler</literal> annotation.</para>
+</callout>
+<callout arearefs="CO7-2 CO7-3">
+<para>It is important to note that it is possible (but not necessary) to emit <emphasis role="strong">more than one event</emphasis> after processing a command. This is illustrated in the first instance of the <literal>AddItemCommand</literal> in the previous code where we emit <literal>CartCreatedEvent</literal> and <literal>ItemAddedEvent</literal>.</para>
+</callout>
+<callout arearefs="CO7-4 CO7-5 CO7-6 CO7-7">
+<para>The loading process continues through the invocation of event sourcing handler methods in exactly the order of occurrence for that aggregate instance.</para>
+</callout>
+</calloutlist>
+<simpara>When working with event sourced aggregates, it is very important to be disciplined about the kind of code that one can write:</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="40*"/>
+<colspec colname="col_2" colwidth="20*"/>
+<colspec colname="col_3" colwidth="20*"/>
+<colspec colname="col_4" colwidth="20*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Type of Method</entry>
+<entry align="left" valign="top">State Restoration</entry>
+<entry align="left" valign="top">Business Logic</entry>
+<entry align="left" valign="top">Event Emission</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><literal>@CommandHandler</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>No</simpara></entry>
+<entry align="left" valign="top"><simpara>Yes</simpara></entry>
+<entry align="left" valign="top"><simpara>Yes</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><literal>@EventSourcingHandler</literal></simpara></entry>
+<entry align="left" valign="top"><simpara>Yes</simpara></entry>
+<entry align="left" valign="top"><simpara>No</simpara></entry>
+<entry align="left" valign="top"><simpara>No</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>If there are a large number of events, aggregate loading can become a time-consuming operation&#8201;&#8212;&#8201;directly proportional to the number of elapsed events for that aggregate. There are techniques (like snapshotting) we can employ to overcome this. We will cover this in more detail in a subsequent chapter.</simpara>
+</section>
+<section xml:id="which-persistence-mechanism-should-we-choose">
+<title>Which persistence mechanism should we choose?</title>
+<simpara>Now that we have a reasonably good understanding of the two types of aggregate persistence mechanisms, it begs the question of which one we should choose. We list a few benefits of using event sourcing below:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>We get to use the events as a <emphasis role="strong">natural audit log</emphasis> in high compliance scenarios.</simpara>
+</listitem>
+<listitem>
+<simpara>It provides the ability to perform <emphasis role="strong">more insightful analytics</emphasis> on the basis of the fine-grained events data.</simpara>
+</listitem>
+<listitem>
+<simpara>It arguably produces more flexible designs when we work with an system based on <emphasis role="strong">immutable events</emphasis>&#8201;&#8212;&#8201;because the complexity of the persistence model is capped. Also, there is no need to deal with complex ORM impedance mismatch problems.</simpara>
+</listitem>
+<listitem>
+<simpara>The domain model is much more <emphasis role="strong">loosely coupled</emphasis> with the persistence model&#8201;&#8212;&#8201;enabling it to evolve mostly independently from the persistence model.</simpara>
+</listitem>
+<listitem>
+<simpara>Enables going back in time to be able to create <emphasis role="strong">adhoc views and reports</emphasis> without having to deal with upfront complexity.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>On the flip side, these are some challenges that you might have to consider when implementing an event sourced solution:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Event sourcing requires a <emphasis role="strong">paradigm shift</emphasis>. Which means that development and business teams will have to spend time and effort understanding how it works.</simpara>
+</listitem>
+<listitem>
+<simpara>The persistence model does not store state directly. This means that <emphasis role="strong">adhoc querying</emphasis> directly on the persistence model can be a lot more <emphasis role="strong">challenging</emphasis>. This can be alleviated by materializing new views, however there is added complexity in doing that.</simpara>
+</listitem>
+<listitem>
+<simpara>Event sourcing usually tends to work very well when implemented in conjunction with <emphasis role="strong">CQRS</emphasis> which arguably may add more complexity to the application. It also requires applications to pay closer attention to strong vs <emphasis role="strong">eventual consistency</emphasis> concerns.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Our experiences indicate that event sourced systems bring a lot of benefits in modern event-driven systems. However, you will need to be cognizant of the considerations presented above in the context of your own ecosystems when making persistence choices.</simpara>
+</section>
+</section>
+<section xml:id="policy-enforcements-validations">
+<title>Policy enforcements (validations)</title>
+<simpara>When processing commands, we need to enforce policies or rules. Policies come in two broad categories:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Structural rules&#8201;&#8212;&#8201;those that enforce that the syntax of the dispatched command is valid.</simpara>
+</listitem>
+<listitem>
+<simpara>Domain rules&#8201;&#8212;&#8201;those that enforce that business rules are adhered to.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>It may also be prudent to perform these validations in different layers of the system.And it is also common for some or all of these policy enforcements to be repeated in more than one layer of the system.However, the important thing to note is that before a command is successfully handled, all these policy enforcements are uniformly applied.Let&#8217;s look at some examples of these in the upcoming section.</simpara>
+<section xml:id="structural-validations">
+<title>Structural validations</title>
+<simpara>Currently, to create an LC application, one is required to dispatch a <literal>CreateLCApplicationCommand</literal>. While the command dictates a structure, none of it is enforced at the moment. Let&#8217;s correct that.</simpara>
+<simpara>To be able to enable validations declaratively, we will make use of the JSR-303 bean validation libraries. We can add that easily using the <literal>spring-boot-starter-validation</literal> dependency to our <literal>pom.xml</literal> file as shown here:</simpara>
+<programlisting language="xml" linenumbering="numbered">    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-validation&lt;/artifactId&gt;
+    &lt;/dependency&gt;</programlisting>
+<simpara>Now we can add validations to the command object using the JSR-303 annotations as depicted below:</simpara>
+<programlisting language="java" linenumbering="numbered">import lombok.Data;
+import javax.validation.*;
+import javax.validation.constraints.*;
+
+@Data
+public class CreateLCApplicationCommand {
+
+    @NotNull
+    private LCApplicationId id;
+
+    @NotNull
+    private ClientId clientId;
+
+    @NotNull
+    @Valid
+    private Party applicant;
+
+    @NotNull
+    @Valid
+    private Party beneficiary;
+
+    @NotNull
+    @Valid
+    private AdvisingBank advisingBank;
+
+    @Future
+    private LocalDate issueDate;
+
+    @Positive
+    private MonetaryAmount amount;
+
+    @NotBlank
+    private String merchandiseDescription;
+}</programlisting>
+<simpara>Most structural validations can be accomplished using the built-in validator annotations. It is also possible to create custom validators for individual fields or to validate the entire object (for example, to validate inter-dependent attributes). For more details on how to do this, please refer to the bean validation specification at <link xl:href="https://beanvalidation.org/2.0/">https://beanvalidation.org/2.0/</link> and the reference implementation at <link xl:href="http://hibernate.org/validator/">http://hibernate.org/validator/</link>.</simpara>
+</section>
+<section xml:id="business-rule-enforcements">
+<title>Business rule enforcements</title>
+<simpara>Structural validations can be accomplished using information that is already available in the command.However, there is another class of validations that requires information that is not present in the incoming command itself.This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</simpara>
+<simpara>Let&#8217;s look at an example of a validation that requires state present within the aggregate. Consider the example of submitting an LC.While we can make several edits to the LC when it is in draft state, no changes can be made after it is submitted.This means that we can only submit an LC once.This act of submitting the LC is achieved by issuing the <literal>SubmitLCApplicationCommand</literal> as shown in the artifact from the eventstorming session:</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/aggregate-state-validation.png"/>
+</imageobject>
+<textobject><phrase>aggregate state validation</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>Let&#8217;s begin with a test to express our intent:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplicationAggregateTests {
+    //..
+    @Test
+    void shouldAllowSubmitOnlyInDraftState() {
+        final LCApplicationId applicationId = LCApplicationId.randomId();
+
+        fixture.given(new LCApplicationCreatedEvent(applicationId))            <co xml:id="CO8-1"/>
+                .when(new SubmitLCApplicationCommand(applicationId))           <co xml:id="CO8-2"/>
+                .expectEvents(new LCApplicationSubmittedEvent(applicationId)); <co xml:id="CO8-3"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO8-1">
+<para>Given that the <literal>LCApplicationCreatedEvent</literal> has already occurred&#8201;&#8212;&#8201;in other words, the LC application is already created.</para>
+</callout>
+<callout arearefs="CO8-2">
+<para>When we try to submit the application by issuing the <literal>SubmitLCApplicationCommand</literal> for the same application.</para>
+</callout>
+<callout arearefs="CO8-3">
+<para>We expect the <literal>LCApplicationSubmittedEvent</literal> to be emitted.</para>
+</callout>
+</calloutlist>
+<simpara>The corresponding implementation will look something like:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplication {
+    // ..
+    @CommandHandler
+    public void submit(SubmitLCApplicationCommand command) {
+        apply(new LCApplicationSubmittedEvent(id));
+    }
+}</programlisting>
+<simpara>The implementation above allows us to submit an LC application unconditionally&#8201;&#8212;&#8201;more than once. However, we want to restrict users to be able to submit only once. To be able to do that, we need to remember that the LC application has already been submitted. We can do that in the <literal>@EventSourcingHandler</literal> of the corresponding events as shown below:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplication {
+    // ..
+    @EventSourcingHandler
+    private void on(LCApplicationSubmittedEvent event) {
+        this.state = State.SUBMITTED; <co xml:id="CO9-1"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO9-1">
+<para>When the <literal>LCApplicationSubmittedEvent</literal> is replayed, we set the state of the <literal>LCApplication</literal> to <literal>SUBMITTED</literal>.</para>
+</callout>
+</calloutlist>
+<simpara>While we have remembered that the application has changed to be in <literal>SUBMITTED</literal> state, we are still not preventing more than one submit attempt. We can fix that by writing a test as shown below:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplicationAggregateTests {
+    @Test
+    void shouldNotAllowSubmitOnAnAlreadySubmittedLC() {
+        final LCApplicationId applicationId = LCApplicationId.randomId();
+
+        fixture.given(
+                new LCApplicationCreatedEvent(applicationId),           <co xml:id="CO10-1"/>
+                new LCApplicationSubmittedEvent(applicationId))         <co xml:id="CO10-2"/>
+
+                .when(new SubmitLCApplicationCommand(applicationId))    <co xml:id="CO10-3"/>
+
+                .expectException(AlreadySubmittedException.class)       <co xml:id="CO10-4"/>
+                .expectNoEvents();                                      <co xml:id="CO10-5"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO10-1 CO10-2">
+<para>The <literal>LCApplicationCreatedEvent</literal> and <literal>LCApplicationSubmittedEvent</literal> have already happened&#8201;&#8212;&#8201;which means that the <literal>LCApplication</literal> has been submitted once.</para>
+</callout>
+<callout arearefs="CO10-3">
+<para>We now dispatch another <literal>SubmitLCApplicationCommand</literal> to the system.</para>
+</callout>
+<callout arearefs="CO10-4">
+<para>We expect an <literal>AlreadySubmittedException</literal> to be thrown.</para>
+</callout>
+<callout arearefs="CO10-5">
+<para>We also expect no events to be emitted.</para>
+</callout>
+</calloutlist>
+<simpara>The implementation of the command handler to make this work is shown below:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplication {
+    // ..
+    @CommandHandler
+    public void submit(SubmitLCApplicationCommand command) {
+        if (this.state != State.DRAFT) {                                     <co xml:id="CO11-1"/>
+            throw new AlreadySubmittedException("LC is already submitted!");
+        }
+        apply(new LCApplicationSubmittedEvent(id));
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO11-1">
+<para>Note how we are using the state attribute from the <literal>LCApplication</literal> aggregate to perform the validation. If the application is not in <literal>DRAFT</literal> state, we fail with the <literal>AlreadySubmittedException</literal> domain exception.</para>
+</callout>
+</calloutlist>
+<simpara>Let&#8217;s also look at an example where information needed to perform the validation is not part of either the command or the aggregate. Let&#8217;s consider the scenario where country regulations prohibit transacting with a set of so called <emphasis>sanctioned</emphasis> countries. Changes to this list of countries may be affected by external factors. Hence it does not make sense to pass this list of sanctioned countries as part of the command payload. Neither does it make sense to maintain it as part of every single aggregate&#8217;s state&#8201;&#8212;&#8201;given that it can change (albeit very infrequently). In such a case, we may want to consider making use of a command handler that is outside the confines of the aggregate class. Thus far, we have only seen examples of <literal>@CommandHandler</literal> methods within the aggregate. But the <literal>@CommandHandler</literal> annotation can appear on any other class external to the aggregate. However, in such a case, we need to load the aggregate ourselves. The Axon framework provides a <literal>org.axonframework.modelling.command.Repository</literal> interface to allow us to do that. It is important to note that this <literal>Repository</literal> is distinct from spring framework&#8217;s interface that is part of the spring data libraries. An example of how this works is shown below:</simpara>
+<programlisting language="java" linenumbering="numbered">import org.axonframework.modelling.command.Repository;
+
+class MyCustomCommandHandler {
+
+    private final Repository&lt;LCApplication&gt; repository; <co xml:id="CO12-1"/>
+
+    MyCustomCommandHandler(Repository&lt;LCApplication&gt; repository) {
+        this.repository = repository;  <co xml:id="CO12-2"/>
+    }
+
+    @CommandHandler
+    public void handle(SomeCommand command) {
+        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());  <co xml:id="CO12-3"/>
+        // Command handling code
+    }
+
+    @CommandHandler
+    public void handle(AnotherCommand command) {
+        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());
+        // Command handling code
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO12-1 CO12-2">
+<para>We are injecting the Axon <literal>Repository</literal> to allow us to load aggregates. This ws not required previously because the <literal>@CommandHandler</literal> annotation appeared on aggregate methods directly.</para>
+</callout>
+<callout arearefs="CO12-3">
+<para>We are using the <literal>Repository</literal> to load aggregates and work with them. The <literal>Repository</literal> interface supports other convenience methods to work with aggregates. Please refer to the Axon framework documentation for more usage examples.</para>
+</callout>
+</calloutlist>
+<simpara>Coming back to the sanctioned countries example, let&#8217;s look at how we need to set up the test slightly differently:</simpara>
+<programlisting language="java" linenumbering="numbered">public class CreateLCApplicationCommandHandlerTests {
+    private FixtureConfiguration&lt;LCApplication&gt; fixture;
+
+    @BeforeEach
+    void setUp() {
+        final Set&lt;Country&gt; sanctioned = Set.of(SOKOVIA);
+        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);              <co xml:id="CO13-1"/>
+
+        final Repository&lt;LCApplication&gt; repository = fixture.getRepository();   <co xml:id="CO13-2"/>
+
+        CreateLCApplicationCommandHandler handler =
+                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO13-3"/>
+        fixture.registerAnnotatedCommandHandler(handler);                       <co xml:id="CO13-4"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO13-1">
+<para>We are creating a new aggregate fixture as usual</para>
+</callout>
+<callout arearefs="CO13-2">
+<para>We are using the fixture to obtain an instance of the Axon <literal>Repository</literal></para>
+</callout>
+<callout arearefs="CO13-3">
+<para>We instantiate the custom command handler passing in the <literal>Repository</literal> instance. Also note how we inject the collection of sanctioned countries into the handler using simple dependency injection. In real life, this set of sanctioned countries will likely be obtained from external configuration.</para>
+</callout>
+<callout arearefs="CO13-4">
+<para>We finally need to register the command handler with the fixture, so that it can route commands to this handler as well.</para>
+</callout>
+</calloutlist>
+<simpara>The tests for this look fairly straightforward:</simpara>
+<programlisting language="java" linenumbering="numbered">class CreateLCApplicationCommandHandlerTests {
+    // ..
+
+    @BeforeEach
+    void setUp() {
+    final Set&lt;Country&gt; sanctioned = Set.of(SOKOVIA);                            <co xml:id="CO14-1"/>
+        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);
+
+        final Repository&lt;LCApplication&gt; repository = fixture.getRepository();
+
+        CreateLCApplicationCommandHandler handler =
+                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO14-2"/>
+        fixture.registerAnnotatedCommandHandler(handler);
+    }
+
+    @Test
+    void shouldFailIfBeneficiaryCountryIsSanctioned() {
+        fixture.given()
+                .when(new CreateLCApplicationCommand(randomId(), SOKOVIA))      <co xml:id="CO14-3"/>
+                .expectNoEvents()
+                .expectException(CannotTradeWithSanctionedCountryException.class);
+    }
+
+    @Test
+    void shouldCreateIfCountryIsNotSanctioned() {
+        final LCApplicationId applicationId = randomId();
+        fixture.given()
+                .when(new CreateLCApplicationCommand(applicationId, WAKANDA))   <co xml:id="CO14-4"/>
+                .expectEvents(new LCApplicationCreatedEvent(applicationId));
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO14-1">
+<para>For the purposes of the test, we mark the country <literal>SOKOVIA</literal> as a <emphasis>sanctioned</emphasis> country. In a more realistic scenario, this will likely come from some form external configuration (e.g. a lookup table or form of external configuration). However, this is appropriate for our unit test.</para>
+</callout>
+<callout arearefs="CO14-2">
+<para>We then inject this set of <emphasis>sanctioned countries</emphasis> into the command handler.</para>
+</callout>
+<callout arearefs="CO14-3">
+<para>When the <literal>LCApplication</literal> is created for the sanctioned country, we expect no events to be emitted and furthermore, the <literal>CannotTradeWithSanctionedCountryException</literal> exception to be thrown.</para>
+</callout>
+<callout arearefs="CO14-4">
+<para>Finally, when the beneficiary belongs to a non-sanctioned country, we emit the <literal>LCApplicationCreatedEvent</literal> to be emitted.</para>
+</callout>
+</calloutlist>
+<simpara>The implementation of the command handler is shown below:</simpara>
+<programlisting language="java" linenumbering="numbered">import org.springframework.stereotype.Service;
+
+@Service <co xml:id="CO15-1"/>
+public class CreateLCApplicationCommandHandler {
+    private final Repository&lt;LCApplication&gt; repository;
+    private final Set&lt;Country&gt; sanctionedCountries;
+
+    public CreateLCApplicationCommandHandler(Repository&lt;LCApplication&gt; repository,
+                                             Set&lt;Country&gt; sanctionedCountries) {
+        this.repository = repository;
+        this.sanctionedCountries = sanctionedCountries;
+    }
+
+    @CommandHandler
+    public void handle(CreateLCApplicationCommand command) {
+        // Validations can be performed here as well <co xml:id="CO15-2"/>
+        repository.newInstance(() -&gt; new LCApplication(command, sanctionedCountries)); <co xml:id="CO15-3"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO15-1">
+<para>We mark the class as a <literal>@Service</literal> to mark it as a component devoid of encapsulated state and enable auto-discovery when using annotation-based configuration or classpath scanning. As such, it can be used to perform any "plumbing" activities.</para>
+</callout>
+<callout arearefs="CO15-2">
+<para>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <literal>Repository</literal> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <link xl:href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</link><footnote><simpara><link xl:href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">https://www.martinfowler.com/bliki/AnemicDomainModel.html</link></simpara></footnote>.</para>
+</callout>
+</calloutlist>
+<simpara>Finally, the aggregate implementation along with the validation is shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">class LCApplication {
+// ...
+    public LCApplication(CreateLCApplicationCommand command, Set&lt;Country&gt; sanctioned) {
+        if (sanctioned.contains(command.getBeneficiaryCountry())) { <co xml:id="CO16-1"/>
+            throw new CannotTradeWithSanctionedCountryException();
+        }
+        apply(new LCApplicationCreatedEvent(command.getId()));
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO16-1">
+<para>The validation itself is fairly straightforward. We throw a <literal>CannotTradeWithSanctionedCountryException</literal> when the validation fails.</para>
+</callout>
+</calloutlist>
+<simpara>With the above examples, we looked at different ways to implement the policy enforcements encapsulated within the boundaries the aggregate.</simpara>
+</section>
+</section>
+<section xml:id="summary">
+<title>Summary</title>
+<simpara>In this chapter, we used the outputs of the eventstorming session and used it as a primary aid to create a domain model for our bounded context. We looked at how to implement this using the command query responsibility segregation (CQRS) architecture pattern. We looked at persistence options and the implications of using event sourced vs state stored aggregates. Finally, we rounded off by looking at a variety of ways in which to perform business validations. We looked at all this through a set of code examples using Spring boot and the Axon framework.</simpara>
+<simpara>With this knowledge, we should be able to implement robust, well encapsulated, event-driven domain models. In the next chapter, we will look at implementing a user interface for these domain capabilities and examine a few options such as CRUD-based vs task-based UIs.</simpara>
+</section>
+<section xml:id="questions">
+<title>Questions</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Can you examine the eventstorming session artifact from the last chapter, and identify the possible aggregates that would be required?</simpara>
+</listitem>
+<listitem>
+<simpara>In your problem domain, can you determine the right approach for persisting aggregates? What are the reasons for choosing one approach over the other?</simpara>
+</listitem>
+<listitem>
+<simpara>Based on your current understanding, would you apply CQRS architecture pattern in your solution? And how would you justify the choice to your team ?</simpara>
+</listitem>
+</orderedlist>
+</section>
+<section xml:id="further-reading">
+<title>Further reading</title>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="25*"/>
+<colspec colname="col_2" colwidth="25*"/>
+<colspec colname="col_3" colwidth="50*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Title</entry>
+<entry align="left" valign="top">Author</entry>
+<entry align="left" valign="top">Location</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>CQRS</simpara></entry>
+<entry align="left" valign="top"><simpara>Martin Fowler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://martinfowler.com/bliki/CQRS.html">https://martinfowler.com/bliki/CQRS.html</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Bootiful CQRS and Event Sourcing with Axon Framework</simpara></entry>
+<entry align="left" valign="top"><simpara>SpringDeveloper and Allard Buijze</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.youtube.com/watch?v=7e5euKxHhTE">https://www.youtube.com/watch?v=7e5euKxHhTE</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>The Log: What every software engineer should know about real-time data&#8217;s unifying abstraction</simpara></entry>
+<entry align="left" valign="top"><simpara>Jay Kreps</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying">https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Event Sourcing</simpara></entry>
+<entry align="left" valign="top"><simpara>Martin Fowler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://martinfowler.com/eaaDev/EventSourcing.html">https://martinfowler.com/eaaDev/EventSourcing.html</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Using a DDD Approach for Validating Business Rules</simpara></entry>
+<entry align="left" valign="top"><simpara>Fabian Lopez</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.infoq.com/articles/ddd-business-rules/">https://www.infoq.com/articles/ddd-business-rules/</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Anemic Domain Model</simpara></entry>
+<entry align="left" valign="top"><simpara>Martin Fowler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">https://www.martinfowler.com/bliki/AnemicDomainModel.html</link></simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="answers">
+<title>Answers</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Refer to section <xref linkend="_identifying_aggregates"/></simpara>
+</listitem>
+<listitem>
+<simpara>Refer to section <xref linkend="_persisting_aggregates"/>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</simpara>
+</listitem>
+<listitem>
+<simpara>Refer to section <xref linkend="_why_cqrs"/> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</simpara>
+</listitem>
+</orderedlist>
+</section>
+</section>
+</article>

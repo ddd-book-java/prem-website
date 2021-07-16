@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="implementing-the-user-interfacetask-based-20-pages" role="text-justify">
+<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
+<blockquote>
+<attribution>
+Marty Rubin
+</attribution>
+<simpara>To accomplish a difficult task, one must first make it easy.</simpara>
+</blockquote>
+<simpara>The essence of DDD is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <link xl:href="https://openjfx.com/">JavaFX</link><footnote><simpara><link xl:href="https://openjfx.com/">https://openjfx.com/</link></simpara></footnote> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <emphasis>impedance mismatch</emphasis> and how task-based UIs can help cope with this mismatch a lot better.</simpara>
+<simpara>At the end of the chapter, you will learn how to employ DDD principles to help you build robust user experiences that are simple and intuitive. You will also learn why it may be prudent to design your backend APIs from the perspective of the consumer.</simpara>
+<section xml:id="technical-requirements">
+<title>Technical Requirements</title>
+<itemizedlist>
+<listitem>
+<simpara>JDK 1.8+ (We have used Java 16 to compile sample sources)</simpara>
+</listitem>
+<listitem>
+<simpara>JavaFX SDK 16 and SceneBuilder</simpara>
+</listitem>
+<listitem>
+<simpara>Maven 3.x</simpara>
+</listitem>
+<listitem>
+<simpara>Spring Boot 2.4.x</simpara>
+</listitem>
+<listitem>
+<simpara>mvvmFX 1.8 (<link xl:href="https://sialcasa.github.io/mvvmFX/">https://sialcasa.github.io/mvvmFX/</link>)</simpara>
+</listitem>
+<listitem>
+<simpara>JUnit 5.7.x (Included with spring boot)</simpara>
+</listitem>
+<listitem>
+<simpara>TestFX (for UI testing)</simpara>
+</listitem>
+<listitem>
+<simpara>OpenJFX Monocle (for headless UI testing)</simpara>
+</listitem>
+<listitem>
+<simpara>Project Lombok (To reduce verbosity)</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="bootstrapping-the-ui">
+<title>Bootstrapping the UI</title>
+<simpara>We will simply be building on top of the LC application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on Bootstrapping the Application. In addition, we will need to add the following dependencies to the <literal>dependencies</literal> section of the Maven <literal>pom.xml</literal> file in the root directory of the project:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
+    &lt;!--...--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-controls&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-graphics&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-fxml&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx-spring-boot&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--...--&gt;
+&lt;/dependencies&gt;</programlisting>
+<simpara>To run UI tests, you will need to add the following dependencies:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
+    &lt;!--...--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
+        &lt;artifactId&gt;testfx-junit5&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+        &lt;version&gt;${testfx-junit5.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
+        &lt;artifactId&gt;openjfx-monocle&lt;/artifactId&gt;
+        &lt;version&gt;${openjfx-monocle.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx-testing-utils&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!--...--&gt;
+&lt;/dependencies&gt;</programlisting>
+<simpara>To be able to run the application from the command line, you will need to add the <literal>javafx-maven-plugin</literal> to the <literal>plugins</literal> section of your <literal>pom.xml</literal>, per the following:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;plugin&gt;
+    &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+    &lt;artifactId&gt;javafx-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${javafx-maven-plugin.version}&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;mainClass&gt;com.premonition.lc.issuance.App&lt;/mainClass&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</programlisting>
+<simpara>To run the application from the command line, use:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">mvn javafx:run</programlisting>
+<note>
+<simpara>If you are using a JDK greater that version 1.8, the JavaFX libraries may not be bundled with the JDK itself. When running the application from your IDE, you will likely need to add the following:</simpara>
+</note>
+<programlisting language="bash" linenumbering="unnumbered">--module-path=&lt;path-to-javafx-sdk&gt;/lib/ \
+   --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.media</programlisting>
+<note>
+<simpara>Please refer to the ch06 directory of the accompanying source code repository for the complete example.</simpara>
+</note>
+<simpara>Before we dive deep into building the GUI solution, let&#8217;s do a quick recap of where we left the APIs.</simpara>
+</section>
+<section xml:id="api-styles">
+<title>API Styles</title>
+<simpara>If you recall from chapter 5, we created the following commands:</simpara>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/potential-commands.png"/>
+</imageobject>
+<textobject><phrase>potential commands</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</simpara>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/revised-commands.png"/>
+</imageobject>
+<textobject><phrase>revised commands</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <emphasis>always</emphasis> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>CRUD-based</simpara>
+</listitem>
+<listitem>
+<simpara>Task-based</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Let&#8217;s look at each of these in a bit more detail:</simpara>
+<section xml:id="crud-based-apis">
+<title>CRUD-based APIs</title>
+<simpara>CRUD is an acronym used to refer to the four basic operations that can be performed on database applications: Create, Read, Update, and Delete. Many programming languages and protocols have their own equivalent of CRUD, often with slight variations in naming and intent. For example, SQL — a popular language for interacting with databases — calls the four functions Insert, Select, Update, and Delete. Similarly, the HTTP protocol has <literal>POST</literal>, <literal>GET</literal>, <literal>PUT</literal> and <literal>DELETE</literal> as verbs to represent these CRUD operations. This approach has got extended to our design of APIs as well. This has resulted in the proliferation of both CRUD-based APIs and user experiences. Take a look at the <literal>CreateLCApplicationCommand</literal> from Chapter 5:</simpara>
+<programlisting language="java" linenumbering="numbered">import lombok.Data;
+
+@Data
+public class CreateLCApplicationCommand {
+
+    private LCApplicationId id;
+
+    private ClientId clientId;
+    private Party applicant;
+    private Party beneficiary;
+    private AdvisingBank advisingBank;
+    private LocalDate issueDate;
+    private MonetaryAmount amount;
+    private String merchandiseDescription;
+}</programlisting>
+<simpara>Along similar lines, it would not be uncommon to create a corresponding  <literal>UpdateLCApplicationCommand</literal> as depicted here:</simpara>
+<programlisting language="java" linenumbering="numbered">import lombok.Data;
+
+@Data
+public class UpdateLCApplicationCommand {
+
+    @TargetAggregateIdentifier
+    private LCApplicationId id;
+
+    private ClientId clientId;
+    private Party applicant;
+    private Party beneficiary;
+    private AdvisingBank advisingBank;
+    private LocalDate issueDate;
+    private MonetaryAmount amount;
+    private String merchandiseDescription;
+}</programlisting>
+<simpara>While this is very common and also very easy to grasp, it is not without problems. Here are some questions that taking this approach raises:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Are we allowed to change everything listed in the <literal>update</literal> command?</simpara>
+</listitem>
+<listitem>
+<simpara>Assuming that is true, do they all change at the same time?</simpara>
+</listitem>
+<listitem>
+<simpara>How do we know what exactly changed? Should we be doing a diff?</simpara>
+</listitem>
+<listitem>
+<simpara>What if all the attributes mentioned above are not included in the <literal>update</literal> command?</simpara>
+</listitem>
+<listitem>
+<simpara>What if we need to add attributes in future?</simpara>
+</listitem>
+<listitem>
+<simpara>Is the business intent of what the user wanted to accomplish captured?</simpara>
+</listitem>
+</orderedlist>
+<simpara>In a simple system, the answer to these questions may not matter that much. However, as system complexity increases, will this approach remain resilient to change? We feel that it merits taking a look at another approach called task-based APIs to be able to answer these questions.</simpara>
+</section>
+<section xml:id="task-based-apis">
+<title>Task-based APIs</title>
+<simpara>In a typical organization, individuals perform tasks relevant to their specialization. The bigger the organization, the higher the degree of specialization. This approach of segregating tasks according to one&#8217;s specialization makes sense, because it mitigates the possibility of stepping on each others' shoes, especially when getting complex pieces of work done. For example, in the LC application process, there is a need to establish the value/legality of the product while also determining the credit worthiness of the applicant. It makes sense that each of these tasks are usually performed by individuals in unrelated departments. It also follows that these tasks can be performed independently from the other.</simpara>
+<simpara>In terms of a business process, if we have a single <literal>CreateLCApplicationCommand</literal> that precedes these operations, individuals in both departments firstly have to wait for the entire application to be filled out before either can commence their work. Secondly, if either piece of information is updated through a single <literal>UpdateLCApplicationCommand</literal>, it is unclear what changed. This can result in a spurious notification being sent to at least one department because of this lack of clarity in the process.</simpara>
+<simpara>Since most work happens in the form of specific tasks, it can work to our advantage if our processes and by extension, our APIs mirror these behaviors.</simpara>
+<simpara>Keeping this in mind, let&#8217;s re-examine our revised APIs for the LC application process:</simpara>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/revised-commands.png"/>
+</imageobject>
+<textobject><phrase>revised commands</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <literal>ChangeMerchandise</literal> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action.</simpara>
+</section>
+<section xml:id="impact-of-api-style-on-user-experiences">
+<title>Impact of API style on user experiences</title>
+
+</section>
+<section xml:id="task-based-or-crud-based">
+<title>Task-based or CRUD-based?</title>
+<simpara>Task-based UIs (in contrast to CRUD-based UIs) treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly.</simpara>
+</section>
+</section>
+<section xml:id="design-pattern-considerations">
+<title>Design pattern considerations</title>
+<section xml:id="usability">
+<title>Usability</title>
+
+</section>
+<section xml:id="testability">
+<title>Testability</title>
+
+</section>
+</section>
+<section xml:id="implementing-the-save-lc-functionality">
+<title>Implementing the save LC functionality</title>
+
+</section>
+<section xml:id="invoking-backend-services">
+<title>Invoking backend services</title>
+
+</section>
+<section xml:id="summary">
+<title>Summary</title>
+
+</section>
+<section xml:id="questions">
+<title>Questions</title>
+
+</section>
+<section xml:id="further-reading">
+<title>Further reading</title>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="25*"/>
+<colspec colname="col_2" colwidth="25*"/>
+<colspec colname="col_3" colwidth="50*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Title</entry>
+<entry align="left" valign="top">Author</entry>
+<entry align="left" valign="top">Location</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>TODO</simpara></entry>
+<entry align="left" valign="top"><simpara>TODO</simpara></entry>
+<entry align="left" valign="top"><simpara>TODO</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+</section>
+</article>

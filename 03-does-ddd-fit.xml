@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Where and How Does DDD Fit? (15 pages)</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="where-and-how-does-ddd-fit-15-pages">
+<title>Where and How Does DDD Fit? (15 pages)</title>
+<blockquote>
+<attribution>
+Bob Goff
+</attribution>
+<simpara>We won’t be distracted by comparison if we are captivated with purpose.</simpara>
+</blockquote>
+<simpara>Software architecture refers to the fundamental structures of a software system and the discipline of creating such structures and systems. Over the years, we have accumulated a series of architecture styles to help us deal with system complexity. In this chapter we will examine how DDD compares with several of these architecture styles and how/where it fits in the overall scheme of things when crafting a software solution.</simpara>
+<section xml:id="architecture-styles">
+<title>Architecture Styles</title>
+
+</section>
+<section xml:id="layered-architecture">
+<title>Layered Architecture</title>
+
+</section>
+<section xml:id="onion-architecture">
+<title>Onion Architecture</title>
+
+</section>
+<section xml:id="hexagonal-architecture">
+<title>Hexagonal Architecture</title>
+
+</section>
+<section xml:id="service-oriented-architecture">
+<title>Service Oriented Architecture</title>
+
+</section>
+<section xml:id="microservice-architecture">
+<title>Microservice Architecture</title>
+
+</section>
+<section xml:id="event-driven-architecture-eda">
+<title>Event-Driven Architecture (EDA)</title>
+
+</section>
+<section xml:id="command-query-responsibility-segregation-cqrs">
+<title>Command Query Responsibility Segregation (CQRS)</title>
+
+</section>
+<section xml:id="serverless-architecture">
+<title>Serverless Architecture</title>
+
+</section>
+</section>
+</article>

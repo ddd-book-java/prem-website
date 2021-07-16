@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Integrating with External Systems (15 pages)</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="integrating-with-external-systems-15-pages">
+<title>Integrating with External Systems (15 pages)</title>
+<blockquote>
+<attribution>
+Carl Jung
+</attribution>
+<simpara>Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by integration of the contraries.</simpara>
+</blockquote>
+<simpara>Thus far, we have used DDD to implement a robust core for our application. However, most bounded contexts usually have both upstream and downstream dependencies which usually change at a pace which is different from these core components. To maintain both agility and reliability  and enable loose coupling, it is important to create what DDD calls the anti-corruption layer in order to shield the core from everything that surrounds it. In this chapter, we will look at integrating with a legacy Inventory Management system. We will round off by looking at common patterns when integrating with legacy applications.</simpara>
+<section xml:id="technical-requirements">
+<title>Technical Requirements</title>
+
+</section>
+<section xml:id="implementing-consumer-driven-contracts">
+<title>Implementing consumer-driven contracts</title>
+
+</section>
+<section xml:id="exposing-a-rest-based-api">
+<title>Exposing a REST-based API</title>
+<simpara>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a RESTful interface.</simpara>
+</section>
+<section xml:id="exposing-an-events-based-api">
+<title>Exposing an events-based API</title>
+
+</section>
+<section xml:id="implementing-an-anti-corruption-layer">
+<title>Implementing an Anti-Corruption Layer</title>
+
+</section>
+<section xml:id="legacy-application-migration-patterns">
+<title>Legacy Application Migration Patterns</title>
+
+</section>
+</section>
+</article>

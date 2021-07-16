@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="3"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Distributing into Microservices (15 pages)</title>
+<date>2021-07-16</date>
+</info>
+<section xml:id="distributing-into-microservices-15-pages">
+<title>Distributing into Microservices (15 pages)</title>
+<blockquote>
+<attribution>
+Leslie Lamport
+</attribution>
+<simpara>A distributed system is one in which the failure of a computer you didn&#8217;t even know existed can render your own computer unusable.</simpara>
+</blockquote>
+<simpara>We now have a working application which is bundled as a single package. In this chapter, we will distribute the UI, the command side, the query side and the saga components into distinct components. We will also look at how to test the system as a whole using the excellent <link xl:href="https://www.testcontainers.org/">testcontainers</link> library.</simpara>
+<section xml:id="right-sizing-components">
+<title>Right Sizing Components</title>
+
+</section>
+<section xml:id="maintaining-autonomy">
+<title>Maintaining Autonomy</title>
+
+</section>
+<section xml:id="understanding-the-costs-of-distribution">
+<title>Understanding the Costs of Distribution</title>
+
+</section>
+<section xml:id="testing-the-overall-system">
+<title>Testing the Overall System</title>
+
+</section>
+</section>
+</article>
