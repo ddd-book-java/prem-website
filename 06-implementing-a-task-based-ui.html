@@ -449,7 +449,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#crud-based-apis">CRUD-based APIs</a></li>
 <li><a href="#task-based-apis">Task-based APIs</a></li>
-<li><a href="#impact-of-api-style-on-user-experiences">Impact of API style on user experiences</a></li>
 <li><a href="#task-based-or-crud-based">Task-based or CRUD-based?</a></li>
 </ul>
 </li>
@@ -726,7 +725,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/revised-commands.png" alt="revised commands" width="712" height="533">
+<img src="./images/revised-commands.png" alt="revised commands" width="712" height="554">
 </div>
 </div>
 <div class="paragraph">
@@ -840,7 +839,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <p>Are we allowed to change everything listed in the <code>update</code> command?</p>
 </li>
 <li>
-<p>Assuming that is true, do they all change at the same time?</p>
+<p>Assuming that everything can change, do they all change at the same time?</p>
 </li>
 <li>
 <p>How do we know what exactly changed? Should we be doing a diff?</p>
@@ -880,17 +879,118 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 </div>
 <div class="paragraph">
-<p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action.</p>
+<p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="impact-of-api-style-on-user-experiences"><a class="anchor" href="#impact-of-api-style-on-user-experiences"></a>Impact of API style on user experiences</h4>
-
 </div>
 <div class="sect3">
 <h4 id="task-based-or-crud-based"><a class="anchor" href="#task-based-or-crud-based"></a>Task-based or CRUD-based?</h4>
 <div class="paragraph">
-<p>Task-based UIs (in contrast to CRUD-based UIs) treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly.</p>
+<p>CRUD-based APIs seem to operate at the level of the aggregate. In our example, we have the LC aggregate. In the simplest case, this essentially translates to four operations aligned with each of the CRUD verbs. However, as we are seeing, even in our simplified version, the LC is becoming a fairly complex concept. Having to work with just four operations at the level of the LC is cognitively complex. With more requirements, this complexity will only continue to increase. For example, consider a situation where  the business expresses a need to capture a lot more information about the <code>merchandise</code>, where today, this is simply captured in the form of free-form text.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre><span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Merchandise</span> {
+    <span style="color:#088;font-weight:bold">private</span> MerchandiseId id;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Set</span>&lt;Item&gt; items;
+    <span style="color:#088;font-weight:bold">private</span> Packaging packaging;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">boolean</span> hazardous;
+}
+
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Item</span> {
+    <span style="color:#088;font-weight:bold">private</span> ProductId productId;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">int</span> quantity;
+    <span style="color:#777">// ...</span>
+}
+
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Packaging</span> {
+    <span style="color:#777">// ...</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In our current design, the implications of this change are far reaching for both the provider and the consumer(s).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Characteristic</th>
+<th class="tableblock halign-left valign-top">CRUD-based</th>
+<th class="tableblock halign-left valign-top">Task-based</th>
+<th class="tableblock halign-left valign-top">Commentary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usability</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reusability</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces enable more complex features to be composed using simpler ones providing more flexibility to the consumers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scalability</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup></em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Latency</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arguably, coarse-grained CRUD interfaces can enable consumers to achieve a lot more in less interactions, thereby providing low latency.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Management Overhead</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity of the system as a whole is proportional to the number of features that need to be implemented. Irrespective of API style, this usually remains constant. However, spreading complexity relatively uniformly across multiple simpler interfaces can enable managing complexity a lot more effectively.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. That will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
 </div>
 </div>
 </div>
@@ -953,10 +1053,13 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="footnote" id="_footnotedef_1">
 <a href="#_footnoteref_1">1</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
 </div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-16 20:23:35 UTC
+Last updated 2021-07-19 17:05:34 UTC
 </div>
 </div>
 </body>

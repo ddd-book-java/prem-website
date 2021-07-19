@@ -39,7 +39,11 @@ Write more here&#8230;&#8203; TODO.</simpara>
 <part xml:id="part-1-foundations">
 <title>Part 1: Foundations</title>
 <partintro>
-<simpara>    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practising Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will also do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age.</simpara>
+<simpara>    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practising Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will also do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age.
+:tip-caption: 💡</simpara>
+<tip>
+<simpara>It&#8217;s possible to use Unicode glyphs as admonition icons.</simpara>
+</tip>
 </partintro>
 <chapter xml:id="the-rationale-for-domain-driven-design" role="text-justify">
 <title>The Rationale for Domain-Driven Design</title>
@@ -295,8 +299,16 @@ Confucius
 </section>
 <section xml:id="evolving-a-domain-model-and-a-solution">
 <title>Evolving a Domain Model and a Solution</title>
-<simpara>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <emphasis role="strong"><emphasis>domain model</emphasis></emphasis> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This solution is termed as a <emphasis role="strong"><emphasis>bounded context</emphasis></emphasis> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <emphasis role="strong"><emphasis>context maps</emphasis></emphasis>.</simpara>
+<simpara>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <emphasis role="strong"><emphasis>domain model</emphasis></emphasis> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This boundary is termed as a <emphasis role="strong"><emphasis>bounded context</emphasis></emphasis> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <emphasis role="strong"><emphasis>context maps</emphasis></emphasis>.</simpara>
 <simpara>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <emphasis role="strong">not</emphasis> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</simpara>
+<informalfigure role="text-center">
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/bounded-context.png"/>
+</imageobject>
+<textobject><phrase>bounded context</phrase></textobject>
+</mediaobject>
+</informalfigure>
 <simpara>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <link xl:href="https://domainstorytelling.org/">domain storytelling</link>, <link xl:href="https://www.eventstorming.com/">event storming</link>, and <link xl:href="https://evolutionaryarchitecture.com/">evolutionary architecture</link> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</simpara>
 <important>
 <simpara>The thrust of DDD is that <emphasis role="strong">one single model</emphasis> form the bedrock of team communication, design, and implementation. While teams may and will indeed require a variety of means to express the model, it is very important to keep the executable code and the various representations up to date at all times.</simpara>
@@ -2410,7 +2422,7 @@ public class UpdateLCApplicationCommand {
 <simpara>Are we allowed to change everything listed in the <literal>update</literal> command?</simpara>
 </listitem>
 <listitem>
-<simpara>Assuming that is true, do they all change at the same time?</simpara>
+<simpara>Assuming that everything can change, do they all change at the same time?</simpara>
 </listitem>
 <listitem>
 <simpara>How do we know what exactly changed? Should we be doing a diff?</simpara>
@@ -2441,15 +2453,89 @@ public class UpdateLCApplicationCommand {
 <textobject><phrase>revised commands</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <literal>ChangeMerchandise</literal> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action.</simpara>
-</section>
-<section xml:id="impact-of-api-style-on-user-experiences">
-<title>Impact of API style on user experiences</title>
-
+<simpara>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <literal>ChangeMerchandise</literal> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</simpara>
 </section>
 <section xml:id="task-based-or-crud-based">
 <title>Task-based or CRUD-based?</title>
-<simpara>Task-based UIs (in contrast to CRUD-based UIs) treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly.</simpara>
+<simpara>CRUD-based APIs seem to operate at the level of the aggregate. In our example, we have the LC aggregate. In the simplest case, this essentially translates to four operations aligned with each of the CRUD verbs. However, as we are seeing, even in our simplified version, the LC is becoming a fairly complex concept. Having to work with just four operations at the level of the LC is cognitively complex. With more requirements, this complexity will only continue to increase. For example, consider a situation where  the business expresses a need to capture a lot more information about the <literal>merchandise</literal>, where today, this is simply captured in the form of free-form text.</simpara>
+<programlisting language="java" linenumbering="numbered">public class Merchandise {
+    private MerchandiseId id;
+    private Set&lt;Item&gt; items;
+    private Packaging packaging;
+    private boolean hazardous;
+}
+
+class Item {
+    private ProductId productId;
+    private int quantity;
+    // ...
+}
+
+class Packaging {
+    // ...
+}</programlisting>
+<simpara>In our current design, the implications of this change are far reaching for both the provider and the consumer(s).</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="14.2857*"/>
+<colspec colname="col_2" colwidth="14.2857*"/>
+<colspec colname="col_3" colwidth="14.2857*"/>
+<colspec colname="col_4" colwidth="57.1429*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Characteristic</entry>
+<entry align="left" valign="top">CRUD-based</entry>
+<entry align="left" valign="top">Task-based</entry>
+<entry align="left" valign="top">Commentary</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Usability</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Reusability</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>Task-based interfaces enable more complex features to be composed using simpler ones providing more flexibility to the consumers.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Scalability</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Security</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <emphasis>principle of least privilege<footnote><simpara><link xl:href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">https://en.wikipedia.org/wiki/Principle_of_least_privilege</link></simpara></footnote></emphasis>.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Latency</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>Arguably, coarse-grained CRUD interfaces can enable consumers to achieve a lot more in less interactions, thereby providing low latency.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Management Overhead</simpara></entry>
+<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Complexity</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="left" valign="top"><simpara>Complexity of the system as a whole is proportional to the number of features that need to be implemented. Irrespective of API style, this usually remains constant. However, spreading complexity relatively uniformly across multiple simpler interfaces can enable managing complexity a lot more effectively.</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. That will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</simpara>
 </section>
 </section>
 <section xml:id="design-pattern-considerations">

@@ -817,10 +817,15 @@ It is important to note that the notion of core vs. supporting vs. generic subdo
 <div class="sect3">
 <h4 id="evolving-a-domain-model-and-a-solution"><a class="anchor" href="#evolving-a-domain-model-and-a-solution"></a>Evolving a Domain Model and a Solution</h4>
 <div class="paragraph">
-<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This solution is termed as a <strong><em>bounded context</em></strong> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>.</p>
+<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This boundary is termed as a <strong><em>bounded context</em></strong> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>.</p>
 </div>
 <div class="paragraph">
 <p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context.png" alt="bounded context" width="583" height="315">
+</div>
 </div>
 <div class="paragraph">
 <p>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <a href="https://domainstorytelling.org/">domain storytelling</a>, <a href="https://www.eventstorming.com/">event storming</a>, and <a href="https://evolutionaryarchitecture.com/">evolutionary architecture</a> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</p>
@@ -1067,7 +1072,7 @@ He who has a why to live for can bear almost any how.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-16 20:23:35 UTC
+Last updated 2021-07-19 17:05:34 UTC
 </div>
 </div>
 </body>
