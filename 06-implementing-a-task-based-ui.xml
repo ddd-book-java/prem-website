@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
-<date>2021-07-19</date>
+<date>2021-07-20</date>
 </info>
 <section xml:id="implementing-the-user-interfacetask-based-20-pages" role="text-justify">
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
@@ -15,7 +15,7 @@ Marty Rubin
 <simpara>To accomplish a difficult task, one must first make it easy.</simpara>
 </blockquote>
 <simpara>The essence of DDD is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <link xl:href="https://openjfx.com/">JavaFX</link><footnote><simpara><link xl:href="https://openjfx.com/">https://openjfx.com/</link></simpara></footnote> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <emphasis>impedance mismatch</emphasis> and how task-based UIs can help cope with this mismatch a lot better.</simpara>
-<simpara>At the end of the chapter, you will learn how to employ DDD principles to help you build robust user experiences that are simple and intuitive. You will also learn why it may be prudent to design your backend APIs from the perspective of the consumer.</simpara>
+<simpara>At the end of the chapter, you will learn how to employ DDD principles to help you build robust user experiences that are simple and intuitive. You will also learn why it may be prudent to design your backend interfaces (APIs) from the perspective of the consumer.</simpara>
 <section xml:id="technical-requirements">
 <title>Technical Requirements</title>
 <itemizedlist>
@@ -47,80 +47,6 @@ Marty Rubin
 <simpara>Project Lombok (To reduce verbosity)</simpara>
 </listitem>
 </itemizedlist>
-</section>
-<section xml:id="bootstrapping-the-ui">
-<title>Bootstrapping the UI</title>
-<simpara>We will simply be building on top of the LC application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on Bootstrapping the Application. In addition, we will need to add the following dependencies to the <literal>dependencies</literal> section of the Maven <literal>pom.xml</literal> file in the root directory of the project:</simpara>
-<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
-    &lt;!--...--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
-        &lt;artifactId&gt;javafx-controls&lt;/artifactId&gt;
-        &lt;version&gt;${javafx.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
-        &lt;artifactId&gt;javafx-graphics&lt;/artifactId&gt;
-        &lt;version&gt;${javafx.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
-        &lt;artifactId&gt;javafx-fxml&lt;/artifactId&gt;
-        &lt;version&gt;${javafx.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
-        &lt;artifactId&gt;mvvmfx&lt;/artifactId&gt;
-        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
-        &lt;artifactId&gt;mvvmfx-spring-boot&lt;/artifactId&gt;
-        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!--...--&gt;
-&lt;/dependencies&gt;</programlisting>
-<simpara>To run UI tests, you will need to add the following dependencies:</simpara>
-<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
-    &lt;!--...--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
-        &lt;artifactId&gt;testfx-junit5&lt;/artifactId&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-        &lt;version&gt;${testfx-junit5.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
-        &lt;artifactId&gt;openjfx-monocle&lt;/artifactId&gt;
-        &lt;version&gt;${openjfx-monocle.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
-        &lt;artifactId&gt;mvvmfx-testing-utils&lt;/artifactId&gt;
-        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!--...--&gt;
-&lt;/dependencies&gt;</programlisting>
-<simpara>To be able to run the application from the command line, you will need to add the <literal>javafx-maven-plugin</literal> to the <literal>plugins</literal> section of your <literal>pom.xml</literal>, per the following:</simpara>
-<programlisting language="xml" linenumbering="numbered">&lt;plugin&gt;
-    &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
-    &lt;artifactId&gt;javafx-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${javafx-maven-plugin.version}&lt;/version&gt;
-    &lt;configuration&gt;
-        &lt;mainClass&gt;com.premonition.lc.issuance.App&lt;/mainClass&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;</programlisting>
-<simpara>To run the application from the command line, use:</simpara>
-<programlisting language="bash" linenumbering="unnumbered">mvn javafx:run</programlisting>
-<note>
-<simpara>If you are using a JDK greater that version 1.8, the JavaFX libraries may not be bundled with the JDK itself. When running the application from your IDE, you will likely need to add the following:</simpara>
-</note>
-<programlisting language="bash" linenumbering="unnumbered">--module-path=&lt;path-to-javafx-sdk&gt;/lib/ \
-   --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.media</programlisting>
-<note>
-<simpara>Please refer to the ch06 directory of the accompanying source code repository for the complete example.</simpara>
-</note>
 <simpara>Before we dive deep into building the GUI solution, let&#8217;s do a quick recap of where we left the APIs.</simpara>
 </section>
 <section xml:id="api-styles">
@@ -249,65 +175,313 @@ class Packaging {
 <simpara>In our current design, the implications of this change are far reaching for both the provider and the consumer(s).</simpara>
 <informaltable frame="all" rowsep="1" colsep="1">
 <tgroup cols="4">
-<colspec colname="col_1" colwidth="14.2857*"/>
-<colspec colname="col_2" colwidth="14.2857*"/>
-<colspec colname="col_3" colwidth="14.2857*"/>
-<colspec colname="col_4" colwidth="57.1429*"/>
+<colspec colname="col_1" colwidth="11.1111*"/>
+<colspec colname="col_2" colwidth="11.1111*"/>
+<colspec colname="col_3" colwidth="11.1111*"/>
+<colspec colname="col_4" colwidth="66.6667*"/>
 <thead>
 <row>
 <entry align="left" valign="top">Characteristic</entry>
-<entry align="left" valign="top">CRUD-based</entry>
-<entry align="left" valign="top">Task-based</entry>
+<entry align="center" valign="top">CRUD-based</entry>
+<entry align="center" valign="top">Task-based</entry>
 <entry align="left" valign="top">Commentary</entry>
 </row>
 </thead>
 <tbody>
 <row>
 <entry align="left" valign="top"><simpara>Usability</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/frown-open.png"/>
+</imageobject>
+<textobject><phrase>frown open</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Reusability</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/times-circle.png"/>
+</imageobject>
+<textobject><phrase>times circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces enable more complex features to be composed using simpler ones providing more flexibility to the consumers.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Scalability</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/times-circle.png"/>
+</imageobject>
+<textobject><phrase>times circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Security</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/times-circle.png"/>
+</imageobject>
+<textobject><phrase>times circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <emphasis>principle of least privilege<footnote><simpara><link xl:href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">https://en.wikipedia.org/wiki/Principle_of_least_privilege</link></simpara></footnote></emphasis>.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Latency</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/times-circle.png"/>
+</imageobject>
+<textobject><phrase>times circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Arguably, coarse-grained CRUD interfaces can enable consumers to achieve a lot more in less interactions, thereby providing low latency.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Management Overhead</simpara></entry>
-<entry align="left" valign="top"><simpara>++</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/check-circle.png"/>
+</imageobject>
+<textobject><phrase>check circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/times-circle.png"/>
+</imageobject>
+<textobject><phrase>times circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</simpara></entry>
 </row>
 <row>
 <entry align="left" valign="top"><simpara>Complexity</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
-<entry align="left" valign="top"><simpara>&#8201;&#8212;&#8201;</simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="gray"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/question-circle.png"/>
+</imageobject>
+<textobject><phrase>question circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
+<entry align="center" valign="top"><simpara><phrase role="gray"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="./images/icons/question-circle.png"/>
+</imageobject>
+<textobject><phrase>question circle</phrase></textobject>
+</inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Complexity of the system as a whole is proportional to the number of features that need to be implemented. Irrespective of API style, this usually remains constant. However, spreading complexity relatively uniformly across multiple simpler interfaces can enable managing complexity a lot more effectively.</simpara></entry>
 </row>
 </tbody>
 </tgroup>
 </informaltable>
 <simpara>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. That will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</simpara>
+<simpara>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. However, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</simpara>
+</section>
+</section>
+<section xml:id="bootstrapping-the-ui">
+<title>Bootstrapping the UI</title>
+<simpara>We will simply be building on top of the LC application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on Bootstrapping the Application. In addition, we will need to add the following dependencies to the <literal>dependencies</literal> section of the Maven <literal>pom.xml</literal> file in the root directory of the project:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
+    &lt;!--...--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-controls&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-graphics&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+        &lt;artifactId&gt;javafx-fxml&lt;/artifactId&gt;
+        &lt;version&gt;${javafx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx-spring-boot&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--...--&gt;
+&lt;/dependencies&gt;</programlisting>
+<simpara>To run UI tests, you will need to add the following dependencies:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;dependencies&gt;
+    &lt;!--...--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
+        &lt;artifactId&gt;testfx-junit5&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+        &lt;version&gt;${testfx-junit5.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testfx&lt;/groupId&gt;
+        &lt;artifactId&gt;openjfx-monocle&lt;/artifactId&gt;
+        &lt;version&gt;${openjfx-monocle.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.saxsys&lt;/groupId&gt;
+        &lt;artifactId&gt;mvvmfx-testing-utils&lt;/artifactId&gt;
+        &lt;version&gt;${mvvmfx.version}&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!--...--&gt;
+&lt;/dependencies&gt;</programlisting>
+<simpara>To be able to run the application from the command line, you will need to add the <literal>javafx-maven-plugin</literal> to the <literal>plugins</literal> section of your <literal>pom.xml</literal>, per the following:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;plugin&gt;
+    &lt;groupId&gt;org.openjfx&lt;/groupId&gt;
+    &lt;artifactId&gt;javafx-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${javafx-maven-plugin.version}&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;mainClass&gt;com.premonition.lc.issuance.App&lt;/mainClass&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</programlisting>
+<simpara>To run the application from the command line, use:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">mvn javafx:run</programlisting>
+<note>
+<simpara>If you are using a JDK greater that version 1.8, the JavaFX libraries may not be bundled with the JDK itself. When running the application from your IDE, you will likely need to add the following:</simpara>
+</note>
+<programlisting language="bash" linenumbering="unnumbered">--module-path=&lt;path-to-javafx-sdk&gt;/lib/ \
+   --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.media</programlisting>
+<simpara>We are making use of the mvvmfx framework to assemble the UI. To make this work with spring boot, the application launcher looks as depicted here:</simpara>
+<programlisting language="java" linenumbering="numbered">@SpringBootApplication
+public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
+
+    private static final InputStream icon = Objects.requireNonNull(App.class.getResourceAsStream("/lc-icon.png"));
+
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+
+    @Override
+    public void startMvvmfx(Stage stage) {
+        stage.setTitle("LC Issuance");
+
+        final Parent parent = FluentViewLoader.fxmlView(MainView.class)
+                .providedScopes(new UserScope("admin"))
+                .load().getView();
+
+        final Image icon = new Image(App.icon);
+        stage.getIcons().add(icon);
+        final Scene scene = new Scene(parent);
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; {
+            if (KeyCode.ESCAPE == event.getCode()) {
+                stage.close();
+            }
+        });
+        stage.setScene(scene);
+        stage.show();
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO1-1">
+<para>Note that we are required to extend from the <literal>mvvmfx</literal> framework class <literal>MvvmfxSpringApplication</literal>.</para>
+</callout>
+</calloutlist>
+<note>
+<simpara>Please refer to the ch06 directory of the accompanying source code repository for the complete example.</simpara>
+</note>
+</section>
+<section xml:id="implementing-the-ui">
+<title>Implementing the UI</title>
+<simpara>When working with user interfaces, it is fairly customary to use one of these presentation patterns:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Model-View-Controller (MVC)</simpara>
+</listitem>
+<listitem>
+<simpara>Model-View-Presenter (MVP)</simpara>
+</listitem>
+<listitem>
+<simpara>Model-View-ViewModel (MVVM)</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Each of these patterns enable us to produce code that is loosely coupled, testable and maintainable. Let&#8217;s briefly examine each of these in more detail here:</simpara>
+<section xml:id="model-view-controller">
+<title>Model View Controller</title>
+<simpara>This is arguably the oldest, most popular when implementing user interfaces, given that it has been in existence since the early 1970s. The pattern breaks the app into three components:</simpara>
+<figure role="text-center">
+<title>MVC design pattern</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/ui-patterns/mvc.png"/>
+</imageobject>
+<textobject><phrase>mvc</phrase></textobject>
+</mediaobject>
+</figure>
+<itemizedlist>
+<listitem>
+<simpara>Model: responsible to house the business logic and managing the state of the application.</simpara>
+</listitem>
+<listitem>
+<simpara>View: responsible for presenting data to the user and handling user interactions.</simpara>
+</listitem>
+<listitem>
+<simpara>Controller: responsible to act as a glue between the model and the view. It is also responsible for handling incoming requests, data management, networking and validation.</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="model-view-presenter">
+<title>Model View Presenter</title>
+<figure role="text-center">
+<title>MVP design pattern</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/ui-patterns/mvp.png"/>
+</imageobject>
+<textobject><phrase>mvp</phrase></textobject>
+</mediaobject>
+</figure>
+</section>
+<section xml:id="model-view-viewmodel">
+<title>Model View ViewModel</title>
+<figure role="text-center">
+<title>MVVM design pattern</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/ui-patterns/mvvm.png"/>
+</imageobject>
+<textobject><phrase>mvvm</phrase></textobject>
+</mediaobject>
+</figure>
+</section>
+<section xml:id="mvc-versus-mvp-versus-mvvm">
+<title>MVC versus MVP versus MVVM</title>
+
 </section>
 </section>
 <section xml:id="design-pattern-considerations">
@@ -320,10 +494,6 @@ class Packaging {
 <title>Testability</title>
 
 </section>
-</section>
-<section xml:id="implementing-the-save-lc-functionality">
-<title>Implementing the save LC functionality</title>
-
 </section>
 <section xml:id="invoking-backend-services">
 <title>Invoking backend services</title>
