@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
-<date>2021-07-20</date>
+<date>2021-07-23</date>
 </info>
 <section xml:id="implementing-the-user-interfacetask-based-20-pages" role="text-justify">
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
@@ -192,9 +192,9 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Usability</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/frown-open.png"/>
+<imagedata fileref="./images/icons/times-circle.png"/>
 </imageobject>
-<textobject><phrase>frown open</phrase></textobject>
+<textobject><phrase>times circle</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
@@ -445,15 +445,18 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 </figure>
 <itemizedlist>
 <listitem>
-<simpara>Model: responsible to house the business logic and managing the state of the application.</simpara>
+<simpara><emphasis role="strong">Model</emphasis>: responsible to house the business logic and managing the state of the application.</simpara>
 </listitem>
 <listitem>
-<simpara>View: responsible for presenting data to the user and handling user interactions.</simpara>
+<simpara><emphasis role="strong">View</emphasis>: responsible for presenting data to the user.</simpara>
 </listitem>
 <listitem>
-<simpara>Controller: responsible to act as a glue between the model and the view. It is also responsible for handling incoming requests, data management, networking and validation.</simpara>
+<simpara><emphasis role="strong">Controller</emphasis>: responsible to act as a glue between the model and the view. It is also responsible for handling user interactions, data management, networking and validation.</simpara>
 </listitem>
 </itemizedlist>
+<note>
+<simpara>There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions, etc. need to live. Some implementations (such as the active record<footnote><simpara><link xl:href="https://martinfowler.com/eaaCatalog/activeRecord.html">https://martinfowler.com/eaaCatalog/activeRecord.html</link></simpara></footnote> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<footnote><simpara><link xl:href="https://martinfowler.com/eaaCatalog/repository.html">https://martinfowler.com/eaaCatalog/repository.html</link></simpara></footnote> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.</simpara>
+</note>
 </section>
 <section xml:id="model-view-presenter">
 <title>Model View Presenter</title>
@@ -466,9 +469,20 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 <textobject><phrase>mvp</phrase></textobject>
 </mediaobject>
 </figure>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Model</emphasis>: responsible to house the business logic and managing the state of the application.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">View</emphasis>: responsible for presenting data to the user and notifying the presenter about user interactions.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Presenter</emphasis>: responsible for handling user interactions on behalf of the view. The presenter usually interacts with the view through an interface that the view implements. This allows for easier unit testing of the presenter independent of the view. The presenter interacts with the model for updates and read operations.</simpara>
+</listitem>
+</itemizedlist>
 </section>
-<section xml:id="model-view-viewmodel">
-<title>Model View ViewModel</title>
+<section xml:id="model-view-view-model">
+<title>Model View View-Model</title>
 <figure role="text-center">
 <title>MVVM design pattern</title>
 <mediaobject>
@@ -478,25 +492,26 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 <textobject><phrase>mvvm</phrase></textobject>
 </mediaobject>
 </figure>
+<itemizedlist>
+<listitem>
+<simpara>Model: responsible to house the business logic and managing the state of the application.</simpara>
+</listitem>
+<listitem>
+<simpara>View: responsible for presenting data to the user and notifying the view-model about user interactions.</simpara>
+</listitem>
+<listitem>
+<simpara>View-Model: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Now that we understand the mechanics of each of these patterns, let&#8217;s look at which one to use.</simpara>
 </section>
 <section xml:id="mvc-versus-mvp-versus-mvvm">
 <title>MVC versus MVP versus MVVM</title>
-
+<simpara>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</simpara>
 </section>
 </section>
-<section xml:id="design-pattern-considerations">
-<title>Design pattern considerations</title>
-<section xml:id="usability">
-<title>Usability</title>
-
-</section>
-<section xml:id="testability">
-<title>Testability</title>
-
-</section>
-</section>
-<section xml:id="invoking-backend-services">
-<title>Invoking backend services</title>
+<section xml:id="ui-implementation">
+<title>UI Implementation</title>
 
 </section>
 <section xml:id="summary">

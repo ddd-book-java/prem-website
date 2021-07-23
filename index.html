@@ -621,20 +621,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#model-view-controller">6.4.1. Model View Controller</a></li>
 <li><a href="#model-view-presenter">6.4.2. Model View Presenter</a></li>
-<li><a href="#model-view-viewmodel">6.4.3. Model View ViewModel</a></li>
+<li><a href="#model-view-view-model">6.4.3. Model View View-Model</a></li>
 <li><a href="#mvc-versus-mvp-versus-mvvm">6.4.4. MVC versus MVP versus MVVM</a></li>
 </ul>
 </li>
-<li><a href="#design-pattern-considerations">6.5. Design pattern considerations</a>
-<ul class="sectlevel3">
-<li><a href="#usability">6.5.1. Usability</a></li>
-<li><a href="#testability">6.5.2. Testability</a></li>
-</ul>
-</li>
-<li><a href="#invoking-backend-services">6.6. Invoking backend services</a></li>
-<li><a href="#summary-4">6.7. Summary</a></li>
-<li><a href="#questions-4">6.8. Questions</a></li>
-<li><a href="#further-reading-4">6.9. Further reading</a></li>
+<li><a href="#ui-implementation">6.5. UI Implementation</a></li>
+<li><a href="#summary-4">6.6. Summary</a></li>
+<li><a href="#questions-4">6.7. Questions</a></li>
+<li><a href="#further-reading-4">6.8. Further reading</a></li>
 </ul>
 </li>
 <li><a href="#implementing-queries-and-projections-10-pages">7. Implementing Queries and Projections (10 pages)</a>
@@ -4198,7 +4192,7 @@ To accomplish a difficult task, one must first make it easy.
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Usability</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-frown-open"></i></span></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-times-circle"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-check-circle"></i></span></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</p></td>
 </tr>
@@ -4546,15 +4540,27 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="ulist">
 <ul>
 <li>
-<p>Model: responsible to house the business logic and managing the state of the application.</p>
+<p><strong>Model</strong>: responsible to house the business logic and managing the state of the application.</p>
 </li>
 <li>
-<p>View: responsible for presenting data to the user and handling user interactions.</p>
+<p><strong>View</strong>: responsible for presenting data to the user.</p>
 </li>
 <li>
-<p>Controller: responsible to act as a glue between the model and the view. It is also responsible for handling incoming requests, data management, networking and validation.</p>
+<p><strong>Controller</strong>: responsible to act as a glue between the model and the view. It is also responsible for handling user interactions, data management, networking and validation.</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions, etc. need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -4565,46 +4571,66 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 <div class="title">Figure 1- 34. MVP design pattern</div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Model</strong>: responsible to house the business logic and managing the state of the application.</p>
+</li>
+<li>
+<p><strong>View</strong>: responsible for presenting data to the user and notifying the presenter about user interactions.</p>
+</li>
+<li>
+<p><strong>Presenter</strong>: responsible for handling user interactions on behalf of the view. The presenter usually interacts with the view through an interface that the view implements. This allows for easier unit testing of the presenter independent of the view. The presenter interacts with the model for updates and read operations.</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
-<h4 id="model-view-viewmodel"><a class="anchor" href="#model-view-viewmodel"></a><a class="link" href="#model-view-viewmodel">6.4.3. Model View ViewModel</a></h4>
+<h4 id="model-view-view-model"><a class="anchor" href="#model-view-view-model"></a><a class="link" href="#model-view-view-model">6.4.3. Model View View-Model</a></h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
 <div class="title">Figure 1- 35. MVVM design pattern</div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Model: responsible to house the business logic and managing the state of the application.</p>
+</li>
+<li>
+<p>View: responsible for presenting data to the user and notifying the view-model about user interactions.</p>
+</li>
+<li>
+<p>View-Model: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Now that we understand the mechanics of each of these patterns, let&#8217;s look at which one to use.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="mvc-versus-mvp-versus-mvvm"><a class="anchor" href="#mvc-versus-mvp-versus-mvvm"></a><a class="link" href="#mvc-versus-mvp-versus-mvvm">6.4.4. MVC versus MVP versus MVVM</a></h4>
-
+<div class="paragraph">
+<p>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="design-pattern-considerations"><a class="anchor" href="#design-pattern-considerations"></a><a class="link" href="#design-pattern-considerations">6.5. Design pattern considerations</a></h3>
-<div class="sect3">
-<h4 id="usability"><a class="anchor" href="#usability"></a><a class="link" href="#usability">6.5.1. Usability</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="testability"><a class="anchor" href="#testability"></a><a class="link" href="#testability">6.5.2. Testability</a></h4>
-
 </div>
 </div>
 <div class="sect2">
-<h3 id="invoking-backend-services"><a class="anchor" href="#invoking-backend-services"></a><a class="link" href="#invoking-backend-services">6.6. Invoking backend services</a></h3>
+<h3 id="ui-implementation"><a class="anchor" href="#ui-implementation"></a><a class="link" href="#ui-implementation">6.5. UI Implementation</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.7. Summary</a></h3>
+<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.6. Summary</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.8. Questions</a></h3>
+<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.7. Questions</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.9. Further reading</a></h3>
+<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.8. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -4855,11 +4881,17 @@ Sometimes I feel like I am being forgotten.
 <div class="footnote" id="_footnotedef_5">
 <a href="#_footnoteref_5">5</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-07-20 22:01:54 UTC
+Last updated 2021-07-23 14:27:32 UTC
 </div>
 </div>
 </body>
