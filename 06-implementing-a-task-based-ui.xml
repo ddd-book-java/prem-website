@@ -146,9 +146,9 @@ public class UpdateLCApplicationCommand {
 <informalfigure role="text-center">
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/revised-commands.png"/>
+<imagedata fileref="./images/revised-commands-recap.png"/>
 </imageobject>
-<textobject><phrase>revised commands</phrase></textobject>
+<textobject><phrase>revised commands recap</phrase></textobject>
 </mediaobject>
 </informalfigure>
 <simpara>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <literal>ChangeMerchandise</literal> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</simpara>
