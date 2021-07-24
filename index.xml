@@ -2280,23 +2280,25 @@ Marty Rubin
 <section xml:id="api-styles">
 <title>API Styles</title>
 <simpara>If you recall from chapter 5, we created the following commands:</simpara>
-<informalfigure role="text-center">
+<figure role="text-center">
+<title>Commands from the event storming session</title>
 <mediaobject>
 <imageobject>
 <imagedata fileref="./images/potential-commands.png"/>
 </imageobject>
 <textobject><phrase>potential commands</phrase></textobject>
 </mediaobject>
-</informalfigure>
+</figure>
 <simpara>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</simpara>
-<informalfigure role="text-center">
+<figure role="text-center">
+<title>Decomposed commands</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/revised-commands.png"/>
+<imagedata fileref="./images/ui-patterns/old-new-commands.png"/>
 </imageobject>
-<textobject><phrase>revised commands</phrase></textobject>
+<textobject><phrase>old new commands</phrase></textobject>
 </mediaobject>
-</informalfigure>
+</figure>
 <simpara>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <emphasis>always</emphasis> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</simpara>
 <itemizedlist>
 <listitem>
@@ -2400,7 +2402,7 @@ class Item {
 class Packaging {
     // ...
 }</programlisting>
-<simpara>In our current design, the implications of this change are far reaching for both the provider and the consumer(s).</simpara>
+<simpara>In our current design, the implications of this change are far reaching for both the provider and the consumer(s). Let&#8217;s look at some of the consequences in more detail:</simpara>
 <informaltable frame="all" rowsep="1" colsep="1">
 <tgroup cols="4">
 <colspec colname="col_1" colwidth="11.1111*"/>
@@ -2531,7 +2533,7 @@ class Packaging {
 </tbody>
 </tgroup>
 </informaltable>
-<simpara>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. That will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</simpara>
+<simpara>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</simpara>
 <simpara>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. However, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</simpara>
 </section>
 </section>
@@ -2605,7 +2607,7 @@ class Packaging {
 </note>
 <programlisting language="bash" linenumbering="unnumbered">--module-path=&lt;path-to-javafx-sdk&gt;/lib/ \
    --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.media</programlisting>
-<simpara>We are making use of the mvvmfx framework to assemble the UI. To make this work with spring boot, the application launcher looks as depicted here:</simpara>
+<simpara>We are making use of the mvvmFX framework to assemble the UI. To make this work with spring boot, the application launcher looks as depicted here:</simpara>
 <programlisting language="java" linenumbering="numbered">@SpringBootApplication
 public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 
@@ -2628,7 +2630,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 }</programlisting>
 <calloutlist>
 <callout arearefs="CO17-1">
-<para>Note that we are required to extend from the <literal>mvvmfx</literal> framework class <literal>MvvmfxSpringApplication</literal>.</para>
+<para>Note that we are required to extend from the mvvmFX framework class <literal>MvvmfxSpringApplication</literal>.</para>
 </callout>
 </calloutlist>
 <note>
@@ -2779,7 +2781,8 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 <section xml:id="view-delegate">
 <title>View delegate</title>
 <simpara>Next, let&#8217;s look at the structure of the view delegate <literal>com.premonition.lc.issuance.ui.views.CreateLCView</literal>:</simpara>
-<programlisting language="java" linenumbering="numbered">//...
+<programlisting language="java" linenumbering="numbered">import javafx.fxml.FXML;
+//...
 public class CreateLCView {                     <co xml:id="CO19-1"/>
 
     @FXML
@@ -2838,7 +2841,7 @@ public class CreateLCViewModel implements ViewModel {      <co xml:id="CO20-1"/>
 }</programlisting>
 <calloutlist>
 <callout arearefs="CO20-1">
-<para>The view-model class for the <literal>CreateLCView</literal>. Note that we are required to implement the <literal>de.saxsys.mvvmfx.ViewModel</literal> interface provided by the <literal>mvvmfx</literal> framework.</para>
+<para>The view-model class for the <literal>CreateLCView</literal>. Note that we are required to implement the <literal>de.saxsys.mvvmfx.ViewModel</literal> interface provided by the mvvmFX framework.</para>
 </callout>
 <callout arearefs="CO20-2">
 <para>We are initializing the <literal>clientReference</literal> property using the <literal>SimpleStringProperty</literal> provided by JavaFX. There are several other property classes to define more complex types. Please refer to the JavaFX documentation for more details.</para>
@@ -2880,7 +2883,7 @@ public class CreateLCView implements FxmlView&lt;CreateLCViewModel&gt; {   <co x
 }</programlisting>
 <calloutlist>
 <callout arearefs="CO21-1">
-<para>The <literal>mvvmfx</literal> framework requires that the view delegate implement the <literal>FXMLView&lt;? extends ViewModelType&gt;</literal>. In this case, the view-model type is <literal>CreateLCViewModel</literal>. The <literal>mvvmfx</literal> framework supports other view types as well. Please refer to the framework documentation for more details.</para>
+<para>The mvvmFX framework requires that the view delegate implement the <literal>FXMLView&lt;? extends ViewModelType&gt;</literal>. In this case, the view-model type is <literal>CreateLCViewModel</literal>. The mvvmFX framework supports other view types as well. Please refer to the framework documentation for more details.</para>
 </callout>
 <callout arearefs="CO21-2">
 <para>The framework provides a <literal>@de.saxsys.mvvmfx.InjectViewModel</literal> annotation to allow dependency injecting the view-model into the view delegate.</para>
@@ -2900,9 +2903,9 @@ public class CreateLCView implements FxmlView&lt;CreateLCViewModel&gt; {   <co x
 <title>Enforcing business validations in the UI</title>
 <simpara>We have a business validation that the client reference for an LC needs to be at least 4 characters in length. This will be enforced on the back-end. However, to provide a richer user experience, we will also enforce this validation on the UI.</simpara>
 <warning>
-<simpara>This may feel contrary to the notion of centralizing business validations on the back-end. While this is a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Industry luminary, Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<footnote><simpara><link xl:href="https://vimeo.com/131757759">https://vimeo.com/131757759</link></simpara></footnote>. Ted Neward also talks about this in his blog titled The Fallacies of Enterprise Computing<footnote><simpara><link xl:href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</link></simpara></footnote></simpara>
+<simpara>This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<footnote><simpara><link xl:href="https://vimeo.com/131757759">https://vimeo.com/131757759</link></simpara></footnote>. Ted Neward also talks about this in his blog titled <emphasis>The Fallacies of Enterprise Computing</emphasis><footnote><simpara><link xl:href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</link></simpara></footnote>.</simpara>
 </warning>
-<simpara>The advantage of using MVVM is that this logic is easily testable in a simple unit test of the view-model. Let&#8217;s test-drive this now:</simpara>
+<simpara>The advantage of using MVVM is that this logic is easily testable in a simple unit test of the view-model. Let&#8217;s see this in action test-drive this now:</simpara>
 <programlisting language="java" linenumbering="numbered">class CreateLCViewModelTests {
 
     private CreateLCViewModel viewModel;
@@ -3024,7 +3027,7 @@ public class CreateLCViewTests {                                  <co xml:id="CO
 <para>We have written a convenience <literal>@UITest</literal> extension to combine spring framework and TestFX testing. Please refer to the accompanying source code with the book for more details.</para>
 </callout>
 <callout arearefs="CO23-2">
-<para>We set up the spring context to act as the dependency injection provider for the mvvmfx framework and its injection annotations (for example, <literal>@InjectViewModel</literal>) to work.</para>
+<para>We set up the spring context to act as the dependency injection provider for the mvvmFX framework and its injection annotations (for example, <literal>@InjectViewModel</literal>) to work.</para>
 </callout>
 <callout arearefs="CO23-3">
 <para>We are using the <literal>@Start</literal> annotation provided by the TestFX framework to launch the UI.</para>
