@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
-<date>2021-07-23</date>
+<date>2021-07-24</date>
 </info>
 <section xml:id="implementing-the-user-interfacetask-based-20-pages" role="text-justify">
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
@@ -505,13 +505,341 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 </itemizedlist>
 <simpara>Now that we understand the mechanics of each of these patterns, let&#8217;s look at which one to use.</simpara>
 </section>
-<section xml:id="mvc-versus-mvp-versus-mvvm">
-<title>MVC versus MVP versus MVVM</title>
+<section xml:id="which-one-mvc-mvp-or-mvvm">
+<title>Which one: MVC, MVP or MVVM</title>
 <simpara>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</simpara>
 </section>
 </section>
 <section xml:id="ui-implementation">
 <title>UI Implementation</title>
+<section xml:id="mvvm-primer">
+<title>MVVM primer</title>
+<simpara>Let&#8217;s consider the example of creating a new LC. To create a new LC, all we need is for the applicant to provide a friendly client reference. This is usually an easy to remember string of free text. A simple rendition of this UI is shown here:</simpara>
+<figure role="text-center">
+<title>Create LC screen</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/mvvm/create-lc-ui.png"/>
+</imageobject>
+<textobject><phrase>create lc ui</phrase></textobject>
+</mediaobject>
+</figure>
+<section xml:id="declarative-view">
+<title>Declarative view</title>
+<simpara>When working with JavaFX, the view can be rendered using a declarative style in FXML format. Important excerpts from the <literal>CreateLCView.fxml</literal> file for the create LC view are shown here:</simpara>
+<programlisting language="xml" linenumbering="numbered">&lt;?import javafx.scene.layout.Pane?&gt;
+&lt;?import javafx.scene.control.Button?&gt;
+&lt;?import javafx.scene.control.TextField?&gt;
+
+&lt;Pane id="create-lc"  xmlns="http://javafx.com/javafx/16"
+                      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.premonition.lc.issuance.ui.views.CreateLCView"&gt; <co xml:id="CO2-1"/>
+    ...
+
+    &lt;TextField id="client-reference"
+               fx:id="clientReference"/&gt;                                 <co xml:id="CO2-2"/>
+
+    &lt;Button id="create-button"
+            fx:id="createButton"
+            text="Create"
+            onAction="#create"/&gt;                                         <co xml:id="CO2-3"/>
+    ...
+&lt;/Pane&gt;</programlisting>
+<calloutlist>
+<callout arearefs="CO2-1">
+<para>The <literal>CreateLCView</literal> class acts as the view delegate for the FXML view and is assigned using the <literal>fx:controller</literal> attribute of the root element (<literal>javafx.scene.layout.Pane</literal> in this case).</para>
+</callout>
+<callout arearefs="CO2-2">
+<para>In order to reference <literal>client-reference</literal> textbox in the view delegate, we use the <literal>fx:id</literal> annotation&#8201;&#8212;&#8201;<literal>clientReference</literal> in this case.</para>
+</callout>
+<callout arearefs="CO2-3">
+<para>Similarly, the <literal>create-button</literal> is referenced using <literal>fx:id=createButton</literal> in the view delegate. Furthermore, the <literal>create</literal> method in the view delegate is assigned to handle the default action (the button press event for <literal>javafx.scene.control.Button</literal>).</para>
+</callout>
+</calloutlist>
+</section>
+<section xml:id="view-delegate">
+<title>View delegate</title>
+<simpara>Next, let&#8217;s look at the structure of the view delegate <literal>com.premonition.lc.issuance.ui.views.CreateLCView</literal>:</simpara>
+<programlisting language="java" linenumbering="numbered">//...
+public class CreateLCView {                     <co xml:id="CO3-1"/>
+
+    @FXML
+    private TextField clientReference;          <co xml:id="CO3-2"/>
+    @FXML
+    private Button createButton;                <co xml:id="CO3-3"/>
+
+    public void create(ActionEvent event) {     <co xml:id="CO3-4"/>
+        // Handle button press logic here
+    }
+
+    // Other parts omitted for brevity...
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO3-1">
+<para>The view delegate class for the <literal>CreateLCView.fxml</literal> view.</para>
+</callout>
+<callout arearefs="CO3-2">
+<para>The Java binding for the <literal>clientReference</literal> textbox in the view. The name of the member needs to match exactly with the value of the <literal>fx:id</literal> attribute in the view. Further, it needs to be annotated with the <literal>@javafx.fxml.FXML</literal> annotation. The use of the <literal>@FXML</literal> annotation is optional if the member in the view delegate is <literal>public</literal> and matches the name in the view.</para>
+</callout>
+<callout arearefs="CO3-3">
+<para>Similarly, the <literal>createButton</literal> is bound to the corresponding button widget in the view.</para>
+</callout>
+<callout arearefs="CO3-4">
+<para>The method for the action handler when the <literal>createButton</literal> is pressed.</para>
+</callout>
+</calloutlist>
+</section>
+<section xml:id="view-model">
+<title>View-Model</title>
+<simpara>The view-model class <literal>CreateLCViewModel for the `CreateLCView</literal> is shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">import javafx.beans.property.StringProperty;
+import de.saxsys.mvvmfx.ViewModel;
+
+public class CreateLCViewModel implements ViewModel {      <co xml:id="CO4-1"/>
+
+    private final StringProperty clientReference;          <co xml:id="CO4-2"/>
+
+    public CreateLCViewModel() {
+        this.clientReference = new SimpleStringProperty(); <co xml:id="CO4-3"/>
+    }
+
+    public StringProperty clientReferenceProperty() {      <co xml:id="CO4-4"/>
+        return clientReference;
+    }
+
+    public String getClientReference() {
+        return clientReference.get();
+    }
+
+    public void setClientReference(String clientReference) {
+        this.clientReference.set(clientReference);
+    }
+
+    // Other getters and setters omitted for brevity
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO4-1">
+<para>The view-model class for the <literal>CreateLCView</literal>. Note that we are required to implement the <literal>de.saxsys.mvvmfx.ViewModel</literal> interface provided by the <literal>mvvmfx</literal> framework.</para>
+</callout>
+<callout arearefs="CO4-2">
+<para>We are initializing the <literal>clientReference</literal> property using the <literal>SimpleStringProperty</literal> provided by JavaFX. There are several other property classes to define more complex types. Please refer to the JavaFX documentation for more details.</para>
+</callout>
+<callout arearefs="CO4-3">
+<para>The value of the <literal>clientReference</literal> in the view-model. We will look at how to associate this with value of the <literal>clientReference</literal> textbox in the view shortly. Note that we are using the <literal>StringProperty</literal> provided by <literal>JavaFX</literal>, which provides access to the underlying <literal>String</literal> value of the client reference.</para>
+</callout>
+<callout arearefs="CO4-4">
+<para><literal>JavaFX</literal> beans are required to create a special accessor for the property itself in addition to the standard getter and setter for the underlying value.</para>
+</callout>
+</calloutlist>
+</section>
+<section xml:id="binding-the-view-to-the-view-model">
+<title>Binding the view to the view-model</title>
+<simpara>Next, let&#8217;s look at how to associate the view to the view-model:</simpara>
+<programlisting language="java" linenumbering="numbered">import de.saxsys.mvvmfx.Initialize;
+import de.saxsys.mvvmfx.FxmlView;
+import de.saxsys.mvvmfx.InjectViewModel;
+//...
+public class CreateLCView implements FxmlView&lt;CreateLCViewModel&gt; {   <co xml:id="CO5-1"/>
+
+    @FXML
+    private TextField clientReference;
+    @FXML
+    private Button createButton;
+
+    @InjectViewModel
+    private CreateLCViewModel viewModel;                             <co xml:id="CO5-2"/>
+
+    @Initialize
+    private void initialize() {                                      <co xml:id="CO5-3"/>
+        clientReference.textProperty()
+            .bindBidirectional(viewModel.clientReferenceProperty()); <co xml:id="CO5-4"/>
+        createButton.disableProperty()
+            .bind(viewModel.createDisabledProperty());               <co xml:id="CO5-5"/>
+    }
+
+    // Other parts omitted for brevity...
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO5-1">
+<para>The <literal>mvvmfx</literal> framework requires that the view delegate implement the <literal>FXMLView&lt;? extends ViewModelType&gt;</literal>. In this case, the view-model type is <literal>CreateLCViewModel</literal>. The <literal>mvvmfx</literal> framework supports other view types as well. Please refer to the framework documentation for more details.</para>
+</callout>
+<callout arearefs="CO5-2">
+<para>The framework provides a <literal>@de.saxsys.mvvmfx.InjectViewModel</literal> annotation to allow dependency injecting the view-model into the view delegate.</para>
+</callout>
+<callout arearefs="CO5-3">
+<para>The framework will invoke all methods annotated with the <literal>@de.saxsys.mvvmfx.Initialize</literal> annotation during the initialization process. The annotation can be omitted if the method is named <literal>initialize</literal> and is declared <literal>public</literal>. Please refer to the framework documentation for more details.</para>
+</callout>
+<callout arearefs="CO5-4">
+<para>We have now bound the text property of the <literal>clientReference</literal> textbox in the view delegate to the corresponding property in the view-model. Note that this is a <emphasis role="strong">bidirectional</emphasis> binding, which means that the value in the view and the view model are kept in sync if it changes on either side.</para>
+</callout>
+<callout arearefs="CO5-5">
+<para>This is another variation of binding in action, where we are making use of a unidirectional binding. Here, we are binding the disabled property of the <literal>create</literal> button to the corresponding property on the view-model. We will look at why we need to do this shortly.</para>
+</callout>
+</calloutlist>
+</section>
+<section xml:id="enforcing-business-validations-in-the-ui">
+<title>Enforcing business validations in the UI</title>
+<simpara>We have a business validation that the client reference for an LC needs to be at least 4 characters in length. This will be enforced on the back-end. However, to provide a richer user experience, we will also enforce this validation on the UI.</simpara>
+<warning>
+<simpara>This may feel contrary to the notion of centralizing business validations on the back-end. While this is a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Industry luminary, Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<footnote><simpara><link xl:href="https://vimeo.com/131757759">https://vimeo.com/131757759</link></simpara></footnote>. Ted Neward also talks about this in his blog titled The Fallacies of Enterprise Computing<footnote><simpara><link xl:href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</link></simpara></footnote></simpara>
+</warning>
+<simpara>The advantage of using MVVM is that this logic is easily testable in a simple unit test of the view-model. Let&#8217;s test-drive this now:</simpara>
+<programlisting language="java" linenumbering="numbered">class CreateLCViewModelTests {
+
+    private CreateLCViewModel viewModel;
+
+    @BeforeEach
+    void before() {
+        int clientReferenceMinLength = 4;
+        viewModel = new CreateLCViewModel(clientReferenceMinLength);
+    }
+
+    @Test
+    void shouldNotEnableCreateByDefault() {
+        assertThat(viewModel.getCreateDisabled()).isTrue();
+    }
+
+    @Test
+    void shouldNotEnableCreateIfClientReferenceLesserThanMinimumLength() {
+        viewModel.setClientReference("123");
+        assertThat(viewModel.getCreateDisabled()).isTrue();
+    }
+
+    @Test
+    void shouldEnableCreateIfClientReferenceEqualToMinimumLength() {
+        viewModel.setClientReference("1234");
+        assertThat(viewModel.getCreateDisabled()).isFalse();
+    }
+
+    @Test
+    void shouldEnableCreateIfClientReferenceGreaterThanMinimumLength() {
+        viewModel.setClientReference("12345");
+        assertThat(viewModel.getCreateDisabled()).isFalse();
+    }
+}</programlisting>
+<simpara>Now, let&#8217;s look at the implementation for this functionality in the view-model:</simpara>
+<programlisting language="java" linenumbering="numbered">public class CreateLCViewModel implements ViewModel {
+
+    //...
+    private final StringProperty clientReference;
+    private final BooleanProperty createDisabled;                    <co xml:id="CO6-1"/>
+
+    public CreateLCViewModel(int clientReferenceMinLength) {         <co xml:id="CO6-2"/>
+        this.clientReference = new SimpleStringProperty();
+        this.createDisabled = new SimpleBooleanProperty();
+        this.createDisabled
+            .bind(this.clientReference.length()
+                    .lessThan(clientReferenceMinLength));            <co xml:id="CO6-3"/>
+    }
+
+    //...
+}
+
+public class CreateLCView implements FxmlView&lt;CreateLCViewModel&gt; {
+
+    //...
+    @Initialize
+    public void initialize() {
+        createButton.disableProperty()
+            .bind(viewModel.createDisabledProperty());               <co xml:id="CO6-4"/>
+        clientReference.textProperty()
+            .bindBidirectional(viewModel.clientReferenceProperty());
+    }
+    //...
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO6-1">
+<para>We declare a <literal>createDisabled</literal> property in the view-model to manage when the create button should be disabled.</para>
+</callout>
+<callout arearefs="CO6-2">
+<para>The minimum length for a valid client reference is injected into the view-model. It is conceivable that this value will be provided as part of external configuration, or possibly from the back-end.</para>
+</callout>
+<callout arearefs="CO6-3">
+<para>We create a binding expression to match the business requirement.</para>
+</callout>
+<callout arearefs="CO6-4">
+<para>We bind the view-model property to the disabled property of the create button in the view delegate.</para>
+</callout>
+</calloutlist>
+<simpara>Let&#8217;s also look at how to write an end-to-end, headless UI test as shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">@UITest
+public class CreateLCViewTests {                                  <co xml:id="CO7-1"/>
+
+    @Autowired
+    private ApplicationContext context;
+
+    @Init
+    public void init() {
+        MvvmFX.setCustomDependencyInjector(context::getBean);     <co xml:id="CO7-2"/>
+    }
+
+    @Start
+    public void start(Stage stage) {                              <co xml:id="CO7-3"/>
+        final Parent parent = FluentViewLoader
+                .fxmlView(CreateLCView.class)
+                .load().getView();
+        stage.setScene(new Scene(parent));
+        stage.show();
+    }
+
+    @Test
+    void blankClientReference(FxRobot robot) {
+        robot.lookup("#client-reference")                         <co xml:id="CO7-4"/>
+            .queryAs(TextField.class)
+            .setText("");
+
+        verifyThat("#create-button", NodeMatchers.isDisabled());  <co xml:id="CO7-5"/>
+    }
+
+    @Test
+    void validClientReference(FxRobot robot) {
+        robot.lookup("#client-reference")
+            .queryAs(TextField.class)
+            .setText("Test");
+
+        verifyThat("#create-button", NodeMatchers.isEnabled());   <co xml:id="CO7-6"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO7-1">
+<para>We have written a convenience <literal>@UITest</literal> extension to combine spring framework and TestFX testing. Please refer to the accompanying source code with the book for more details.</para>
+</callout>
+<callout arearefs="CO7-2">
+<para>We set up the spring context to act as the dependency injection provider for the mvvmfx framework and its injection annotations (for example, <literal>@InjectViewModel</literal>) to work.</para>
+</callout>
+<callout arearefs="CO7-3">
+<para>We are using the <literal>@Start</literal> annotation provided by the TestFX framework to launch the UI.</para>
+</callout>
+<callout arearefs="CO7-4">
+<para>The TestFX framework injects an instance of the <literal>FxRobot</literal> UI helper, which we can use to access UI elements.</para>
+</callout>
+<callout arearefs="CO7-5 CO7-6">
+<para>We are using the The TestFX framework provided convenience matchers for test assertions.</para>
+</callout>
+</calloutlist>
+<simpara>Now, when we run the application, we can see that the create button is enabled when a valid client reference is entered:</simpara>
+<figure role="text-center">
+<title>The Create button is enabled with a valid client reference</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/mvvm/valid-client-reference-input.png"/>
+</imageobject>
+<textobject><phrase>valid client reference input</phrase></textobject>
+</mediaobject>
+</figure>
+</section>
+</section>
+<section xml:id="a-crud-based-ui-example">
+<title>A CRUD-based UI example</title>
+
+</section>
+<section xml:id="a-task-based-ui-example">
+<title>A task-based UI example</title>
+
+</section>
+</section>
+<section xml:id="the-bff-pattern">
+<title>The BFF Pattern</title>
 
 </section>
 <section xml:id="summary">

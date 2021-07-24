@@ -622,13 +622,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#model-view-controller">6.4.1. Model View Controller</a></li>
 <li><a href="#model-view-presenter">6.4.2. Model View Presenter</a></li>
 <li><a href="#model-view-view-model">6.4.3. Model View View-Model</a></li>
-<li><a href="#mvc-versus-mvp-versus-mvvm">6.4.4. MVC versus MVP versus MVVM</a></li>
+<li><a href="#which-one-mvc-mvp-or-mvvm">6.4.4. Which one: MVC, MVP or MVVM</a></li>
 </ul>
 </li>
-<li><a href="#ui-implementation">6.5. UI Implementation</a></li>
-<li><a href="#summary-4">6.6. Summary</a></li>
-<li><a href="#questions-4">6.7. Questions</a></li>
-<li><a href="#further-reading-4">6.8. Further reading</a></li>
+<li><a href="#ui-implementation">6.5. UI Implementation</a>
+<ul class="sectlevel3">
+<li><a href="#mvvm-primer">6.5.1. MVVM primer</a></li>
+<li><a href="#a-crud-based-ui-example">6.5.2. A CRUD-based UI example</a></li>
+<li><a href="#a-task-based-ui-example">6.5.3. A task-based UI example</a></li>
+</ul>
+</li>
+<li><a href="#the-bff-pattern">6.6. The BFF Pattern</a></li>
+<li><a href="#summary-4">6.7. Summary</a></li>
+<li><a href="#questions-4">6.8. Questions</a></li>
+<li><a href="#further-reading-4">6.9. Further reading</a></li>
 </ul>
 </li>
 <li><a href="#implementing-queries-and-projections-10-pages">7. Implementing Queries and Projections (10 pages)</a>
@@ -4611,7 +4618,7 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-versus-mvp-versus-mvvm"><a class="anchor" href="#mvc-versus-mvp-versus-mvvm"></a><a class="link" href="#mvc-versus-mvp-versus-mvvm">6.4.4. MVC versus MVP versus MVVM</a></h4>
+<h4 id="which-one-mvc-mvp-or-mvvm"><a class="anchor" href="#which-one-mvc-mvp-or-mvvm"></a><a class="link" href="#which-one-mvc-mvp-or-mvvm">6.4.4. Which one: MVC, MVP or MVVM</a></h4>
 <div class="paragraph">
 <p>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</p>
 </div>
@@ -4619,18 +4626,639 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 <div class="sect2">
 <h3 id="ui-implementation"><a class="anchor" href="#ui-implementation"></a><a class="link" href="#ui-implementation">6.5. UI Implementation</a></h3>
+<div class="sect3">
+<h4 id="mvvm-primer"><a class="anchor" href="#mvvm-primer"></a><a class="link" href="#mvvm-primer">6.5.1. MVVM primer</a></h4>
+<div class="paragraph">
+<p>Let&#8217;s consider the example of creating a new LC. To create a new LC, all we need is for the applicant to provide a friendly client reference. This is usually an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/mvvm/create-lc-ui.png" alt="create lc ui">
+</div>
+<div class="title">Figure 1- 36. Create LC screen</div>
+</div>
+<div class="sect4">
+<h5 id="declarative-view"><a class="anchor" href="#declarative-view"></a><a class="link" href="#declarative-view">Declarative view</a></h5>
+<div class="paragraph">
+<p>When working with JavaFX, the view can be rendered using a declarative style in FXML format. Important excerpts from the <code>CreateLCView.fxml</code> file for the create LC view are shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td>
+  <td class="code"><pre><span style="color:#777">&lt;?import javafx.scene.layout.Pane?&gt;</span>
+<span style="color:#777">&lt;?import javafx.scene.control.Button?&gt;</span>
+<span style="color:#777">&lt;?import javafx.scene.control.TextField?&gt;</span>
+
+<span style="color:#070;font-weight:bold">&lt;Pane</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">create-lc</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">xmlns</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/javafx/16</span><span style="color:#710">&quot;</span></span>
+                      <span style="color:#b48">xmlns:fx</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/fxml/1</span><span style="color:#710">&quot;</span></span>
+      <span style="color:#b48">fx:controller</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">com.premonition.lc.issuance.ui.views.CreateLCView</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    ...
+
+    <span style="color:#070;font-weight:bold">&lt;TextField</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">client-reference</span><span style="color:#710">&quot;</span></span>
+               <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">clientReference</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                 <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span style="color:#070;font-weight:bold">&lt;Button</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">create-button</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">createButton</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">text</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Create</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">onAction</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                         <i class="conum" data-value="3"></i><b>(3)</b>
+    ...
+<span style="color:#070;font-weight:bold">&lt;/Pane&gt;</span>
+</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>CreateLCView</code> class acts as the view delegate for the FXML view and is assigned using the <code>fx:controller</code> attribute of the root element (<code>javafx.scene.layout.Pane</code> in this case).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In order to reference <code>client-reference</code> textbox in the view delegate, we use the <code>fx:id</code> annotation&#8201;&#8212;&#8201;<code>clientReference</code> in this case.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Similarly, the <code>create-button</code> is referenced using <code>fx:id=createButton</code> in the view delegate. Furthermore, the <code>create</code> method in the view delegate is assigned to handle the default action (the button press event for <code>javafx.scene.control.Button</code>).</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="view-delegate"><a class="anchor" href="#view-delegate"></a><a class="link" href="#view-delegate">View delegate</a></h5>
+<div class="paragraph">
+<p>Next, let&#8217;s look at the structure of the view delegate <code>com.premonition.lc.issuance.ui.views.CreateLCView</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td>
+  <td class="code"><pre><span style="color:#777">//...</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> {                     <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#007">@FXML</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#007">@FXML</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> createButton;                <i class="conum" data-value="3"></i><b>(3)</b>
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> create(<span style="color:#0a8;font-weight:bold">ActionEvent</span> event) {     <i class="conum" data-value="4"></i><b>(4)</b>
+        <span style="color:#777">// Handle button press logic here</span>
+    }
+
+    <span style="color:#777">// Other parts omitted for brevity...</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The view delegate class for the <code>CreateLCView.fxml</code> view.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The Java binding for the <code>clientReference</code> textbox in the view. The name of the member needs to match exactly with the value of the <code>fx:id</code> attribute in the view. Further, it needs to be annotated with the <code>@javafx.fxml.FXML</code> annotation. The use of the <code>@FXML</code> annotation is optional if the member in the view delegate is <code>public</code> and matches the name in the view.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Similarly, the <code>createButton</code> is bound to the corresponding button widget in the view.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The method for the action handler when the <code>createButton</code> is pressed.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="view-model"><a class="anchor" href="#view-model"></a><a class="link" href="#view-model">View-Model</a></h5>
+<div class="paragraph">
+<p>The view-model class <code>CreateLCViewModel for the `CreateLCView</code> is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">javafx.beans.property.StringProperty</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.ViewModel</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {      <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> StringProperty clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span style="color:#088;font-weight:bold">public</span> CreateLCViewModel() {
+        <span style="color:#950">this</span>.clientReference = <span style="color:#080;font-weight:bold">new</span> SimpleStringProperty(); <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+
+    <span style="color:#088;font-weight:bold">public</span> StringProperty clientReferenceProperty() {      <i class="conum" data-value="4"></i><b>(4)</b>
+        <span style="color:#080;font-weight:bold">return</span> clientReference;
+    }
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">String</span> getClientReference() {
+        <span style="color:#080;font-weight:bold">return</span> clientReference.get();
+    }
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> setClientReference(<span style="color:#0a8;font-weight:bold">String</span> clientReference) {
+        <span style="color:#950">this</span>.clientReference.set(clientReference);
+    }
+
+    <span style="color:#777">// Other getters and setters omitted for brevity</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The view-model class for the <code>CreateLCView</code>. Note that we are required to implement the <code>de.saxsys.mvvmfx.ViewModel</code> interface provided by the <code>mvvmfx</code> framework.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We are initializing the <code>clientReference</code> property using the <code>SimpleStringProperty</code> provided by JavaFX. There are several other property classes to define more complex types. Please refer to the JavaFX documentation for more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The value of the <code>clientReference</code> in the view-model. We will look at how to associate this with value of the <code>clientReference</code> textbox in the view shortly. Note that we are using the <code>StringProperty</code> provided by <code>JavaFX</code>, which provides access to the underlying <code>String</code> value of the client reference.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>JavaFX</code> beans are required to create a special accessor for the property itself in addition to the standard getter and setter for the underlying value.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="binding-the-view-to-the-view-model"><a class="anchor" href="#binding-the-view-to-the-view-model"></a><a class="link" href="#binding-the-view-to-the-view-model">Binding the view to the view-model</a></h5>
+<div class="paragraph">
+<p>Next, let&#8217;s look at how to associate the view to the view-model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.Initialize</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.FxmlView</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.InjectViewModel</span>;
+<span style="color:#777">//...</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;CreateLCViewModel&gt; {   <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#007">@FXML</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;
+    <span style="color:#007">@FXML</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> createButton;
+
+    <span style="color:#007">@InjectViewModel</span>
+    <span style="color:#088;font-weight:bold">private</span> CreateLCViewModel viewModel;                             <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span style="color:#007">@Initialize</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">void</span> initialize() {                                      <i class="conum" data-value="3"></i><b>(3)</b>
+        clientReference.textProperty()
+            .bindBidirectional(viewModel.clientReferenceProperty()); <i class="conum" data-value="4"></i><b>(4)</b>
+        createButton.disableProperty()
+            .bind(viewModel.createDisabledProperty());               <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+    <span style="color:#777">// Other parts omitted for brevity...</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>mvvmfx</code> framework requires that the view delegate implement the <code>FXMLView&lt;? extends ViewModelType&gt;</code>. In this case, the view-model type is <code>CreateLCViewModel</code>. The <code>mvvmfx</code> framework supports other view types as well. Please refer to the framework documentation for more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The framework provides a <code>@de.saxsys.mvvmfx.InjectViewModel</code> annotation to allow dependency injecting the view-model into the view delegate.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The framework will invoke all methods annotated with the <code>@de.saxsys.mvvmfx.Initialize</code> annotation during the initialization process. The annotation can be omitted if the method is named <code>initialize</code> and is declared <code>public</code>. Please refer to the framework documentation for more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We have now bound the text property of the <code>clientReference</code> textbox in the view delegate to the corresponding property in the view-model. Note that this is a <strong>bidirectional</strong> binding, which means that the value in the view and the view model are kept in sync if it changes on either side.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>This is another variation of binding in action, where we are making use of a unidirectional binding. Here, we are binding the disabled property of the <code>create</code> button to the corresponding property on the view-model. We will look at why we need to do this shortly.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="enforcing-business-validations-in-the-ui"><a class="anchor" href="#enforcing-business-validations-in-the-ui"></a><a class="link" href="#enforcing-business-validations-in-the-ui">Enforcing business validations in the UI</a></h5>
+<div class="paragraph">
+<p>We have a business validation that the client reference for an LC needs to be at least 4 characters in length. This will be enforced on the back-end. However, to provide a richer user experience, we will also enforce this validation on the UI.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This may feel contrary to the notion of centralizing business validations on the back-end. While this is a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Industry luminary, Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>. Ted Neward also talks about this in his blog titled The Fallacies of Enterprise Computing<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The advantage of using MVVM is that this logic is easily testable in a simple unit test of the view-model. Let&#8217;s test-drive this now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModelTests</span> {
+
+    <span style="color:#088;font-weight:bold">private</span> CreateLCViewModel viewModel;
+
+    <span style="color:#007">@BeforeEach</span>
+    <span style="color:#339;font-weight:bold">void</span> before() {
+        <span style="color:#339;font-weight:bold">int</span> clientReferenceMinLength = <span style="color:#00D">4</span>;
+        viewModel = <span style="color:#080;font-weight:bold">new</span> CreateLCViewModel(clientReferenceMinLength);
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableCreateByDefault() {
+        assertThat(viewModel.getCreateDisabled()).isTrue();
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableCreateIfClientReferenceLesserThanMinimumLength() {
+        viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">123</span><span style="color:#710">&quot;</span></span>);
+        assertThat(viewModel.getCreateDisabled()).isTrue();
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldEnableCreateIfClientReferenceEqualToMinimumLength() {
+        viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1234</span><span style="color:#710">&quot;</span></span>);
+        assertThat(viewModel.getCreateDisabled()).isFalse();
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldEnableCreateIfClientReferenceGreaterThanMinimumLength() {
+        viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">12345</span><span style="color:#710">&quot;</span></span>);
+        assertThat(viewModel.getCreateDisabled()).isFalse();
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s look at the implementation for this functionality in the view-model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td>
+  <td class="code"><pre><span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {
+
+    <span style="color:#777">//...</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> StringProperty clientReference;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> BooleanProperty createDisabled;                    <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#088;font-weight:bold">public</span> CreateLCViewModel(<span style="color:#339;font-weight:bold">int</span> clientReferenceMinLength) {         <i class="conum" data-value="2"></i><b>(2)</b>
+        <span style="color:#950">this</span>.clientReference = <span style="color:#080;font-weight:bold">new</span> SimpleStringProperty();
+        <span style="color:#950">this</span>.createDisabled = <span style="color:#080;font-weight:bold">new</span> SimpleBooleanProperty();
+        <span style="color:#950">this</span>.createDisabled
+            .bind(<span style="color:#950">this</span>.clientReference.length()
+                    .lessThan(clientReferenceMinLength));            <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+
+    <span style="color:#777">//...</span>
+}
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;CreateLCViewModel&gt; {
+
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@Initialize</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> initialize() {
+        createButton.disableProperty()
+            .bind(viewModel.createDisabledProperty());               <i class="conum" data-value="4"></i><b>(4)</b>
+        clientReference.textProperty()
+            .bindBidirectional(viewModel.clientReferenceProperty());
+    }
+    <span style="color:#777">//...</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We declare a <code>createDisabled</code> property in the view-model to manage when the create button should be disabled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The minimum length for a valid client reference is injected into the view-model. It is conceivable that this value will be provided as part of external configuration, or possibly from the back-end.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We create a binding expression to match the business requirement.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We bind the view-model property to the disabled property of the create button in the view delegate.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s also look at how to write an end-to-end, headless UI test as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td>
+  <td class="code"><pre>
+<span style="color:#007">@UITest</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewTests</span> {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#007">@Autowired</span>
+    <span style="color:#088;font-weight:bold">private</span> ApplicationContext context;
+
+    <span style="color:#007">@Init</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> init() {
+        MvvmFX.setCustomDependencyInjector(context::getBean);     <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+
+    <span style="color:#007">@Start</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> start(Stage stage) {                              <i class="conum" data-value="3"></i><b>(3)</b>
+        <span style="color:#088;font-weight:bold">final</span> Parent parent = FluentViewLoader
+                .fxmlView(CreateLCView.class)
+                .load().getView();
+        stage.setScene(<span style="color:#080;font-weight:bold">new</span> Scene(parent));
+        stage.show();
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> blankClientReference(FxRobot robot) {
+        robot.lookup(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#client-reference</span><span style="color:#710">&quot;</span></span>)                         <i class="conum" data-value="4"></i><b>(4)</b>
+            .queryAs(<span style="color:#0a8;font-weight:bold">TextField</span>.class)
+            .setText(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>);
+
+        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isDisabled());  <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> validClientReference(FxRobot robot) {
+        robot.lookup(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#client-reference</span><span style="color:#710">&quot;</span></span>)
+            .queryAs(<span style="color:#0a8;font-weight:bold">TextField</span>.class)
+            .setText(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Test</span><span style="color:#710">&quot;</span></span>);
+
+        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isEnabled());   <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We have written a convenience <code>@UITest</code> extension to combine spring framework and TestFX testing. Please refer to the accompanying source code with the book for more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We set up the spring context to act as the dependency injection provider for the mvvmfx framework and its injection annotations (for example, <code>@InjectViewModel</code>) to work.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We are using the <code>@Start</code> annotation provided by the TestFX framework to launch the UI.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The TestFX framework injects an instance of the <code>FxRobot</code> UI helper, which we can use to access UI elements.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>We are using the The TestFX framework provided convenience matchers for test assertions.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now, when we run the application, we can see that the create button is enabled when a valid client reference is entered:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
+</div>
+<div class="title">Figure 1- 37. The Create button is enabled with a valid client reference</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="a-crud-based-ui-example"><a class="anchor" href="#a-crud-based-ui-example"></a><a class="link" href="#a-crud-based-ui-example">6.5.2. A CRUD-based UI example</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="a-task-based-ui-example"><a class="anchor" href="#a-task-based-ui-example"></a><a class="link" href="#a-task-based-ui-example">6.5.3. A task-based UI example</a></h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="the-bff-pattern"><a class="anchor" href="#the-bff-pattern"></a><a class="link" href="#the-bff-pattern">6.6. The BFF Pattern</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.6. Summary</a></h3>
+<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.7. Summary</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.7. Questions</a></h3>
+<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.8. Questions</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.8. Further reading</a></h3>
+<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.9. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -4887,11 +5515,17 @@ Sometimes I feel like I am being forgotten.
 <div class="footnote" id="_footnotedef_7">
 <a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
 </div>
+<div class="footnote" id="_footnotedef_8">
+<a href="#_footnoteref_8">8</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+</div>
+<div class="footnote" id="_footnotedef_9">
+<a href="#_footnoteref_9">9</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-07-23 15:35:01 UTC
+Last updated 2021-07-24 13:50:34 UTC
 </div>
 </div>
 </body>
