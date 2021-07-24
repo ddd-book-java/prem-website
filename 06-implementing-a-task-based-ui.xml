@@ -3,11 +3,11 @@
 <?asciidoc-numbered?>
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
-<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
+<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based</title>
 <date>2021-07-24</date>
 </info>
-<section xml:id="implementing-the-user-interfacetask-based-20-pages" role="text-justify">
-<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based (20 pages)</title>
+<section xml:id="implementing-the-user-interfacetask-based" role="text-justify">
+<title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based</title>
 <blockquote>
 <attribution>
 Marty Rubin
@@ -192,15 +192,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Usability</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</simpara></entry>
 </row>
@@ -208,15 +208,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Reusability</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces enable more complex features to be composed using simpler ones providing more flexibility to the consumers.</simpara></entry>
 </row>
@@ -224,15 +224,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Scalability</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</simpara></entry>
 </row>
@@ -240,15 +240,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Security</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <emphasis>principle of least privilege<footnote><simpara><link xl:href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">https://en.wikipedia.org/wiki/Principle_of_least_privilege</link></simpara></footnote></emphasis>.</simpara></entry>
 </row>
@@ -256,15 +256,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Latency</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>Arguably, coarse-grained CRUD interfaces can enable consumers to achieve a lot more in less interactions, thereby providing low latency.</simpara></entry>
 </row>
@@ -272,15 +272,15 @@ class Packaging {
 <entry align="left" valign="top"><simpara>Management Overhead</simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="green"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/check-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-up.png"/>
 </imageobject>
-<textobject><phrase>check circle</phrase></textobject>
+<textobject><phrase>thumbs up</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="center" valign="top"><simpara><phrase role="red"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="./images/icons/times-circle.png"/>
+<imagedata fileref="./images/icons/thumbs-down.png"/>
 </imageobject>
-<textobject><phrase>times circle</phrase></textobject>
+<textobject><phrase>thumbs down</phrase></textobject>
 </inlinemediaobject></phrase></simpara></entry>
 <entry align="left" valign="top"><simpara>For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</simpara></entry>
 </row>
