@@ -62,13 +62,13 @@ Marty Rubin
 </mediaobject>
 </figure>
 <simpara>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</simpara>
-<figure role="text-center">
+<figure xml:id="decomposed-commands" role="text-center">
 <title>Decomposed commands</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/ui-patterns/old-new-commands.png"/>
+<imagedata fileref="./images/ui-patterns/decomposed-commands.png"/>
 </imageobject>
-<textobject><phrase>old new commands</phrase></textobject>
+<textobject><phrase>decomposed commands</phrase></textobject>
 </mediaobject>
 </figure>
 <simpara>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <emphasis>always</emphasis> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</simpara>
@@ -145,8 +145,8 @@ public class UpdateLCApplicationCommand {
 <simpara>In terms of a business process, if we have a single <literal>CreateLCApplicationCommand</literal> that precedes these operations, individuals in both departments firstly have to wait for the entire application to be filled out before either can commence their work. Secondly, if either piece of information is updated through a single <literal>UpdateLCApplicationCommand</literal>, it is unclear what changed. This can result in a spurious notification being sent to at least one department because of this lack of clarity in the process.</simpara>
 <simpara>Since most work happens in the form of specific tasks, it can work to our advantage if our processes and by extension, our APIs mirror these behaviors.</simpara>
 <simpara>Keeping this in mind, let&#8217;s re-examine our revised APIs for the LC application process:</simpara>
-<figure role="text-center">
-<title>Revised commands&#8201;&#8212;&#8201;recap</title>
+<figure xml:id="revised-commands" role="text-center">
+<title>Revised commands</title>
 <mediaobject>
 <imageobject>
 <imagedata fileref="./images/ui-patterns/revised-commands-recap.png"/>
@@ -509,7 +509,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 <section xml:id="mvvm-primer">
 <title>MVVM primer</title>
 <simpara>Let&#8217;s consider the example of creating a new LC. To start creation of a new LC, all we need is for the applicant to provide a friendly client reference. This is an easy to remember string of free text. A simple rendition of this UI is shown here:</simpara>
-<figure role="text-center">
+<figure xml:id="start-lc-creation-screen" role="text-center">
 <title>Start LC creation screen</title>
 <mediaobject>
 <imageobject>
@@ -826,7 +826,93 @@ public class StartLCViewTests {                                  <co xml:id="CO7
 </section>
 <section xml:id="integrating-with-the-backend">
 <title>Integrating with the backend</title>
+<simpara>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <xref linkend="revised-commands"/> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <emphasis>Start</emphasis> button on the <xref linkend="start-lc-creation-screen"/>. The revised <literal>StartNewLCApplicationCommand</literal> looks as shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">@Data
+public class StartNewLCApplicationCommand {
+    private final String applicantId;
+    private final LCApplicationId id;
+    private final String clientReference;
 
+    private StartNewLCApplicationCommand(String applicantId, String clientReference) {
+        this.id = LCApplicationId.randomId();
+        this.applicantId = applicantId;
+        this.clientReference = clientReference;
+    }
+
+    public static StartNewLCApplicationCommand startApplication( <co xml:id="CO8-1"/>
+                    String applicantId,
+                    String clientReference) {
+        return new StartNewLCApplicationCommand(applicantId, clientReference);
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO8-1">
+<para>To start a new LC application, we need an <literal>applicantId</literal> and a <literal>clientReference</literal>.</para>
+</callout>
+</calloutlist>
+<simpara>Given that we are using the MVVM pattern, the code to invoke the backend service is part of the view-model. Let&#8217;s test-drive this functionality:</simpara>
+<programlisting language="java" linenumbering="numbered">@ExtendWith(MockitoExtension.class)
+class StartLCViewModelTests {
+
+    @Mock
+    private BackendService service;
+
+    @BeforeEach
+    void before() {
+        int clientReferenceMinLength = 4;
+        viewModel = new StartLCViewModel(clientReferenceMinLength, service);
+    }
+
+    @Test
+    void shouldNotInvokeBackendIfStartButtonIsDisabled() {
+        viewModel.setClientReference("");
+        viewModel.startNewLC();
+
+        Mockito.verifyNoInteractions(service);
+    }
+}</programlisting>
+<simpara>The view-model is enhanced accordingly to inject an instance of the <literal>BackendService</literal> and looks as shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">public class StartLCViewModel implements ViewModel {
+
+    private final BackendService service;
+    // Other members omitted for brevity
+
+    public StartLCViewModel(int clientReferenceMinLength,
+                            BackendService service) {
+        this.service = service;
+        // Other code omitted for brevity
+    }
+
+    public void startNewLC() {
+        // TODO: invoke backend!
+    }
+}</programlisting>
+<simpara>Now a test to actually make sure that the backend gets invoked only when a valid client reference is input:</simpara>
+<programlisting language="java" linenumbering="numbered">class StartLCViewModelTests {
+    // ...
+
+    @BeforeEach
+    void before() {
+        viewModel = new StartLCViewModel(4, service);
+        viewModel.setLoggedInUser(new LoggedInUserScope("test-applicant")); <co xml:id="CO9-1"/>
+    }
+
+    @Test
+    void shouldNotInvokeBackendIfStartButtonIsDisabled() {
+        viewModel.setClientReference("");
+        viewModel.startNewLC();
+
+        Mockito.verifyNoInteractions(service);                              <co xml:id="CO9-2"/>
+    }
+
+    @Test
+    void shouldInvokeBackendWhenStartingCreationOfNewLC() {
+        viewModel.setClientReference("My first LC");
+        viewModel.startNewLC();
+
+Mockito.verify(service).startNewLC("test-applicant", "12345");              <co xml:id="CO9-3"/>
+    }
+}</programlisting>
 </section>
 </section>
 <section xml:id="a-crud-based-ui-example">
