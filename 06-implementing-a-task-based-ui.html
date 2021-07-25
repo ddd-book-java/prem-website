@@ -698,8 +698,9 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/revised-commands-recap.png" alt="revised commands recap" width="681" height="347">
+<img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
+<div class="title">Figure 3. Revised commands&#8201;&#8212;&#8201;recap</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -1095,7 +1096,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvc.png" alt="mvc">
 </div>
-<div class="title">Figure 3. MVC design pattern</div>
+<div class="title">Figure 4. MVC design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -1129,7 +1130,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
 </div>
-<div class="title">Figure 4. MVP design pattern</div>
+<div class="title">Figure 5. MVP design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -1151,7 +1152,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 5. MVVM design pattern</div>
+<div class="title">Figure 6. MVVM design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -1182,18 +1183,18 @@ There are different schools of thought when it comes where concerns such as data
 <div class="sect3">
 <h4 id="mvvm-primer"><a class="anchor" href="#mvvm-primer"></a>MVVM primer</h4>
 <div class="paragraph">
-<p>Let&#8217;s consider the example of creating a new LC. To create a new LC, all we need is for the applicant to provide a friendly client reference. This is usually an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
+<p>Let&#8217;s consider the example of creating a new LC. To start creation of a new LC, all we need is for the applicant to provide a friendly client reference. This is an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/mvvm/create-lc-ui.png" alt="create lc ui">
+<img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 6. Create LC screen</div>
+<div class="title">Figure 7. Start LC creation screen</div>
 </div>
 <div class="sect4">
 <h5 id="declarative-view"><a class="anchor" href="#declarative-view"></a>Declarative view</h5>
 <div class="paragraph">
-<p>When working with JavaFX, the view can be rendered using a declarative style in FXML format. Important excerpts from the <code>CreateLCView.fxml</code> file for the create LC view are shown here:</p>
+<p>When working with JavaFX, the view can be rendered using a declarative style in FXML format. Important excerpts from the <code>StartLCView.fxml</code> file to start creating a new LC are shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1221,18 +1222,18 @@ There are different schools of thought when it comes where concerns such as data
 <span style="color:#777">&lt;?import javafx.scene.control.Button?&gt;</span>
 <span style="color:#777">&lt;?import javafx.scene.control.TextField?&gt;</span>
 
-<span style="color:#070;font-weight:bold">&lt;Pane</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">create-lc</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">xmlns</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/javafx/16</span><span style="color:#710">&quot;</span></span>
+<span style="color:#070;font-weight:bold">&lt;Pane</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">start-lc</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">xmlns</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/javafx/16</span><span style="color:#710">&quot;</span></span>
                       <span style="color:#b48">xmlns:fx</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/fxml/1</span><span style="color:#710">&quot;</span></span>
-      <span style="color:#b48">fx:controller</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">com.premonition.lc.issuance.ui.views.CreateLCView</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+      <span style="color:#b48">fx:controller</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">com.premonition.lc.issuance.ui.views.StartLCView</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
     ...
 
     <span style="color:#070;font-weight:bold">&lt;TextField</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">client-reference</span><span style="color:#710">&quot;</span></span>
                <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">clientReference</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                 <i class="conum" data-value="2"></i><b>(2)</b>
 
-    <span style="color:#070;font-weight:bold">&lt;Button</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">create-button</span><span style="color:#710">&quot;</span></span>
-            <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">createButton</span><span style="color:#710">&quot;</span></span>
-            <span style="color:#b48">text</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Create</span><span style="color:#710">&quot;</span></span>
-            <span style="color:#b48">onAction</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                         <i class="conum" data-value="3"></i><b>(3)</b>
+    <span style="color:#070;font-weight:bold">&lt;Button</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">start-button</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">startButton</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">text</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Start</span><span style="color:#710">&quot;</span></span>
+            <span style="color:#b48">onAction</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                         <i class="conum" data-value="3"></i><b>(3)</b>
     ...
 <span style="color:#070;font-weight:bold">&lt;/Pane&gt;</span>
 </pre></td>
@@ -1243,7 +1244,7 @@ There are different schools of thought when it comes where concerns such as data
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>CreateLCView</code> class acts as the view delegate for the FXML view and is assigned using the <code>fx:controller</code> attribute of the root element (<code>javafx.scene.layout.Pane</code> in this case).</td>
+<td>The <code>StartLCView</code> class acts as the view delegate for the FXML view and is assigned using the <code>fx:controller</code> attribute of the root element (<code>javafx.scene.layout.Pane</code> in this case).</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1251,7 +1252,7 @@ There are different schools of thought when it comes where concerns such as data
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Similarly, the <code>create-button</code> is referenced using <code>fx:id=createButton</code> in the view delegate. Furthermore, the <code>create</code> method in the view delegate is assigned to handle the default action (the button press event for <code>javafx.scene.control.Button</code>).</td>
+<td>Similarly, the <code>start-button</code> is referenced using <code>fx:id=startButton</code> in the view delegate. Furthermore, the <code>start</code> method in the view delegate is assigned to handle the default action (the button press event for <code>javafx.scene.control.Button</code>).</td>
 </tr>
 </table>
 </div>
@@ -1259,7 +1260,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="sect4">
 <h5 id="view-delegate"><a class="anchor" href="#view-delegate"></a>View delegate</h5>
 <div class="paragraph">
-<p>Next, let&#8217;s look at the structure of the view delegate <code>com.premonition.lc.issuance.ui.views.CreateLCView</code>:</p>
+<p>Next, let&#8217;s look at the structure of the view delegate <code>com.premonition.lc.issuance.ui.views.StartLCView</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1282,14 +1283,14 @@ There are different schools of thought when it comes where concerns such as data
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">javafx.fxml.FXML</span>;
 <span style="color:#777">//...</span>
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> {                     <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCView</span> {                     <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#007">@FXML</span>
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
     <span style="color:#007">@FXML</span>
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> createButton;                <i class="conum" data-value="3"></i><b>(3)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> startButton;                <i class="conum" data-value="3"></i><b>(3)</b>
 
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> create(<span style="color:#0a8;font-weight:bold">ActionEvent</span> event) {     <i class="conum" data-value="4"></i><b>(4)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> start(<span style="color:#0a8;font-weight:bold">ActionEvent</span> event) {     <i class="conum" data-value="4"></i><b>(4)</b>
         <span style="color:#777">// Handle button press logic here</span>
     }
 
@@ -1302,7 +1303,7 @@ There are different schools of thought when it comes where concerns such as data
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The view delegate class for the <code>CreateLCView.fxml</code> view.</td>
+<td>The view delegate class for the <code>StartLCView.fxml</code> view.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1310,11 +1311,11 @@ There are different schools of thought when it comes where concerns such as data
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Similarly, the <code>createButton</code> is bound to the corresponding button widget in the view.</td>
+<td>Similarly, the <code>startButton</code> is bound to the corresponding button widget in the view.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The method for the action handler when the <code>createButton</code> is pressed.</td>
+<td>The method for the action handler when the <code>startButton</code> is pressed.</td>
 </tr>
 </table>
 </div>
@@ -1322,7 +1323,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="sect4">
 <h5 id="view-model"><a class="anchor" href="#view-model"></a>View-Model</h5>
 <div class="paragraph">
-<p>The view-model class <code>CreateLCViewModel for the `CreateLCView</code> is shown here:</p>
+<p>The view-model class <code>StartLCViewModel for the `StartLCView</code> is shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1356,11 +1357,11 @@ There are different schools of thought when it comes where concerns such as data
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">javafx.beans.property.StringProperty</span>;
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.ViewModel</span>;
 
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {      <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {      <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> StringProperty clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
 
-    <span style="color:#088;font-weight:bold">public</span> CreateLCViewModel() {
+    <span style="color:#088;font-weight:bold">public</span> StartLCViewModel() {
         <span style="color:#950">this</span>.clientReference = <span style="color:#080;font-weight:bold">new</span> SimpleStringProperty(); <i class="conum" data-value="3"></i><b>(3)</b>
     }
 
@@ -1385,7 +1386,7 @@ There are different schools of thought when it comes where concerns such as data
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The view-model class for the <code>CreateLCView</code>. Note that we are required to implement the <code>de.saxsys.mvvmfx.ViewModel</code> interface provided by the mvvmFX framework.</td>
+<td>The view-model class for the <code>StartLCView</code>. Note that we are required to implement the <code>de.saxsys.mvvmfx.ViewModel</code> interface provided by the mvvmFX framework.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1439,22 +1440,22 @@ There are different schools of thought when it comes where concerns such as data
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.FxmlView</span>;
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.InjectViewModel</span>;
 <span style="color:#777">//...</span>
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;CreateLCViewModel&gt; {   <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;StartLCViewModel&gt; {   <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#007">@FXML</span>
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;
     <span style="color:#007">@FXML</span>
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> createButton;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> startButton;
 
     <span style="color:#007">@InjectViewModel</span>
-    <span style="color:#088;font-weight:bold">private</span> CreateLCViewModel viewModel;                             <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">private</span> StartLCViewModel viewModel;                             <i class="conum" data-value="2"></i><b>(2)</b>
 
     <span style="color:#007">@Initialize</span>
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">void</span> initialize() {                                      <i class="conum" data-value="3"></i><b>(3)</b>
         clientReference.textProperty()
             .bindBidirectional(viewModel.clientReferenceProperty()); <i class="conum" data-value="4"></i><b>(4)</b>
-        createButton.disableProperty()
-            .bind(viewModel.createDisabledProperty());               <i class="conum" data-value="5"></i><b>(5)</b>
+        startButton.disableProperty()
+            .bind(viewModel.startDisabledProperty());               <i class="conum" data-value="5"></i><b>(5)</b>
     }
 
     <span style="color:#777">// Other parts omitted for brevity...</span>
@@ -1466,7 +1467,7 @@ There are different schools of thought when it comes where concerns such as data
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The mvvmFX framework requires that the view delegate implement the <code>FXMLView&lt;? extends ViewModelType&gt;</code>. In this case, the view-model type is <code>CreateLCViewModel</code>. The mvvmFX framework supports other view types as well. Please refer to the framework documentation for more details.</td>
+<td>The mvvmFX framework requires that the view delegate implement the <code>FXMLView&lt;? extends ViewModelType&gt;</code>. In this case, the view-model type is <code>StartLCViewModel</code>. The mvvmFX framework supports other view types as well. Please refer to the framework documentation for more details.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1482,7 +1483,7 @@ There are different schools of thought when it comes where concerns such as data
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>This is another variation of binding in action, where we are making use of a unidirectional binding. Here, we are binding the disabled property of the <code>create</code> button to the corresponding property on the view-model. We will look at why we need to do this shortly.</td>
+<td>This is another variation of binding in action, where we are making use of a unidirectional binding. Here, we are binding the disabled property of the <code>start</code> button to the corresponding property on the view-model. We will look at why we need to do this shortly.</td>
 </tr>
 </table>
 </div>
@@ -1544,37 +1545,37 @@ This may feel contrary to the notion of centralizing business validations on the
 32
 33
 </pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModelTests</span> {
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewModelTests</span> {
 
-    <span style="color:#088;font-weight:bold">private</span> CreateLCViewModel viewModel;
+    <span style="color:#088;font-weight:bold">private</span> StartLCViewModel viewModel;
 
     <span style="color:#007">@BeforeEach</span>
     <span style="color:#339;font-weight:bold">void</span> before() {
         <span style="color:#339;font-weight:bold">int</span> clientReferenceMinLength = <span style="color:#00D">4</span>;
-        viewModel = <span style="color:#080;font-weight:bold">new</span> CreateLCViewModel(clientReferenceMinLength);
+        viewModel = <span style="color:#080;font-weight:bold">new</span> StartLCViewModel(clientReferenceMinLength);
     }
 
     <span style="color:#007">@Test</span>
-    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableCreateByDefault() {
-        assertThat(viewModel.getCreateDisabled()).isTrue();
+    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableStartByDefault() {
+        assertThat(viewModel.getStartDisabled()).isTrue();
     }
 
     <span style="color:#007">@Test</span>
-    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableCreateIfClientReferenceLesserThanMinimumLength() {
+    <span style="color:#339;font-weight:bold">void</span> shouldNotEnableStartIfClientReferenceLesserThanMinimumLength() {
         viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">123</span><span style="color:#710">&quot;</span></span>);
-        assertThat(viewModel.getCreateDisabled()).isTrue();
+        assertThat(viewModel.getStartDisabled()).isTrue();
     }
 
     <span style="color:#007">@Test</span>
-    <span style="color:#339;font-weight:bold">void</span> shouldEnableCreateIfClientReferenceEqualToMinimumLength() {
+    <span style="color:#339;font-weight:bold">void</span> shouldEnableStartIfClientReferenceEqualToMinimumLength() {
         viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1234</span><span style="color:#710">&quot;</span></span>);
-        assertThat(viewModel.getCreateDisabled()).isFalse();
+        assertThat(viewModel.getStartDisabled()).isFalse();
     }
 
     <span style="color:#007">@Test</span>
-    <span style="color:#339;font-weight:bold">void</span> shouldEnableCreateIfClientReferenceGreaterThanMinimumLength() {
+    <span style="color:#339;font-weight:bold">void</span> shouldEnableStartIfClientReferenceGreaterThanMinimumLength() {
         viewModel.setClientReference(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">12345</span><span style="color:#710">&quot;</span></span>);
-        assertThat(viewModel.getCreateDisabled()).isFalse();
+        assertThat(viewModel.getStartDisabled()).isFalse();
     }
 }</pre></td>
 </tr></table></code></pre>
@@ -1616,16 +1617,16 @@ This may feel contrary to the notion of centralizing business validations on the
 28
 29
 </pre></td>
-  <td class="code"><pre><span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {
+  <td class="code"><pre><span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {
 
     <span style="color:#777">//...</span>
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> StringProperty clientReference;
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> BooleanProperty createDisabled;                    <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> BooleanProperty startDisabled;                    <i class="conum" data-value="1"></i><b>(1)</b>
 
-    <span style="color:#088;font-weight:bold">public</span> CreateLCViewModel(<span style="color:#339;font-weight:bold">int</span> clientReferenceMinLength) {         <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">public</span> StartLCViewModel(<span style="color:#339;font-weight:bold">int</span> clientReferenceMinLength) {         <i class="conum" data-value="2"></i><b>(2)</b>
         <span style="color:#950">this</span>.clientReference = <span style="color:#080;font-weight:bold">new</span> SimpleStringProperty();
-        <span style="color:#950">this</span>.createDisabled = <span style="color:#080;font-weight:bold">new</span> SimpleBooleanProperty();
-        <span style="color:#950">this</span>.createDisabled
+        <span style="color:#950">this</span>.startDisabled = <span style="color:#080;font-weight:bold">new</span> SimpleBooleanProperty();
+        <span style="color:#950">this</span>.startDisabled
             .bind(<span style="color:#950">this</span>.clientReference.length()
                     .lessThan(clientReferenceMinLength));            <i class="conum" data-value="3"></i><b>(3)</b>
     }
@@ -1633,13 +1634,13 @@ This may feel contrary to the notion of centralizing business validations on the
     <span style="color:#777">//...</span>
 }
 
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;CreateLCViewModel&gt; {
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCView</span> <span style="color:#088;font-weight:bold">implements</span> FxmlView&lt;StartLCViewModel&gt; {
 
     <span style="color:#777">//...</span>
     <span style="color:#007">@Initialize</span>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> initialize() {
-        createButton.disableProperty()
-            .bind(viewModel.createDisabledProperty());               <i class="conum" data-value="4"></i><b>(4)</b>
+        startButton.disableProperty()
+            .bind(viewModel.startDisabledProperty());               <i class="conum" data-value="4"></i><b>(4)</b>
         clientReference.textProperty()
             .bindBidirectional(viewModel.clientReferenceProperty());
     }
@@ -1652,7 +1653,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We declare a <code>createDisabled</code> property in the view-model to manage when the create button should be disabled.</td>
+<td>We declare a <code>startDisabled</code> property in the view-model to manage when the start button should be disabled.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1664,7 +1665,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>We bind the view-model property to the disabled property of the create button in the view delegate.</td>
+<td>We bind the view-model property to the disabled property of the start button in the view delegate.</td>
 </tr>
 </table>
 </div>
@@ -1716,7 +1717,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </pre></td>
   <td class="code"><pre>
 <span style="color:#007">@UITest</span>
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCViewTests</span> {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewTests</span> {                                  <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#007">@Autowired</span>
     <span style="color:#088;font-weight:bold">private</span> ApplicationContext context;
@@ -1729,7 +1730,7 @@ This may feel contrary to the notion of centralizing business validations on the
     <span style="color:#007">@Start</span>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> start(Stage stage) {                              <i class="conum" data-value="3"></i><b>(3)</b>
         <span style="color:#088;font-weight:bold">final</span> Parent parent = FluentViewLoader
-                .fxmlView(CreateLCView.class)
+                .fxmlView(StartLCView.class)
                 .load().getView();
         stage.setScene(<span style="color:#080;font-weight:bold">new</span> Scene(parent));
         stage.show();
@@ -1741,7 +1742,7 @@ This may feel contrary to the notion of centralizing business validations on the
             .queryAs(<span style="color:#0a8;font-weight:bold">TextField</span>.class)
             .setText(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#710">&quot;</span></span>);
 
-        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isDisabled());  <i class="conum" data-value="5"></i><b>(5)</b>
+        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isDisabled());  <i class="conum" data-value="5"></i><b>(5)</b>
     }
 
     <span style="color:#007">@Test</span>
@@ -1750,7 +1751,7 @@ This may feel contrary to the notion of centralizing business validations on the
             .queryAs(<span style="color:#0a8;font-weight:bold">TextField</span>.class)
             .setText(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Test</span><span style="color:#710">&quot;</span></span>);
 
-        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#create-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isEnabled());   <i class="conum" data-value="5"></i><b>(5)</b>
+        verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start-button</span><span style="color:#710">&quot;</span></span>, NodeMatchers.isEnabled());   <i class="conum" data-value="5"></i><b>(5)</b>
     }
 }</pre></td>
 </tr></table></code></pre>
@@ -1781,14 +1782,21 @@ This may feel contrary to the notion of centralizing business validations on the
 </table>
 </div>
 <div class="paragraph">
-<p>Now, when we run the application, we can see that the create button is enabled when a valid client reference is entered:</p>
+<p>Now, when we run the application, we can see that the start button is enabled when a valid client reference is entered:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 7. The Create button is enabled with a valid client reference</div>
+<div class="title">Figure 8. The start button is enabled with a valid client reference</div>
 </div>
+<div class="paragraph">
+<p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a>Integrating with the backend</h5>
+
 </div>
 </div>
 <div class="sect3">
@@ -1862,7 +1870,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-24 22:09:01 UTC
+Last updated 2021-07-25 12:13:43 UTC
 </div>
 </div>
 </body>
