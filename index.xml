@@ -2284,9 +2284,9 @@ Marty Rubin
 <title>Commands from the event storming session</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/potential-commands.png"/>
+<imagedata fileref="./images/command-flow.png"/>
 </imageobject>
-<textobject><phrase>potential commands</phrase></textobject>
+<textobject><phrase>command flow</phrase></textobject>
 </mediaobject>
 </figure>
 <simpara>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</simpara>
