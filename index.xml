@@ -2755,7 +2755,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 
 &lt;Pane id="start-lc"  xmlns="http://javafx.com/javafx/16"
                       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.premonition.lc.issuance.ui.views.StartLCView"&gt; <co xml:id="CO18-1"/>
+      fx:controller="com.premonition.lc.issuance.ui.views.StartLCView"&gt;  <co xml:id="CO18-1"/>
     ...
 
     &lt;TextField id="client-reference"
@@ -2764,7 +2764,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
     &lt;Button id="start-button"
             fx:id="startButton"
             text="Start"
-            onAction="#start"/&gt;                                         <co xml:id="CO18-3"/>
+            onAction="#start"/&gt;                                          <co xml:id="CO18-3"/>
     ...
 &lt;/Pane&gt;</programlisting>
 <calloutlist>
@@ -2787,7 +2787,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 public class StartLCView {                     <co xml:id="CO19-1"/>
 
     @FXML
-    private TextField clientReference;          <co xml:id="CO19-2"/>
+    private TextField clientReference;         <co xml:id="CO19-2"/>
     @FXML
     private Button startButton;                <co xml:id="CO19-3"/>
 
@@ -2818,7 +2818,7 @@ public class StartLCView {                     <co xml:id="CO19-1"/>
 <programlisting language="java" linenumbering="numbered">import javafx.beans.property.StringProperty;
 import de.saxsys.mvvmfx.ViewModel;
 
-public class StartLCViewModel implements ViewModel {      <co xml:id="CO20-1"/>
+public class StartLCViewModel implements ViewModel {       <co xml:id="CO20-1"/>
 
     private final StringProperty clientReference;          <co xml:id="CO20-2"/>
 
