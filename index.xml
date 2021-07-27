@@ -3138,7 +3138,7 @@ class StartLCViewModelTests {
         viewModel.setClientReference("My first LC");
         viewModel.startNewLC();
 
-Mockito.verify(service).startNewLC("test-applicant", "12345");              <co xml:id="CO25-3"/>
+        Mockito.verify(service).startNewLC("test-applicant", "12345");      <co xml:id="CO25-3"/>
     }
 }</programlisting>
 </section>
