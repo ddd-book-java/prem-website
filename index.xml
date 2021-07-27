@@ -2862,7 +2862,7 @@ public class StartLCViewModel implements ViewModel {      <co xml:id="CO20-1"/>
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 //...
-public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {   <co xml:id="CO21-1"/>
+public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {     <co xml:id="CO21-1"/>
 
     @FXML
     private TextField clientReference;
@@ -2870,14 +2870,14 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {   <co xml
     private Button startButton;
 
     @InjectViewModel
-    private StartLCViewModel viewModel;                             <co xml:id="CO21-2"/>
+    private StartLCViewModel viewModel;                              <co xml:id="CO21-2"/>
 
     @Initialize
     private void initialize() {                                      <co xml:id="CO21-3"/>
         clientReference.textProperty()
             .bindBidirectional(viewModel.clientReferenceProperty()); <co xml:id="CO21-4"/>
         startButton.disableProperty()
-            .bind(viewModel.startDisabledProperty());               <co xml:id="CO21-5"/>
+            .bind(viewModel.startDisabledProperty());                <co xml:id="CO21-5"/>
     }
 
     // Other parts omitted for brevity...
@@ -2945,9 +2945,9 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {   <co xml
 
     //...
     private final StringProperty clientReference;
-    private final BooleanProperty startDisabled;                    <co xml:id="CO22-1"/>
+    private final BooleanProperty startDisabled;                     <co xml:id="CO22-1"/>
 
-    public StartLCViewModel(int clientReferenceMinLength) {         <co xml:id="CO22-2"/>
+    public StartLCViewModel(int clientReferenceMinLength) {          <co xml:id="CO22-2"/>
         this.clientReference = new SimpleStringProperty();
         this.startDisabled = new SimpleBooleanProperty();
         this.startDisabled
@@ -2964,7 +2964,7 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {
     @Initialize
     public void initialize() {
         startButton.disableProperty()
-            .bind(viewModel.startDisabledProperty());               <co xml:id="CO22-4"/>
+            .bind(viewModel.startDisabledProperty());                <co xml:id="CO22-4"/>
         clientReference.textProperty()
             .bindBidirectional(viewModel.clientReferenceProperty());
     }
@@ -2986,7 +2986,7 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {
 </calloutlist>
 <simpara>Let&#8217;s also look at how to write an end-to-end, headless UI test as shown here:</simpara>
 <programlisting language="java" linenumbering="numbered">@UITest
-public class StartLCViewTests {                                  <co xml:id="CO23-1"/>
+public class StartLCViewTests {                                   <co xml:id="CO23-1"/>
 
     @Autowired
     private ApplicationContext context;
@@ -3011,7 +3011,7 @@ public class StartLCViewTests {                                  <co xml:id="CO2
             .queryAs(TextField.class)
             .setText("");
 
-        verifyThat("#start-button", NodeMatchers.isDisabled());  <co xml:id="CO23-5"/>
+        verifyThat("#start-button", NodeMatchers.isDisabled());   <co xml:id="CO23-5"/>
     }
 
     @Test
@@ -3020,7 +3020,7 @@ public class StartLCViewTests {                                  <co xml:id="CO2
             .queryAs(TextField.class)
             .setText("Test");
 
-        verifyThat("#start-button", NodeMatchers.isEnabled());   <co xml:id="CO23-6"/>
+        verifyThat("#start-button", NodeMatchers.isEnabled());    <co xml:id="CO23-6"/>
     }
 }</programlisting>
 <calloutlist>
@@ -3122,7 +3122,7 @@ class StartLCViewModelTests {
     @BeforeEach
     void before() {
         viewModel = new StartLCViewModel(4, service);
-        viewModel.setLoggedInUser(new LoggedInUserScope("test-applicant")); <co xml:id="CO25-1"/>
+        viewModel.setLoggedInUser(new LoggedInUserScope("test-applicant"));   <co xml:id="CO25-1"/>
     }
 
     @Test
@@ -3130,7 +3130,7 @@ class StartLCViewModelTests {
         viewModel.setClientReference("");
         viewModel.startNewLC();
 
-        Mockito.verifyNoInteractions(service);                              <co xml:id="CO25-2"/>
+        Mockito.verifyNoInteractions(service);                                <co xml:id="CO25-2"/>
     }
 
     @Test
@@ -3138,31 +3138,201 @@ class StartLCViewModelTests {
         viewModel.setClientReference("My first LC");
         viewModel.startNewLC();
 
-        Mockito.verify(service).startNewLC("test-applicant", "12345");      <co xml:id="CO25-3"/>
+        Mockito.verify(service).startNewLC("test-applicant", "My first LC");  <co xml:id="CO25-3"/>
     }
 }</programlisting>
-</section>
-</section>
-<section xml:id="a-crud-based-ui-example">
-<title>A CRUD-based UI example</title>
+<calloutlist>
+<callout arearefs="CO25-1">
+<para>We set the logged in user</para>
+</callout>
+<callout arearefs="CO25-2">
+<para>When the client reference is blank, there should be no interactions with the backend service.</para>
+</callout>
+<callout arearefs="CO25-3">
+<para>When a valid value for the client reference is entered, the backend should be invoked with the entered value.</para>
+</callout>
+</calloutlist>
+<simpara>The implementation to make this test pass, then looks like this:</simpara>
+<programlisting language="java" linenumbering="numbered">public class StartLCViewModel {
+    //...
+    public void startNewLC() {
+        if (!getStartDisabled()) {                  <co xml:id="CO26-1"/>
+            service.startNewLC(
+                    userScope.getLoggedInUserId(),
+                    getClientReference());          <co xml:id="CO26-2"/>
+        }
+    }
+    //...
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO26-1">
+<para>We check that the start button is enabled before invoking the backend.</para>
+</callout>
+<callout arearefs="CO26-2">
+<para>The actual backend call with the appropriate values.</para>
+</callout>
+</calloutlist>
+<simpara>Now let&#8217;s look at how to integrate the backend call from the view. We test this in a UI test as shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">@UITest
+public class StartLCViewTests {
 
-</section>
-<section xml:id="a-task-based-ui-example">
-<title>A task-based UI example</title>
+    @MockBean
+    private BackendService service;                                   <co xml:id="CO27-1"/>
 
-</section>
-</section>
-<section xml:id="the-bff-pattern">
-<title>The BFF Pattern</title>
+    //...
 
+    @Test
+    void shouldLaunchLCDetailsWhenCreationIsSuccessful(FxRobot robot) {
+        final String clientReference = "My first LC";
+        LCApplicationId lcApplicationId = LCApplicationId.randomId();
+
+        when(service.startNewLC("test-applicant", clientReference))
+                .thenReturn(lcApplicationId);                         <co xml:id="CO27-2"/>
+
+        robot.lookup("#client-reference")
+            .queryAs(TextField.class)
+            .setText(clientReference);                                <co xml:id="CO27-3"/>
+        robot.clickOn("#start-button");                               <co xml:id="CO27-4"/>
+
+        Mockito.verify(service).startNewLC("admin", clientReference); <co xml:id="CO27-5"/>
+
+        verifyThat("#lc-details-screen", isVisible());                <co xml:id="CO27-6"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO27-1">
+<para>We inject a mock instance of the backend service.</para>
+</callout>
+<callout arearefs="CO27-2">
+<para>We stub the call to the backend to return successfully.</para>
+</callout>
+<callout arearefs="CO27-3">
+<para>We type in a valid value for the client reference.</para>
+</callout>
+<callout arearefs="CO27-4">
+<para>We click on the <literal>start</literal> button.</para>
+</callout>
+<callout arearefs="CO27-5">
+<para>We verify that the service was indeed invoked with the correct arguments.</para>
+</callout>
+<callout arearefs="CO27-6">
+<para>We verify that we have moved to the next screen in the UI (the LC details screen).</para>
+</callout>
+</calloutlist>
+<simpara>Let&#8217;s also look at what happens when the service invocation fails in another test:</simpara>
+<programlisting language="java" linenumbering="numbered">public class StartLCViewTests {
+    //...
+    @Test
+    void shouldStayOnCreateLCScreenOnCreationFailure(FxRobot robot) {
+        final String clientReference = "My first LC";
+        when(service.startNewLC("test-applicant", clientReference))
+            .thenThrow(new RuntimeException("Failed!!"));   <co xml:id="CO28-1"/>
+
+        robot.lookup("#client-reference")
+            .queryAs(TextField.class)
+            .setText(clientReference);
+        robot.clickOn("#start-button");
+
+        verifyThat("#start-lc-screen", isVisible());        <co xml:id="CO28-2"/>
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO28-1">
+<para>We stub the backend service call to fail with an exception.</para>
+</callout>
+<callout arearefs="CO28-2">
+<para>We verify that we continue to remain on the <literal>start-lc-screen</literal>.</para>
+</callout>
+</calloutlist>
+<simpara>The view implementation for this functionality is shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">import javafx.concurrent.Service;
+
+public class StartLCView {
+    //...
+    public void start(ActionEvent event) {
+        new Service&lt;Void&gt;() {                    <co xml:id="CO29-1"/>
+            @Override
+            protected Task&lt;Void&gt; createTask() {
+                return new Task&lt;&gt;() {
+                    @Override
+                    protected Void call() {
+                        viewModel.startNewLC();  <co xml:id="CO29-2"/>
+                        return null;
+                    }
+                };
+            }
+
+            @Override
+            protected void succeeded() {
+                Stage stage = UIUtils.getStage(event);
+                showLCDetailsView(stage);        <co xml:id="CO29-3"/>
+            }
+
+            @Override
+            protected void failed() {
+                // Nothing for now. Remain on the same screen.
+            }
+        }.start();
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO29-1">
+<para>JavaFX, like most frontend frameworks, is single-threaded and requires that long-running tasks not be invoked on the UI thread. For this purpose, it provides the <literal>javafx.concurrent.Service</literal> abstraction to handle such interactions elegantly in a background thread.</para>
+</callout>
+<callout arearefs="CO29-2">
+<para>The actual invocation of the backend through the view-model happens here.</para>
+</callout>
+<callout arearefs="CO29-3">
+<para>We show the next screen to enter more LC details here.</para>
+</callout>
+</calloutlist>
+<simpara>Finally, the service implementation itself is shown here:</simpara>
+<programlisting language="java" linenumbering="numbered">import org.axonframework.commandhandling.gateway.CommandGateway;
+
+@Service
+public class BackendService {
+
+    private final CommandGateway gateway;                         <co xml:id="CO30-1"/>
+
+    public BackendService(CommandGateway gateway) {
+        this.gateway = gateway;
+    }
+
+    public LCApplicationId startNewLC(String applicantId, String clientReference) {
+        return gateway.sendAndWait(                               <co xml:id="CO30-2"/>
+                  startApplication(applicantId, clientReference)
+               );
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO30-1">
+<para>We inject the <literal>org.axonframework.commandhandling.gateway.CommandGateway</literal> provided by the Axon framework to invoke the command.</para>
+</callout>
+<callout arearefs="CO30-2">
+<para>The actual invocation of the backend using the <literal>sendAndWait</literal> method happens here. In this case, we are blocking until the backend call completes. There are other variations that do not require this kind of blocking. Please refer to the Axon framework documentation for more details.</para>
+</callout>
+</calloutlist>
+<simpara>We have now seen a complete example of how to implement the UI and invoke the backend API.</simpara>
+</section>
+</section>
 </section>
 <section xml:id="summary-4">
 <title>Summary</title>
-
+<simpara>In this chapter, we looked the nuances of API styles and clarified why it is very important to design APIs that capture the users' intent closely. We looked at the differences between CRUD-based and task-based APIs. Finally, we implemented the UI making use of the MVVM design pattern and demonstrated how it aids in test-driving frontend functionality.</simpara>
 </section>
 <section xml:id="questions-4">
 <title>Questions</title>
-
+<itemizedlist>
+<listitem>
+<simpara>What kind of APIs do you come up with? CRUD-based? Task-based? Something else?</simpara>
+</listitem>
+<listitem>
+<simpara>How do consumers find your APIs? Do they have to implement further translations of your APIs to consume them meaningfully?</simpara>
+</listitem>
+<listitem>
+<simpara>Are you able to test-drive your front-end functionality? Do you see merit in this approach?</simpara>
+</listitem>
+</itemizedlist>
 </section>
 <section xml:id="further-reading-4">
 <title>Further reading</title>
@@ -3180,9 +3350,24 @@ class StartLCViewModelTests {
 </thead>
 <tbody>
 <row>
-<entry align="left" valign="top"><simpara>TODO</simpara></entry>
-<entry align="left" valign="top"><simpara>TODO</simpara></entry>
-<entry align="left" valign="top"><simpara>TODO</simpara></entry>
+<entry align="left" valign="top"><simpara>Task-drien user interfaces</simpara></entry>
+<entry align="left" valign="top"><simpara>Oleksandr Sukholeyster</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://www.uxmatters.com/mt/archives/2014/12/task-driven-user-interfaces.php">https://www.uxmatters.com/mt/archives/2014/12/task-driven-user-interfaces.php</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Business logic, a different perspective</simpara></entry>
+<entry align="left" valign="top"><simpara>Udi Dahan</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://vimeo.com/131757759">https://vimeo.com/131757759</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>The Fallacies of Enterprise Computing</simpara></entry>
+<entry align="left" valign="top"><simpara>Ted Neward</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>GUI architectures</simpara></entry>
+<entry align="left" valign="top"><simpara>Martin Fowler</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="https://martinfowler.com/eaaDev/uiArchs.html">https://martinfowler.com/eaaDev/uiArchs.html</link></simpara></entry>
 </row>
 </tbody>
 </tgroup>
