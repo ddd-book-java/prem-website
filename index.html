@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#which-persistence-mechanism-should-we-choose">5.5.3. Which persistence mechanism should we choose?</a></li>
 </ul>
 </li>
-<li><a href="#policy-enforcements-validations">5.6. Policy enforcements (validations)</a>
+<li><a href="#enforcing-policies">5.6. Enforcing policies</a>
 <ul class="sectlevel3">
 <li><a href="#structural-validations">5.6.1. Structural validations</a></li>
 <li><a href="#business-rule-enforcements">5.6.2. Business rule enforcements</a></li>
@@ -2118,7 +2118,7 @@ To communicate effectively, the code must be based on the same language used to 
 </div>
 </div>
 <div class="paragraph">
-<p>In the Command Query Responsibility Segregation (CQRS) section, we  describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates. The list of topics to be covered is as follows:</p>
+<p>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates. The list of topics to be covered is as follows:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2140,7 +2140,7 @@ To communicate effectively, the code must be based on the same language used to 
 </ul>
 </div>
 <div class="paragraph">
-<p>By the end of this chapter, you would have learnt how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</p>
+<p>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</p>
 </div>
 <div class="sect2">
 <h3 id="technical-requirements-2"><a class="anchor" href="#technical-requirements-2"></a><a class="link" href="#technical-requirements-2">5.1. Technical Requirements</a></h3>
@@ -2184,7 +2184,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture">
 </div>
-<div class="title">Figure 1- 27. Traditional vs. CQRS Architecture</div>
+<div class="title">Figure 1- 27. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2234,6 +2234,9 @@ Implementing CQRS does not require the use of any framework. However, in this bo
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the spring and axon frameworks.</p>
 </div>
 </div>
 </div>
@@ -2356,6 +2359,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/event-storming/05-read-models.png" alt="05 read models">
 </div>
+<div class="title">Figure 1- 28. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</p>
@@ -2370,6 +2374,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
 </div>
+<div class="title">Figure 1- 29. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
@@ -2383,7 +2388,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 1- 28. First cut attempt at aggregate design</div>
+<div class="title">Figure 1- 30. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>At first glance, it appears that we have four potential entities to handle these commands:</p>
@@ -2392,7 +2397,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
 </div>
-<div class="title">Figure 1- 29. Potential aggregates at first glance</div>
+<div class="title">Figure 1- 31. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
@@ -2401,7 +2406,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="326" height="148">
 </div>
-<div class="title">Figure 1- 30. Slightly more refined aggregate structure</div>
+<div class="title">Figure 1- 32. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
 <p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
@@ -2413,7 +2418,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-For a more detailed explanation of the differences between aggregates, aggregate roots, entities and value objects, refer to Chapter 2.
+For a more detailed explanation of the differences between aggregates, aggregate roots, entities and value objects, refer to Chapter 2, The Mechanics of Domain-Driven Design.
 </td>
 </tr>
 </table>
@@ -2446,7 +2451,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 31. An event-driven system</div>
+<div class="title">Figure 1- 33. An event-driven system</div>
 </div>
 <div class="paragraph">
 <p>An optional set of events may have occurred in the past. A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus. The system will react in one of two ways when it handles a command:</p>
@@ -2462,7 +2467,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </ul>
 </div>
 <div class="paragraph">
-<p>The Axon framework allows us to express tests in this form. This is outlined below:</p>
+<p>The Axon framework allows us to express tests in the following form.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2606,7 +2611,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </table>
 </div>
 <div class="paragraph">
-<p>It is worth noting that the <code>merchandiseDescription</code> is left as a primitive <code>String</code> type. This may feel contradictory to the commentary we present above. We will address this in the upcoming section on validations.</p>
+<p>It is worth noting that the <code>merchandiseDescription</code> is left as a primitive <code>String</code> type. This may feel contradictory to the commentary we present above. We will address this in the upcoming section on Structural validations.</p>
 </div>
 <div class="paragraph">
 <p>Now let’s look at what the event we will emit as a result of successfully processing the command will look like.</p>
@@ -2780,7 +2785,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 32. Typical entity relationship model</div>
+<div class="title">Figure 1- 34. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
@@ -2798,7 +2803,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-A log is an extremely simple, append-only sequence of immutable records ordered by time.
+A log is an extremely simple, append-only sequence of immutable records ordered by time.   The diagram here illustrates the structure of a log where records are written sequentially. In other words, a log is an append-only data structure as depicted here:.
 </td>
 </tr>
 </table>
@@ -2807,6 +2812,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
+<div class="title">Figure 1- 35. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above. Consider the example of an online order flow below:</p>
@@ -3106,7 +3112,7 @@ Wheat bread</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>If there are a large number of events, aggregate loading can become a time-consuming operation&#8201;&#8212;&#8201;directly proportional to the number of elapsed events for that aggregate. There are techniques (like snapshotting) we can employ to overcome this. We will cover this in more detail in a subsequent chapter.</p>
+<p>If there are a large number of events, aggregate loading can become a time-consuming operation&#8201;&#8212;&#8201;directly proportional to the number of elapsed events for that aggregate. There are techniques (like snapshotting) we can employ to overcome this. We will cover this in more detail in Chapter 11 – Non-Functional Requirements.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3155,7 +3161,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="policy-enforcements-validations"><a class="anchor" href="#policy-enforcements-validations"></a><a class="link" href="#policy-enforcements-validations">5.6. Policy enforcements (validations)</a></h3>
+<h3 id="enforcing-policies"><a class="anchor" href="#enforcing-policies"></a><a class="link" href="#enforcing-policies">5.6. Enforcing policies</a></h3>
 <div class="paragraph">
 <p>When processing commands, we need to enforce policies or rules. Policies come in two broad categories:</p>
 </div>
@@ -3291,6 +3297,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
+<div class="title">Figure 1- 36. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -3968,7 +3975,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 33. Commands from the event storming session</div>
+<div class="title">Figure 1- 37. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -3977,7 +3984,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 34. Decomposed commands</div>
+<div class="title">Figure 1- 38. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4128,7 +4135,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 35. Revised commands</div>
+<div class="title">Figure 1- 39. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4524,7 +4531,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvc.png" alt="mvc">
 </div>
-<div class="title">Figure 1- 36. MVC design pattern</div>
+<div class="title">Figure 1- 40. MVC design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -4558,7 +4565,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
 </div>
-<div class="title">Figure 1- 37. MVP design pattern</div>
+<div class="title">Figure 1- 41. MVP design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -4580,7 +4587,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 38. MVVM design pattern</div>
+<div class="title">Figure 1- 42. MVVM design pattern</div>
 </div>
 <div class="ulist">
 <ul>
@@ -4617,7 +4624,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 39. Start LC creation screen</div>
+<div class="title">Figure 1- 43. Start LC creation screen</div>
 </div>
 <div class="sect4">
 <h5 id="declarative-view"><a class="anchor" href="#declarative-view"></a><a class="link" href="#declarative-view">Declarative view</a></h5>
@@ -5216,7 +5223,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 40. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 44. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5225,7 +5232,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 35</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 39</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 43</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6085,7 +6092,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-07-28 13:25:15 UTC
+Last updated 2021-07-29 00:36:18 UTC
 </div>
 </div>
 </body>
