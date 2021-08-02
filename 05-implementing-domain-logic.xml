@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain Logic</title>
-<date>2021-07-29</date>
+<date>2021-08-02</date>
 </info>
 <section xml:id="implementing-domain-logic" role="text-justify">
 <title>Implementing Domain Logic</title>
@@ -34,30 +34,15 @@ Eric Evans
 </itemizedlist>
 <simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
 <section xml:id="technical-requirements">
-<title>Technical Requirements</title>
-<itemizedlist>
-<listitem>
-<simpara>JDK 1.8+ (We have used Java 16 to compile sample sources)</simpara>
-</listitem>
-<listitem>
-<simpara>Maven 3.x</simpara>
-</listitem>
-<listitem>
-<simpara>Spring Boot 2.4.x</simpara>
-</listitem>
-<listitem>
-<simpara>JUnit 5.7.x (Included with spring boot)</simpara>
-</listitem>
-<listitem>
-<simpara>Axon Framework 4.4.7 (DDD and CQRS Framework)</simpara>
-</listitem>
-<listitem>
-<simpara>Project Lombok (To reduce verbosity)</simpara>
-</listitem>
-<listitem>
-<simpara>Moneta 1.4.x (Money and currency reference implementation - JSR 354)</simpara>
-</listitem>
-</itemizedlist>
+<title>Technical requirements</title>
+<simpara>To follow the examples in this chapter, you will need access to:
+* JDK 1.8+ (We have used Java 16 to compile sample sources)
+* Maven 3.x
+* Spring Boot 2.4.x
+* JUnit 5.7.x (Included with spring boot)
+* Axon Framework 4.4.7 (DDD and CQRS Framework)
+* Project Lombok (To reduce verbosity)
+* Moneta 1.4.x (Money and currency reference implementation - JSR 354)</simpara>
 </section>
 <section xml:id="command-query-responsibility-segregation-cqrs">
 <title>Command Query Responsibility Segregation (CQRS)</title>

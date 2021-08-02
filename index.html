@@ -570,7 +570,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#implementing-domain-logic">5. Implementing Domain Logic</a>
 <ul class="sectlevel2">
-<li><a href="#technical-requirements-2">5.1. Technical Requirements</a></li>
+<li><a href="#technical-requirements-2">5.1. Technical requirements</a></li>
 <li><a href="#command-query-responsibility-segregation-cqrs-2">5.2. Command Query Responsibility Segregation (CQRS)</a>
 <ul class="sectlevel3">
 <li><a href="#recap-what-is-cqrs">5.2.1. Recap: What is CQRS</a></li>
@@ -608,7 +608,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#implementing-the-user-interfacetask-based">6. Implementing the User Interface&#8201;&#8212;&#8201;Task-based</a>
 <ul class="sectlevel2">
-<li><a href="#technical-requirements-3">6.1. Technical Requirements</a></li>
+<li><a href="#technical-requirements-3">6.1. Technical requirements</a></li>
 <li><a href="#api-styles">6.2. API Styles</a>
 <ul class="sectlevel3">
 <li><a href="#crud-based-apis">6.2.1. CRUD-based APIs</a></li>
@@ -617,17 +617,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#bootstrapping-the-ui">6.3. Bootstrapping the UI</a></li>
-<li><a href="#implementing-the-ui">6.4. Implementing the UI</a>
+<li><a href="#ui-design-patterns">6.4. UI Design Patterns</a>
 <ul class="sectlevel3">
-<li><a href="#model-view-controller">6.4.1. Model View Controller</a></li>
-<li><a href="#model-view-presenter">6.4.2. Model View Presenter</a></li>
-<li><a href="#model-view-view-model">6.4.3. Model View View-Model</a></li>
+<li><a href="#model-view-controller-mvc">6.4.1. Model View Controller (MVC)</a></li>
+<li><a href="#model-view-presenter-mvp">6.4.2. Model View Presenter (MVP)</a></li>
+<li><a href="#model-view-view-model-mvvm">6.4.3. Model View View-Model (MVVM)</a></li>
 <li><a href="#which-one-mvc-mvp-or-mvvm">6.4.4. Which one: MVC, MVP or MVVM</a></li>
 </ul>
 </li>
-<li><a href="#ui-implementation">6.5. UI Implementation</a>
+<li><a href="#implementing-the-ui">6.5. Implementing the UI</a>
 <ul class="sectlevel3">
-<li><a href="#mvvm-primer">6.5.1. MVVM primer</a></li>
+<li><a href="#mvvm-deep-dive">6.5.1. MVVM deep-dive</a></li>
 </ul>
 </li>
 <li><a href="#summary-4">6.6. Summary</a></li>
@@ -2143,31 +2143,16 @@ To communicate effectively, the code must be based on the same language used to 
 <p>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</p>
 </div>
 <div class="sect2">
-<h3 id="technical-requirements-2"><a class="anchor" href="#technical-requirements-2"></a><a class="link" href="#technical-requirements-2">5.1. Technical Requirements</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
-</li>
-<li>
-<p>Maven 3.x</p>
-</li>
-<li>
-<p>Spring Boot 2.4.x</p>
-</li>
-<li>
-<p>JUnit 5.7.x (Included with spring boot)</p>
-</li>
-<li>
-<p>Axon Framework 4.4.7 (DDD and CQRS Framework)</p>
-</li>
-<li>
-<p>Project Lombok (To reduce verbosity)</p>
-</li>
-<li>
-<p>Moneta 1.4.x (Money and currency reference implementation - JSR 354)</p>
-</li>
-</ul>
+<h3 id="technical-requirements-2"><a class="anchor" href="#technical-requirements-2"></a><a class="link" href="#technical-requirements-2">5.1. Technical requirements</a></h3>
+<div class="paragraph">
+<p>To follow the examples in this chapter, you will need access to:
+* JDK 1.8+ (We have used Java 16 to compile sample sources)
+* Maven 3.x
+* Spring Boot 2.4.x
+* JUnit 5.7.x (Included with spring boot)
+* Axon Framework 4.4.7 (DDD and CQRS Framework)
+* Project Lombok (To reduce verbosity)
+* Moneta 1.4.x (Money and currency reference implementation - JSR 354)</p>
 </div>
 </div>
 <div class="sect2">
@@ -3930,37 +3915,18 @@ To accomplish a difficult task, one must first make it easy.
 <p>At the end of the chapter, you will learn how to employ DDD principles to help you build robust user experiences that are simple and intuitive. You will also learn why it may be prudent to design your backend interfaces (APIs) from the perspective of the consumer.</p>
 </div>
 <div class="sect2">
-<h3 id="technical-requirements-3"><a class="anchor" href="#technical-requirements-3"></a><a class="link" href="#technical-requirements-3">6.1. Technical Requirements</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
-</li>
-<li>
-<p>JavaFX SDK 16 and SceneBuilder</p>
-</li>
-<li>
-<p>Maven 3.x</p>
-</li>
-<li>
-<p>Spring Boot 2.4.x</p>
-</li>
-<li>
-<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
-</li>
-<li>
-<p>JUnit 5.7.x (Included with spring boot)</p>
-</li>
-<li>
-<p>TestFX (for UI testing)</p>
-</li>
-<li>
-<p>OpenJFX Monocle (for headless UI testing)</p>
-</li>
-<li>
-<p>Project Lombok (To reduce verbosity)</p>
-</li>
-</ul>
+<h3 id="technical-requirements-3"><a class="anchor" href="#technical-requirements-3"></a><a class="link" href="#technical-requirements-3">6.1. Technical requirements</a></h3>
+<div class="paragraph">
+<p>To follow the examples in this chapter, you will need access to:
+* JDK 1.8+ (We have used Java 16 to compile sample sources)
+* JavaFX SDK 16 and SceneBuilder
+* Maven 3.x
+* Spring Boot 2.4.x
+* mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)
+* JUnit 5.7.x (Included with spring boot)
+* TestFX (for UI testing)
+* OpenJFX Monocle (for headless UI testing)
+* Project Lombok (To reduce verbosity)</p>
 </div>
 <div class="paragraph">
 <p>Before we dive deep into building the GUI solution, let&#8217;s do a quick recap of where we left the APIs.</p>
@@ -3973,7 +3939,7 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/command-flow.png" alt="command flow" width="488" height="742">
+<img src="./images/command-flow.png" alt="command flow" width="491" height="581">
 </div>
 <div class="title">Figure 1- 37. Commands from the event storming session</div>
 </div>
@@ -4144,7 +4110,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="sect3">
 <h4 id="task-based-or-crud-based"><a class="anchor" href="#task-based-or-crud-based"></a><a class="link" href="#task-based-or-crud-based">6.2.3. Task-based or CRUD-based?</a></h4>
 <div class="paragraph">
-<p>CRUD-based APIs seem to operate at the level of the aggregate. In our example, we have the LC aggregate. In the simplest case, this essentially translates to four operations aligned with each of the CRUD verbs. However, as we are seeing, even in our simplified version, the LC is becoming a fairly complex concept. Having to work with just four operations at the level of the LC is cognitively complex. With more requirements, this complexity will only continue to increase. For example, consider a situation where  the business expresses a need to capture a lot more information about the <code>merchandise</code>, where today, this is simply captured in the form of free-form text.</p>
+<p>CRUD-based APIs seem to operate at the level of the aggregate. In our example, we have the LC aggregate. In the simplest case, this essentially translates to four operations aligned with each of the CRUD verbs. However, as we are seeing, even in our simplified version, the LC is becoming a fairly complex concept. Having to work with just four operations at the level of the LC is cognitively complex. With more requirements, this complexity will only continue to increase. For example, consider a situation where  the business expresses a need to capture a lot more information about the <code>merchandise</code>, where today, this is simply captured in the form of free-form text. A more elaborate version of merchandise information is shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4252,14 +4218,14 @@ To accomplish a difficult task, one must first make it easy.
 <p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
 </div>
 <div class="paragraph">
-<p>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. However, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</p>
+<p>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. Moreover, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="bootstrapping-the-ui"><a class="anchor" href="#bootstrapping-the-ui"></a><a class="link" href="#bootstrapping-the-ui">6.3. Bootstrapping the UI</a></h3>
 <div class="paragraph">
-<p>We will simply be building on top of the LC application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on Bootstrapping the Application. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
+<p>We will be building the UI on top of the LC issuance application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on <em>Bootstrapping the application</em>. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4398,7 +4364,7 @@ To accomplish a difficult task, one must first make it easy.
     <span style="color:#070;font-weight:bold">&lt;artifactId&gt;</span>javafx-maven-plugin<span style="color:#070;font-weight:bold">&lt;/artifactId&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;version&gt;</span>${javafx-maven-plugin.version}<span style="color:#070;font-weight:bold">&lt;/version&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;configuration&gt;</span>
-        <span style="color:#070;font-weight:bold">&lt;mainClass&gt;</span>com.premonition.lc.issuance.App<span style="color:#070;font-weight:bold">&lt;/mainClass&gt;</span>
+        <span style="color:#070;font-weight:bold">&lt;mainClass&gt;</span>com.premonition.lc.ch06.App<span style="color:#070;font-weight:bold">&lt;/mainClass&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;/configuration&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;/plugin&gt;</span></pre></td>
 </tr></table></code></pre>
@@ -4502,7 +4468,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-the-ui"><a class="anchor" href="#implementing-the-ui"></a><a class="link" href="#implementing-the-ui">6.4. Implementing the UI</a></h3>
+<h3 id="ui-design-patterns"><a class="anchor" href="#ui-design-patterns"></a><a class="link" href="#ui-design-patterns">6.4. UI Design Patterns</a></h3>
 <div class="paragraph">
 <p>When working with user interfaces, it is fairly customary to use one of these presentation patterns:</p>
 </div>
@@ -4523,7 +4489,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <p>Each of these patterns enable us to produce code that is loosely coupled, testable and maintainable. Let&#8217;s briefly examine each of these in more detail here:</p>
 </div>
 <div class="sect3">
-<h4 id="model-view-controller"><a class="anchor" href="#model-view-controller"></a><a class="link" href="#model-view-controller">6.4.1. Model View Controller</a></h4>
+<h4 id="model-view-controller-mvc"><a class="anchor" href="#model-view-controller-mvc"></a><a class="link" href="#model-view-controller-mvc">6.4.1. Model View Controller (MVC)</a></h4>
 <div class="paragraph">
 <p>This is arguably the oldest, most popular when implementing user interfaces, given that it has been in existence since the early 1970s. The pattern breaks the app into three components:</p>
 </div>
@@ -4553,14 +4519,17 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions, etc. need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
+There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="model-view-presenter"><a class="anchor" href="#model-view-presenter"></a><a class="link" href="#model-view-presenter">6.4.2. Model View Presenter</a></h4>
+<h4 id="model-view-presenter-mvp"><a class="anchor" href="#model-view-presenter-mvp"></a><a class="link" href="#model-view-presenter-mvp">6.4.2. Model View Presenter (MVP)</a></h4>
+<div class="paragraph">
+<p>MVP is a refinement of the MVC design pattern that originated in the early 1990s. Here, the <code>presenter</code> acts as a middleman between the <code>view</code> and the <code>model</code>. A high level visual of how this pattern is implemented is shown here:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
@@ -4582,7 +4551,10 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 </div>
 <div class="sect3">
-<h4 id="model-view-view-model"><a class="anchor" href="#model-view-view-model"></a><a class="link" href="#model-view-view-model">6.4.3. Model View View-Model</a></h4>
+<h4 id="model-view-view-model-mvvm"><a class="anchor" href="#model-view-view-model-mvvm"></a><a class="link" href="#model-view-view-model-mvvm">6.4.3. Model View View-Model (MVVM)</a></h4>
+<div class="paragraph">
+<p>Modern UI frameworks started adopting a declarative style to express the view. MVVM was designed to remove all GUI code (code-behind) from the view by making use of binding expressions. This allowed for a cleaner separation of stylistic vs. programming concerns. A high level visual of how this pattern is implemented is shown here:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
@@ -4614,9 +4586,12 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 </div>
 <div class="sect2">
-<h3 id="ui-implementation"><a class="anchor" href="#ui-implementation"></a><a class="link" href="#ui-implementation">6.5. UI Implementation</a></h3>
+<h3 id="implementing-the-ui"><a class="anchor" href="#implementing-the-ui"></a><a class="link" href="#implementing-the-ui">6.5. Implementing the UI</a></h3>
+<div class="paragraph">
+<p>As discussed in the previous section, the MVVM design pattern provides a robust means to implement the UI. Let&#8217;s look at each of the components we implement in detail:</p>
+</div>
 <div class="sect3">
-<h4 id="mvvm-primer"><a class="anchor" href="#mvvm-primer"></a><a class="link" href="#mvvm-primer">6.5.1. MVVM primer</a></h4>
+<h4 id="mvvm-deep-dive"><a class="anchor" href="#mvvm-deep-dive"></a><a class="link" href="#mvvm-deep-dive">6.5.1. MVVM deep-dive</a></h4>
 <div class="paragraph">
 <p>Let&#8217;s consider the example of creating a new LC. To start creation of a new LC, all we need is for the applicant to provide a friendly client reference. This is an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
 </div>
@@ -4625,6 +4600,9 @@ There are different schools of thought when it comes where concerns such as data
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
 <div class="title">Figure 1- 43. Start LC creation screen</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
 </div>
 <div class="sect4">
 <h5 id="declarative-view"><a class="anchor" href="#declarative-view"></a><a class="link" href="#declarative-view">Declarative view</a></h5>
@@ -4659,7 +4637,7 @@ There are different schools of thought when it comes where concerns such as data
 
 <span style="color:#070;font-weight:bold">&lt;Pane</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">start-lc</span><span style="color:#710">&quot;</span></span>  <span style="color:#b48">xmlns</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/javafx/16</span><span style="color:#710">&quot;</span></span>
                       <span style="color:#b48">xmlns:fx</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://javafx.com/fxml/1</span><span style="color:#710">&quot;</span></span>
-      <span style="color:#b48">fx:controller</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">com.premonition.lc.issuance.ui.views.StartLCView</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>  <i class="conum" data-value="1"></i><b>(1)</b>
+      <span style="color:#b48">fx:controller</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">com.premonition.lc.ch07.ui.views.StartLCView</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
     ...
 
     <span style="color:#070;font-weight:bold">&lt;TextField</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">client-reference</span><span style="color:#710">&quot;</span></span>
@@ -4668,7 +4646,7 @@ There are different schools of thought when it comes where concerns such as data
     <span style="color:#070;font-weight:bold">&lt;Button</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">start-button</span><span style="color:#710">&quot;</span></span>
             <span style="color:#b48">fx:id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">startButton</span><span style="color:#710">&quot;</span></span>
             <span style="color:#b48">text</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Start</span><span style="color:#710">&quot;</span></span>
-            <span style="color:#b48">onAction</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                          <i class="conum" data-value="3"></i><b>(3)</b>
+            <span style="color:#b48">onAction</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">/&gt;</span>                                         <i class="conum" data-value="3"></i><b>(3)</b>
     ...
 <span style="color:#070;font-weight:bold">&lt;/Pane&gt;</span>
 </pre></td>
@@ -4721,7 +4699,7 @@ There are different schools of thought when it comes where concerns such as data
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCView</span> {                     <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#007">@FXML</span>
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;         <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">TextField</span> clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
     <span style="color:#007">@FXML</span>
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Button</span> startButton;                <i class="conum" data-value="3"></i><b>(3)</b>
 
@@ -4758,7 +4736,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="sect4">
 <h5 id="view-model"><a class="anchor" href="#view-model"></a><a class="link" href="#view-model">View-Model</a></h5>
 <div class="paragraph">
-<p>The view-model class <code>StartLCViewModel for the `StartLCView</code> is shown here:</p>
+<p>The view-model class <code>StartLCViewModel</code> for the <code>StartLCView</code> is shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4792,7 +4770,7 @@ There are different schools of thought when it comes where concerns such as data
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">javafx.beans.property.StringProperty</span>;
 <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">de.saxsys.mvvmfx.ViewModel</span>;
 
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {       <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewModel</span> <span style="color:#088;font-weight:bold">implements</span> ViewModel {      <i class="conum" data-value="1"></i><b>(1)</b>
 
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> StringProperty clientReference;          <i class="conum" data-value="2"></i><b>(2)</b>
 
@@ -5683,10 +5661,10 @@ This may feel contrary to the notion of centralizing business validations on the
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> start(<span style="color:#0a8;font-weight:bold">ActionEvent</span> event) {
         <span style="color:#080;font-weight:bold">new</span> Service&lt;<span style="color:#0a8;font-weight:bold">Void</span>&gt;() {                    <i class="conum" data-value="1"></i><b>(1)</b>
             <span style="color:#007">@Override</span>
-            <span style="color:#088;font-weight:bold">protected</span> Task&lt;<span style="color:#0a8;font-weight:bold">Void</span>&gt; createTask() {
+            <span style="color:#088;font-weight:bold">private</span> Task&lt;<span style="color:#0a8;font-weight:bold">Void</span>&gt; createTask() {
                 <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">new</span> Task&lt;&gt;() {
                     <span style="color:#007">@Override</span>
-                    <span style="color:#088;font-weight:bold">protected</span> <span style="color:#0a8;font-weight:bold">Void</span> call() {
+                    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Void</span> call() {
                         viewModel.startNewLC();  <i class="conum" data-value="2"></i><b>(2)</b>
                         <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">null</span>;
                     }
@@ -5694,13 +5672,13 @@ This may feel contrary to the notion of centralizing business validations on the
             }
 
             <span style="color:#007">@Override</span>
-            <span style="color:#088;font-weight:bold">protected</span> <span style="color:#339;font-weight:bold">void</span> succeeded() {
+            <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">void</span> succeeded() {
                 Stage stage = UIUtils.getStage(event);
                 showLCDetailsView(stage);        <i class="conum" data-value="3"></i><b>(3)</b>
             }
 
             <span style="color:#007">@Override</span>
-            <span style="color:#088;font-weight:bold">protected</span> <span style="color:#339;font-weight:bold">void</span> failed() {
+            <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">void</span> failed() {
                 <span style="color:#777">// Nothing for now. Remain on the same screen.</span>
             }
         }.start();
@@ -5798,7 +5776,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="ulist">
 <ul>
 <li>
-<p>What kind of APIs do you come up with? CRUD-based? Task-based? Something else?</p>
+<p>What kind of APIs do you come up with in your domain? CRUD-based? Task-based? Something else?</p>
 </li>
 <li>
 <p>How do consumers find your APIs? Do they have to implement further translations of your APIs to consume them meaningfully?</p>
@@ -6092,7 +6070,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-07-29 00:36:18 UTC
+Last updated 2021-08-02 21:18:18 UTC
 </div>
 </div>
 </body>
