@@ -3909,7 +3909,23 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 </div>
 <div class="paragraph">
-<p>The essence of DDD is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
+<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter,we will implement the UI for LC Application and wire up the integration to the backend APIs.  The list of topics to be covered is as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>API styles</p>
+</li>
+<li>
+<p>UI design patterns</p>
+</li>
+<li>
+<p>Implementing the UI</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>At the end of the chapter, you will learn how to employ DDD principles to help you build robust user experiences that are simple and intuitive. You will also learn why it may be prudent to design your backend interfaces (APIs) from the perspective of the consumer.</p>
@@ -4521,6 +4537,9 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 <div class="title">Figure 1- 40. MVC design pattern</div>
 </div>
+<div class="paragraph">
+<p>The pattern comprises the following components:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -4558,6 +4577,9 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 <div class="title">Figure 1- 41. MVP design pattern</div>
 </div>
+<div class="paragraph">
+<p>The pattern comprises the following components:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -4583,16 +4605,19 @@ There are different schools of thought when it comes where concerns such as data
 </div>
 <div class="title">Figure 1- 42. MVVM design pattern</div>
 </div>
+<div class="paragraph">
+<p>The pattern comprises the following components:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Model: responsible to house the business logic and managing the state of the application.</p>
+<p><strong>Model</strong> : responsible to house the business logic and managing the state of the application.</p>
 </li>
 <li>
-<p>View: responsible for presenting data to the user and notifying the view-model about user interactions.</p>
+<p><strong>View</strong> : responsible for presenting data to the user and notifying the view-model about user interactions.</p>
 </li>
 <li>
-<p>View-Model: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</p>
+<p><strong>View-Model</strong>: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</p>
 </li>
 </ul>
 </div>
@@ -6092,7 +6117,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-02 22:25:54 UTC
+Last updated 2021-08-06 13:54:28 UTC
 </div>
 </div>
 </body>
