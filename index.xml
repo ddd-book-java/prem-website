@@ -2765,7 +2765,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 
 &lt;Pane id="start-lc"  xmlns="http://javafx.com/javafx/16"
                       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.premonition.lc.ch06.ui.views.StartLCView"&gt;        <co xml:id="CO18-1"/>
+      fx:controller="com.premonition.lc.ch06.ui.views.StartLCView"&gt;      <co xml:id="CO18-1"/>
     ...
 
     &lt;TextField id="client-reference"
@@ -2774,7 +2774,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
     &lt;Button id="start-button"
             fx:id="startButton"
             text="Start"
-            onAction="#start"/&gt;                                         <co xml:id="CO18-3"/>
+            onAction="#start"/&gt;                                          <co xml:id="CO18-3"/>
     ...
 &lt;/Pane&gt;</programlisting>
 <calloutlist>
