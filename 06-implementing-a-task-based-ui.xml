@@ -547,7 +547,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO1-1"/>
 
 &lt;Pane id="start-lc"  xmlns="http://javafx.com/javafx/16"
                       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.premonition.lc.ch07.ui.views.StartLCView"&gt; <co xml:id="CO2-1"/>
+      fx:controller="com.premonition.lc.ch06.ui.views.StartLCView"&gt; <co xml:id="CO2-1"/>
     ...
 
     &lt;TextField id="client-reference"
