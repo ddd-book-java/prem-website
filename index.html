@@ -593,7 +593,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#state-stored-aggregates">5.6.1. State stored aggregates</a></li>
 <li><a href="#event-sourced-aggregates">5.6.2. Event sourced aggregates</a></li>
-<li><a href="#which-persistence-mechanism-should-we-choose">5.6.3. Which persistence mechanism should we choose?</a></li>
+<li><a href="#persistence-technology-choices">5.6.3. Persistence technology choices</a></li>
+<li><a href="#which-persistence-mechanism-should-we-choose">5.6.4. Which persistence mechanism should we choose?</a></li>
 </ul>
 </li>
 <li><a href="#enforcing-policies">5.7. Enforcing policies</a>
@@ -3141,7 +3142,13 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.6.3. Which persistence mechanism should we choose?</a></h4>
+<h4 id="persistence-technology-choices"><a class="anchor" href="#persistence-technology-choices"></a><a class="link" href="#persistence-technology-choices">5.6.3. Persistence technology choices</a></h4>
+<div class="paragraph">
+<p>If you are using a state store to persist your aggregates, using your usual evaluation process for choosing your persistence technology should suffice. However, if you are looking at event-sourced aggregates, the decision can be a bit more nuanced. In our experience, even a simple relational database can do the trick. Indeed, we had made use of a relational database to act as an event store for a high volume transactional application with billions of events. This setup worked just fine for us. It is worth noting that we were only using the event store to insert new events and loading events for a given aggregate in sequential order. However, there are a multitude of specialized technologies that have been purpose built to act as an event store that support several other value-added features such as time travel, full event replay, event payload introspection, etc. If you have such requirements, it might be worth considering other options such as NoSql databases (document stores like MongoDB or column family stores like Cassandra) or purpose-built commercial offerings such as EventStoreDB<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> and Axon Server<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> to evaluate feasibility in your context.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.6.4. Which persistence mechanism should we choose?</a></h4>
 <div class="paragraph">
 <p>Now that we have a reasonably good understanding of the two types of aggregate persistence mechanisms, it begs the question of which one we should choose. We list a few benefits of using event sourcing below:</p>
 </div>
@@ -3806,7 +3813,7 @@ Wheat bread</p></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.</td>
+<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>.</td>
 </tr>
 </table>
 </div>
@@ -3955,7 +3962,7 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 </div>
 <div class="paragraph">
-<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
+<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
 </div>
 <div class="paragraph">
 <p>In this chapter,we will implement the UI for LC Application and wire up the integration to the backend APIs.  The list of topics to be covered is as follows:</p>
@@ -4276,7 +4283,7 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup></em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup></em>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Latency</p></td>
@@ -4606,7 +4613,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
+There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
 </td>
 </tr>
 </table>
@@ -5006,7 +5013,7 @@ There are different schools of thought when it comes where concerns such as data
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -6145,31 +6152,37 @@ Sometimes I feel like I am being forgotten.
 <a href="#_footnoteref_3">3</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://www.eventstore.com/" class="bare">https://www.eventstore.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
+<a href="#_footnoteref_5">5</a>. <a href="https://axoniq.io/product-overview/axon-server" class="bare">https://axoniq.io/product-overview/axon-server</a>
 </div>
 <div class="footnote" id="_footnotedef_6">
-<a href="#_footnoteref_6">6</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
+<a href="#_footnoteref_6">6</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_7">
-<a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
+<a href="#_footnoteref_7">7</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_8">
-<a href="#_footnoteref_8">8</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+<a href="#_footnoteref_8">8</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_9">
-<a href="#_footnoteref_9">9</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_9">9</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
 </div>
 <div class="footnote" id="_footnotedef_10">
-<a href="#_footnoteref_10">10</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_10">10</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+</div>
+<div class="footnote" id="_footnotedef_11">
+<a href="#_footnoteref_11">11</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+</div>
+<div class="footnote" id="_footnotedef_12">
+<a href="#_footnoteref_12">12</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-14 12:41:32 UTC
+Last updated 2021-08-14 13:24:50 UTC
 </div>
 </div>
 </body>

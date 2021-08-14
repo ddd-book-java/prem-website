@@ -466,6 +466,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#state-stored-aggregates">State stored aggregates</a></li>
 <li><a href="#event-sourced-aggregates">Event sourced aggregates</a></li>
+<li><a href="#persistence-technology-choices">Persistence technology choices</a></li>
 <li><a href="#which-persistence-mechanism-should-we-choose">Which persistence mechanism should we choose?</a></li>
 </ul>
 </li>
@@ -1518,6 +1519,12 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
+<h4 id="persistence-technology-choices"><a class="anchor" href="#persistence-technology-choices"></a>Persistence technology choices</h4>
+<div class="paragraph">
+<p>If you are using a state store to persist your aggregates, using your usual evaluation process for choosing your persistence technology should suffice. However, if you are looking at event-sourced aggregates, the decision can be a bit more nuanced. In our experience, even a simple relational database can do the trick. Indeed, we had made use of a relational database to act as an event store for a high volume transactional application with billions of events. This setup worked just fine for us. It is worth noting that we were only using the event store to insert new events and loading events for a given aggregate in sequential order. However, there are a multitude of specialized technologies that have been purpose built to act as an event store that support several other value-added features such as time travel, full event replay, event payload introspection, etc. If you have such requirements, it might be worth considering other options such as NoSql databases (document stores like MongoDB or column family stores like Cassandra) or purpose-built commercial offerings such as EventStoreDB<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> and Axon Server<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> to evaluate feasibility in your context.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a>Which persistence mechanism should we choose?</h4>
 <div class="paragraph">
 <p>Now that we have a reasonably good understanding of the two types of aggregate persistence mechanisms, it begs the question of which one we should choose. We list a few benefits of using event sourcing below:</p>
@@ -2183,7 +2190,7 @@ Wheat bread</p></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.</td>
+<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>.</td>
 </tr>
 </table>
 </div>
@@ -2333,12 +2340,18 @@ Wheat bread</p></td>
 <a href="#_footnoteref_3">3</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://www.eventstore.com/" class="bare">https://www.eventstore.com/</a>
+</div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://axoniq.io/product-overview/axon-server" class="bare">https://axoniq.io/product-overview/axon-server</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-14 12:41:32 UTC
+Last updated 2021-08-14 13:24:50 UTC
 </div>
 </div>
 </body>
