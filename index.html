@@ -571,39 +571,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#implementing-domain-logic">5. Implementing Domain Logic</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-2">5.1. Technical requirements</a></li>
-<li><a href="#command-query-responsibility-segregation-cqrs-2">5.2. Command Query Responsibility Segregation (CQRS)</a>
+<li><a href="#continuing-our-design-journey">5.2. Continuing our design journey</a></li>
+<li><a href="#applying-cqrs">5.3. Applying CQRS</a>
 <ul class="sectlevel3">
-<li><a href="#recap-what-is-cqrs">5.2.1. Recap: What is CQRS</a></li>
-<li><a href="#_why_cqrs">5.2.2. Why CQRS?</a></li>
+<li><a href="#recap-what-is-cqrs">5.3.1. Recap: What is CQRS</a></li>
+<li><a href="#_why_cqrs">5.3.2. Why CQRS?</a></li>
+<li><a href="#tooling-choices">5.3.3. Tooling choices</a></li>
 </ul>
 </li>
-<li><a href="#bootstrapping-the-application">5.3. Bootstrapping the application</a></li>
-<li><a href="#identifying-commands">5.4. Identifying Commands</a>
+<li><a href="#bootstrapping-the-application">5.4. Bootstrapping the application</a></li>
+<li><a href="#identifying-commands">5.5. Identifying Commands</a>
 <ul class="sectlevel3">
-<li><a href="#_identifying_aggregates">5.4.1. Identifying Aggregates</a></li>
-<li><a href="#test-driving-the-system">5.4.2. Test-driving the system</a></li>
-<li><a href="#implementing-the-command">5.4.3. Implementing the command</a></li>
-<li><a href="#implementing-the-event">5.4.4. Implementing the event</a></li>
-<li><a href="#designing-the-aggregate">5.4.5. Designing the aggregate</a></li>
+<li><a href="#_identifying_aggregates">5.5.1. Identifying Aggregates</a></li>
+<li><a href="#test-driving-the-system">5.5.2. Test-driving the system</a></li>
+<li><a href="#implementing-the-command">5.5.3. Implementing the command</a></li>
+<li><a href="#implementing-the-event">5.5.4. Implementing the event</a></li>
+<li><a href="#designing-the-aggregate">5.5.5. Designing the aggregate</a></li>
 </ul>
 </li>
-<li><a href="#_persisting_aggregates">5.5. Persisting aggregates</a>
+<li><a href="#_persisting_aggregates">5.6. Persisting aggregates</a>
 <ul class="sectlevel3">
-<li><a href="#state-stored-aggregates">5.5.1. State stored aggregates</a></li>
-<li><a href="#event-sourced-aggregates">5.5.2. Event sourced aggregates</a></li>
-<li><a href="#which-persistence-mechanism-should-we-choose">5.5.3. Which persistence mechanism should we choose?</a></li>
+<li><a href="#state-stored-aggregates">5.6.1. State stored aggregates</a></li>
+<li><a href="#event-sourced-aggregates">5.6.2. Event sourced aggregates</a></li>
+<li><a href="#which-persistence-mechanism-should-we-choose">5.6.3. Which persistence mechanism should we choose?</a></li>
 </ul>
 </li>
-<li><a href="#enforcing-policies">5.6. Enforcing policies</a>
+<li><a href="#enforcing-policies">5.7. Enforcing policies</a>
 <ul class="sectlevel3">
-<li><a href="#structural-validations">5.6.1. Structural validations</a></li>
-<li><a href="#business-rule-enforcements">5.6.2. Business rule enforcements</a></li>
+<li><a href="#structural-validations">5.7.1. Structural validations</a></li>
+<li><a href="#business-rule-enforcements">5.7.2. Business rule enforcements</a></li>
 </ul>
 </li>
-<li><a href="#summary-3">5.7. Summary</a></li>
-<li><a href="#questions-3">5.8. Questions</a></li>
-<li><a href="#further-reading-3">5.9. Further reading</a></li>
-<li><a href="#answers-3">5.10. Answers</a></li>
+<li><a href="#summary-3">5.8. Summary</a></li>
+<li><a href="#questions-3">5.9. Questions</a></li>
+<li><a href="#further-reading-3">5.10. Further reading</a></li>
+<li><a href="#answers-3">5.11. Answers</a></li>
 </ul>
 </li>
 <li><a href="#implementing-the-user-interfacetask-based">6. Implementing the User Interface&#8201;&#8212;&#8201;Task-based</a>
@@ -1852,7 +1854,7 @@ This is either user initiated or system initiated, in response to a domain event
 <p><strong>User</strong>: A person who performs a business action/activity.</p>
 </li>
 <li>
-<p><strong>Policy</strong>: A set of business rules that need to be adhered to, for an action/activity to be successfully performed.</p>
+<p><strong>Policy</strong>: A set of business invariants (rules) that need to be adhered to, for an action/activity to be successfully performed.</p>
 </li>
 <li>
 <p><strong>Read Model</strong>: A piece of information required to perform an action/activity.</p>
@@ -1955,7 +1957,7 @@ In the above illustration, we realized that, the process to handle "declined LC 
 <h5 id="4-outline-read-models"><a class="anchor" href="#4-outline-read-models"></a><a class="link" href="#4-outline-read-models">4. Outline read models</a></h5>
 <div class="paragraph">
 <p>Every activity requires a certain set of data to be able to be performed.
-Users will need to view out-of-band data to that they need to act upon and also see the result of their actions.
+Users will need to view out-of-band data that they need to act upon and also see the result of their actions.
 These sets of data are represented as <strong>read models</strong> (using green stickies).</p>
 </div>
 <div class="imageblock">
@@ -2145,23 +2147,56 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="sect2">
 <h3 id="technical-requirements-2"><a class="anchor" href="#technical-requirements-2"></a><a class="link" href="#technical-requirements-2">5.1. Technical requirements</a></h3>
 <div class="paragraph">
-<p>To follow the examples in this chapter, you will need access to:
-* JDK 1.8+ (We have used Java 16 to compile sample sources)
-* Maven 3.x
-* Spring Boot 2.4.x
-* JUnit 5.7.x (Included with spring boot)
-* Axon Framework 4.4.7 (DDD and CQRS Framework)
-* Project Lombok (To reduce verbosity)
-* Moneta 1.4.x (Money and currency reference implementation - JSR 354)</p>
+<p>To follow the examples in this chapter, you will need access to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
+</li>
+<li>
+<p>Maven 3.x</p>
+</li>
+<li>
+<p>Spring Boot 2.4.x</p>
+</li>
+<li>
+<p>JUnit 5.7.x (Included with spring boot)</p>
+</li>
+<li>
+<p>Axon Framework 4.4.7 (DDD and CQRS Framework)</p>
+</li>
+<li>
+<p>Project Lombok (To reduce verbosity)</p>
+</li>
+<li>
+<p>Moneta 1.4.x (Money and currency reference implementation - JSR 354)</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="command-query-responsibility-segregation-cqrs-2"><a class="anchor" href="#command-query-responsibility-segregation-cqrs-2"></a><a class="link" href="#command-query-responsibility-segregation-cqrs-2">5.2. Command Query Responsibility Segregation (CQRS)</a></h3>
+<h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a><a class="link" href="#continuing-our-design-journey">5.2. Continuing our design journey</a></h3>
 <div class="paragraph">
-<p>In this chapter, we will make use of the Command Query Responsibility Segregation (CQRS) architecture pattern to express the domain logic for our solution. The CQRS pattern strictly separates <strong>write</strong> (those that mutate state) and <strong>read</strong> (those that answer questions) operations.</p>
+<p>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/event-storming/05-read-models.png" alt="05 read models">
+</div>
+<div class="title">Figure 1- 27. Recap of eventstorming session</div>
+</div>
+<div class="paragraph">
+<p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the Command Query Responsibility Segregation (CQRS) pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and why we are using it and how it can result in an elegant solution.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="applying-cqrs"><a class="anchor" href="#applying-cqrs"></a><a class="link" href="#applying-cqrs">5.3. Applying CQRS</a></h3>
+<div class="paragraph">
+<p>As covered in chapter 3, the CQRS pattern separates <strong>write</strong> (operations that mutate state) and <strong>read</strong> (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let&#8217;s look at what it means to apply CQRS in practical terms.</p>
 </div>
 <div class="sect3">
-<h4 id="recap-what-is-cqrs"><a class="anchor" href="#recap-what-is-cqrs"></a><a class="link" href="#recap-what-is-cqrs">5.2.1. Recap: What is CQRS</a></h4>
+<h4 id="recap-what-is-cqrs"><a class="anchor" href="#recap-what-is-cqrs"></a><a class="link" href="#recap-what-is-cqrs">5.3.1. Recap: What is CQRS</a></h4>
 <div class="paragraph">
 <p>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates and enquiries. This is depicted in the following diagram:</p>
 </div>
@@ -2169,7 +2204,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture">
 </div>
-<div class="title">Figure 1- 27. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 1- 28. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2188,7 +2223,7 @@ We depict multiple read models above because it is possible (but not necessary) 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_why_cqrs"><a class="anchor" href="#_why_cqrs"></a><a class="link" href="#_why_cqrs">5.2.2. Why CQRS?</a></h4>
+<h4 id="_why_cqrs"><a class="anchor" href="#_why_cqrs"></a><a class="link" href="#_why_cqrs">5.3.2. Why CQRS?</a></h4>
 <div class="paragraph">
 <p>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios. We discuss some of these scenarios below:</p>
 </div>
@@ -2208,6 +2243,22 @@ We depict multiple read models above because it is possible (but not necessary) 
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the Spring and Axon frameworks.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a><a class="link" href="#tooling-choices">5.3.3. Tooling choices</a></h4>
+<div class="paragraph">
+<p>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this essay<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>, which is worth taking a look at. Using a <em>good</em> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the Axon Framework to implement application functionality as we have real-world experience of having used in large scale enterprise development. There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> that are worth exploring as well.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bootstrapping-the-application"><a class="anchor" href="#bootstrapping-the-application"></a><a class="link" href="#bootstrapping-the-application">5.4. Bootstrapping the application</a></h3>
+<div class="paragraph">
+<p>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <a href="https://start.spring.io" class="bare">https://start.spring.io</a> to create this application. Here, we will make use of the <code>spring</code> CLI to bootstrap the application.</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2215,20 +2266,13 @@ We depict multiple read models above because it is possible (but not necessary) 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Implementing CQRS does not require the use of any framework. However, in this book we will look at using Axon Framework because in our opinion it provides a set of conveniences to do so while staying out of the way. There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> that are worth exploring as well.
+To install the <code>spring</code> CLI for your platform, please refer to the detailed instructions at <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started.installing" class="bare">https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started.installing</a>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the spring and axon frameworks.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="bootstrapping-the-application"><a class="anchor" href="#bootstrapping-the-application"></a><a class="link" href="#bootstrapping-the-application">5.3. Bootstrapping the application</a></h3>
-<div class="paragraph">
-<p>To get started, let&#8217;s create a simple spring boot application using the following command:</p>
+<p>To bootstrap the application, use the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2243,46 +2287,17 @@ Implementing CQRS does not require the use of any framework. However, in this bo
 8
 9
 </pre></td>
-  <td class="code"><pre>curl -G https://start.spring.io/starter.zip \ <i class="conum" data-value="1"></i><b>(1)</b>
-       -d dependencies=web,data-jpa,lombok,validation,h2,actuator \ <i class="conum" data-value="2"></i><b>(2)</b>
-       -d name=lc-issuance-api \
-       -d artifactId=lc-issuance-api \
-       -d groupId=com.example.api \
-       -d packaging=jar \
-       -d description='LC Issuance API' \
-       -d package-name=com.example.api \
-       -o lc-issuance-api.zip <i class="conum" data-value="3"></i><b>(3)</b>
-</pre></td>
+  <td class="code"><pre>spring init \
+      --dependencies 'web,data-jpa,lombok,validation,h2,actuator' \
+      --name lc-issuance-api \
+      --artifactId lc-issuance-api \
+      --groupId com.example.api \
+      --packaging jar \
+      --description 'LC Issuance API' \
+      --package-name com.example.api \
+      --force</pre></td>
 </tr></table></code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The spring initializr to create the application archive in zip form</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The list of dependencies separated by a comma</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The name of the archive containing the generated sources</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Alternatively, you can use use the spring initializr directly at <a href="https://start.spring.io" class="bare">https://start.spring.io</a> or the spring boot CLI to generate the application.
-</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>This should create a file named <code>lc-issuance-api.zip</code> in the current directory. Unzip this file to a location of your choice and add a dependency on the Axon framework in the <code>dependencies</code> section of the <code>pom.xml</code> file:</p>
@@ -2308,7 +2323,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>You may need to change the version</td>
+<td>You may need to change the version. We are at version <code>4.5.3</code> at the time of writing this book.</td>
 </tr>
 </table>
 </div>
@@ -2344,14 +2359,14 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/event-storming/05-read-models.png" alt="05 read models">
 </div>
-<div class="title">Figure 1- 28. Recap of eventstorming session</div>
+<div class="title">Figure 1- 29. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a><a class="link" href="#identifying-commands">5.4. Identifying Commands</a></h3>
+<h3 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a><a class="link" href="#identifying-commands">5.5. Identifying Commands</a></h3>
 <div class="paragraph">
 <p>From the eventstorming session, we have the following commands to start with:</p>
 </div>
@@ -2359,13 +2374,13 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
 </div>
-<div class="title">Figure 1- 29. Identified commands</div>
+<div class="title">Figure 1- 30. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
 </div>
 <div class="sect3">
-<h4 id="_identifying_aggregates"><a class="anchor" href="#_identifying_aggregates"></a><a class="link" href="#_identifying_aggregates">5.4.1. Identifying Aggregates</a></h4>
+<h4 id="_identifying_aggregates"><a class="anchor" href="#_identifying_aggregates"></a><a class="link" href="#_identifying_aggregates">5.5.1. Identifying Aggregates</a></h4>
 <div class="paragraph">
 <p>Looking at the output of the eventstorming session, one potential grouping can be as follows:</p>
 </div>
@@ -2373,7 +2388,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 1- 30. First cut attempt at aggregate design</div>
+<div class="title">Figure 1- 31. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>At first glance, it appears that we have four potential entities to handle these commands:</p>
@@ -2382,7 +2397,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
 </div>
-<div class="title">Figure 1- 31. Potential aggregates at first glance</div>
+<div class="title">Figure 1- 32. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
@@ -2391,7 +2406,7 @@ Alternatively, you can use use the spring initializr directly at <a href="https:
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="326" height="148">
 </div>
-<div class="title">Figure 1- 32. Slightly refined aggregate structure</div>
+<div class="title">Figure 1- 33. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
 <p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
@@ -2413,7 +2428,7 @@ For a more detailed explanation of the differences between aggregates, aggregate
 </div>
 </div>
 <div class="sect3">
-<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.4.2. Test-driving the system</a></h4>
+<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.5.2. Test-driving the system</a></h4>
 <div class="paragraph">
 <p>While we have a reasonably good conceptual understanding of the system, we are still in the process of refining this understanding. Test-driving the system allows us to exercise our understanding by acting as the first client of the solution that we are producing.</p>
 </div>
@@ -2424,7 +2439,7 @@ For a more detailed explanation of the differences between aggregates, aggregate
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>Growing Object-Oriented Software, Guided by Tests</em> by authors Nat Price and Steve Freeman. This is worth looking at, to gain a deeper understanding of this practice.
+The practice of test-driving the system is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>Growing Object-Oriented Software, Guided by Tests</em> by authors Nat Price and Steve Freeman. This is worth looking at, to gain a deeper understanding of this practice.
 </td>
 </tr>
 </table>
@@ -2436,23 +2451,48 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 33. An event-driven system</div>
+<div class="title">Figure 1- 34. An event-driven system</div>
 </div>
-<div class="paragraph">
-<p>An optional set of events may have occurred in the past. A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus. The system will react in one of two ways when it handles a command:</p>
-</div>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An optional set of domain events may have occurred in the past.</p>
+</li>
+<li>
+<p>A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus.</p>
+</li>
+<li>
+<p>The command is handled by an aggregate which then proceeds to validate the received command to enforce invariants (structural and domain validations).</p>
+</li>
+<li>
+<p>The system then reacts in one of two ways:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha">
 <li>
 <p>Emit one or more events</p>
 </li>
 <li>
 <p>Throw an exception</p>
 </li>
-</ul>
+</ol>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>The Axon framework allows us to express tests in the following form.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The code snippets shown in this chapter are excerpts to highlight significant concepts and techniques. For the full working example, please refer to the accompanying source code for this chapter (included in the ch05 directory).
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2537,7 +2577,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.4.3. Implementing the command</a></h4>
+<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.5.3. Implementing the command</a></h4>
 <div class="paragraph">
 <p>The <code>CreateLCApplicationCommand</code> in the previous simplistic example does not carry any state. Realistically, the command will likely look something like what is depicted as follows:</p>
 </div>
@@ -2603,7 +2643,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.4.4. Implementing the event</a></h4>
+<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.5.4. Implementing the event</a></h4>
 <div class="paragraph">
 <p>In an event-driven system, mutating system state by successfully processing a command usually results in a domain event being emitted to signal the state mutation to the rest of the system. A simplified representation of a real-world <code>LCApplicationCreatedEvent</code> is shown here:</p>
 </div>
@@ -2660,7 +2700,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </div>
 </div>
 <div class="sect3">
-<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.4.5. Designing the aggregate</a></h4>
+<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.5.5. Designing the aggregate</a></h4>
 <div class="paragraph">
 <p>The aggregate is the place where commands are handled and events are emitted. The good thing about the test that we have written is that it is expressed in a manner that hides the implementation details. But let&#8217;s look at the implementation to be able to appreciate how we can get our tests to pass and meet the business requirement.</p>
 </div>
@@ -2744,7 +2784,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 </div>
 </div>
 <div class="sect2">
-<h3 id="_persisting_aggregates"><a class="anchor" href="#_persisting_aggregates"></a><a class="link" href="#_persisting_aggregates">5.5. Persisting aggregates</a></h3>
+<h3 id="_persisting_aggregates"><a class="anchor" href="#_persisting_aggregates"></a><a class="link" href="#_persisting_aggregates">5.6. Persisting aggregates</a></h3>
 <div class="paragraph">
 <p>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc. So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</p>
 </div>
@@ -2762,7 +2802,7 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <p>Let&#8217;s examine each of these techniques in more detail below:</p>
 </div>
 <div class="sect3">
-<h4 id="state-stored-aggregates"><a class="anchor" href="#state-stored-aggregates"></a><a class="link" href="#state-stored-aggregates">5.5.1. State stored aggregates</a></h4>
+<h4 id="state-stored-aggregates"><a class="anchor" href="#state-stored-aggregates"></a><a class="link" href="#state-stored-aggregates">5.6.1. State stored aggregates</a></h4>
 <div class="paragraph">
 <p>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate. And there is good reason for this ubiquity. Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations. For example, for our <code>LCApplication</code>, it is conceivable that we could use a relational database with a structure that would look something like below:</p>
 </div>
@@ -2770,14 +2810,14 @@ This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<em>G
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 34. Typical entity relationship model</div>
+<div class="title">Figure 1- 35. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="event-sourced-aggregates"><a class="anchor" href="#event-sourced-aggregates"></a><a class="link" href="#event-sourced-aggregates">5.5.2. Event sourced aggregates</a></h4>
+<h4 id="event-sourced-aggregates"><a class="anchor" href="#event-sourced-aggregates"></a><a class="link" href="#event-sourced-aggregates">5.6.2. Event sourced aggregates</a></h4>
 <div class="paragraph">
 <p>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time. Similarly, relational databases have been employing commit logs to store information durably almost since their inception. However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</p>
 </div>
@@ -2797,7 +2837,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 35. The log data structure</div>
+<div class="title">Figure 1- 36. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above. Consider the example of an online order flow below:</p>
@@ -3101,7 +3141,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.5.3. Which persistence mechanism should we choose?</a></h4>
+<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.6.3. Which persistence mechanism should we choose?</a></h4>
 <div class="paragraph">
 <p>Now that we have a reasonably good understanding of the two types of aggregate persistence mechanisms, it begs the question of which one we should choose. We list a few benefits of using event sourcing below:</p>
 </div>
@@ -3146,7 +3186,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="enforcing-policies"><a class="anchor" href="#enforcing-policies"></a><a class="link" href="#enforcing-policies">5.6. Enforcing policies</a></h3>
+<h3 id="enforcing-policies"><a class="anchor" href="#enforcing-policies"></a><a class="link" href="#enforcing-policies">5.7. Enforcing policies</a></h3>
 <div class="paragraph">
 <p>When processing commands, we need to enforce policies or rules. Policies come in two broad categories:</p>
 </div>
@@ -3164,7 +3204,7 @@ Wheat bread</p></td>
 <p>It may also be prudent to perform these validations in different layers of the system.And it is also common for some or all of these policy enforcements to be repeated in more than one layer of the system.However, the important thing to note is that before a command is successfully handled, all these policy enforcements are uniformly applied.Let&#8217;s look at some examples of these in the upcoming section.</p>
 </div>
 <div class="sect3">
-<h4 id="structural-validations"><a class="anchor" href="#structural-validations"></a><a class="link" href="#structural-validations">5.6.1. Structural validations</a></h4>
+<h4 id="structural-validations"><a class="anchor" href="#structural-validations"></a><a class="link" href="#structural-validations">5.7.1. Structural validations</a></h4>
 <div class="paragraph">
 <p>Currently, to create an LC application, one is required to dispatch a <code>CreateLCApplicationCommand</code>. While the command dictates a structure, none of it is enforced at the moment. Let&#8217;s correct that.</p>
 </div>
@@ -3271,7 +3311,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a><a class="link" href="#business-rule-enforcements">5.6.2. Business rule enforcements</a></h4>
+<h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a><a class="link" href="#business-rule-enforcements">5.7.2. Business rule enforcements</a></h4>
 <div class="paragraph">
 <p>Structural validations can be accomplished using information that is already available in the command.However, there is another class of validations that requires information that is not present in the incoming command itself.This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</p>
 </div>
@@ -3282,7 +3322,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 36. Validations during the submit LC process</div>
+<div class="title">Figure 1- 37. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -3514,26 +3554,30 @@ Wheat bread</p></td>
 20
 21
 22
+23
+24
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.command.Repository</span>;
 
 <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">MyCustomCommandHandler</span> {
 
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> Repository&lt;LCApplication&gt; repository; <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> Repository&lt;LCApplication&gt; repository;                 <i class="conum" data-value="1"></i><b>(1)</b>
 
     MyCustomCommandHandler(Repository&lt;LCApplication&gt; repository) {
-        <span style="color:#950">this</span>.repository = repository;  <i class="conum" data-value="1"></i><b>(1)</b>
+        <span style="color:#950">this</span>.repository = repository;                                   <i class="conum" data-value="1"></i><b>(1)</b>
     }
 
     <span style="color:#007">@CommandHandler</span>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> handle(SomeCommand command) {
-        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());  <i class="conum" data-value="2"></i><b>(2)</b>
+        Aggregate&lt;LCApplication&gt; application
+            = repository.load(command.getAggregateId());                <i class="conum" data-value="2"></i><b>(2)</b>
         <span style="color:#777">// Command handling code</span>
     }
 
     <span style="color:#007">@CommandHandler</span>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> handle(AnotherCommand command) {
-        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());
+        Aggregate&lt;LCApplication&gt; application
+            = repository.load(command.getAggregateId());
         <span style="color:#777">// Command handling code</span>
     }
 }</pre></td>
@@ -3729,10 +3773,11 @@ Wheat bread</p></td>
 17
 18
 19
+20
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.springframework.stereotype.Service</span>;
 
-<span style="color:#007">@Service</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#007">@Service</span>                                                         <i class="conum" data-value="1"></i><b>(1)</b>
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCApplicationCommandHandler</span> {
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> Repository&lt;LCApplication&gt; repository;
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">Set</span>&lt;Country&gt; sanctionedCountries;
@@ -3745,8 +3790,9 @@ Wheat bread</p></td>
 
     <span style="color:#007">@CommandHandler</span>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> handle(CreateLCApplicationCommand command) {
-        <span style="color:#777">// Validations can be performed here as well </span><i class="conum" data-value="2"></i><b>(2)</b>
-        repository.newInstance(() -&gt; <span style="color:#080;font-weight:bold">new</span> LCApplication(command, sanctionedCountries)); <i class="conum" data-value="3"></i><b>(3)</b>
+        <span style="color:#777">// Validations can be performed here as well                </span><i class="conum" data-value="2"></i><b>(2)</b>
+        repository.newInstance(()
+            -&gt; <span style="color:#080;font-weight:bold">new</span> LCApplication(command, sanctionedCountries)); <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</pre></td>
 </tr></table></code></pre>
@@ -3760,7 +3806,7 @@ Wheat bread</p></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>.</td>
+<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.</td>
 </tr>
 </table>
 </div>
@@ -3806,7 +3852,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">5.7. Summary</a></h3>
+<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">5.8. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we used the outputs of the eventstorming session and used it as a primary aid to create a domain model for our bounded context. We looked at how to implement this using the command query responsibility segregation (CQRS) architecture pattern. We looked at persistence options and the implications of using event sourced vs state stored aggregates. Finally, we rounded off by looking at a variety of ways in which to perform business validations. We looked at all this through a set of code examples using Spring boot and the Axon framework.</p>
 </div>
@@ -3815,7 +3861,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions-3"><a class="anchor" href="#questions-3"></a><a class="link" href="#questions-3">5.8. Questions</a></h3>
+<h3 id="questions-3"><a class="anchor" href="#questions-3"></a><a class="link" href="#questions-3">5.9. Questions</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3831,7 +3877,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="further-reading-3"><a class="anchor" href="#further-reading-3"></a><a class="link" href="#further-reading-3">5.9. Further reading</a></h3>
+<h3 id="further-reading-3"><a class="anchor" href="#further-reading-3"></a><a class="link" href="#further-reading-3">5.10. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3880,17 +3926,17 @@ Wheat bread</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="answers-3"><a class="anchor" href="#answers-3"></a><a class="link" href="#answers-3">5.10. Answers</a></h3>
+<h3 id="answers-3"><a class="anchor" href="#answers-3"></a><a class="link" href="#answers-3">5.11. Answers</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Refer to section <a href="#_identifying_aggregates">Section 5.4.1</a></p>
+<p>Refer to section <a href="#_identifying_aggregates">Section 5.5.1</a></p>
 </li>
 <li>
-<p>Refer to section <a href="#_persisting_aggregates">Section 5.5</a>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</p>
+<p>Refer to section <a href="#_persisting_aggregates">Section 5.6</a>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</p>
 </li>
 <li>
-<p>Refer to section <a href="#_why_cqrs">Section 5.2.2</a> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</p>
+<p>Refer to section <a href="#_why_cqrs">Section 5.3.2</a> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</p>
 </li>
 </ol>
 </div>
@@ -3909,7 +3955,7 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 </div>
 <div class="paragraph">
-<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
+<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
 </div>
 <div class="paragraph">
 <p>In this chapter,we will implement the UI for LC Application and wire up the integration to the backend APIs.  The list of topics to be covered is as follows:</p>
@@ -3979,7 +4025,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 37. Commands from the event storming session</div>
+<div class="title">Figure 1- 38. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -3988,7 +4034,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 38. Decomposed commands</div>
+<div class="title">Figure 1- 39. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4139,7 +4185,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 39. Revised commands</div>
+<div class="title">Figure 1- 40. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4230,7 +4276,7 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup></em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup></em>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Latency</p></td>
@@ -4535,7 +4581,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvc.png" alt="mvc">
 </div>
-<div class="title">Figure 1- 40. MVC design pattern</div>
+<div class="title">Figure 1- 41. MVC design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4560,7 +4606,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
+There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
 </td>
 </tr>
 </table>
@@ -4575,7 +4621,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
 </div>
-<div class="title">Figure 1- 41. MVP design pattern</div>
+<div class="title">Figure 1- 42. MVP design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4603,7 +4649,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 42. MVVM design pattern</div>
+<div class="title">Figure 1- 43. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4646,7 +4692,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 43. Start LC creation screen</div>
+<div class="title">Figure 1- 44. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -4960,7 +5006,7 @@ There are different schools of thought when it comes where concerns such as data
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -5248,7 +5294,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 44. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 45. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5257,7 +5303,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 43</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 44</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6090,37 +6136,40 @@ Sometimes I feel like I am being forgotten.
 <div id="footnotes">
 <hr>
 <div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. <a href="https://www.lagomframework.com/" class="bare">https://www.lagomframework.com/</a>
+<a href="#_footnoteref_1">1</a>. <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html" class="bare">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
+<a href="#_footnoteref_2">2</a>. <a href="https://www.lagomframework.com/" class="bare">https://www.lagomframework.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
+<a href="#_footnoteref_3">3</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
+<a href="#_footnoteref_5">5</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_6">
-<a href="#_footnoteref_6">6</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
+<a href="#_footnoteref_6">6</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_7">
-<a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+<a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
 </div>
 <div class="footnote" id="_footnotedef_8">
-<a href="#_footnoteref_8">8</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_8">8</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
 </div>
 <div class="footnote" id="_footnotedef_9">
-<a href="#_footnoteref_9">9</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_9">9</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+</div>
+<div class="footnote" id="_footnotedef_10">
+<a href="#_footnoteref_10">10</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-06 22:23:16 UTC
+Last updated 2021-08-14 12:41:32 UTC
 </div>
 </div>
 </body>

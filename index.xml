@@ -943,7 +943,7 @@ This is either user initiated or system initiated, in response to a domain event
 <simpara><emphasis role="strong">User</emphasis>: A person who performs a business action/activity.</simpara>
 </listitem>
 <listitem>
-<simpara><emphasis role="strong">Policy</emphasis>: A set of business rules that need to be adhered to, for an action/activity to be successfully performed.</simpara>
+<simpara><emphasis role="strong">Policy</emphasis>: A set of business invariants (rules) that need to be adhered to, for an action/activity to be successfully performed.</simpara>
 </listitem>
 <listitem>
 <simpara><emphasis role="strong">Read Model</emphasis>: A piece of information required to perform an action/activity.</simpara>
@@ -1036,7 +1036,7 @@ In the above illustration, we realized that, the process to handle "declined LC 
 <section xml:id="4-outline-read-models">
 <title>4. Outline read models</title>
 <simpara>Every activity requires a certain set of data to be able to be performed.
-Users will need to view out-of-band data to that they need to act upon and also see the result of their actions.
+Users will need to view out-of-band data that they need to act upon and also see the result of their actions.
 These sets of data are represented as <emphasis role="strong">read models</emphasis> (using green stickies).</simpara>
 <figure>
 <title>Big picture eventstorming workshop board</title>
@@ -1195,18 +1195,48 @@ Eric Evans
 <simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
 <section xml:id="technical-requirements-2">
 <title>Technical requirements</title>
-<simpara>To follow the examples in this chapter, you will need access to:
-* JDK 1.8+ (We have used Java 16 to compile sample sources)
-* Maven 3.x
-* Spring Boot 2.4.x
-* JUnit 5.7.x (Included with spring boot)
-* Axon Framework 4.4.7 (DDD and CQRS Framework)
-* Project Lombok (To reduce verbosity)
-* Moneta 1.4.x (Money and currency reference implementation - JSR 354)</simpara>
+<simpara>To follow the examples in this chapter, you will need access to:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>JDK 1.8+ (We have used Java 16 to compile sample sources)</simpara>
+</listitem>
+<listitem>
+<simpara>Maven 3.x</simpara>
+</listitem>
+<listitem>
+<simpara>Spring Boot 2.4.x</simpara>
+</listitem>
+<listitem>
+<simpara>JUnit 5.7.x (Included with spring boot)</simpara>
+</listitem>
+<listitem>
+<simpara>Axon Framework 4.4.7 (DDD and CQRS Framework)</simpara>
+</listitem>
+<listitem>
+<simpara>Project Lombok (To reduce verbosity)</simpara>
+</listitem>
+<listitem>
+<simpara>Moneta 1.4.x (Money and currency reference implementation - JSR 354)</simpara>
+</listitem>
+</itemizedlist>
 </section>
-<section xml:id="command-query-responsibility-segregation-cqrs-2">
-<title>Command Query Responsibility Segregation (CQRS)</title>
-<simpara>In this chapter, we will make use of the Command Query Responsibility Segregation (CQRS) architecture pattern to express the domain logic for our solution. The CQRS pattern strictly separates <emphasis role="strong">write</emphasis> (those that mutate state) and <emphasis role="strong">read</emphasis> (those that answer questions) operations.</simpara>
+<section xml:id="continuing-our-design-journey">
+<title>Continuing our design journey</title>
+<simpara>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</simpara>
+<figure>
+<title>Recap of eventstorming session</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/event-storming/05-read-models.png"/>
+</imageobject>
+<textobject><phrase>05 read models</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>As mentioned previously, the <emphasis role="strong">blue</emphasis> stickies in this diagram represent <emphasis role="strong">commands</emphasis>. We will be using the Command Query Responsibility Segregation (CQRS) pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and why we are using it and how it can result in an elegant solution.</simpara>
+</section>
+<section xml:id="applying-cqrs">
+<title>Applying CQRS</title>
+<simpara>As covered in chapter 3, the CQRS pattern separates <emphasis role="strong">write</emphasis> (operations that mutate state) and <emphasis role="strong">read</emphasis> (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let&#8217;s look at what it means to apply CQRS in practical terms.</simpara>
 <section xml:id="recap-what-is-cqrs">
 <title>Recap: What is CQRS</title>
 <simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates and enquiries. This is depicted in the following diagram:</simpara>
@@ -1241,47 +1271,38 @@ Eric Evans
 <simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a single model to serve all use cases means that they can now be focused towards solving a single concern and thereby reduce complexity. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
 </listitem>
 </itemizedlist>
-<note>
-<simpara>Implementing CQRS does not require the use of any framework. However, in this book we will look at using Axon Framework because in our opinion it provides a set of conveniences to do so while staying out of the way. There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
-</note>
-<simpara>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the spring and axon frameworks.</simpara>
+<simpara>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the Spring and Axon frameworks.</simpara>
+</section>
+<section xml:id="tooling-choices">
+<title>Tooling choices</title>
+<simpara>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this essay<footnote><simpara><link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</link></simpara></footnote>, which is worth taking a look at. Using a <emphasis>good</emphasis> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the Axon Framework to implement application functionality as we have real-world experience of having used in large scale enterprise development. There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
 </section>
 </section>
 <section xml:id="bootstrapping-the-application">
 <title>Bootstrapping the application</title>
-<simpara>To get started, let&#8217;s create a simple spring boot application using the following command:</simpara>
-<programlisting language="bash" linenumbering="numbered">curl -G https://start.spring.io/starter.zip \ <co xml:id="CO1-1"/>
-       -d dependencies=web,data-jpa,lombok,validation,h2,actuator \ <co xml:id="CO1-2"/>
-       -d name=lc-issuance-api \
-       -d artifactId=lc-issuance-api \
-       -d groupId=com.example.api \
-       -d packaging=jar \
-       -d description='LC Issuance API' \
-       -d package-name=com.example.api \
-       -o lc-issuance-api.zip <co xml:id="CO1-3"/></programlisting>
-<calloutlist>
-<callout arearefs="CO1-1">
-<para>The spring initializr to create the application archive in zip form</para>
-</callout>
-<callout arearefs="CO1-2">
-<para>The list of dependencies separated by a comma</para>
-</callout>
-<callout arearefs="CO1-3">
-<para>The name of the archive containing the generated sources</para>
-</callout>
-</calloutlist>
+<simpara>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <link xl:href="https://start.spring.io">https://start.spring.io</link> to create this application. Here, we will make use of the <literal>spring</literal> CLI to bootstrap the application.</simpara>
 <note>
-<simpara>Alternatively, you can use use the spring initializr directly at <link xl:href="https://start.spring.io">https://start.spring.io</link> or the spring boot CLI to generate the application.</simpara>
+<simpara>To install the <literal>spring</literal> CLI for your platform, please refer to the detailed instructions at <link xl:href="https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started.installing">https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started.installing</link>.</simpara>
 </note>
+<simpara>To bootstrap the application, use the following command:</simpara>
+<programlisting language="bash" linenumbering="numbered">spring init \
+      --dependencies 'web,data-jpa,lombok,validation,h2,actuator' \
+      --name lc-issuance-api \
+      --artifactId lc-issuance-api \
+      --groupId com.example.api \
+      --packaging jar \
+      --description 'LC Issuance API' \
+      --package-name com.example.api \
+      --force</programlisting>
 <simpara>This should create a file named <literal>lc-issuance-api.zip</literal> in the current directory. Unzip this file to a location of your choice and add a dependency on the Axon framework in the <literal>dependencies</literal> section of the <literal>pom.xml</literal> file:</simpara>
 <programlisting language="xml" linenumbering="numbered">    &lt;dependency&gt;
         &lt;groupId&gt;org.axonframework&lt;/groupId&gt;
         &lt;artifactId&gt;axon-spring-boot-starter&lt;/artifactId&gt;
-        &lt;version&gt;${axon-framework.version}&lt;/version&gt; <co xml:id="CO2-1"/>
+        &lt;version&gt;${axon-framework.version}&lt;/version&gt; <co xml:id="CO1-1"/>
     &lt;/dependency&gt;</programlisting>
 <calloutlist>
-<callout arearefs="CO2-1">
-<para>You may need to change the version</para>
+<callout arearefs="CO1-1">
+<para>You may need to change the version. We are at version <literal>4.5.3</literal> at the time of writing this book.</para>
 </callout>
 </calloutlist>
 <simpara>Also, add the following dependency on the <literal>axon-test</literal> library to enable unit testing of aggregates:</simpara>
@@ -1359,7 +1380,7 @@ Eric Evans
 <title>Test-driving the system</title>
 <simpara>While we have a reasonably good conceptual understanding of the system, we are still in the process of refining this understanding. Test-driving the system allows us to exercise our understanding by acting as the first client of the solution that we are producing.</simpara>
 <note>
-<simpara>This is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<emphasis>Growing Object-Oriented Software, Guided by Tests</emphasis> by authors Nat Price and Steve Freeman. This is worth looking at, to gain a deeper understanding of this practice.</simpara>
+<simpara>The practice of test-driving the system is very well illustrated in the best-selling book&#8201;&#8212;&#8201;<emphasis>Growing Object-Oriented Software, Guided by Tests</emphasis> by authors Nat Price and Steve Freeman. This is worth looking at, to gain a deeper understanding of this practice.</simpara>
 </note>
 <simpara>So let&#8217;s start with the first test. To the external world, an event-driven system typically works in a manner depicted below:</simpara>
 <figure role="text-center">
@@ -1371,57 +1392,73 @@ Eric Evans
 <textobject><phrase>event driven system</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>An optional set of events may have occurred in the past. A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus. The system will react in one of two ways when it handles a command:</simpara>
-<itemizedlist>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>An optional set of domain events may have occurred in the past.</simpara>
+</listitem>
+<listitem>
+<simpara>A command is received by the system (initiated manually by a user or automatically by a part of the system), which acts as a stimulus.</simpara>
+</listitem>
+<listitem>
+<simpara>The command is handled by an aggregate which then proceeds to validate the received command to enforce invariants (structural and domain validations).</simpara>
+</listitem>
+<listitem>
+<simpara>The system then reacts in one of two ways:</simpara>
+<orderedlist numeration="loweralpha">
 <listitem>
 <simpara>Emit one or more events</simpara>
 </listitem>
 <listitem>
 <simpara>Throw an exception</simpara>
 </listitem>
-</itemizedlist>
+</orderedlist>
+</listitem>
+</orderedlist>
 <simpara>The Axon framework allows us to express tests in the following form.</simpara>
+<note>
+<simpara>The code snippets shown in this chapter are excerpts to highlight significant concepts and techniques. For the full working example, please refer to the accompanying source code for this chapter (included in the ch05 directory).</simpara>
+</note>
 <programlisting language="java" linenumbering="numbered">public class LCApplicationAggregateTests {
 
-    private FixtureConfiguration&lt;LCApplication&gt; fixture;                          <co xml:id="CO3-1"/>
+    private FixtureConfiguration&lt;LCApplication&gt; fixture;                          <co xml:id="CO2-1"/>
 
     @BeforeEach
     void setUp() {
-        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);                <co xml:id="CO3-2"/>
+        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);                <co xml:id="CO2-2"/>
     }
 
     @Test
     void shouldPublishLCApplicationCreated() {
-        fixture.given()                                                           <co xml:id="CO3-3"/>
+        fixture.given()                                                           <co xml:id="CO2-3"/>
 
-                .when(new CreateLCApplicationCommand())                           <co xml:id="CO3-4"/>
+                .when(new CreateLCApplicationCommand())                           <co xml:id="CO2-4"/>
 
-                .expectEventsMatching(exactSequenceOf(                            <co xml:id="CO3-5"/>
-                        messageWithPayload(any(LCApplicationCreatedEvent.class)), <co xml:id="CO3-6"/>
-                        andNoMore()                                               <co xml:id="CO3-7"/>
+                .expectEventsMatching(exactSequenceOf(                            <co xml:id="CO2-5"/>
+                        messageWithPayload(any(LCApplicationCreatedEvent.class)), <co xml:id="CO2-6"/>
+                        andNoMore()                                               <co xml:id="CO2-7"/>
                 ));
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO3-1">
+<callout arearefs="CO2-1">
 <para><literal>FixtureConfiguration</literal> is an Axon framework utility to aid testing of aggregate behaviour using a BDD style given-when-then syntax.</para>
 </callout>
-<callout arearefs="CO3-2">
+<callout arearefs="CO2-2">
 <para><literal>AggregateTestFixture</literal> is a concrete implementation of <literal>FixtureConfiguration</literal> where you need to register your aggregate class&#8201;&#8212;&#8201;<literal>LCApplication</literal> in our case as the candidate to handle commands directed to our solution.</para>
 </callout>
-<callout arearefs="CO3-3">
+<callout arearefs="CO2-3">
 <para>Since this is the start of the business process, there are no events that have occurred thus far. This is signified by the fact that we do not pass any arguments to the <literal>given</literal> method. In other examples we will discuss later, there will likely be events that have already occurred prior to receiving this command.</para>
 </callout>
-<callout arearefs="CO3-4">
+<callout arearefs="CO2-4">
 <para>This is where we instantiate a new instance of the command object. Command objects are usually similar to data transfer objects, carrying a set of information. This command will be routed to our aggregate for handling. We will take a look at how this works in detail shortly.</para>
 </callout>
-<callout arearefs="CO3-5">
+<callout arearefs="CO2-5">
 <para>Here we are declaring that we expect events matching an exact sequence.</para>
 </callout>
-<callout arearefs="CO3-6">
+<callout arearefs="CO2-6">
 <para>Here we are expecting an event of type <literal>LCApplicationCreated</literal> to be emitted as a result of successfully handling the command.</para>
 </callout>
-<callout arearefs="CO3-7">
+<callout arearefs="CO2-7">
 <para>We are finally saying that we do not expect any more events&#8201;&#8212;&#8201;which means that we expect exactly one event to be emitted.</para>
 </callout>
 </calloutlist>
@@ -1432,26 +1469,26 @@ Eric Evans
 <programlisting language="java" linenumbering="numbered">import lombok.Data;
 
 @Data
-public class CreateLCApplicationCommand {  <co xml:id="CO4-1"/>
+public class CreateLCApplicationCommand {  <co xml:id="CO3-1"/>
 
-    private LCApplicationId id;            <co xml:id="CO4-2"/>
+    private LCApplicationId id;            <co xml:id="CO3-2"/>
     private ClientId clientId;
-    private Party applicant;               <co xml:id="CO4-3"/>
+    private Party applicant;               <co xml:id="CO3-3"/>
     private Party beneficiary;
-    private AdvisingBank advisingBank;     <co xml:id="CO4-4"/>
+    private AdvisingBank advisingBank;     <co xml:id="CO3-4"/>
     private LocalDate issueDate;
     private MonetaryAmount amount;
     private String merchandiseDescription;
 
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO4-1">
+<callout arearefs="CO3-1">
 <para>The command class. When naming commands, we typically use an imperative style i.e. they usually begin with a verb denoting the action required. Note that this is a data transfer object. In other words, it is simply a bag of data attributes. Also note how it is devoid of any logic (at least at the moment).</para>
 </callout>
-<callout arearefs="CO4-2">
+<callout arearefs="CO3-2">
 <para>The identifier for the LC Application. We are assuming client generated identifiers in this case. The topic of using server-generated versus client-generated identifiers is out of scope for the subject of this book. You may use either depending on what is advantageous in your context. Also note that we are using a strong type for the identifier <literal>LCApplicationId</literal> as opposed to a primitive such as a numeric or a string value. It is also common in some cases to use UUIDs as the identifier. However, we prefer using strong types to be able to differentiate between identifier types. Notice how we are using a type <literal>ClientId</literal> to represent the creator of the application.</para>
 </callout>
-<callout arearefs="CO4-3 CO4-4">
+<callout arearefs="CO3-3 CO3-4">
 <para>The <literal>Party</literal> and <literal>AdvisingBank</literal> types are complex types to represent those concepts in our solution. Care should be taken to consistently use names that are relevant in the problem (business) domain as opposed to using names that only make sense in the solution (technology) domain. Note the attempt to make use of the <emphasis>ubiquitous language</emphasis> of the domain experts in both cases. This is a practice that we should always be conscious of when naming things in the system.</para>
 </callout>
 </calloutlist>
@@ -1464,7 +1501,7 @@ public class CreateLCApplicationCommand {  <co xml:id="CO4-1"/>
 <programlisting language="java" linenumbering="numbered">import lombok.Data;
 
 @Data
-public class LCApplicationCreatedEvent {   <co xml:id="CO5-1"/>
+public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 
     private LCApplicationId id;
     private ClientId clientId;
@@ -1477,7 +1514,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO5-1"/>
 
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO5-1">
+<callout arearefs="CO4-1">
 <para>The event type. When naming events, we typically use names in the past tense to denote things that have already occurred and are to be accepted unconditionally as empirical facts that cannot be changed.</para>
 </callout>
 </calloutlist>
@@ -1489,7 +1526,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO5-1"/>
 <simpara>The aggregate is the place where commands are handled and events are emitted. The good thing about the test that we have written is that it is expressed in a manner that hides the implementation details. But let&#8217;s look at the implementation to be able to appreciate how we can get our tests to pass and meet the business requirement.</simpara>
 <programlisting language="java" linenumbering="numbered">public class LCApplication {
 
-    @AggregateIdentifier                                                            <co xml:id="CO6-1"/>
+    @AggregateIdentifier                                                            <co xml:id="CO5-1"/>
     private LCApplicationId id;
 
     @SuppressWarnings("unused")
@@ -1497,31 +1534,31 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO5-1"/>
         // Required by the framework
     }
 
-    @CommandHandler                                                                 <co xml:id="CO6-2"/>
-    public LCApplication(CreateLCApplicationCommand command) {                      <co xml:id="CO6-3"/>
+    @CommandHandler                                                                 <co xml:id="CO5-2"/>
+    public LCApplication(CreateLCApplicationCommand command) {                      <co xml:id="CO5-3"/>
         // TODO: perform validations here
-        AggregateLifecycle.apply(new LCApplicationCreatedEvent(command.getId()));   <co xml:id="CO6-4"/>
+        AggregateLifecycle.apply(new LCApplicationCreatedEvent(command.getId()));   <co xml:id="CO5-4"/>
     }
 
-    @EventSourcingHandler                                                           <co xml:id="CO6-5"/>
+    @EventSourcingHandler                                                           <co xml:id="CO5-5"/>
     private void on(LCApplicationCreatedEvent event) {
         this.id = event.getId();
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO6-1">
+<callout arearefs="CO5-1">
 <para>The aggregate identifier for the <literal>LCApplication</literal> aggregate. All aggregates are required to declare an identifier and mark it so using the <literal>@AggregateIdentifier</literal> annotation provided by the framework.</para>
 </callout>
-<callout arearefs="CO6-2">
+<callout arearefs="CO5-2">
 <para>The method that is handling the command needs to be annotated with the <literal>@CommandHandler</literal> annotation. In this case, the command handler happens to be the constructor of the class given that this the first command that can be received by this aggregate. We will see examples of subsequent commands being handled by other methods later in the chapter.</para>
 </callout>
-<callout arearefs="CO6-3">
+<callout arearefs="CO5-3">
 <para>The <literal>@CommandHandler</literal> annotation marks a method as being a command handler. The exact command that this method can handle needs to be passed as a parameter to the method. Do note that there can only be one command handler in the <emphasis role="strong">entire</emphasis> system for any given command.</para>
 </callout>
-<callout arearefs="CO6-4">
+<callout arearefs="CO5-4">
 <para>Here, we are emitting the <literal>LCApplicationCreatedEvent</literal> using the <literal>AggregateLifecycle</literal> utility provided by the framework. In this very simple case, we are emitting an event unconditionally on receipt of the command. In a real-world scenario, it is conceivable that a set of validations will be performed before deciding to either emit one or more events or failing the command with an exception. We will look at more realistic examples later in the chapter.</para>
 </callout>
-<callout arearefs="CO6-5">
+<callout arearefs="CO5-5">
 <para>The need for the <literal>@EventSourcingHandler</literal> and its role are likely very unclear at this time. We will explain the need for this in detail in an upcoming section of this chapter.</para>
 </callout>
 </calloutlist>
@@ -1701,7 +1738,7 @@ Wheat bread</simpara></entry>
     private CartItems items;
     //..
 
-    private Cart() {                                             <co xml:id="CO7-1"/>
+    private Cart() {                                             <co xml:id="CO6-1"/>
         // Required by the framework
     }
 
@@ -1709,9 +1746,9 @@ Wheat bread</simpara></entry>
     public void addItem(AddItemToCartCommand command) {
         // Business validations here
         if (this.isNew) {
-            apply(new CartCreatedEvent(command.getId()));        <co xml:id="CO7-2"/>
+            apply(new CartCreatedEvent(command.getId()));        <co xml:id="CO6-2"/>
         }
-        apply(new ItemAddedEvent(id, command.getItem()));        <co xml:id="CO7-3"/>
+        apply(new ItemAddedEvent(id, command.getItem()));        <co xml:id="CO6-3"/>
     }
 
     @CommandHandler
@@ -1726,37 +1763,37 @@ Wheat bread</simpara></entry>
         apply(new OrderCreatedEvent(this.items));
     }
 
-    @EventSourcingHandler                                        <co xml:id="CO7-4"/>
+    @EventSourcingHandler                                        <co xml:id="CO6-4"/>
     private void on(CartCreatedEvent event) {
         this.id = event.getCartId();
         this.items = new CartItems();
         this.isNew = true;
     }
 
-    @EventSourcingHandler                                        <co xml:id="CO7-5"/>
+    @EventSourcingHandler                                        <co xml:id="CO6-5"/>
     private void on(ItemAddedEvent event) {
         this.items.add(event.getItem());
         this.isNew = false;
     }
 
-    @EventSourcingHandler                                        <co xml:id="CO7-6"/>
+    @EventSourcingHandler                                        <co xml:id="CO6-6"/>
     private void on(ItemRemovedEvent event) {
         this.items.remove(event.getItem());
     }
 
-    @EventSourcingHandler                                        <co xml:id="CO7-7"/>
+    @EventSourcingHandler                                        <co xml:id="CO6-7"/>
     private void on(CheckoutConfirmedEvent event) {
         // ..
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO7-1">
+<callout arearefs="CO6-1">
 <para>Before processing any command, the aggregate loading process commences by first invoking the no-args constructor. For this reason, we need the no-args constructor to be <emphasis role="strong">empty</emphasis> i.e. it should <emphasis role="strong">not</emphasis> have any code that restores state. State restoration <emphasis role="strong">must</emphasis> happen only in those methods that trigger an event replay. In the case of the Axon framework, this translates to methods embellished with the <literal>@EventSourcingHandler</literal> annotation.</para>
 </callout>
-<callout arearefs="CO7-2 CO7-3">
+<callout arearefs="CO6-2 CO6-3">
 <para>It is important to note that it is possible (but not necessary) to emit <emphasis role="strong">more than one event</emphasis> after processing a command. This is illustrated in the first instance of the <literal>AddItemCommand</literal> in the previous code where we emit <literal>CartCreatedEvent</literal> and <literal>ItemAddedEvent</literal>.</para>
 </callout>
-<callout arearefs="CO7-4 CO7-5 CO7-6 CO7-7">
+<callout arearefs="CO6-4 CO6-5 CO6-6 CO6-7">
 <para>The loading process continues through the invocation of event sourcing handler methods in exactly the order of occurrence for that aggregate instance.</para>
 </callout>
 </calloutlist>
@@ -1905,19 +1942,19 @@ public class CreateLCApplicationCommand {
     void shouldAllowSubmitOnlyInDraftState() {
         final LCApplicationId applicationId = LCApplicationId.randomId();
 
-        fixture.given(new LCApplicationCreatedEvent(applicationId))            <co xml:id="CO8-1"/>
-                .when(new SubmitLCApplicationCommand(applicationId))           <co xml:id="CO8-2"/>
-                .expectEvents(new LCApplicationSubmittedEvent(applicationId)); <co xml:id="CO8-3"/>
+        fixture.given(new LCApplicationCreatedEvent(applicationId))            <co xml:id="CO7-1"/>
+                .when(new SubmitLCApplicationCommand(applicationId))           <co xml:id="CO7-2"/>
+                .expectEvents(new LCApplicationSubmittedEvent(applicationId)); <co xml:id="CO7-3"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO8-1">
+<callout arearefs="CO7-1">
 <para>Given that the <literal>LCApplicationCreatedEvent</literal> has already occurred&#8201;&#8212;&#8201;in other words, the LC application is already created.</para>
 </callout>
-<callout arearefs="CO8-2">
+<callout arearefs="CO7-2">
 <para>When we try to submit the application by issuing the <literal>SubmitLCApplicationCommand</literal> for the same application.</para>
 </callout>
-<callout arearefs="CO8-3">
+<callout arearefs="CO7-3">
 <para>We expect the <literal>LCApplicationSubmittedEvent</literal> to be emitted.</para>
 </callout>
 </calloutlist>
@@ -1934,11 +1971,11 @@ public class CreateLCApplicationCommand {
     // ..
     @EventSourcingHandler
     private void on(LCApplicationSubmittedEvent event) {
-        this.state = State.SUBMITTED; <co xml:id="CO9-1"/>
+        this.state = State.SUBMITTED; <co xml:id="CO8-1"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO9-1">
+<callout arearefs="CO8-1">
 <para>When the <literal>LCApplicationSubmittedEvent</literal> is replayed, we set the state of the <literal>LCApplication</literal> to <literal>SUBMITTED</literal>.</para>
 </callout>
 </calloutlist>
@@ -1949,26 +1986,26 @@ public class CreateLCApplicationCommand {
         final LCApplicationId applicationId = LCApplicationId.randomId();
 
         fixture.given(
-                new LCApplicationCreatedEvent(applicationId),           <co xml:id="CO10-1"/>
-                new LCApplicationSubmittedEvent(applicationId))         <co xml:id="CO10-2"/>
+                new LCApplicationCreatedEvent(applicationId),           <co xml:id="CO9-1"/>
+                new LCApplicationSubmittedEvent(applicationId))         <co xml:id="CO9-2"/>
 
-                .when(new SubmitLCApplicationCommand(applicationId))    <co xml:id="CO10-3"/>
+                .when(new SubmitLCApplicationCommand(applicationId))    <co xml:id="CO9-3"/>
 
-                .expectException(AlreadySubmittedException.class)       <co xml:id="CO10-4"/>
-                .expectNoEvents();                                      <co xml:id="CO10-5"/>
+                .expectException(AlreadySubmittedException.class)       <co xml:id="CO9-4"/>
+                .expectNoEvents();                                      <co xml:id="CO9-5"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO10-1 CO10-2">
+<callout arearefs="CO9-1 CO9-2">
 <para>The <literal>LCApplicationCreatedEvent</literal> and <literal>LCApplicationSubmittedEvent</literal> have already happened&#8201;&#8212;&#8201;which means that the <literal>LCApplication</literal> has been submitted once.</para>
 </callout>
-<callout arearefs="CO10-3">
+<callout arearefs="CO9-3">
 <para>We now dispatch another <literal>SubmitLCApplicationCommand</literal> to the system.</para>
 </callout>
-<callout arearefs="CO10-4">
+<callout arearefs="CO9-4">
 <para>We expect an <literal>AlreadySubmittedException</literal> to be thrown.</para>
 </callout>
-<callout arearefs="CO10-5">
+<callout arearefs="CO9-5">
 <para>We also expect no events to be emitted.</para>
 </callout>
 </calloutlist>
@@ -1977,14 +2014,14 @@ public class CreateLCApplicationCommand {
     // ..
     @CommandHandler
     public void submit(SubmitLCApplicationCommand command) {
-        if (this.state != State.DRAFT) {                                     <co xml:id="CO11-1"/>
+        if (this.state != State.DRAFT) {                                     <co xml:id="CO10-1"/>
             throw new AlreadySubmittedException("LC is already submitted!");
         }
         apply(new LCApplicationSubmittedEvent(id));
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO11-1">
+<callout arearefs="CO10-1">
 <para>Note how we are using the state attribute from the <literal>LCApplication</literal> aggregate to perform the validation. If the application is not in <literal>DRAFT</literal> state, we fail with the <literal>AlreadySubmittedException</literal> domain exception.</para>
 </callout>
 </calloutlist>
@@ -1993,29 +2030,31 @@ public class CreateLCApplicationCommand {
 
 class MyCustomCommandHandler {
 
-    private final Repository&lt;LCApplication&gt; repository; <co xml:id="CO12-1"/>
+    private final Repository&lt;LCApplication&gt; repository;                 <co xml:id="CO11-1"/>
 
     MyCustomCommandHandler(Repository&lt;LCApplication&gt; repository) {
-        this.repository = repository;  <co xml:id="CO12-2"/>
+        this.repository = repository;                                   <co xml:id="CO11-2"/>
     }
 
     @CommandHandler
     public void handle(SomeCommand command) {
-        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());  <co xml:id="CO12-3"/>
+        Aggregate&lt;LCApplication&gt; application
+            = repository.load(command.getAggregateId());                <co xml:id="CO11-3"/>
         // Command handling code
     }
 
     @CommandHandler
     public void handle(AnotherCommand command) {
-        Aggregate&lt;LCApplication&gt; application = repository.load(command.getAggregateId());
+        Aggregate&lt;LCApplication&gt; application
+            = repository.load(command.getAggregateId());
         // Command handling code
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO12-1 CO12-2">
+<callout arearefs="CO11-1 CO11-2">
 <para>We are injecting the Axon <literal>Repository</literal> to allow us to load aggregates. This ws not required previously because the <literal>@CommandHandler</literal> annotation appeared on aggregate methods directly.</para>
 </callout>
-<callout arearefs="CO12-3">
+<callout arearefs="CO11-3">
 <para>We are using the <literal>Repository</literal> to load aggregates and work with them. The <literal>Repository</literal> interface supports other convenience methods to work with aggregates. Please refer to the Axon framework documentation for more usage examples.</para>
 </callout>
 </calloutlist>
@@ -2026,26 +2065,26 @@ class MyCustomCommandHandler {
     @BeforeEach
     void setUp() {
         final Set&lt;Country&gt; sanctioned = Set.of(SOKOVIA);
-        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);              <co xml:id="CO13-1"/>
+        fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);              <co xml:id="CO12-1"/>
 
-        final Repository&lt;LCApplication&gt; repository = fixture.getRepository();   <co xml:id="CO13-2"/>
+        final Repository&lt;LCApplication&gt; repository = fixture.getRepository();   <co xml:id="CO12-2"/>
 
         CreateLCApplicationCommandHandler handler =
-                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO13-3"/>
-        fixture.registerAnnotatedCommandHandler(handler);                       <co xml:id="CO13-4"/>
+                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO12-3"/>
+        fixture.registerAnnotatedCommandHandler(handler);                       <co xml:id="CO12-4"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO13-1">
+<callout arearefs="CO12-1">
 <para>We are creating a new aggregate fixture as usual</para>
 </callout>
-<callout arearefs="CO13-2">
+<callout arearefs="CO12-2">
 <para>We are using the fixture to obtain an instance of the Axon <literal>Repository</literal></para>
 </callout>
-<callout arearefs="CO13-3">
+<callout arearefs="CO12-3">
 <para>We instantiate the custom command handler passing in the <literal>Repository</literal> instance. Also note how we inject the collection of sanctioned countries into the handler using simple dependency injection. In real life, this set of sanctioned countries will likely be obtained from external configuration.</para>
 </callout>
-<callout arearefs="CO13-4">
+<callout arearefs="CO12-4">
 <para>We finally need to register the command handler with the fixture, so that it can route commands to this handler as well.</para>
 </callout>
 </calloutlist>
@@ -2055,20 +2094,20 @@ class MyCustomCommandHandler {
 
     @BeforeEach
     void setUp() {
-    final Set&lt;Country&gt; sanctioned = Set.of(SOKOVIA);                            <co xml:id="CO14-1"/>
+    final Set&lt;Country&gt; sanctioned = Set.of(SOKOVIA);                            <co xml:id="CO13-1"/>
         fixture = new AggregateTestFixture&lt;&gt;(LCApplication.class);
 
         final Repository&lt;LCApplication&gt; repository = fixture.getRepository();
 
         CreateLCApplicationCommandHandler handler =
-                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO14-2"/>
+                new CreateLCApplicationCommandHandler(repository, sanctioned);  <co xml:id="CO13-2"/>
         fixture.registerAnnotatedCommandHandler(handler);
     }
 
     @Test
     void shouldFailIfBeneficiaryCountryIsSanctioned() {
         fixture.given()
-                .when(new CreateLCApplicationCommand(randomId(), SOKOVIA))      <co xml:id="CO14-3"/>
+                .when(new CreateLCApplicationCommand(randomId(), SOKOVIA))      <co xml:id="CO13-3"/>
                 .expectNoEvents()
                 .expectException(CannotTradeWithSanctionedCountryException.class);
     }
@@ -2077,28 +2116,28 @@ class MyCustomCommandHandler {
     void shouldCreateIfCountryIsNotSanctioned() {
         final LCApplicationId applicationId = randomId();
         fixture.given()
-                .when(new CreateLCApplicationCommand(applicationId, WAKANDA))   <co xml:id="CO14-4"/>
+                .when(new CreateLCApplicationCommand(applicationId, WAKANDA))   <co xml:id="CO13-4"/>
                 .expectEvents(new LCApplicationCreatedEvent(applicationId));
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO14-1">
+<callout arearefs="CO13-1">
 <para>For the purposes of the test, we mark the country <literal>SOKOVIA</literal> as a <emphasis>sanctioned</emphasis> country. In a more realistic scenario, this will likely come from some form external configuration (e.g. a lookup table or form of external configuration). However, this is appropriate for our unit test.</para>
 </callout>
-<callout arearefs="CO14-2">
+<callout arearefs="CO13-2">
 <para>We then inject this set of <emphasis>sanctioned countries</emphasis> into the command handler.</para>
 </callout>
-<callout arearefs="CO14-3">
+<callout arearefs="CO13-3">
 <para>When the <literal>LCApplication</literal> is created for the sanctioned country, we expect no events to be emitted and furthermore, the <literal>CannotTradeWithSanctionedCountryException</literal> exception to be thrown.</para>
 </callout>
-<callout arearefs="CO14-4">
+<callout arearefs="CO13-4">
 <para>Finally, when the beneficiary belongs to a non-sanctioned country, we emit the <literal>LCApplicationCreatedEvent</literal> to be emitted.</para>
 </callout>
 </calloutlist>
 <simpara>The implementation of the command handler is shown below:</simpara>
 <programlisting language="java" linenumbering="numbered">import org.springframework.stereotype.Service;
 
-@Service <co xml:id="CO15-1"/>
+@Service                                                         <co xml:id="CO14-1"/>
 public class CreateLCApplicationCommandHandler {
     private final Repository&lt;LCApplication&gt; repository;
     private final Set&lt;Country&gt; sanctionedCountries;
@@ -2111,15 +2150,16 @@ public class CreateLCApplicationCommandHandler {
 
     @CommandHandler
     public void handle(CreateLCApplicationCommand command) {
-        // Validations can be performed here as well <co xml:id="CO15-2"/>
-        repository.newInstance(() -&gt; new LCApplication(command, sanctionedCountries)); <co xml:id="CO15-3"/>
+        // Validations can be performed here as well                <co xml:id="CO14-2"/>
+        repository.newInstance(()
+            -&gt; new LCApplication(command, sanctionedCountries)); <co xml:id="CO14-3"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO15-1">
+<callout arearefs="CO14-1">
 <para>We mark the class as a <literal>@Service</literal> to mark it as a component devoid of encapsulated state and enable auto-discovery when using annotation-based configuration or classpath scanning. As such, it can be used to perform any "plumbing" activities.</para>
 </callout>
-<callout arearefs="CO15-2">
+<callout arearefs="CO14-2">
 <para>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <literal>Repository</literal> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <link xl:href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</link><footnote><simpara><link xl:href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">https://www.martinfowler.com/bliki/AnemicDomainModel.html</link></simpara></footnote>.</para>
 </callout>
 </calloutlist>
@@ -2127,14 +2167,14 @@ public class CreateLCApplicationCommandHandler {
 <programlisting language="java" linenumbering="numbered">class LCApplication {
 // ...
     public LCApplication(CreateLCApplicationCommand command, Set&lt;Country&gt; sanctioned) {
-        if (sanctioned.contains(command.getBeneficiaryCountry())) { <co xml:id="CO16-1"/>
+        if (sanctioned.contains(command.getBeneficiaryCountry())) { <co xml:id="CO15-1"/>
             throw new CannotTradeWithSanctionedCountryException();
         }
         apply(new LCApplicationCreatedEvent(command.getId()));
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO16-1">
+<callout arearefs="CO15-1">
 <para>The validation itself is fairly straightforward. We throw a <literal>CannotTradeWithSanctionedCountryException</literal> when the validation fails.</para>
 </callout>
 </calloutlist>
@@ -2613,7 +2653,7 @@ class Packaging {
    --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.media</programlisting>
 <simpara>We are making use of the mvvmFX framework to assemble the UI. To make this work with spring boot, the application launcher looks as depicted here:</simpara>
 <programlisting language="java" linenumbering="numbered">@SpringBootApplication
-public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
+public class App extends MvvmfxSpringApplication { <co xml:id="CO16-1"/>
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -2633,7 +2673,7 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO17-1">
+<callout arearefs="CO16-1">
 <para>Note that we are required to extend from the mvvmFX framework class <literal>MvvmfxSpringApplication</literal>.</para>
 </callout>
 </calloutlist>
@@ -2765,26 +2805,26 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 
 &lt;Pane id="start-lc"  xmlns="http://javafx.com/javafx/16"
                       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.premonition.lc.ch06.ui.views.StartLCView"&gt;      <co xml:id="CO18-1"/>
+      fx:controller="com.premonition.lc.ch06.ui.views.StartLCView"&gt;      <co xml:id="CO17-1"/>
     ...
 
     &lt;TextField id="client-reference"
-               fx:id="clientReference"/&gt;                                 <co xml:id="CO18-2"/>
+               fx:id="clientReference"/&gt;                                 <co xml:id="CO17-2"/>
 
     &lt;Button id="start-button"
             fx:id="startButton"
             text="Start"
-            onAction="#start"/&gt;                                          <co xml:id="CO18-3"/>
+            onAction="#start"/&gt;                                          <co xml:id="CO17-3"/>
     ...
 &lt;/Pane&gt;</programlisting>
 <calloutlist>
-<callout arearefs="CO18-1">
+<callout arearefs="CO17-1">
 <para>The <literal>StartLCView</literal> class acts as the view delegate for the FXML view and is assigned using the <literal>fx:controller</literal> attribute of the root element (<literal>javafx.scene.layout.Pane</literal> in this case).</para>
 </callout>
-<callout arearefs="CO18-2">
+<callout arearefs="CO17-2">
 <para>In order to reference <literal>client-reference</literal> textbox in the view delegate, we use the <literal>fx:id</literal> annotation&#8201;&#8212;&#8201;<literal>clientReference</literal> in this case.</para>
 </callout>
-<callout arearefs="CO18-3">
+<callout arearefs="CO17-3">
 <para>Similarly, the <literal>start-button</literal> is referenced using <literal>fx:id=startButton</literal> in the view delegate. Furthermore, the <literal>start</literal> method in the view delegate is assigned to handle the default action (the button press event for <literal>javafx.scene.control.Button</literal>).</para>
 </callout>
 </calloutlist>
@@ -2794,30 +2834,30 @@ public class App extends MvvmfxSpringApplication { <co xml:id="CO17-1"/>
 <simpara>Next, let&#8217;s look at the structure of the view delegate <literal>com.premonition.lc.issuance.ui.views.StartLCView</literal>:</simpara>
 <programlisting language="java" linenumbering="numbered">import javafx.fxml.FXML;
 //...
-public class StartLCView {                     <co xml:id="CO19-1"/>
+public class StartLCView {                     <co xml:id="CO18-1"/>
 
     @FXML
-    private TextField clientReference;         <co xml:id="CO19-2"/>
+    private TextField clientReference;         <co xml:id="CO18-2"/>
     @FXML
-    private Button startButton;                <co xml:id="CO19-3"/>
+    private Button startButton;                <co xml:id="CO18-3"/>
 
-    public void start(ActionEvent event) {     <co xml:id="CO19-4"/>
+    public void start(ActionEvent event) {     <co xml:id="CO18-4"/>
         // Handle button press logic here
     }
 
     // Other parts omitted for brevity...
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO19-1">
+<callout arearefs="CO18-1">
 <para>The view delegate class for the <literal>StartLCView.fxml</literal> view.</para>
 </callout>
-<callout arearefs="CO19-2">
+<callout arearefs="CO18-2">
 <para>The Java binding for the <literal>clientReference</literal> textbox in the view. The name of the member needs to match exactly with the value of the <literal>fx:id</literal> attribute in the view. Further, it needs to be annotated with the <literal>@javafx.fxml.FXML</literal> annotation. The use of the <literal>@FXML</literal> annotation is optional if the member in the view delegate is <literal>public</literal> and matches the name in the view.</para>
 </callout>
-<callout arearefs="CO19-3">
+<callout arearefs="CO18-3">
 <para>Similarly, the <literal>startButton</literal> is bound to the corresponding button widget in the view.</para>
 </callout>
-<callout arearefs="CO19-4">
+<callout arearefs="CO18-4">
 <para>The method for the action handler when the <literal>startButton</literal> is pressed.</para>
 </callout>
 </calloutlist>
@@ -2828,15 +2868,15 @@ public class StartLCView {                     <co xml:id="CO19-1"/>
 <programlisting language="java" linenumbering="numbered">import javafx.beans.property.StringProperty;
 import de.saxsys.mvvmfx.ViewModel;
 
-public class StartLCViewModel implements ViewModel {       <co xml:id="CO20-1"/>
+public class StartLCViewModel implements ViewModel {       <co xml:id="CO19-1"/>
 
-    private final StringProperty clientReference;          <co xml:id="CO20-2"/>
+    private final StringProperty clientReference;          <co xml:id="CO19-2"/>
 
     public StartLCViewModel() {
-        this.clientReference = new SimpleStringProperty(); <co xml:id="CO20-3"/>
+        this.clientReference = new SimpleStringProperty(); <co xml:id="CO19-3"/>
     }
 
-    public StringProperty clientReferenceProperty() {      <co xml:id="CO20-4"/>
+    public StringProperty clientReferenceProperty() {      <co xml:id="CO19-4"/>
         return clientReference;
     }
 
@@ -2851,16 +2891,16 @@ public class StartLCViewModel implements ViewModel {       <co xml:id="CO20-1"/>
     // Other getters and setters omitted for brevity
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO20-1">
+<callout arearefs="CO19-1">
 <para>The view-model class for the <literal>StartLCView</literal>. Note that we are required to implement the <literal>de.saxsys.mvvmfx.ViewModel</literal> interface provided by the mvvmFX framework.</para>
 </callout>
-<callout arearefs="CO20-2">
+<callout arearefs="CO19-2">
 <para>We are initializing the <literal>clientReference</literal> property using the <literal>SimpleStringProperty</literal> provided by JavaFX. There are several other property classes to define more complex types. Please refer to the JavaFX documentation for more details.</para>
 </callout>
-<callout arearefs="CO20-3">
+<callout arearefs="CO19-3">
 <para>The value of the <literal>clientReference</literal> in the view-model. We will look at how to associate this with value of the <literal>clientReference</literal> textbox in the view shortly. Note that we are using the <literal>StringProperty</literal> provided by <literal>JavaFX</literal>, which provides access to the underlying <literal>String</literal> value of the client reference.</para>
 </callout>
-<callout arearefs="CO20-4">
+<callout arearefs="CO19-4">
 <para><literal>JavaFX</literal> beans are required to create a special accessor for the property itself in addition to the standard getter and setter for the underlying value.</para>
 </callout>
 </calloutlist>
@@ -2872,7 +2912,7 @@ public class StartLCViewModel implements ViewModel {       <co xml:id="CO20-1"/>
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 //...
-public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {     <co xml:id="CO21-1"/>
+public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {     <co xml:id="CO20-1"/>
 
     @FXML
     private TextField clientReference;
@@ -2880,32 +2920,32 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {     <co x
     private Button startButton;
 
     @InjectViewModel
-    private StartLCViewModel viewModel;                              <co xml:id="CO21-2"/>
+    private StartLCViewModel viewModel;                              <co xml:id="CO20-2"/>
 
     @Initialize
-    private void initialize() {                                      <co xml:id="CO21-3"/>
+    private void initialize() {                                      <co xml:id="CO20-3"/>
         clientReference.textProperty()
-            .bindBidirectional(viewModel.clientReferenceProperty()); <co xml:id="CO21-4"/>
+            .bindBidirectional(viewModel.clientReferenceProperty()); <co xml:id="CO20-4"/>
         startButton.disableProperty()
-            .bind(viewModel.startDisabledProperty());                <co xml:id="CO21-5"/>
+            .bind(viewModel.startDisabledProperty());                <co xml:id="CO20-5"/>
     }
 
     // Other parts omitted for brevity...
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO21-1">
+<callout arearefs="CO20-1">
 <para>The mvvmFX framework requires that the view delegate implement the <literal>FXMLView&lt;? extends ViewModelType&gt;</literal>. In this case, the view-model type is <literal>StartLCViewModel</literal>. The mvvmFX framework supports other view types as well. Please refer to the framework documentation for more details.</para>
 </callout>
-<callout arearefs="CO21-2">
+<callout arearefs="CO20-2">
 <para>The framework provides a <literal>@de.saxsys.mvvmfx.InjectViewModel</literal> annotation to allow dependency injecting the view-model into the view delegate.</para>
 </callout>
-<callout arearefs="CO21-3">
+<callout arearefs="CO20-3">
 <para>The framework will invoke all methods annotated with the <literal>@de.saxsys.mvvmfx.Initialize</literal> annotation during the initialization process. The annotation can be omitted if the method is named <literal>initialize</literal> and is declared <literal>public</literal>. Please refer to the framework documentation for more details.</para>
 </callout>
-<callout arearefs="CO21-4">
+<callout arearefs="CO20-4">
 <para>We have now bound the text property of the <literal>clientReference</literal> textbox in the view delegate to the corresponding property in the view-model. Note that this is a <emphasis role="strong">bidirectional</emphasis> binding, which means that the value in the view and the view model are kept in sync if it changes on either side.</para>
 </callout>
-<callout arearefs="CO21-5">
+<callout arearefs="CO20-5">
 <para>This is another variation of binding in action, where we are making use of a unidirectional binding. Here, we are binding the disabled property of the <literal>start</literal> button to the corresponding property on the view-model. We will look at why we need to do this shortly.</para>
 </callout>
 </calloutlist>
@@ -2955,14 +2995,14 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {     <co x
 
     //...
     private final StringProperty clientReference;
-    private final BooleanProperty startDisabled;                     <co xml:id="CO22-1"/>
+    private final BooleanProperty startDisabled;                     <co xml:id="CO21-1"/>
 
-    public StartLCViewModel(int clientReferenceMinLength) {          <co xml:id="CO22-2"/>
+    public StartLCViewModel(int clientReferenceMinLength) {          <co xml:id="CO21-2"/>
         this.clientReference = new SimpleStringProperty();
         this.startDisabled = new SimpleBooleanProperty();
         this.startDisabled
             .bind(this.clientReference.length()
-                    .lessThan(clientReferenceMinLength));            <co xml:id="CO22-3"/>
+                    .lessThan(clientReferenceMinLength));            <co xml:id="CO21-3"/>
     }
 
     //...
@@ -2974,40 +3014,40 @@ public class StartLCView implements FxmlView&lt;StartLCViewModel&gt; {
     @Initialize
     public void initialize() {
         startButton.disableProperty()
-            .bind(viewModel.startDisabledProperty());                <co xml:id="CO22-4"/>
+            .bind(viewModel.startDisabledProperty());                <co xml:id="CO21-4"/>
         clientReference.textProperty()
             .bindBidirectional(viewModel.clientReferenceProperty());
     }
     //...
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO22-1">
+<callout arearefs="CO21-1">
 <para>We declare a <literal>startDisabled</literal> property in the view-model to manage when the start button should be disabled.</para>
 </callout>
-<callout arearefs="CO22-2">
+<callout arearefs="CO21-2">
 <para>The minimum length for a valid client reference is injected into the view-model. It is conceivable that this value will be provided as part of external configuration, or possibly from the back-end.</para>
 </callout>
-<callout arearefs="CO22-3">
+<callout arearefs="CO21-3">
 <para>We create a binding expression to match the business requirement.</para>
 </callout>
-<callout arearefs="CO22-4">
+<callout arearefs="CO21-4">
 <para>We bind the view-model property to the disabled property of the start button in the view delegate.</para>
 </callout>
 </calloutlist>
 <simpara>Let&#8217;s also look at how to write an end-to-end, headless UI test as shown here:</simpara>
 <programlisting language="java" linenumbering="numbered">@UITest
-public class StartLCViewTests {                                   <co xml:id="CO23-1"/>
+public class StartLCViewTests {                                   <co xml:id="CO22-1"/>
 
     @Autowired
     private ApplicationContext context;
 
     @Init
     public void init() {
-        MvvmFX.setCustomDependencyInjector(context::getBean);     <co xml:id="CO23-2"/>
+        MvvmFX.setCustomDependencyInjector(context::getBean);     <co xml:id="CO22-2"/>
     }
 
     @Start
-    public void start(Stage stage) {                              <co xml:id="CO23-3"/>
+    public void start(Stage stage) {                              <co xml:id="CO22-3"/>
         final Parent parent = FluentViewLoader
                 .fxmlView(StartLCView.class)
                 .load().getView();
@@ -3017,11 +3057,11 @@ public class StartLCViewTests {                                   <co xml:id="CO
 
     @Test
     void blankClientReference(FxRobot robot) {
-        robot.lookup("#client-reference")                         <co xml:id="CO23-4"/>
+        robot.lookup("#client-reference")                         <co xml:id="CO22-4"/>
             .queryAs(TextField.class)
             .setText("");
 
-        verifyThat("#start-button", NodeMatchers.isDisabled());   <co xml:id="CO23-5"/>
+        verifyThat("#start-button", NodeMatchers.isDisabled());   <co xml:id="CO22-5"/>
     }
 
     @Test
@@ -3030,23 +3070,23 @@ public class StartLCViewTests {                                   <co xml:id="CO
             .queryAs(TextField.class)
             .setText("Test");
 
-        verifyThat("#start-button", NodeMatchers.isEnabled());    <co xml:id="CO23-6"/>
+        verifyThat("#start-button", NodeMatchers.isEnabled());    <co xml:id="CO22-6"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO23-1">
+<callout arearefs="CO22-1">
 <para>We have written a convenience <literal>@UITest</literal> extension to combine spring framework and TestFX testing. Please refer to the accompanying source code with the book for more details.</para>
 </callout>
-<callout arearefs="CO23-2">
+<callout arearefs="CO22-2">
 <para>We set up the spring context to act as the dependency injection provider for the mvvmFX framework and its injection annotations (for example, <literal>@InjectViewModel</literal>) to work.</para>
 </callout>
-<callout arearefs="CO23-3">
+<callout arearefs="CO22-3">
 <para>We are using the <literal>@Start</literal> annotation provided by the TestFX framework to launch the UI.</para>
 </callout>
-<callout arearefs="CO23-4">
+<callout arearefs="CO22-4">
 <para>The TestFX framework injects an instance of the <literal>FxRobot</literal> UI helper, which we can use to access UI elements.</para>
 </callout>
-<callout arearefs="CO23-5 CO23-6">
+<callout arearefs="CO22-5 CO22-6">
 <para>We are using the The TestFX framework provided convenience matchers for test assertions.</para>
 </callout>
 </calloutlist>
@@ -3077,14 +3117,14 @@ public class StartNewLCApplicationCommand {
         this.clientReference = clientReference;
     }
 
-    public static StartNewLCApplicationCommand startApplication( <co xml:id="CO24-1"/>
+    public static StartNewLCApplicationCommand startApplication( <co xml:id="CO23-1"/>
                     String applicantId,
                     String clientReference) {
         return new StartNewLCApplicationCommand(applicantId, clientReference);
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO24-1">
+<callout arearefs="CO23-1">
 <para>To start a new LC application, we need an <literal>applicantId</literal> and a <literal>clientReference</literal>.</para>
 </callout>
 </calloutlist>
@@ -3132,7 +3172,7 @@ class StartLCViewModelTests {
     @BeforeEach
     void before() {
         viewModel = new StartLCViewModel(4, service);
-        viewModel.setLoggedInUser(new LoggedInUserScope("test-applicant"));   <co xml:id="CO25-1"/>
+        viewModel.setLoggedInUser(new LoggedInUserScope("test-applicant"));   <co xml:id="CO24-1"/>
     }
 
     @Test
@@ -3140,7 +3180,7 @@ class StartLCViewModelTests {
         viewModel.setClientReference("");
         viewModel.startNewLC();
 
-        Mockito.verifyNoInteractions(service);                                <co xml:id="CO25-2"/>
+        Mockito.verifyNoInteractions(service);                                <co xml:id="CO24-2"/>
     }
 
     @Test
@@ -3148,17 +3188,17 @@ class StartLCViewModelTests {
         viewModel.setClientReference("My first LC");
         viewModel.startNewLC();
 
-        Mockito.verify(service).startNewLC("test-applicant", "My first LC");  <co xml:id="CO25-3"/>
+        Mockito.verify(service).startNewLC("test-applicant", "My first LC");  <co xml:id="CO24-3"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO25-1">
+<callout arearefs="CO24-1">
 <para>We set the logged in user</para>
 </callout>
-<callout arearefs="CO25-2">
+<callout arearefs="CO24-2">
 <para>When the client reference is blank, there should be no interactions with the backend service.</para>
 </callout>
-<callout arearefs="CO25-3">
+<callout arearefs="CO24-3">
 <para>When a valid value for the client reference is entered, the backend should be invoked with the entered value.</para>
 </callout>
 </calloutlist>
@@ -3166,19 +3206,19 @@ class StartLCViewModelTests {
 <programlisting language="java" linenumbering="numbered">public class StartLCViewModel {
     //...
     public void startNewLC() {
-        if (!getStartDisabled()) {                  <co xml:id="CO26-1"/>
+        if (!getStartDisabled()) {                  <co xml:id="CO25-1"/>
             service.startNewLC(
                     userScope.getLoggedInUserId(),
-                    getClientReference());          <co xml:id="CO26-2"/>
+                    getClientReference());          <co xml:id="CO25-2"/>
         }
     }
     //...
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO26-1">
+<callout arearefs="CO25-1">
 <para>We check that the start button is enabled before invoking the backend.</para>
 </callout>
-<callout arearefs="CO26-2">
+<callout arearefs="CO25-2">
 <para>The actual backend call with the appropriate values.</para>
 </callout>
 </calloutlist>
@@ -3187,7 +3227,7 @@ class StartLCViewModelTests {
 public class StartLCViewTests {
 
     @MockBean
-    private BackendService service;                                   <co xml:id="CO27-1"/>
+    private BackendService service;                                   <co xml:id="CO26-1"/>
 
     //...
 
@@ -3197,35 +3237,35 @@ public class StartLCViewTests {
         LCApplicationId lcApplicationId = LCApplicationId.randomId();
 
         when(service.startNewLC("test-applicant", clientReference))
-                .thenReturn(lcApplicationId);                         <co xml:id="CO27-2"/>
+                .thenReturn(lcApplicationId);                         <co xml:id="CO26-2"/>
 
         robot.lookup("#client-reference")
             .queryAs(TextField.class)
-            .setText(clientReference);                                <co xml:id="CO27-3"/>
-        robot.clickOn("#start-button");                               <co xml:id="CO27-4"/>
+            .setText(clientReference);                                <co xml:id="CO26-3"/>
+        robot.clickOn("#start-button");                               <co xml:id="CO26-4"/>
 
-        Mockito.verify(service).startNewLC("admin", clientReference); <co xml:id="CO27-5"/>
+        Mockito.verify(service).startNewLC("admin", clientReference); <co xml:id="CO26-5"/>
 
-        verifyThat("#lc-details-screen", isVisible());                <co xml:id="CO27-6"/>
+        verifyThat("#lc-details-screen", isVisible());                <co xml:id="CO26-6"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO27-1">
+<callout arearefs="CO26-1">
 <para>We inject a mock instance of the backend service.</para>
 </callout>
-<callout arearefs="CO27-2">
+<callout arearefs="CO26-2">
 <para>We stub the call to the backend to return successfully.</para>
 </callout>
-<callout arearefs="CO27-3">
+<callout arearefs="CO26-3">
 <para>We type in a valid value for the client reference.</para>
 </callout>
-<callout arearefs="CO27-4">
+<callout arearefs="CO26-4">
 <para>We click on the <literal>start</literal> button.</para>
 </callout>
-<callout arearefs="CO27-5">
+<callout arearefs="CO26-5">
 <para>We verify that the service was indeed invoked with the correct arguments.</para>
 </callout>
-<callout arearefs="CO27-6">
+<callout arearefs="CO26-6">
 <para>We verify that we have moved to the next screen in the UI (the LC details screen).</para>
 </callout>
 </calloutlist>
@@ -3236,21 +3276,21 @@ public class StartLCViewTests {
     void shouldStayOnCreateLCScreenOnCreationFailure(FxRobot robot) {
         final String clientReference = "My first LC";
         when(service.startNewLC("test-applicant", clientReference))
-            .thenThrow(new RuntimeException("Failed!!"));   <co xml:id="CO28-1"/>
+            .thenThrow(new RuntimeException("Failed!!"));   <co xml:id="CO27-1"/>
 
         robot.lookup("#client-reference")
             .queryAs(TextField.class)
             .setText(clientReference);
         robot.clickOn("#start-button");
 
-        verifyThat("#start-lc-screen", isVisible());        <co xml:id="CO28-2"/>
+        verifyThat("#start-lc-screen", isVisible());        <co xml:id="CO27-2"/>
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO28-1">
+<callout arearefs="CO27-1">
 <para>We stub the backend service call to fail with an exception.</para>
 </callout>
-<callout arearefs="CO28-2">
+<callout arearefs="CO27-2">
 <para>We verify that we continue to remain on the <literal>start-lc-screen</literal>.</para>
 </callout>
 </calloutlist>
@@ -3260,13 +3300,13 @@ public class StartLCViewTests {
 public class StartLCView {
     //...
     public void start(ActionEvent event) {
-        new Service&lt;Void&gt;() {                    <co xml:id="CO29-1"/>
+        new Service&lt;Void&gt;() {                    <co xml:id="CO28-1"/>
             @Override
             private Task&lt;Void&gt; createTask() {
                 return new Task&lt;&gt;() {
                     @Override
                     private Void call() {
-                        viewModel.startNewLC();  <co xml:id="CO29-2"/>
+                        viewModel.startNewLC();  <co xml:id="CO28-2"/>
                         return null;
                     }
                 };
@@ -3275,7 +3315,7 @@ public class StartLCView {
             @Override
             private void succeeded() {
                 Stage stage = UIUtils.getStage(event);
-                showLCDetailsView(stage);        <co xml:id="CO29-3"/>
+                showLCDetailsView(stage);        <co xml:id="CO28-3"/>
             }
 
             @Override
@@ -3286,13 +3326,13 @@ public class StartLCView {
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO29-1">
+<callout arearefs="CO28-1">
 <para>JavaFX, like most frontend frameworks, is single-threaded and requires that long-running tasks not be invoked on the UI thread. For this purpose, it provides the <literal>javafx.concurrent.Service</literal> abstraction to handle such interactions elegantly in a background thread.</para>
 </callout>
-<callout arearefs="CO29-2">
+<callout arearefs="CO28-2">
 <para>The actual invocation of the backend through the view-model happens here.</para>
 </callout>
-<callout arearefs="CO29-3">
+<callout arearefs="CO28-3">
 <para>We show the next screen to enter more LC details here.</para>
 </callout>
 </calloutlist>
@@ -3302,23 +3342,23 @@ public class StartLCView {
 @Service
 public class BackendService {
 
-    private final CommandGateway gateway;                         <co xml:id="CO30-1"/>
+    private final CommandGateway gateway;                         <co xml:id="CO29-1"/>
 
     public BackendService(CommandGateway gateway) {
         this.gateway = gateway;
     }
 
     public LCApplicationId startNewLC(String applicantId, String clientReference) {
-        return gateway.sendAndWait(                               <co xml:id="CO30-2"/>
+        return gateway.sendAndWait(                               <co xml:id="CO29-2"/>
                   startApplication(applicantId, clientReference)
                );
     }
 }</programlisting>
 <calloutlist>
-<callout arearefs="CO30-1">
+<callout arearefs="CO29-1">
 <para>We inject the <literal>org.axonframework.commandhandling.gateway.CommandGateway</literal> provided by the Axon framework to invoke the command.</para>
 </callout>
-<callout arearefs="CO30-2">
+<callout arearefs="CO29-2">
 <para>The actual invocation of the backend using the <literal>sendAndWait</literal> method happens here. In this case, we are blocking until the backend call completes. There are other variations that do not require this kind of blocking. Please refer to the Axon framework documentation for more details.</para>
 </callout>
 </calloutlist>
