@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Queries and Projections (10 pages)</title>
-<date>2021-08-16</date>
+<date>2021-08-20</date>
 </info>
 <section xml:id="implementing-queries-and-projections-10-pages">
 <title>Implementing Queries and Projections (10 pages)</title>
@@ -14,21 +14,111 @@ Anonymous
 </attribution>
 <simpara>The best view comes after the hardest climb.</simpara>
 </blockquote>
-<simpara>In the section on <xref linkend="command-query-responsibility-segregation-cqrs"/>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models and exposing these in the form of an HTTP API.</simpara>
+<simpara>In the section on <link linkend="command-query-responsibility-segregation-cqrs">CQRS</link>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models.</simpara>
+<simpara>When working with query models, we construct models by listening to events as they happen. We will examine how to deal with situations where:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>New requirements evolve over a period of time requiring us to build new query models.</simpara>
+</listitem>
+<listitem>
+<simpara>We discover a bug in our query model which requires us to recreate the model from scratch.</simpara>
+</listitem>
+</itemizedlist>
+<section xml:id="technical-requirements">
+<title>Technical requirements</title>
+<itemizedlist>
+<listitem>
+<simpara>JDK 1.8+ (We have used Java 16 to compile sample sources)</simpara>
+</listitem>
+<listitem>
+<simpara>JavaFX SDK 16 and SceneBuilder</simpara>
+</listitem>
+<listitem>
+<simpara>Spring Boot 2.4.x</simpara>
+</listitem>
+<listitem>
+<simpara>mvvmFX 1.8 (<link xl:href="https://sialcasa.github.io/mvvmFX/">https://sialcasa.github.io/mvvmFX/</link>)</simpara>
+</listitem>
+<listitem>
+<simpara>JUnit 5.7.x (Included with spring boot)</simpara>
+</listitem>
+<listitem>
+<simpara>TestFX (for UI testing)</simpara>
+</listitem>
+<listitem>
+<simpara>OpenJFX Monocle (for headless UI testing)</simpara>
+</listitem>
+<listitem>
+<simpara>Project Lombok (To reduce verbosity)</simpara>
+</listitem>
+<listitem>
+<simpara>Axon server to act as an event store</simpara>
+</listitem>
+<listitem>
+<simpara>Maven 3.x</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="query-models">
+<title>Query models</title>
+<simpara>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
+<figure role="text-center">
+<title>CQRS application</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/cqrs/cqrs-application.png"/>
+</imageobject>
+<textobject><phrase>cqrs application</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara><emphasis role="strong">On the command side:</emphasis></simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>A request to mutate state (command) is received.</simpara>
+</listitem>
+<listitem>
+<simpara>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</simpara>
+</listitem>
+<listitem>
+<simpara>If business invariants (validations) are satisfied, one or more domain events are published.</simpara>
+</listitem>
+<listitem>
+<simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
+</listitem>
+<listitem>
+<simpara>The external world is notified by publishing these domain events.</simpara>
+</listitem>
+</orderedlist>
+<simpara><emphasis role="strong">On the query side:</emphasis></simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>An event listening component listens to these domain events.</simpara>
+</listitem>
+<listitem>
+<simpara>Constructs a purpose-built query model to satisfy a specific query use case.</simpara>
+</listitem>
+<listitem>
+<simpara>This query model is persisted in a datastore optimized for read operations.</simpara>
+</listitem>
+<listitem>
+<simpara>This query model is then exposed in the form of an API.</simpara>
+</listitem>
+</orderedlist>
+</section>
 <section xml:id="consuming-events">
 <title>Consuming events</title>
 
 </section>
-<section xml:id="persisting-distinct-query-models">
-<title>Persisting Distinct Query Models</title>
+<section xml:id="persisting-a-query-read-model">
+<title>Persisting a query (read) model</title>
 
 </section>
-<section xml:id="exposing-a-rest-based-api-for-queries">
-<title>Exposing a REST-based API for Queries</title>
+<section xml:id="creating-additional-query-read-models">
+<title>Creating additional query (read) models</title>
 
 </section>
-<section xml:id="creating-additional-views">
-<title>Creating Additional Views</title>
+<section xml:id="historic-event-replays">
+<title>Historic event replays</title>
 
 </section>
 </section>

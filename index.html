@@ -640,10 +640,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#implementing-queries-and-projections-10-pages">7. Implementing Queries and Projections (10 pages)</a>
 <ul class="sectlevel2">
-<li><a href="#consuming-events">7.1. Consuming events</a></li>
-<li><a href="#persisting-distinct-query-models">7.2. Persisting Distinct Query Models</a></li>
-<li><a href="#exposing-a-rest-based-api-for-queries">7.3. Exposing a REST-based API for Queries</a></li>
-<li><a href="#creating-additional-views">7.4. Creating Additional Views</a></li>
+<li><a href="#technical-requirements-4">7.1. Technical requirements</a></li>
+<li><a href="#query-models">7.2. Query models</a></li>
+<li><a href="#consuming-events">7.3. Consuming events</a></li>
+<li><a href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></li>
+<li><a href="#creating-additional-query-read-models">7.5. Creating additional query (read) models</a></li>
+<li><a href="#historic-event-replays">7.6. Historic event replays</a></li>
 </ul>
 </li>
 <li><a href="#long-running-user-flows-10-pages">8. Long-Running User Flows (10 pages)</a>
@@ -657,7 +659,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#integrating-with-external-systems-15-pages">9. Integrating with External Systems (15 pages)</a>
 <ul class="sectlevel2">
-<li><a href="#technical-requirements-4">9.1. Technical Requirements</a></li>
+<li><a href="#technical-requirements-5">9.1. Technical Requirements</a></li>
 <li><a href="#implementing-consumer-driven-contracts">9.2. Implementing consumer-driven contracts</a></li>
 <li><a href="#exposing-a-rest-based-api">9.3. Exposing a REST-based API</a></li>
 <li><a href="#exposing-an-events-based-api">9.4. Exposing an events-based API</a></li>
@@ -4009,9 +4011,6 @@ To accomplish a difficult task, one must first make it easy.
 <p>JavaFX SDK 16 and SceneBuilder</p>
 </li>
 <li>
-<p>Maven 3.x</p>
-</li>
-<li>
 <p>Spring Boot 2.4.x</p>
 </li>
 <li>
@@ -4028,6 +4027,9 @@ To accomplish a difficult task, one must first make it easy.
 </li>
 <li>
 <p>Project Lombok (To reduce verbosity)</p>
+</li>
+<li>
+<p>Maven 3.x</p>
 </li>
 </ul>
 </div>
@@ -5955,22 +5957,125 @@ The best view comes after the hardest climb.
 </div>
 </div>
 <div class="paragraph">
-<p>In the section on <a href="#command-query-responsibility-segregation-cqrs">Section 3.8</a>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models and exposing these in the form of an HTTP API.</p>
+<p>In the section on <a href="#command-query-responsibility-segregation-cqrs">CQRS</a>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models.</p>
+</div>
+<div class="paragraph">
+<p>When working with query models, we construct models by listening to events as they happen. We will examine how to deal with situations where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>New requirements evolve over a period of time requiring us to build new query models.</p>
+</li>
+<li>
+<p>We discover a bug in our query model which requires us to recreate the model from scratch.</p>
+</li>
+</ul>
 </div>
 <div class="sect2">
-<h3 id="consuming-events"><a class="anchor" href="#consuming-events"></a><a class="link" href="#consuming-events">7.1. Consuming events</a></h3>
+<h3 id="technical-requirements-4"><a class="anchor" href="#technical-requirements-4"></a><a class="link" href="#technical-requirements-4">7.1. Technical requirements</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
+</li>
+<li>
+<p>JavaFX SDK 16 and SceneBuilder</p>
+</li>
+<li>
+<p>Spring Boot 2.4.x</p>
+</li>
+<li>
+<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
+</li>
+<li>
+<p>JUnit 5.7.x (Included with spring boot)</p>
+</li>
+<li>
+<p>TestFX (for UI testing)</p>
+</li>
+<li>
+<p>OpenJFX Monocle (for headless UI testing)</p>
+</li>
+<li>
+<p>Project Lombok (To reduce verbosity)</p>
+</li>
+<li>
+<p>Axon server to act as an event store</p>
+</li>
+<li>
+<p>Maven 3.x</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="query-models"><a class="anchor" href="#query-models"></a><a class="link" href="#query-models">7.2. Query models</a></h3>
+<div class="paragraph">
+<p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/cqrs-application.png" alt="cqrs application">
+</div>
+<div class="title">Figure 1- 46. CQRS application</div>
+</div>
+<div class="paragraph">
+<p><strong>On the command side:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A request to mutate state (command) is received.</p>
+</li>
+<li>
+<p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
+</li>
+<li>
+<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
+</li>
+<li>
+<p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
+</li>
+<li>
+<p>The external world is notified by publishing these domain events.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>On the query side:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An event listening component listens to these domain events.</p>
+</li>
+<li>
+<p>Constructs a purpose-built query model to satisfy a specific query use case.</p>
+</li>
+<li>
+<p>This query model is persisted in a datastore optimized for read operations.</p>
+</li>
+<li>
+<p>This query model is then exposed in the form of an API.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="consuming-events"><a class="anchor" href="#consuming-events"></a><a class="link" href="#consuming-events">7.3. Consuming events</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="persisting-distinct-query-models"><a class="anchor" href="#persisting-distinct-query-models"></a><a class="link" href="#persisting-distinct-query-models">7.2. Persisting Distinct Query Models</a></h3>
+<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="exposing-a-rest-based-api-for-queries"><a class="anchor" href="#exposing-a-rest-based-api-for-queries"></a><a class="link" href="#exposing-a-rest-based-api-for-queries">7.3. Exposing a REST-based API for Queries</a></h3>
+<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.5. Creating additional query (read) models</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="creating-additional-views"><a class="anchor" href="#creating-additional-views"></a><a class="link" href="#creating-additional-views">7.4. Creating Additional Views</a></h3>
+<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.6. Historic event replays</a></h3>
 
 </div>
 </div>
@@ -6026,7 +6131,7 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <p>Thus far, we have used DDD to implement a robust core for our application. However, most bounded contexts usually have both upstream and downstream dependencies which usually change at a pace which is different from these core components. To maintain both agility and reliability  and enable loose coupling, it is important to create what DDD calls the anti-corruption layer in order to shield the core from everything that surrounds it. In this chapter, we will look at integrating with a legacy Inventory Management system. We will round off by looking at common patterns when integrating with legacy applications.</p>
 </div>
 <div class="sect2">
-<h3 id="technical-requirements-4"><a class="anchor" href="#technical-requirements-4"></a><a class="link" href="#technical-requirements-4">9.1. Technical Requirements</a></h3>
+<h3 id="technical-requirements-5"><a class="anchor" href="#technical-requirements-5"></a><a class="link" href="#technical-requirements-5">9.1. Technical Requirements</a></h3>
 
 </div>
 <div class="sect2">
@@ -6197,7 +6302,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-16 22:33:16 UTC
+Last updated 2021-08-20 23:10:36 UTC
 </div>
 </div>
 </body>

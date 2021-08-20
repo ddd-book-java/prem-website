@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based</title>
-<date>2021-08-16</date>
+<date>2021-08-20</date>
 </info>
 <section xml:id="implementing-the-user-interfacetask-based" role="text-justify">
 <title>Implementing the User Interface&#8201;&#8212;&#8201;Task-based</title>
@@ -39,9 +39,6 @@ Marty Rubin
 <simpara>JavaFX SDK 16 and SceneBuilder</simpara>
 </listitem>
 <listitem>
-<simpara>Maven 3.x</simpara>
-</listitem>
-<listitem>
 <simpara>Spring Boot 2.4.x</simpara>
 </listitem>
 <listitem>
@@ -58,6 +55,9 @@ Marty Rubin
 </listitem>
 <listitem>
 <simpara>Project Lombok (To reduce verbosity)</simpara>
+</listitem>
+<listitem>
+<simpara>Maven 3.x</simpara>
 </listitem>
 </itemizedlist>
 <simpara>Before we dive deep into building the GUI solution, let&#8217;s do a quick recap of where we left the APIs.</simpara>

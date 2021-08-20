@@ -443,10 +443,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#implementing-queries-and-projections-10-pages">Implementing Queries and Projections (10 pages)</a>
 <ul class="sectlevel2">
+<li><a href="#technical-requirements">Technical requirements</a></li>
+<li><a href="#query-models">Query models</a></li>
 <li><a href="#consuming-events">Consuming events</a></li>
-<li><a href="#persisting-distinct-query-models">Persisting Distinct Query Models</a></li>
-<li><a href="#exposing-a-rest-based-api-for-queries">Exposing a REST-based API for Queries</a></li>
-<li><a href="#creating-additional-views">Creating Additional Views</a></li>
+<li><a href="#persisting-a-query-read-model">Persisting a query (read) model</a></li>
+<li><a href="#creating-additional-query-read-models">Creating additional query (read) models</a></li>
+<li><a href="#historic-event-replays">Historic event replays</a></li>
 </ul>
 </li>
 </ul>
@@ -465,22 +467,125 @@ The best view comes after the hardest climb.
 </div>
 </div>
 <div class="paragraph">
-<p>In the section on <a href="#command-query-responsibility-segregation-cqrs">[command-query-responsibility-segregation-cqrs]</a>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models and exposing these in the form of an HTTP API.</p>
+<p>In the section on <a href="#command-query-responsibility-segregation-cqrs">CQRS</a>, we described how DDD and CQRS complement each other and how the query side (read models) can be used to create one or more representations of the underlying data. In this chapter, we will dive deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models.</p>
+</div>
+<div class="paragraph">
+<p>When working with query models, we construct models by listening to events as they happen. We will examine how to deal with situations where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>New requirements evolve over a period of time requiring us to build new query models.</p>
+</li>
+<li>
+<p>We discover a bug in our query model which requires us to recreate the model from scratch.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="technical-requirements"><a class="anchor" href="#technical-requirements"></a>Technical requirements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
+</li>
+<li>
+<p>JavaFX SDK 16 and SceneBuilder</p>
+</li>
+<li>
+<p>Spring Boot 2.4.x</p>
+</li>
+<li>
+<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
+</li>
+<li>
+<p>JUnit 5.7.x (Included with spring boot)</p>
+</li>
+<li>
+<p>TestFX (for UI testing)</p>
+</li>
+<li>
+<p>OpenJFX Monocle (for headless UI testing)</p>
+</li>
+<li>
+<p>Project Lombok (To reduce verbosity)</p>
+</li>
+<li>
+<p>Axon server to act as an event store</p>
+</li>
+<li>
+<p>Maven 3.x</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="query-models"><a class="anchor" href="#query-models"></a>Query models</h3>
+<div class="paragraph">
+<p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/cqrs-application.png" alt="cqrs application">
+</div>
+<div class="title">Figure 1. CQRS application</div>
+</div>
+<div class="paragraph">
+<p><strong>On the command side:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A request to mutate state (command) is received.</p>
+</li>
+<li>
+<p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
+</li>
+<li>
+<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
+</li>
+<li>
+<p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
+</li>
+<li>
+<p>The external world is notified by publishing these domain events.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>On the query side:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An event listening component listens to these domain events.</p>
+</li>
+<li>
+<p>Constructs a purpose-built query model to satisfy a specific query use case.</p>
+</li>
+<li>
+<p>This query model is persisted in a datastore optimized for read operations.</p>
+</li>
+<li>
+<p>This query model is then exposed in the form of an API.</p>
+</li>
+</ol>
+</div>
 </div>
 <div class="sect2">
 <h3 id="consuming-events"><a class="anchor" href="#consuming-events"></a>Consuming events</h3>
 
 </div>
 <div class="sect2">
-<h3 id="persisting-distinct-query-models"><a class="anchor" href="#persisting-distinct-query-models"></a>Persisting Distinct Query Models</h3>
+<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a>Persisting a query (read) model</h3>
 
 </div>
 <div class="sect2">
-<h3 id="exposing-a-rest-based-api-for-queries"><a class="anchor" href="#exposing-a-rest-based-api-for-queries"></a>Exposing a REST-based API for Queries</h3>
+<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a>Creating additional query (read) models</h3>
 
 </div>
 <div class="sect2">
-<h3 id="creating-additional-views"><a class="anchor" href="#creating-additional-views"></a>Creating Additional Views</h3>
+<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a>Historic event replays</h3>
 
 </div>
 </div>
@@ -488,7 +593,7 @@ The best view comes after the hardest climb.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-16 22:33:16 UTC
+Last updated 2021-08-20 23:10:36 UTC
 </div>
 </div>
 </body>
