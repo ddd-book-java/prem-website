@@ -642,10 +642,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-4">7.1. Technical requirements</a></li>
 <li><a href="#query-models">7.2. Query models</a></li>
-<li><a href="#consuming-events">7.3. Consuming events</a></li>
+<li><a href="#consume-events">7.3. Consume events</a></li>
 <li><a href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></li>
 <li><a href="#creating-additional-query-read-models">7.5. Creating additional query (read) models</a></li>
-<li><a href="#historic-event-replays">7.6. Historic event replays</a></li>
+<li><a href="#historic-event-replays">7.6. Historic event replays</a>
+<ul class="sectlevel3">
+<li><a href="#the-need-for-replays">7.6.1. The need for replays</a></li>
+<li><a href="#types-of-replays">7.6.2. Types of replays</a></li>
+<li><a href="#event-replay-considerations">7.6.3. Event replay considerations</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#long-running-user-flows-10-pages">8. Long-Running User Flows (10 pages)</a>
@@ -5945,7 +5951,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 </div>
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="implementing-queries-and-projections-10-pages"><a class="anchor" href="#implementing-queries-and-projections-10-pages"></a><a class="link" href="#implementing-queries-and-projections-10-pages">7. Implementing Queries and Projections (10 pages)</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
@@ -6038,9 +6044,21 @@ The best view comes after the hardest climb.
 <p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
 </li>
 <li>
-<p>The external world is notified by publishing these domain events.</p>
+<p>The external world is notified by publishing these domain events onto an event bus.</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We have already seen the command side flow in action in Chapter 5 - Implementing Domain Logic.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p><strong>On the query side:</strong></p>
@@ -6061,10 +6079,96 @@ The best view comes after the hardest climb.
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="consuming-events"><a class="anchor" href="#consuming-events"></a><a class="link" href="#consuming-events">7.3. Consuming events</a></h3>
+<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.3. Consume events</a></h3>
+<div class="paragraph">
+<p>As seen in chapter 5, when starting a new LC application, the importer sends a <code>StartNewLCApplicationCommand</code>, which results in the <code>LCApplicationStartedEvent</code> being emitted as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
+    <span style="color:#777">//..</span>
+    <span style="color:#007">@CommandHandler</span>
+    <span style="color:#088;font-weight:bold">public</span> LCApplication(StartNewLCApplicationCommand command) {
+        <span style="color:#777">// Validation code omitted for brevity</span>
+        <span style="color:#777">// Refer to chapter 5 for details.</span>
+        AggregateLifecycle.apply(<span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(command.getId(),
+                command.getApplicantId(), command.getClientReference()));
+    }
+    <span style="color:#777">//..</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s write an event processing component which will listen to this event and construct a query model. When working with the Axon framework, we have a convenient way to do this by annotating the event listening method with the <code>@EventHandler</code> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.eventhandling.EventHandler</span>;
 
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationStartedEventHandler</span> {
+
+    <span style="color:#007">@EventHandler</span>                                     <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationStartedEvent event) { <i class="conum" data-value="2"></i><b>(2)</b>
+        <span style="color:#777">// Construct a query model here</span>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>To make any method an event listener, we annotate it with the <code>@EventHandler</code> annotation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The handler method needs to specify the event that we intend to listen to. There are other arguments that are supported for event handlers. Please refer to the Axon framework documentation for more information.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>@EventHandler</code> annotation should not be confused with the <code>@EventSourcingHandler</code> annotation which we looked at in chapter 5. The <code>@EventSourcingHandler</code> annotation is used to replay events and restore aggregate state when loading event-sourced aggregates on the command side, whereas the <code>@EventHandler</code> annotation is used to listen to events outside the context of the aggregate. In other words, the <code>@EventSourcingHandler</code> annotation is used exclusively within aggregates, whereas the <code>@EventHandler</code> annotation can be used anywhere there is a need to consume domain events. In this case, we are using it to construct a query model.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></h3>
@@ -6076,7 +6180,36 @@ The best view comes after the hardest climb.
 </div>
 <div class="sect2">
 <h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.6. Historic event replays</a></h3>
+<div class="sect3">
+<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.6.1. The need for replays</a></h4>
 
+</div>
+<div class="sect3">
+<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.6.2. Types of replays</a></h4>
+<div class="sect4">
+<h5 id="full-event-replays"><a class="anchor" href="#full-event-replays"></a><a class="link" href="#full-event-replays">Full event replays</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="partial-event-replays"><a class="anchor" href="#partial-event-replays"></a><a class="link" href="#partial-event-replays">Partial event replays</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="adhoc-event-replays"><a class="anchor" href="#adhoc-event-replays"></a><a class="link" href="#adhoc-event-replays">Adhoc event replays</a></h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.6.3. Event replay considerations</a></h4>
+<div class="sect4">
+<h5 id="application-availability"><a class="anchor" href="#application-availability"></a><a class="link" href="#application-availability">Application availability</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="optimization-techniques"><a class="anchor" href="#optimization-techniques"></a><a class="link" href="#optimization-techniques">Optimization techniques</a></h5>
+
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6302,7 +6435,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-20 23:10:36 UTC
+Last updated 2021-08-23 15:51:11 UTC
 </div>
 </div>
 </body>
