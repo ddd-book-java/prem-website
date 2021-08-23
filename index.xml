@@ -946,7 +946,7 @@ This is either user initiated or system initiated, in response to a domain event
 <simpara><emphasis role="strong">Policy</emphasis>: A set of business invariants (rules) that need to be adhered to, for an action/activity to be successfully performed.</simpara>
 </listitem>
 <listitem>
-<simpara><emphasis role="strong">Read Model</emphasis>: A piece of information required to perform an action/activity.</simpara>
+<simpara><emphasis role="strong">Query/Read Model</emphasis>: A piece of information required to perform an action/activity.</simpara>
 </listitem>
 <listitem>
 <simpara><emphasis role="strong">External System</emphasis>: A system significant to the business process, but out of scope in the current context.</simpara>
@@ -1033,18 +1033,18 @@ In the above illustration, we realized that, the process to handle "declined LC 
 </mediaobject>
 </figure>
 </section>
-<section xml:id="4-outline-read-models">
-<title>4. Outline read models</title>
+<section xml:id="4-outline-query-models">
+<title>4. Outline query models</title>
 <simpara>Every activity requires a certain set of data to be able to be performed.
 Users will need to view out-of-band data that they need to act upon and also see the result of their actions.
-These sets of data are represented as <emphasis role="strong">read models</emphasis> (using green stickies).</simpara>
+These sets of data are represented as <emphasis role="strong">query models</emphasis> (using green stickies).</simpara>
 <figure>
 <title>Big picture eventstorming workshop board</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/event-storming/05-read-models.png"/>
+<imagedata fileref="./images/event-storming/05-query-models.png"/>
 </imageobject>
-<textobject><phrase>05 read models</phrase></textobject>
+<textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
 <note>
@@ -1090,12 +1090,12 @@ Eventstorming, on the other hand, uses a chronological ordering of domain events
 <simpara>When should you use eventstorming?</simpara>
 </listitem>
 <listitem>
-<simpara>Pick an application in your current context. Can you use eventstorming to capture domain events, actors, actions, hotspots, read models, external systems, etc. for the scenario you picked?</simpara>
+<simpara>Pick an application in your current context. Can you use eventstorming to capture domain events, actors, actions, hotspots, query models, external systems, etc. for the scenario you picked?</simpara>
 </listitem>
 </orderedlist>
 </section>
 <section xml:id="further-reading-2">
-<title>Further Reading</title>
+<title>Further reading</title>
 <informaltable frame="all" rowsep="1" colsep="1">
 <tgroup cols="3">
 <colspec colname="col_1" colwidth="25*"/>
@@ -1222,14 +1222,14 @@ Eric Evans
 </section>
 <section xml:id="continuing-our-design-journey">
 <title>Continuing our design journey</title>
-<simpara>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</simpara>
-<figure>
+<simpara>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<figure role="text-center">
 <title>Recap of eventstorming session</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/event-storming/05-read-models.png"/>
+<imagedata fileref="./images/event-storming/05-query-models.png"/>
 </imageobject>
-<textobject><phrase>05 read models</phrase></textobject>
+<textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
 <simpara>As mentioned previously, the <emphasis role="strong">blue</emphasis> stickies in this diagram represent <emphasis role="strong">commands</emphasis>. We will be using the Command Query Responsibility Segregation (CQRS) pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and why we are using it and how it can result in an elegant solution.</simpara>
@@ -1250,9 +1250,9 @@ Eric Evans
 </mediaobject>
 </figure>
 <note>
-<simpara>We depict multiple read models above because it is possible (but not necessary) to create more than one read model, depending on the kinds of query use cases that need to be supported.</simpara>
+<simpara>We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.</simpara>
 </note>
-<simpara>For this to work predictably, the read model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
+<simpara>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
 </section>
 <section xml:id="_why_cqrs">
 <title>Why CQRS?</title>
@@ -1316,17 +1316,6 @@ Eric Evans
         &lt;version&gt;${axon-framework.version}&lt;/version&gt;
     &lt;/dependency&gt;</programlisting>
 <simpara>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</simpara>
-<simpara>As a reminder, this is the output produced from our eventstorming session:</simpara>
-<figure>
-<title>Recap of eventstorming session</title>
-<mediaobject>
-<imageobject>
-<imagedata fileref="./images/event-storming/05-read-models.png"/>
-</imageobject>
-<textobject><phrase>05 read models</phrase></textobject>
-</mediaobject>
-</figure>
-<simpara>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</simpara>
 </section>
 <section xml:id="identifying-commands">
 <title>Identifying Commands</title>
@@ -3485,8 +3474,22 @@ Anonymous
 </listitem>
 </itemizedlist>
 </section>
-<section xml:id="query-models">
-<title>Query models</title>
+<section xml:id="continuing-our-design-journey-2">
+<title>Continuing our design journey</title>
+<simpara>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<figure role="text-center">
+<title>Recap of eventstorming session</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/event-storming/05-query-models.png"/>
+</imageobject>
+<textobject><phrase>05 query models</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>As mentioned previously, the <emphasis role="strong">green</emphasis> stickies</simpara>
+</section>
+<section xml:id="identifying-queries">
+<title>Identifying queries</title>
 <simpara>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
 <title>CQRS application</title>
@@ -3512,7 +3515,7 @@ Anonymous
 <simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
 </listitem>
 <listitem>
-<simpara>The external world is notified by publishing these domain events onto an event bus.</simpara>
+<simpara>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</simpara>
 </listitem>
 </orderedlist>
 <note>
@@ -3521,7 +3524,7 @@ Anonymous
 <simpara><emphasis role="strong">On the query side:</emphasis></simpara>
 <orderedlist numeration="arabic">
 <listitem>
-<simpara>An event listening component listens to these domain events.</simpara>
+<simpara>An event listening component listens to these domain events published on the event bus.</simpara>
 </listitem>
 <listitem>
 <simpara>Constructs a purpose-built query model to satisfy a specific query use case.</simpara>

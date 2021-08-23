@@ -59,8 +59,22 @@ Anonymous
 </listitem>
 </itemizedlist>
 </section>
-<section xml:id="query-models">
-<title>Query models</title>
+<section xml:id="continuing-our-design-journey">
+<title>Continuing our design journey</title>
+<simpara>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<figure role="text-center">
+<title>Recap of eventstorming session</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/event-storming/05-query-models.png"/>
+</imageobject>
+<textobject><phrase>05 query models</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>As mentioned previously, the <emphasis role="strong">green</emphasis> stickies</simpara>
+</section>
+<section xml:id="identifying-queries">
+<title>Identifying queries</title>
 <simpara>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
 <title>CQRS application</title>
@@ -86,7 +100,7 @@ Anonymous
 <simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
 </listitem>
 <listitem>
-<simpara>The external world is notified by publishing these domain events onto an event bus.</simpara>
+<simpara>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</simpara>
 </listitem>
 </orderedlist>
 <note>
@@ -95,7 +109,7 @@ Anonymous
 <simpara><emphasis role="strong">On the query side:</emphasis></simpara>
 <orderedlist numeration="arabic">
 <listitem>
-<simpara>An event listening component listens to these domain events.</simpara>
+<simpara>An event listening component listens to these domain events published on the event bus.</simpara>
 </listitem>
 <listitem>
 <simpara>Constructs a purpose-built query model to satisfy a specific query use case.</simpara>

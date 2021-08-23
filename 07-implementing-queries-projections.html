@@ -444,7 +444,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#implementing-queries-and-projections-10-pages">Implementing Queries and Projections (10 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical requirements</a></li>
-<li><a href="#query-models">Query models</a></li>
+<li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
+<li><a href="#identifying-queries">Identifying queries</a></li>
 <li><a href="#consume-events">Consume events</a></li>
 <li><a href="#persisting-a-query-read-model">Persisting a query (read) model</a></li>
 <li><a href="#creating-additional-query-read-models">Creating additional query (read) models</a></li>
@@ -526,7 +527,22 @@ The best view comes after the hardest climb.
 </div>
 </div>
 <div class="sect2">
-<h3 id="query-models"><a class="anchor" href="#query-models"></a>Query models</h3>
+<h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
+<div class="paragraph">
+<p>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/event-storming/05-query-models.png" alt="05 query models">
+</div>
+<div class="title">Figure 1. Recap of eventstorming session</div>
+</div>
+<div class="paragraph">
+<p>As mentioned previously, the <strong>green</strong> stickies</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a>Identifying queries</h3>
 <div class="paragraph">
 <p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
 </div>
@@ -534,7 +550,7 @@ The best view comes after the hardest climb.
 <div class="content">
 <img src="./images/cqrs/cqrs-application.png" alt="cqrs application">
 </div>
-<div class="title">Figure 1. CQRS application</div>
+<div class="title">Figure 2. CQRS application</div>
 </div>
 <div class="paragraph">
 <p><strong>On the command side:</strong></p>
@@ -554,7 +570,7 @@ The best view comes after the hardest climb.
 <p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
 </li>
 <li>
-<p>The external world is notified by publishing these domain events onto an event bus.</p>
+<p>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</p>
 </li>
 </ol>
 </div>
@@ -576,7 +592,7 @@ We have already seen the command side flow in action in Chapter 5 - Implementing
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>An event listening component listens to these domain events.</p>
+<p>An event listening component listens to these domain events published on the event bus.</p>
 </li>
 <li>
 <p>Constructs a purpose-built query model to satisfy a specific query use case.</p>
@@ -726,7 +742,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-23 15:51:10 UTC
+Last updated 2021-08-23 22:02:49 UTC
 </div>
 </div>
 </body>

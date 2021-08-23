@@ -62,14 +62,14 @@ Eric Evans
 </section>
 <section xml:id="continuing-our-design-journey">
 <title>Continuing our design journey</title>
-<simpara>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</simpara>
-<figure>
+<simpara>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<figure role="text-center">
 <title>Recap of eventstorming session</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/event-storming/05-read-models.png"/>
+<imagedata fileref="./images/event-storming/05-query-models.png"/>
 </imageobject>
-<textobject><phrase>05 read models</phrase></textobject>
+<textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
 <simpara>As mentioned previously, the <emphasis role="strong">blue</emphasis> stickies in this diagram represent <emphasis role="strong">commands</emphasis>. We will be using the Command Query Responsibility Segregation (CQRS) pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and why we are using it and how it can result in an elegant solution.</simpara>
@@ -90,9 +90,9 @@ Eric Evans
 </mediaobject>
 </figure>
 <note>
-<simpara>We depict multiple read models above because it is possible (but not necessary) to create more than one read model, depending on the kinds of query use cases that need to be supported.</simpara>
+<simpara>We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.</simpara>
 </note>
-<simpara>For this to work predictably, the read model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
+<simpara>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
 </section>
 <section xml:id="_why_cqrs">
 <title>Why CQRS?</title>
@@ -156,17 +156,6 @@ Eric Evans
         &lt;version&gt;${axon-framework.version}&lt;/version&gt;
     &lt;/dependency&gt;</programlisting>
 <simpara>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</simpara>
-<simpara>As a reminder, this is the output produced from our eventstorming session:</simpara>
-<figure>
-<title>Recap of eventstorming session</title>
-<mediaobject>
-<imageobject>
-<imagedata fileref="./images/event-storming/05-read-models.png"/>
-</imageobject>
-<textobject><phrase>05 read models</phrase></textobject>
-</mediaobject>
-</figure>
-<simpara>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</simpara>
 </section>
 <section xml:id="identifying-commands">
 <title>Identifying Commands</title>

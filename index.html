@@ -564,7 +564,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#summary-2">4.7. Summary</a></li>
 <li><a href="#questions-2">4.8. Questions</a></li>
-<li><a href="#further-reading-2">4.9. Further Reading</a></li>
+<li><a href="#further-reading-2">4.9. Further reading</a></li>
 <li><a href="#answers-2">4.10. Answers</a></li>
 </ul>
 </li>
@@ -641,15 +641,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#implementing-queries-and-projections-10-pages">7. Implementing Queries and Projections (10 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-4">7.1. Technical requirements</a></li>
-<li><a href="#query-models">7.2. Query models</a></li>
-<li><a href="#consume-events">7.3. Consume events</a></li>
-<li><a href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></li>
-<li><a href="#creating-additional-query-read-models">7.5. Creating additional query (read) models</a></li>
-<li><a href="#historic-event-replays">7.6. Historic event replays</a>
+<li><a href="#continuing-our-design-journey-2">7.2. Continuing our design journey</a></li>
+<li><a href="#identifying-queries">7.3. Identifying queries</a></li>
+<li><a href="#consume-events">7.4. Consume events</a></li>
+<li><a href="#persisting-a-query-read-model">7.5. Persisting a query (read) model</a></li>
+<li><a href="#creating-additional-query-read-models">7.6. Creating additional query (read) models</a></li>
+<li><a href="#historic-event-replays">7.7. Historic event replays</a>
 <ul class="sectlevel3">
-<li><a href="#the-need-for-replays">7.6.1. The need for replays</a></li>
-<li><a href="#types-of-replays">7.6.2. Types of replays</a></li>
-<li><a href="#event-replay-considerations">7.6.3. Event replay considerations</a></li>
+<li><a href="#the-need-for-replays">7.7.1. The need for replays</a></li>
+<li><a href="#types-of-replays">7.7.2. Types of replays</a></li>
+<li><a href="#event-replay-considerations">7.7.3. Event replay considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -1866,7 +1867,7 @@ This is either user initiated or system initiated, in response to a domain event
 <p><strong>Policy</strong>: A set of business invariants (rules) that need to be adhered to, for an action/activity to be successfully performed.</p>
 </li>
 <li>
-<p><strong>Read Model</strong>: A piece of information required to perform an action/activity.</p>
+<p><strong>Query/Read Model</strong>: A piece of information required to perform an action/activity.</p>
 </li>
 <li>
 <p><strong>External System</strong>: A system significant to the business process, but out of scope in the current context.</p>
@@ -1963,15 +1964,15 @@ In the above illustration, we realized that, the process to handle "declined LC 
 </div>
 </div>
 <div class="sect4">
-<h5 id="4-outline-read-models"><a class="anchor" href="#4-outline-read-models"></a><a class="link" href="#4-outline-read-models">4. Outline read models</a></h5>
+<h5 id="4-outline-query-models"><a class="anchor" href="#4-outline-query-models"></a><a class="link" href="#4-outline-query-models">4. Outline query models</a></h5>
 <div class="paragraph">
 <p>Every activity requires a certain set of data to be able to be performed.
 Users will need to view out-of-band data that they need to act upon and also see the result of their actions.
-These sets of data are represented as <strong>read models</strong> (using green stickies).</p>
+These sets of data are represented as <strong>query models</strong> (using green stickies).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/event-storming/05-read-models.png" alt="05 read models">
+<img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
 <div class="title">Figure 1- 25. Big picture eventstorming workshop board</div>
 </div>
@@ -2037,13 +2038,13 @@ Eventstorming, on the other hand, uses a chronological ordering of domain events
 <p>When should you use eventstorming?</p>
 </li>
 <li>
-<p>Pick an application in your current context. Can you use eventstorming to capture domain events, actors, actions, hotspots, read models, external systems, etc. for the scenario you picked?</p>
+<p>Pick an application in your current context. Can you use eventstorming to capture domain events, actors, actions, hotspots, query models, external systems, etc. for the scenario you picked?</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="further-reading-2"><a class="anchor" href="#further-reading-2"></a><a class="link" href="#further-reading-2">4.9. Further Reading</a></h3>
+<h3 id="further-reading-2"><a class="anchor" href="#further-reading-2"></a><a class="link" href="#further-reading-2">4.9. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2187,11 +2188,11 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a><a class="link" href="#continuing-our-design-journey">5.2. Continuing our design journey</a></h3>
 <div class="paragraph">
-<p>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</p>
+<p>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
-<img src="./images/event-storming/05-read-models.png" alt="05 read models">
+<img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
 <div class="title">Figure 1- 27. Recap of eventstorming session</div>
 </div>
@@ -2222,13 +2223,13 @@ To communicate effectively, the code must be based on the same language used to 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We depict multiple read models above because it is possible (but not necessary) to create more than one read model, depending on the kinds of query use cases that need to be supported.
+We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>For this to work predictably, the read model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</p>
+<p>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2373,18 +2374,6 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="paragraph">
 <p>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</p>
 </div>
-<div class="paragraph">
-<p>As a reminder, this is the output produced from our eventstorming session:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/event-storming/05-read-models.png" alt="05 read models">
-</div>
-<div class="title">Figure 1- 29. Recap of eventstorming session</div>
-</div>
-<div class="paragraph">
-<p>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a><a class="link" href="#identifying-commands">5.5. Identifying Commands</a></h3>
@@ -2395,7 +2384,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
 </div>
-<div class="title">Figure 1- 30. Identified commands</div>
+<div class="title">Figure 1- 29. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate (the root entity) for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
@@ -2409,7 +2398,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 1- 31. First cut attempt at aggregate design</div>
+<div class="title">Figure 1- 30. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>At first glance, it appears that we have four potential entities to handle these commands:</p>
@@ -2418,7 +2407,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
 </div>
-<div class="title">Figure 1- 32. Potential aggregates at first glance</div>
+<div class="title">Figure 1- 31. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
@@ -2427,7 +2416,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="326" height="148">
 </div>
-<div class="title">Figure 1- 33. Slightly refined aggregate structure</div>
+<div class="title">Figure 1- 32. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
 <p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
@@ -2472,7 +2461,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 34. An event-driven system</div>
+<div class="title">Figure 1- 33. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2831,7 +2820,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 35. Typical entity relationship model</div>
+<div class="title">Figure 1- 34. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information.We will look at this in more detail below.</p>
@@ -2858,7 +2847,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 36. The log data structure</div>
+<div class="title">Figure 1- 35. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance.Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes.We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -3349,7 +3338,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 37. Validations during the submit LC process</div>
+<div class="title">Figure 1- 36. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -4052,7 +4041,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 38. Commands from the event storming session</div>
+<div class="title">Figure 1- 37. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -4061,7 +4050,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 39. Decomposed commands</div>
+<div class="title">Figure 1- 38. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4212,7 +4201,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 40. Revised commands</div>
+<div class="title">Figure 1- 39. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4608,7 +4597,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvc.png" alt="mvc">
 </div>
-<div class="title">Figure 1- 41. MVC design pattern</div>
+<div class="title">Figure 1- 40. MVC design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4648,7 +4637,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
 </div>
-<div class="title">Figure 1- 42. MVP design pattern</div>
+<div class="title">Figure 1- 41. MVP design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4676,7 +4665,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 43. MVVM design pattern</div>
+<div class="title">Figure 1- 42. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4719,7 +4708,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 44. Start LC creation screen</div>
+<div class="title">Figure 1- 43. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5321,7 +5310,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 45. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 44. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5330,7 +5319,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 44</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 43</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6016,7 +6005,22 @@ The best view comes after the hardest climb.
 </div>
 </div>
 <div class="sect2">
-<h3 id="query-models"><a class="anchor" href="#query-models"></a><a class="link" href="#query-models">7.2. Query models</a></h3>
+<h3 id="continuing-our-design-journey-2"><a class="anchor" href="#continuing-our-design-journey-2"></a><a class="link" href="#continuing-our-design-journey-2">7.2. Continuing our design journey</a></h3>
+<div class="paragraph">
+<p>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/event-storming/05-query-models.png" alt="05 query models">
+</div>
+<div class="title">Figure 1- 45. Recap of eventstorming session</div>
+</div>
+<div class="paragraph">
+<p>As mentioned previously, the <strong>green</strong> stickies</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a><a class="link" href="#identifying-queries">7.3. Identifying queries</a></h3>
 <div class="paragraph">
 <p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
 </div>
@@ -6044,7 +6048,7 @@ The best view comes after the hardest climb.
 <p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
 </li>
 <li>
-<p>The external world is notified by publishing these domain events onto an event bus.</p>
+<p>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</p>
 </li>
 </ol>
 </div>
@@ -6066,7 +6070,7 @@ We have already seen the command side flow in action in Chapter 5 - Implementing
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>An event listening component listens to these domain events.</p>
+<p>An event listening component listens to these domain events published on the event bus.</p>
 </li>
 <li>
 <p>Constructs a purpose-built query model to satisfy a specific query use case.</p>
@@ -6084,7 +6088,7 @@ We have already seen the command side flow in action in Chapter 5 - Implementing
 </div>
 </div>
 <div class="sect2">
-<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.3. Consume events</a></h3>
+<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.4. Consume events</a></h3>
 <div class="paragraph">
 <p>As seen in chapter 5, when starting a new LC application, the importer sends a <code>StartNewLCApplicationCommand</code>, which results in the <code>LCApplicationStartedEvent</code> being emitted as shown here:</p>
 </div>
@@ -6171,21 +6175,21 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect2">
-<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.4. Persisting a query (read) model</a></h3>
+<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.5. Persisting a query (read) model</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.5. Creating additional query (read) models</a></h3>
+<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.6. Creating additional query (read) models</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.6. Historic event replays</a></h3>
+<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.7. Historic event replays</a></h3>
 <div class="sect3">
-<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.6.1. The need for replays</a></h4>
+<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.7.1. The need for replays</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.6.2. Types of replays</a></h4>
+<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.7.2. Types of replays</a></h4>
 <div class="sect4">
 <h5 id="full-event-replays"><a class="anchor" href="#full-event-replays"></a><a class="link" href="#full-event-replays">Full event replays</a></h5>
 
@@ -6200,7 +6204,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.6.3. Event replay considerations</a></h4>
+<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.7.3. Event replay considerations</a></h4>
 <div class="sect4">
 <h5 id="application-availability"><a class="anchor" href="#application-availability"></a><a class="link" href="#application-availability">Application availability</a></h5>
 
@@ -6435,7 +6439,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-23 15:51:11 UTC
+Last updated 2021-08-23 22:02:50 UTC
 </div>
 </div>
 </body>

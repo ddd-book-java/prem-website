@@ -556,11 +556,11 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
 <div class="paragraph">
-<p>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. This is the As a reminder, this is the output produced from our eventstorming session:</p>
+<p>In the previous chapter, we discussed eventstorming as  a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
-<img src="./images/event-storming/05-read-models.png" alt="05 read models">
+<img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
 <div class="title">Figure 1. Recap of eventstorming session</div>
 </div>
@@ -591,13 +591,13 @@ To communicate effectively, the code must be based on the same language used to 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We depict multiple read models above because it is possible (but not necessary) to create more than one read model, depending on the kinds of query use cases that need to be supported.
+We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>For this to work predictably, the read model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</p>
+<p>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</p>
 </div>
 </div>
 <div class="sect3">
@@ -742,18 +742,6 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="paragraph">
 <p>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</p>
 </div>
-<div class="paragraph">
-<p>As a reminder, this is the output produced from our eventstorming session:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/event-storming/05-read-models.png" alt="05 read models">
-</div>
-<div class="title">Figure 3. Recap of eventstorming session</div>
-</div>
-<div class="paragraph">
-<p>The blue stickies in this diagram represent commands. Let&#8217;s look at how to implement these commands using the Axon framework.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a>Identifying Commands</h3>
@@ -764,7 +752,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
 </div>
-<div class="title">Figure 4. Identified commands</div>
+<div class="title">Figure 3. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate (the root entity) for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
@@ -778,7 +766,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 5. First cut attempt at aggregate design</div>
+<div class="title">Figure 4. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>At first glance, it appears that we have four potential entities to handle these commands:</p>
@@ -787,7 +775,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
 </div>
-<div class="title">Figure 6. Potential aggregates at first glance</div>
+<div class="title">Figure 5. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
@@ -796,7 +784,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="326" height="148">
 </div>
-<div class="title">Figure 7. Slightly refined aggregate structure</div>
+<div class="title">Figure 6. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
 <p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
@@ -841,7 +829,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 8. An event-driven system</div>
+<div class="title">Figure 7. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1200,7 +1188,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 9. Typical entity relationship model</div>
+<div class="title">Figure 8. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information.We will look at this in more detail below.</p>
@@ -1227,7 +1215,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 10. The log data structure</div>
+<div class="title">Figure 9. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance.Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes.We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -1718,7 +1706,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 11. Validations during the submit LC process</div>
+<div class="title">Figure 10. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -2366,7 +2354,7 @@ Wheat bread</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-23 15:51:10 UTC
+Last updated 2021-08-23 22:02:49 UTC
 </div>
 </div>
 </body>
