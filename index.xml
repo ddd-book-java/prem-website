@@ -631,17 +631,17 @@ Bob Goff
 <partintro>
 <simpara>In Part 2, we will implement a real-world application using JVM-based technologies such as Vaadin, Spring Boot, Axon Framework, Cadence, among others.</simpara>
 </partintro>
-<chapter xml:id="domain-analysis-and-modeling" role="text-justify">
+<chapter xml:id="_domain_analysis_and_modeling" role="text-justify">
 <title>Domain Analysis and Modeling</title>
 <blockquote>
 <attribution>
 Chinese Proverb
 </attribution>
-<simpara>He who asks a question remains a fool for five minutes. He who does not ask remains a fool forever.</simpara>
+<simpara>He who asks a question remains a fool for five minutes.He who does not ask remains a fool forever.</simpara>
 </blockquote>
 <section xml:id="introduction-2">
 <title>Introduction</title>
-<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail. Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts. In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
+<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail.Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts.In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
 <simpara>The following topics will be covered in this chapter:</simpara>
 <itemizedlist>
 <listitem>
@@ -657,7 +657,7 @@ Chinese Proverb
 <simpara>EventStorming</simpara>
 </listitem>
 </itemizedlist>
-<simpara>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved. Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</simpara>
+<simpara>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved.Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</simpara>
 </section>
 <section xml:id="technical-requirements">
 <title>Technical requirements</title>
@@ -1166,7 +1166,7 @@ Eventstorming, on the other hand, uses a chronological ordering of domain events
 </orderedlist>
 </section>
 </chapter>
-<chapter xml:id="implementing-domain-logic" role="text-justify">
+<chapter xml:id="_implementing_domain_logic" role="text-justify">
 <title>Implementing Domain Logic</title>
 <blockquote>
 <attribution>
@@ -1239,7 +1239,7 @@ Eric Evans
 <simpara>As covered in chapter 3, the CQRS pattern separates <emphasis role="strong">write</emphasis> (operations that mutate state) and <emphasis role="strong">read</emphasis> (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let&#8217;s look at what it means to apply CQRS in practical terms.</simpara>
 <section xml:id="recap-what-is-cqrs">
 <title>Recap: What is CQRS</title>
-<simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates and enquiries. This is depicted in the following diagram:</simpara>
+<simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates (commands) and enquiries. This is depicted in the following diagram:</simpara>
 <figure>
 <title>Traditional versus CQRS Architecture</title>
 <mediaobject>
@@ -1256,7 +1256,7 @@ Eric Evans
 </section>
 <section xml:id="_why_cqrs">
 <title>Why CQRS?</title>
-<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios. We discuss some of these scenarios below:</simpara>
+<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios.We discuss some of these scenarios below:</simpara>
 <itemizedlist>
 <listitem>
 <simpara><emphasis role="strong">Volume imbalance between read and writes</emphasis>: In most systems, read operations often outnumber write operations by significant orders of magnitude. For example, consider the number of times a trader checks stock prices vs. the number of times they actually transact (buy or sell stock trades). It is also usually true that write operations are the ones that make businesses money. Having a single model for both reads and writes in a system with a majority of read operations can overwhelm a system to an extent where write performance can start getting affected.</simpara>
@@ -1268,19 +1268,50 @@ Eric Evans
 <simpara><emphasis role="strong">Different security requirements</emphasis>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</simpara>
 </listitem>
 <listitem>
-<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
+<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
 </listitem>
 </itemizedlist>
 <note>
-<simpara>CQRS is by no means a silver bullet. Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems. Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.</simpara>
+<simpara>CQRS is by no means a silver bullet.Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems.Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.</simpara>
 </note>
 <simpara>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the Spring and Axon frameworks.</simpara>
 </section>
 <section xml:id="tooling-choices">
 <title>Tooling choices</title>
-<simpara>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</link><footnote><simpara><link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</link></simpara></footnote>, which is worth taking a look at. Using a <emphasis>good</emphasis> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <link xl:href="http://axonframework.org/">Axon Framework</link><footnote><simpara><link xl:href="http://axonframework.org/">http://axonframework.org/</link></simpara></footnote> to implement application functionality as we have real-world experience of having used in large scale enterprise development. There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
+<simpara>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</link><footnote><simpara><link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</link></simpara></footnote>, which is worth taking a look at. Using a <emphasis>good</emphasis> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <link xl:href="http://axonframework.org/">Axon Framework</link><footnote><simpara><link xl:href="http://axonframework.org/">http://axonframework.org/</link></simpara></footnote> to implement application functionality as we have real-world experience of having used in large scale enterprise development.There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
 </section>
 </section>
+<section xml:id="_implementing_the_command_side">
+<title>Implementing the command side</title>
+<simpara>In this section, we will focus on implementing the command side of the application. This is where we expect all the business logic of the application to be implemented. Logically, it looks as shown here:</simpara>
+<figure role="text-center">
+<title>CQRS application&#8201;&#8212;&#8201;command side</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/cqrs/cqrs-command-side.png"/>
+</imageobject>
+<textobject><phrase>cqrs command side</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>The high level sequence on the command side is described here:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>A request to mutate state (command) is received.</simpara>
+</listitem>
+<listitem>
+<simpara>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</simpara>
+</listitem>
+<listitem>
+<simpara>If business invariants (validations) are satisfied, one or more domain events are published.</simpara>
+</listitem>
+<listitem>
+<simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
+</listitem>
+<listitem>
+<simpara>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</simpara>
+</listitem>
+</orderedlist>
+<simpara>Let&#8217;s look at how we can implement this in the context of our Letter of Credit (LC) issuance application.</simpara>
 <section xml:id="bootstrapping-the-application">
 <title>Bootstrapping the application</title>
 <simpara>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <link xl:href="https://start.spring.io">https://start.spring.io</link> to create this application. Here, we will make use of the <literal>spring</literal> CLI to bootstrap the application.</simpara>
@@ -1318,7 +1349,7 @@ Eric Evans
 <simpara>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</simpara>
 </section>
 <section xml:id="identifying-commands">
-<title>Identifying Commands</title>
+<title>Identifying commands</title>
 <simpara>From the eventstorming session in the previous chapter, we have the following commands to start with:</simpara>
 <figure role="text-center">
 <title>Identified commands</title>
@@ -1330,8 +1361,9 @@ Eric Evans
 </mediaobject>
 </figure>
 <simpara>Commands are always directed to an aggregate (the root entity) for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</simpara>
+</section>
 <section xml:id="_identifying_aggregates">
-<title>Identifying Aggregates</title>
+<title>Identifying aggregates</title>
 <simpara>Looking at the output of the eventstorming session of our LC (Letter of Credit) application, one potential grouping can be as follows:</simpara>
 <figure>
 <title>First cut attempt at aggregate design</title>
@@ -3476,7 +3508,7 @@ Anonymous
 </section>
 <section xml:id="continuing-our-design-journey-2">
 <title>Continuing our design journey</title>
-<simpara>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<simpara>In <link linkend="_domain_analysis_and_modeling">Chapter 4 - Domain analysis and modeling</link>, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
 <figure role="text-center">
 <title>Recap of eventstorming session</title>
 <mediaobject>
@@ -3486,42 +3518,36 @@ Anonymous
 <textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>As mentioned previously, the <emphasis role="strong">green</emphasis> stickies</simpara>
+<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <link linkend="_why_cqrs">Why CQRS</link> section in <link linkend="_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</simpara>
 </section>
-<section xml:id="identifying-queries">
-<title>Identifying queries</title>
-<simpara>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
+<section xml:id="applying-cqrs-2">
+<title>Applying CQRS</title>
+<simpara>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</simpara>
+<section xml:id="why-cqrs">
+<title>Why CQRS?</title>
+<simpara>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>One for the command side</simpara>
+</listitem>
+<listitem>
+<simpara>One or more for the query side</simpara>
+</listitem>
+</itemizedlist>
+<simpara>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
-<title>CQRS application</title>
+<title>CQRS application&#8201;&#8212;&#8201;query side</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/cqrs/cqrs-application.png"/>
+<imagedata fileref="./images/cqrs/cqrs-query-side.png"/>
 </imageobject>
-<textobject><phrase>cqrs application</phrase></textobject>
+<textobject><phrase>cqrs query side</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara><emphasis role="strong">On the command side:</emphasis></simpara>
-<orderedlist numeration="arabic">
-<listitem>
-<simpara>A request to mutate state (command) is received.</simpara>
-</listitem>
-<listitem>
-<simpara>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</simpara>
-</listitem>
-<listitem>
-<simpara>If business invariants (validations) are satisfied, one or more domain events are published.</simpara>
-</listitem>
-<listitem>
-<simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
-</listitem>
-<listitem>
-<simpara>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</simpara>
-</listitem>
-</orderedlist>
 <note>
-<simpara>We have already seen the command side flow in action in Chapter 5 - Implementing Domain Logic.</simpara>
+<simpara>Please refer to the section on <link linkend="_implementing_the_command_side">implementing the command side</link> in Chapter 5 for a detailed explanation of how the command side is implemented.</simpara>
 </note>
-<simpara><emphasis role="strong">On the query side:</emphasis></simpara>
+<simpara>The high level sequence on the query side is described here:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
 <simpara>An event listening component listens to these domain events published on the event bus.</simpara>
@@ -3536,7 +3562,32 @@ Anonymous
 <simpara>This query model is then exposed in the form of an API.</simpara>
 </listitem>
 </orderedlist>
+<note>
+<simpara>Note how there can exist more than one query side component to handle respective scenarios.</simpara>
+</note>
 <simpara>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</simpara>
+</section>
+<section xml:id="tooling-choices-2">
+<title>Tooling choices</title>
+
+</section>
+</section>
+<section xml:id="implementing-the-query-side">
+<title>Implementing the query side</title>
+<section xml:id="identifying-queries">
+<title>Identifying queries</title>
+<simpara>From the eventstorming session, we have the following queries to start with:</simpara>
+<figure role="text-center">
+<title>Identified queries</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/potential-commands.png"/>
+</imageobject>
+<textobject><phrase>potential commands</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>These query models are an absolute necessity to implement basic functionality dictated by business requirements. But it is possible and very likely that we will need additional query models as the system requirements evolve. We will enhance our application to support these queries as and when the need arises.</simpara>
+</section>
 </section>
 <section xml:id="consume-events">
 <title>Consume events</title>

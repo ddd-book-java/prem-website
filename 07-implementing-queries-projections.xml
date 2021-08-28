@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Queries and Projections (10 pages)</title>
-<date>2021-08-23</date>
+<date>2021-08-28</date>
 </info>
 <section xml:id="implementing-queries-and-projections-10-pages" role="text-justify">
 <title>Implementing Queries and Projections (10 pages)</title>
@@ -61,7 +61,7 @@ Anonymous
 </section>
 <section xml:id="continuing-our-design-journey">
 <title>Continuing our design journey</title>
-<simpara>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
+<simpara>In <link linkend="_domain_analysis_and_modeling">Chapter 4 - Domain analysis and modeling</link>, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</simpara>
 <figure role="text-center">
 <title>Recap of eventstorming session</title>
 <mediaobject>
@@ -71,42 +71,36 @@ Anonymous
 <textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>As mentioned previously, the <emphasis role="strong">green</emphasis> stickies</simpara>
+<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <link linkend="_why_cqrs">Why CQRS</link> section in <link linkend="_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</simpara>
 </section>
-<section xml:id="identifying-queries">
-<title>Identifying queries</title>
-<simpara>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
+<section xml:id="applying-cqrs">
+<title>Applying CQRS</title>
+<simpara>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</simpara>
+<section xml:id="why-cqrs">
+<title>Why CQRS?</title>
+<simpara>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>One for the command side</simpara>
+</listitem>
+<listitem>
+<simpara>One or more for the query side</simpara>
+</listitem>
+</itemizedlist>
+<simpara>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
-<title>CQRS application</title>
+<title>CQRS application&#8201;&#8212;&#8201;query side</title>
 <mediaobject>
 <imageobject>
-<imagedata fileref="./images/cqrs/cqrs-application.png"/>
+<imagedata fileref="./images/cqrs/cqrs-query-side.png"/>
 </imageobject>
-<textobject><phrase>cqrs application</phrase></textobject>
+<textobject><phrase>cqrs query side</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara><emphasis role="strong">On the command side:</emphasis></simpara>
-<orderedlist numeration="arabic">
-<listitem>
-<simpara>A request to mutate state (command) is received.</simpara>
-</listitem>
-<listitem>
-<simpara>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</simpara>
-</listitem>
-<listitem>
-<simpara>If business invariants (validations) are satisfied, one or more domain events are published.</simpara>
-</listitem>
-<listitem>
-<simpara>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</simpara>
-</listitem>
-<listitem>
-<simpara>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</simpara>
-</listitem>
-</orderedlist>
 <note>
-<simpara>We have already seen the command side flow in action in Chapter 5 - Implementing Domain Logic.</simpara>
+<simpara>Please refer to the section on <link linkend="_implementing_the_command_side">implementing the command side</link> in Chapter 5 for a detailed explanation of how the command side is implemented.</simpara>
 </note>
-<simpara><emphasis role="strong">On the query side:</emphasis></simpara>
+<simpara>The high level sequence on the query side is described here:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
 <simpara>An event listening component listens to these domain events published on the event bus.</simpara>
@@ -121,7 +115,32 @@ Anonymous
 <simpara>This query model is then exposed in the form of an API.</simpara>
 </listitem>
 </orderedlist>
+<note>
+<simpara>Note how there can exist more than one query side component to handle respective scenarios.</simpara>
+</note>
 <simpara>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</simpara>
+</section>
+<section xml:id="tooling-choices">
+<title>Tooling choices</title>
+
+</section>
+</section>
+<section xml:id="implementing-the-query-side">
+<title>Implementing the query side</title>
+<section xml:id="identifying-queries">
+<title>Identifying queries</title>
+<simpara>From the eventstorming session, we have the following queries to start with:</simpara>
+<figure role="text-center">
+<title>Identified queries</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/potential-commands.png"/>
+</imageobject>
+<textobject><phrase>potential commands</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>These query models are an absolute necessity to implement basic functionality dictated by business requirements. But it is possible and very likely that we will need additional query models as the system requirements evolve. We will enhance our application to support these queries as and when the need arises.</simpara>
+</section>
 </section>
 <section xml:id="consume-events">
 <title>Consume events</title>

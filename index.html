@@ -539,7 +539,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the Real World</a>
 <ul class="sectlevel1">
-<li><a href="#domain-analysis-and-modeling">4. Domain Analysis and Modeling</a>
+<li><a href="#_domain_analysis_and_modeling">4. Domain Analysis and Modeling</a>
 <ul class="sectlevel2">
 <li><a href="#introduction-2">4.1. Introduction</a></li>
 <li><a href="#technical-requirements">4.2. Technical requirements</a></li>
@@ -568,7 +568,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#answers-2">4.10. Answers</a></li>
 </ul>
 </li>
-<li><a href="#implementing-domain-logic">5. Implementing Domain Logic</a>
+<li><a href="#_implementing_domain_logic">5. Implementing Domain Logic</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-2">5.1. Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey">5.2. Continuing our design journey</a></li>
@@ -579,34 +579,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#tooling-choices">5.3.3. Tooling choices</a></li>
 </ul>
 </li>
-<li><a href="#bootstrapping-the-application">5.4. Bootstrapping the application</a></li>
-<li><a href="#identifying-commands">5.5. Identifying Commands</a>
+<li><a href="#_implementing_the_command_side">5.4. Implementing the command side</a>
 <ul class="sectlevel3">
-<li><a href="#_identifying_aggregates">5.5.1. Identifying Aggregates</a></li>
-<li><a href="#test-driving-the-system">5.5.2. Test-driving the system</a></li>
-<li><a href="#implementing-the-command">5.5.3. Implementing the command</a></li>
-<li><a href="#implementing-the-event">5.5.4. Implementing the event</a></li>
-<li><a href="#designing-the-aggregate">5.5.5. Designing the aggregate</a></li>
+<li><a href="#bootstrapping-the-application">5.4.1. Bootstrapping the application</a></li>
+<li><a href="#identifying-commands">5.4.2. Identifying commands</a></li>
+<li><a href="#_identifying_aggregates">5.4.3. Identifying aggregates</a></li>
+<li><a href="#test-driving-the-system">5.4.4. Test-driving the system</a></li>
+<li><a href="#implementing-the-command">5.4.5. Implementing the command</a></li>
+<li><a href="#implementing-the-event">5.4.6. Implementing the event</a></li>
+<li><a href="#designing-the-aggregate">5.4.7. Designing the aggregate</a></li>
 </ul>
 </li>
-<li><a href="#_persisting_aggregates">5.6. Persisting aggregates</a>
+<li><a href="#_persisting_aggregates">5.5. Persisting aggregates</a>
 <ul class="sectlevel3">
-<li><a href="#_state_stored_aggregates">5.6.1. State stored aggregates</a></li>
-<li><a href="#_event_sourced_aggregates">5.6.2. Event sourced aggregates</a></li>
-<li><a href="#persistence-technology-choices">5.6.3. Persistence technology choices</a></li>
-<li><a href="#which-persistence-mechanism-should-we-choose">5.6.4. Which persistence mechanism should we choose?</a></li>
+<li><a href="#_state_stored_aggregates">5.5.1. State stored aggregates</a></li>
+<li><a href="#_event_sourced_aggregates">5.5.2. Event sourced aggregates</a></li>
+<li><a href="#persistence-technology-choices">5.5.3. Persistence technology choices</a></li>
+<li><a href="#which-persistence-mechanism-should-we-choose">5.5.4. Which persistence mechanism should we choose?</a></li>
 </ul>
 </li>
-<li><a href="#enforcing-policies">5.7. Enforcing policies</a>
+<li><a href="#enforcing-policies">5.6. Enforcing policies</a>
 <ul class="sectlevel3">
-<li><a href="#structural-validations">5.7.1. Structural validations</a></li>
-<li><a href="#business-rule-enforcements">5.7.2. Business rule enforcements</a></li>
+<li><a href="#structural-validations">5.6.1. Structural validations</a></li>
+<li><a href="#business-rule-enforcements">5.6.2. Business rule enforcements</a></li>
 </ul>
 </li>
-<li><a href="#summary-3">5.8. Summary</a></li>
-<li><a href="#questions-3">5.9. Questions</a></li>
-<li><a href="#further-reading-3">5.10. Further reading</a></li>
-<li><a href="#answers-3">5.11. Answers</a></li>
+<li><a href="#summary-3">5.7. Summary</a></li>
+<li><a href="#questions-3">5.8. Questions</a></li>
+<li><a href="#further-reading-3">5.9. Further reading</a></li>
+<li><a href="#answers-3">5.10. Answers</a></li>
 </ul>
 </li>
 <li><a href="#implementing-the-user-interfacetask-based">6. Implementing the User Interface&#8201;&#8212;&#8201;Task-based</a>
@@ -642,15 +643,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-4">7.1. Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey-2">7.2. Continuing our design journey</a></li>
-<li><a href="#identifying-queries">7.3. Identifying queries</a></li>
-<li><a href="#consume-events">7.4. Consume events</a></li>
-<li><a href="#persisting-a-query-read-model">7.5. Persisting a query (read) model</a></li>
-<li><a href="#creating-additional-query-read-models">7.6. Creating additional query (read) models</a></li>
-<li><a href="#historic-event-replays">7.7. Historic event replays</a>
+<li><a href="#applying-cqrs-2">7.3. Applying CQRS</a>
 <ul class="sectlevel3">
-<li><a href="#the-need-for-replays">7.7.1. The need for replays</a></li>
-<li><a href="#types-of-replays">7.7.2. Types of replays</a></li>
-<li><a href="#event-replay-considerations">7.7.3. Event replay considerations</a></li>
+<li><a href="#why-cqrs">7.3.1. Why CQRS?</a></li>
+<li><a href="#tooling-choices-2">7.3.2. Tooling choices</a></li>
+</ul>
+</li>
+<li><a href="#implementing-the-query-side">7.4. Implementing the query side</a>
+<ul class="sectlevel3">
+<li><a href="#identifying-queries">7.4.1. Identifying queries</a></li>
+</ul>
+</li>
+<li><a href="#consume-events">7.5. Consume events</a></li>
+<li><a href="#persisting-a-query-read-model">7.6. Persisting a query (read) model</a></li>
+<li><a href="#creating-additional-query-read-models">7.7. Creating additional query (read) models</a></li>
+<li><a href="#historic-event-replays">7.8. Historic event replays</a>
+<ul class="sectlevel3">
+<li><a href="#the-need-for-replays">7.8.1. The need for replays</a></li>
+<li><a href="#types-of-replays">7.8.2. Types of replays</a></li>
+<li><a href="#event-replay-considerations">7.8.3. Event replay considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -909,7 +920,7 @@ For a more comprehensive list of <a href="http://agilemodeling.com/essays/enterp
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/tech-debt.png" alt="tech debt" width="844" height="406">
+<img src="./images/tech-debt.png" alt="tech debt" width="1126" height="478">
 </div>
 <div class="title">Figure 1- 3. Technical Debt&#8201;&#8212;&#8201;Implications</div>
 </div>
@@ -1477,11 +1488,11 @@ In Part 2, we will implement a real-world application using JVM-based technologi
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="domain-analysis-and-modeling"><a class="anchor" href="#domain-analysis-and-modeling"></a><a class="link" href="#domain-analysis-and-modeling">4. Domain Analysis and Modeling</a></h2>
+<h2 id="_domain_analysis_and_modeling"><a class="anchor" href="#_domain_analysis_and_modeling"></a><a class="link" href="#_domain_analysis_and_modeling">4. Domain Analysis and Modeling</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
-He who asks a question remains a fool for five minutes. He who does not ask remains a fool forever.
+He who asks a question remains a fool for five minutes.He who does not ask remains a fool forever.
 </blockquote>
 <div class="attribution">
 &#8212; Chinese Proverb
@@ -1490,7 +1501,7 @@ He who asks a question remains a fool for five minutes. He who does not ask rema
 <div class="sect2">
 <h3 id="introduction-2"><a class="anchor" href="#introduction-2"></a><a class="link" href="#introduction-2">4.1. Introduction</a></h3>
 <div class="paragraph">
-<p>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail. Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts. In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</p>
+<p>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail.Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts.In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</p>
 </div>
 <div class="paragraph">
 <p>The following topics will be covered in this chapter:</p>
@@ -1512,7 +1523,7 @@ He who asks a question remains a fool for five minutes. He who does not ask rema
 </ul>
 </div>
 <div class="paragraph">
-<p>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved. Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</p>
+<p>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved.Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2119,7 +2130,7 @@ Eventstorming, on the other hand, uses a chronological ordering of domain events
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="implementing-domain-logic"><a class="anchor" href="#implementing-domain-logic"></a><a class="link" href="#implementing-domain-logic">5. Implementing Domain Logic</a></h2>
+<h2 id="_implementing_domain_logic"><a class="anchor" href="#_implementing_domain_logic"></a><a class="link" href="#_implementing_domain_logic">5. Implementing Domain Logic</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -2208,7 +2219,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="sect3">
 <h4 id="recap-what-is-cqrs"><a class="anchor" href="#recap-what-is-cqrs"></a><a class="link" href="#recap-what-is-cqrs">5.3.1. Recap: What is CQRS</a></h4>
 <div class="paragraph">
-<p>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates and enquiries. This is depicted in the following diagram:</p>
+<p>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates (commands) and enquiries. This is depicted in the following diagram:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2235,7 +2246,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect3">
 <h4 id="_why_cqrs"><a class="anchor" href="#_why_cqrs"></a><a class="link" href="#_why_cqrs">5.3.2. Why CQRS?</a></h4>
 <div class="paragraph">
-<p>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios. We discuss some of these scenarios below:</p>
+<p>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios.We discuss some of these scenarios below:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2249,7 +2260,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <p><strong>Different security requirements</strong>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
 </li>
 <li>
-<p><strong>More uniform distribution of complexity</strong>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
+<p><strong>More uniform distribution of complexity</strong>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
 </li>
 </ul>
 </div>
@@ -2260,7 +2271,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-CQRS is by no means a silver bullet. Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems. Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.
+CQRS is by no means a silver bullet.Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems.Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.
 </td>
 </tr>
 </table>
@@ -2272,12 +2283,48 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 <div class="sect3">
 <h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a><a class="link" href="#tooling-choices">5.3.3. Tooling choices</a></h4>
 <div class="paragraph">
-<p>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>, which is worth taking a look at. Using a <em>good</em> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <a href="http://axonframework.org/">Axon Framework</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> to implement application functionality as we have real-world experience of having used in large scale enterprise development. There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> that are worth exploring as well.</p>
+<p>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>, which is worth taking a look at. Using a <em>good</em> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <a href="http://axonframework.org/">Axon Framework</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> to implement application functionality as we have real-world experience of having used in large scale enterprise development.There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> that are worth exploring as well.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bootstrapping-the-application"><a class="anchor" href="#bootstrapping-the-application"></a><a class="link" href="#bootstrapping-the-application">5.4. Bootstrapping the application</a></h3>
+<h3 id="_implementing_the_command_side"><a class="anchor" href="#_implementing_the_command_side"></a><a class="link" href="#_implementing_the_command_side">5.4. Implementing the command side</a></h3>
+<div class="paragraph">
+<p>In this section, we will focus on implementing the command side of the application. This is where we expect all the business logic of the application to be implemented. Logically, it looks as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/cqrs-command-side.png" alt="cqrs command side">
+</div>
+<div class="title">Figure 1- 29. CQRS application&#8201;&#8212;&#8201;command side</div>
+</div>
+<div class="paragraph">
+<p>The high level sequence on the command side is described here:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A request to mutate state (command) is received.</p>
+</li>
+<li>
+<p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
+</li>
+<li>
+<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
+</li>
+<li>
+<p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
+</li>
+<li>
+<p>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at how we can implement this in the context of our Letter of Credit (LC) issuance application.</p>
+</div>
+<div class="sect3">
+<h4 id="bootstrapping-the-application"><a class="anchor" href="#bootstrapping-the-application"></a><a class="link" href="#bootstrapping-the-application">5.4.1. Bootstrapping the application</a></h4>
 <div class="paragraph">
 <p>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <a href="https://start.spring.io" class="bare">https://start.spring.io</a> to create this application. Here, we will make use of the <code>spring</code> CLI to bootstrap the application.</p>
 </div>
@@ -2375,8 +2422,8 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <p>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a><a class="link" href="#identifying-commands">5.5. Identifying Commands</a></h3>
+<div class="sect3">
+<h4 id="identifying-commands"><a class="anchor" href="#identifying-commands"></a><a class="link" href="#identifying-commands">5.4.2. Identifying commands</a></h4>
 <div class="paragraph">
 <p>From the eventstorming session in the previous chapter, we have the following commands to start with:</p>
 </div>
@@ -2384,13 +2431,14 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
 </div>
-<div class="title">Figure 1- 29. Identified commands</div>
+<div class="title">Figure 1- 30. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate (the root entity) for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_identifying_aggregates"><a class="anchor" href="#_identifying_aggregates"></a><a class="link" href="#_identifying_aggregates">5.5.1. Identifying Aggregates</a></h4>
+<h4 id="_identifying_aggregates"><a class="anchor" href="#_identifying_aggregates"></a><a class="link" href="#_identifying_aggregates">5.4.3. Identifying aggregates</a></h4>
 <div class="paragraph">
 <p>Looking at the output of the eventstorming session of our LC (Letter of Credit) application, one potential grouping can be as follows:</p>
 </div>
@@ -2398,7 +2446,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 1- 30. First cut attempt at aggregate design</div>
+<div class="title">Figure 1- 31. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>At first glance, it appears that we have four potential entities to handle these commands:</p>
@@ -2407,7 +2455,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
 </div>
-<div class="title">Figure 1- 31. Potential aggregates at first glance</div>
+<div class="title">Figure 1- 32. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
@@ -2416,7 +2464,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="326" height="148">
 </div>
-<div class="title">Figure 1- 32. Slightly refined aggregate structure</div>
+<div class="title">Figure 1- 33. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
 <p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
@@ -2438,7 +2486,7 @@ For a more detailed explanation of the differences between aggregates, aggregate
 </div>
 </div>
 <div class="sect3">
-<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.5.2. Test-driving the system</a></h4>
+<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.4.4. Test-driving the system</a></h4>
 <div class="paragraph">
 <p>While we have a reasonably good conceptual understanding of the system, we are still in the process of refining this understanding. Test-driving the system allows us to exercise our understanding by acting as the first client of the solution that we are producing.</p>
 </div>
@@ -2461,7 +2509,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 33. An event-driven system</div>
+<div class="title">Figure 1- 34. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2587,7 +2635,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.5.3. Implementing the command</a></h4>
+<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.4.5. Implementing the command</a></h4>
 <div class="paragraph">
 <p>The <code>CreateLCApplicationCommand</code> in the previous simplistic example does not carry any state. Realistically, the command will likely look something like what is depicted as follows:</p>
 </div>
@@ -2653,7 +2701,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.5.4. Implementing the event</a></h4>
+<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.4.6. Implementing the event</a></h4>
 <div class="paragraph">
 <p>In an event-driven system, mutating system state by successfully processing a command usually results in a domain event being emitted to signal the state mutation to the rest of the system. A simplified representation of a real-world <code>LCApplicationCreatedEvent</code> is shown here:</p>
 </div>
@@ -2710,7 +2758,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.5.5. Designing the aggregate</a></h4>
+<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.4.7. Designing the aggregate</a></h4>
 <div class="paragraph">
 <p>The aggregate is the place where commands are handled and events are emitted. The good thing about the test that we have written is that it is expressed in a manner that hides the implementation details. But let&#8217;s look at the implementation to be able to appreciate how we can get our tests to pass and meet the business requirement.</p>
 </div>
@@ -2794,7 +2842,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect2">
-<h3 id="_persisting_aggregates"><a class="anchor" href="#_persisting_aggregates"></a><a class="link" href="#_persisting_aggregates">5.6. Persisting aggregates</a></h3>
+<h3 id="_persisting_aggregates"><a class="anchor" href="#_persisting_aggregates"></a><a class="link" href="#_persisting_aggregates">5.5. Persisting aggregates</a></h3>
 <div class="paragraph">
 <p>When working with any system of even moderate complexity, we are required to make interactions durable.That is, interactions need to outlast system restarts, crashes, etc.So the need for persistence is a given.While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution.We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</p>
 </div>
@@ -2812,7 +2860,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <p>Let&#8217;s examine each of these techniques in more detail below:</p>
 </div>
 <div class="sect3">
-<h4 id="_state_stored_aggregates"><a class="anchor" href="#_state_stored_aggregates"></a><a class="link" href="#_state_stored_aggregates">5.6.1. State stored aggregates</a></h4>
+<h4 id="_state_stored_aggregates"><a class="anchor" href="#_state_stored_aggregates"></a><a class="link" href="#_state_stored_aggregates">5.5.1. State stored aggregates</a></h4>
 <div class="paragraph">
 <p>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate.And there is good reason for this ubiquity.Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations.For example, for our <code>LCApplication</code>, it is conceivable that we could use a relational database with a structure that would look something like below:</p>
 </div>
@@ -2820,14 +2868,14 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 34. Typical entity relationship model</div>
+<div class="title">Figure 1- 35. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information.We will look at this in more detail below.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_event_sourced_aggregates"><a class="anchor" href="#_event_sourced_aggregates"></a><a class="link" href="#_event_sourced_aggregates">5.6.2. Event sourced aggregates</a></h4>
+<h4 id="_event_sourced_aggregates"><a class="anchor" href="#_event_sourced_aggregates"></a><a class="link" href="#_event_sourced_aggregates">5.5.2. Event sourced aggregates</a></h4>
 <div class="paragraph">
 <p>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time.Similarly, relational databases have been employing commit logs to store information durably almost since their inception.However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</p>
 </div>
@@ -2847,7 +2895,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 35. The log data structure</div>
+<div class="title">Figure 1- 36. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance.Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes.We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -3151,13 +3199,13 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="persistence-technology-choices"><a class="anchor" href="#persistence-technology-choices"></a><a class="link" href="#persistence-technology-choices">5.6.3. Persistence technology choices</a></h4>
+<h4 id="persistence-technology-choices"><a class="anchor" href="#persistence-technology-choices"></a><a class="link" href="#persistence-technology-choices">5.5.3. Persistence technology choices</a></h4>
 <div class="paragraph">
 <p>If you are using a state store to persist your aggregates, using your usual evaluation process for choosing your persistence technology should suffice. However, if you are looking at event-sourced aggregates, the decision can be a bit more nuanced. In our experience, even a simple relational database can do the trick. Indeed, we had made use of a relational database to act as an event store for a high volume transactional application with billions of events. This setup worked just fine for us. It is worth noting that we were only using the event store to insert new events and loading events for a given aggregate in sequential order. However, there are a multitude of specialized technologies that have been purpose built to act as an event store that support several other value-added features such as time travel, full event replay, event payload introspection, etc. If you have such requirements, it might be worth considering other options such as NoSql databases (document stores like MongoDB or column family stores like Cassandra) or purpose-built commercial offerings such as EventStoreDB<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> and Axon Server<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> to evaluate feasibility in your context.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.6.4. Which persistence mechanism should we choose?</a></h4>
+<h4 id="which-persistence-mechanism-should-we-choose"><a class="anchor" href="#which-persistence-mechanism-should-we-choose"></a><a class="link" href="#which-persistence-mechanism-should-we-choose">5.5.4. Which persistence mechanism should we choose?</a></h4>
 <div class="paragraph">
 <p>Now that we have a reasonably good understanding of the two types of aggregate persistence mechanisms (<a href="#_state_stored_aggregates">state-stored</a> and <a href="#_event_sourced_aggregates">event-sourced</a>), it begs the question of which one we should choose. We list a few benefits of using event sourcing below:</p>
 </div>
@@ -3202,7 +3250,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="enforcing-policies"><a class="anchor" href="#enforcing-policies"></a><a class="link" href="#enforcing-policies">5.7. Enforcing policies</a></h3>
+<h3 id="enforcing-policies"><a class="anchor" href="#enforcing-policies"></a><a class="link" href="#enforcing-policies">5.6. Enforcing policies</a></h3>
 <div class="paragraph">
 <p>When processing commands, we need to enforce policies or rules. Policies come in two broad categories:</p>
 </div>
@@ -3220,7 +3268,7 @@ Wheat bread</p></td>
 <p>It may also be prudent to perform these validations in different layers of the system.And it is also common for some or all of these policy enforcements to be repeated in more than one layer of the system.However, the important thing to note is that before a command is successfully handled, all these policy enforcements are uniformly applied.Let&#8217;s look at some examples of these in the upcoming section.</p>
 </div>
 <div class="sect3">
-<h4 id="structural-validations"><a class="anchor" href="#structural-validations"></a><a class="link" href="#structural-validations">5.7.1. Structural validations</a></h4>
+<h4 id="structural-validations"><a class="anchor" href="#structural-validations"></a><a class="link" href="#structural-validations">5.6.1. Structural validations</a></h4>
 <div class="paragraph">
 <p>Currently, to create an LC application, one is required to dispatch a <code>CreateLCApplicationCommand</code>. While the command dictates a structure, none of it is enforced at the moment. Let&#8217;s correct that.</p>
 </div>
@@ -3327,7 +3375,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a><a class="link" href="#business-rule-enforcements">5.7.2. Business rule enforcements</a></h4>
+<h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a><a class="link" href="#business-rule-enforcements">5.6.2. Business rule enforcements</a></h4>
 <div class="paragraph">
 <p>Structural validations can be accomplished using information that is already available in the command.However, there is another class of validations that requires information that is not present in the incoming command itself.This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</p>
 </div>
@@ -3338,7 +3386,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 36. Validations during the submit LC process</div>
+<div class="title">Figure 1- 37. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -3868,7 +3916,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">5.8. Summary</a></h3>
+<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">5.7. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we used the outputs of the eventstorming session and used it as a primary aid to create a domain model for our bounded context. We looked at how to implement this using the command query responsibility segregation (CQRS) architecture pattern. We looked at persistence options and the implications of using event sourced vs state stored aggregates. Finally, we rounded off by looking at a variety of ways in which to perform business validations. We looked at all this through a set of code examples using Spring boot and the Axon framework.</p>
 </div>
@@ -3877,7 +3925,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions-3"><a class="anchor" href="#questions-3"></a><a class="link" href="#questions-3">5.9. Questions</a></h3>
+<h3 id="questions-3"><a class="anchor" href="#questions-3"></a><a class="link" href="#questions-3">5.8. Questions</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3893,7 +3941,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="further-reading-3"><a class="anchor" href="#further-reading-3"></a><a class="link" href="#further-reading-3">5.10. Further reading</a></h3>
+<h3 id="further-reading-3"><a class="anchor" href="#further-reading-3"></a><a class="link" href="#further-reading-3">5.9. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3942,14 +3990,14 @@ Wheat bread</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="answers-3"><a class="anchor" href="#answers-3"></a><a class="link" href="#answers-3">5.11. Answers</a></h3>
+<h3 id="answers-3"><a class="anchor" href="#answers-3"></a><a class="link" href="#answers-3">5.10. Answers</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Refer to section <a href="#_identifying_aggregates">Section 5.5.1</a></p>
+<p>Refer to section <a href="#_identifying_aggregates">Section 5.4.3</a></p>
 </li>
 <li>
-<p>Refer to section <a href="#_persisting_aggregates">Section 5.6</a>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</p>
+<p>Refer to section <a href="#_persisting_aggregates">Section 5.5</a>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</p>
 </li>
 <li>
 <p>Refer to section <a href="#_why_cqrs">Section 5.3.2</a> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</p>
@@ -4041,7 +4089,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 37. Commands from the event storming session</div>
+<div class="title">Figure 1- 38. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -4050,7 +4098,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 38. Decomposed commands</div>
+<div class="title">Figure 1- 39. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4201,7 +4249,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 39. Revised commands</div>
+<div class="title">Figure 1- 40. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4597,7 +4645,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvc.png" alt="mvc">
 </div>
-<div class="title">Figure 1- 40. MVC design pattern</div>
+<div class="title">Figure 1- 41. MVC design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4637,7 +4685,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvp.png" alt="mvp">
 </div>
-<div class="title">Figure 1- 41. MVP design pattern</div>
+<div class="title">Figure 1- 42. MVP design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4665,7 +4713,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 42. MVVM design pattern</div>
+<div class="title">Figure 1- 43. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4708,7 +4756,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 43. Start LC creation screen</div>
+<div class="title">Figure 1- 44. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5310,7 +5358,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 44. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 45. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5319,7 +5367,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 43</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 44</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6007,50 +6055,46 @@ The best view comes after the hardest climb.
 <div class="sect2">
 <h3 id="continuing-our-design-journey-2"><a class="anchor" href="#continuing-our-design-journey-2"></a><a class="link" href="#continuing-our-design-journey-2">7.2. Continuing our design journey</a></h3>
 <div class="paragraph">
-<p>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
+<p>In <a href="#_domain_analysis_and_modeling">Chapter 4 - Domain analysis and modeling</a>, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 45. Recap of eventstorming session</div>
+<div class="title">Figure 1- 46. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As mentioned previously, the <strong>green</strong> stickies</p>
+<p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <a href="#_why_cqrs">Why CQRS</a> section in <a href="#_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a><a class="link" href="#identifying-queries">7.3. Identifying queries</a></h3>
+<h3 id="applying-cqrs-2"><a class="anchor" href="#applying-cqrs-2"></a><a class="link" href="#applying-cqrs-2">7.3. Applying CQRS</a></h3>
 <div class="paragraph">
-<p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
+<p>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</p>
+</div>
+<div class="sect3">
+<h4 id="why-cqrs"><a class="anchor" href="#why-cqrs"></a><a class="link" href="#why-cqrs">7.3.1. Why CQRS?</a></h4>
+<div class="paragraph">
+<p>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One for the command side</p>
+</li>
+<li>
+<p>One or more for the query side</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/cqrs/cqrs-application.png" alt="cqrs application">
+<img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 46. CQRS application</div>
-</div>
-<div class="paragraph">
-<p><strong>On the command side:</strong></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A request to mutate state (command) is received.</p>
-</li>
-<li>
-<p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
-</li>
-<li>
-<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
-</li>
-<li>
-<p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
-</li>
-<li>
-<p>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</p>
-</li>
-</ol>
+<div class="title">Figure 1- 47. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6059,13 +6103,13 @@ The best view comes after the hardest climb.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We have already seen the command side flow in action in Chapter 5 - Implementing Domain Logic.
+Please refer to the section on <a href="#_implementing_the_command_side">implementing the command side</a> in Chapter 5 for a detailed explanation of how the command side is implemented.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p><strong>On the query side:</strong></p>
+<p>The high level sequence on the query side is described here:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6083,12 +6127,47 @@ We have already seen the command side flow in action in Chapter 5 - Implementing
 </li>
 </ol>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Note how there can exist more than one query side component to handle respective scenarios.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="tooling-choices-2"><a class="anchor" href="#tooling-choices-2"></a><a class="link" href="#tooling-choices-2">7.3.2. Tooling choices</a></h4>
+
+</div>
+</div>
 <div class="sect2">
-<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.4. Consume events</a></h3>
+<h3 id="implementing-the-query-side"><a class="anchor" href="#implementing-the-query-side"></a><a class="link" href="#implementing-the-query-side">7.4. Implementing the query side</a></h3>
+<div class="sect3">
+<h4 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a><a class="link" href="#identifying-queries">7.4.1. Identifying queries</a></h4>
+<div class="paragraph">
+<p>From the eventstorming session, we have the following queries to start with:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
+</div>
+<div class="title">Figure 1- 48. Identified queries</div>
+</div>
+<div class="paragraph">
+<p>These query models are an absolute necessity to implement basic functionality dictated by business requirements. But it is possible and very likely that we will need additional query models as the system requirements evolve. We will enhance our application to support these queries as and when the need arises.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.5. Consume events</a></h3>
 <div class="paragraph">
 <p>As seen in chapter 5, when starting a new LC application, the importer sends a <code>StartNewLCApplicationCommand</code>, which results in the <code>LCApplicationStartedEvent</code> being emitted as shown here:</p>
 </div>
@@ -6175,21 +6254,21 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect2">
-<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.5. Persisting a query (read) model</a></h3>
+<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.6. Persisting a query (read) model</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.6. Creating additional query (read) models</a></h3>
+<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.7. Creating additional query (read) models</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.7. Historic event replays</a></h3>
+<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.8. Historic event replays</a></h3>
 <div class="sect3">
-<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.7.1. The need for replays</a></h4>
+<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.8.1. The need for replays</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.7.2. Types of replays</a></h4>
+<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.8.2. Types of replays</a></h4>
 <div class="sect4">
 <h5 id="full-event-replays"><a class="anchor" href="#full-event-replays"></a><a class="link" href="#full-event-replays">Full event replays</a></h5>
 
@@ -6204,7 +6283,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.7.3. Event replay considerations</a></h4>
+<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.8.3. Event replay considerations</a></h4>
 <div class="sect4">
 <h5 id="application-availability"><a class="anchor" href="#application-availability"></a><a class="link" href="#application-availability">Application availability</a></h5>
 
@@ -6439,7 +6518,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-23 22:02:50 UTC
+Last updated 2021-08-28 11:43:26 UTC
 </div>
 </div>
 </body>

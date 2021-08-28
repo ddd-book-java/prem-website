@@ -445,7 +445,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
+<li><a href="#applying-cqrs">Applying CQRS</a>
+<ul class="sectlevel3">
+<li><a href="#why-cqrs">Why CQRS?</a></li>
+<li><a href="#tooling-choices">Tooling choices</a></li>
+</ul>
+</li>
+<li><a href="#implementing-the-query-side">Implementing the query side</a>
+<ul class="sectlevel3">
 <li><a href="#identifying-queries">Identifying queries</a></li>
+</ul>
+</li>
 <li><a href="#consume-events">Consume events</a></li>
 <li><a href="#persisting-a-query-read-model">Persisting a query (read) model</a></li>
 <li><a href="#creating-additional-query-read-models">Creating additional query (read) models</a></li>
@@ -529,7 +539,7 @@ The best view comes after the hardest climb.
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
 <div class="paragraph">
-<p>In chapter 4 - Domain analysis and modeling, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
+<p>In <a href="#_domain_analysis_and_modeling">Chapter 4 - Domain analysis and modeling</a>, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -538,41 +548,37 @@ The best view comes after the hardest climb.
 <div class="title">Figure 1. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As mentioned previously, the <strong>green</strong> stickies</p>
+<p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <a href="#_why_cqrs">Why CQRS</a> section in <a href="#_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a>Identifying queries</h3>
+<h3 id="applying-cqrs"><a class="anchor" href="#applying-cqrs"></a>Applying CQRS</h3>
 <div class="paragraph">
-<p>In chapter 5, we saw how CQRS applications make use of distinct models to service commands and queries respectively. We also saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
+<p>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</p>
+</div>
+<div class="sect3">
+<h4 id="why-cqrs"><a class="anchor" href="#why-cqrs"></a>Why CQRS?</h4>
+<div class="paragraph">
+<p>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One for the command side</p>
+</li>
+<li>
+<p>One or more for the query side</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/cqrs/cqrs-application.png" alt="cqrs application">
+<img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 2. CQRS application</div>
-</div>
-<div class="paragraph">
-<p><strong>On the command side:</strong></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A request to mutate state (command) is received.</p>
-</li>
-<li>
-<p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
-</li>
-<li>
-<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
-</li>
-<li>
-<p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
-</li>
-<li>
-<p>The external world is notified by publishing these domain events onto an event bus. The event bus is an infrastructure component onto which events are published.</p>
-</li>
-</ol>
+<div class="title">Figure 2. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -581,13 +587,13 @@ The best view comes after the hardest climb.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We have already seen the command side flow in action in Chapter 5 - Implementing Domain Logic.
+Please refer to the section on <a href="#_implementing_the_command_side">implementing the command side</a> in Chapter 5 for a detailed explanation of how the command side is implemented.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p><strong>On the query side:</strong></p>
+<p>The high level sequence on the query side is described here:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -605,8 +611,43 @@ We have already seen the command side flow in action in Chapter 5 - Implementing
 </li>
 </ol>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Note how there can exist more than one query side component to handle respective scenarios.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a>Tooling choices</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="implementing-the-query-side"><a class="anchor" href="#implementing-the-query-side"></a>Implementing the query side</h3>
+<div class="sect3">
+<h4 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a>Identifying queries</h4>
+<div class="paragraph">
+<p>From the eventstorming session, we have the following queries to start with:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
+</div>
+<div class="title">Figure 3. Identified queries</div>
+</div>
+<div class="paragraph">
+<p>These query models are an absolute necessity to implement basic functionality dictated by business requirements. But it is possible and very likely that we will need additional query models as the system requirements evolve. We will enhance our application to support these queries as and when the need arises.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -742,7 +783,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-23 22:02:49 UTC
+Last updated 2021-08-28 11:43:26 UTC
 </div>
 </div>
 </body>
