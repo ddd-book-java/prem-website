@@ -652,16 +652,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#implementing-the-query-side">7.4. Implementing the query side</a>
 <ul class="sectlevel3">
 <li><a href="#identifying-queries">7.4.1. Identifying queries</a></li>
+<li><a href="#creating-the-query-model">7.4.2. Creating the query model</a></li>
+<li><a href="#query-side-persistence-choices">7.4.3. Query side persistence choices</a></li>
+<li><a href="#consuming-the-query-model">7.4.4. Consuming the query model</a></li>
+<li><a href="#creating-additional-query-read-models">7.4.5. Creating additional query (read) models</a></li>
 </ul>
 </li>
-<li><a href="#consume-events">7.5. Consume events</a></li>
-<li><a href="#persisting-a-query-read-model">7.6. Persisting a query (read) model</a></li>
-<li><a href="#creating-additional-query-read-models">7.7. Creating additional query (read) models</a></li>
-<li><a href="#historic-event-replays">7.8. Historic event replays</a>
+<li><a href="#historic-event-replays">7.5. Historic event replays</a>
 <ul class="sectlevel3">
-<li><a href="#the-need-for-replays">7.8.1. The need for replays</a></li>
-<li><a href="#types-of-replays">7.8.2. Types of replays</a></li>
-<li><a href="#event-replay-considerations">7.8.3. Event replay considerations</a></li>
+<li><a href="#the-need-for-replays">7.5.1. The need for replays</a></li>
+<li><a href="#types-of-replays">7.5.2. Types of replays</a></li>
+<li><a href="#event-replay-considerations">7.5.3. Event replay considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -2429,7 +2430,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/potential-commands.png" alt="potential commands" width="675" height="415">
+<img src="./images/potential-commands.png" alt="potential commands" width="680" height="408">
 </div>
 <div class="title">Figure 1- 30. Identified commands</div>
 </div>
@@ -6145,11 +6146,35 @@ Note how there can exist more than one query side component to handle respective
 </div>
 <div class="sect3">
 <h4 id="tooling-choices-2"><a class="anchor" href="#tooling-choices-2"></a><a class="link" href="#tooling-choices-2">7.3.2. Tooling choices</a></h4>
-
+<div class="paragraph">
+<p>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="implementing-the-query-side"><a class="anchor" href="#implementing-the-query-side"></a><a class="link" href="#implementing-the-query-side">7.4. Implementing the query side</a></h3>
+<div class="paragraph">
+<p>When implementing the query side, we have two concerns to solve for:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Consuming domain events and persisting one or more query models.</p>
+</li>
+<li>
+<p>Exposing the query model as an API.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/cqrs-query-side-dissected.png" alt="cqrs query side dissected">
+</div>
+<div class="title">Figure 1- 48. Query side dissected</div>
+</div>
+<div class="paragraph">
+<p>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</p>
+</div>
 <div class="sect3">
 <h4 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a><a class="link" href="#identifying-queries">7.4.1. Identifying queries</a></h4>
 <div class="paragraph">
@@ -6159,15 +6184,45 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 48. Identified queries</div>
+<div class="title">Figure 1- 49. Identified queries</div>
+</div>
+<div class="paragraph">
+<p>The queries marked in green, all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
+</div>
+<div class="paragraph">
+<p>The <code>LCView</code> class is an extremely simple object devoid of any logic.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+  <td class="code"><pre><span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCView</span> {
+
+    <span style="color:#088;font-weight:bold">private</span> LCApplicationId id;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">String</span> applicantId;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">String</span> clientReference;
+    <span style="color:#088;font-weight:bold">private</span> LCState state;
+
+    <span style="color:#777">// Getters and setters omitted for brevity</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>These query models are an absolute necessity to implement basic functionality dictated by business requirements. But it is possible and very likely that we will need additional query models as the system requirements evolve. We will enhance our application to support these queries as and when the need arises.</p>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="consume-events"><a class="anchor" href="#consume-events"></a><a class="link" href="#consume-events">7.5. Consume events</a></h3>
+<div class="sect3">
+<h4 id="creating-the-query-model"><a class="anchor" href="#creating-the-query-model"></a><a class="link" href="#creating-the-query-model">7.4.2. Creating the query model</a></h4>
 <div class="paragraph">
 <p>As seen in chapter 5, when starting a new LC application, the importer sends a <code>StartNewLCApplicationCommand</code>, which results in the <code>LCApplicationStartedEvent</code> being emitted as shown here:</p>
 </div>
@@ -6215,14 +6270,28 @@ Note how there can exist more than one query side component to handle respective
 7
 8
 9
+10
+11
+12
+13
+14
+15
+16
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.eventhandling.EventHandler</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.springframework.stereotype.Component</span>;
 
+<span style="color:#007">@Component</span>
 <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationStartedEventHandler</span> {
 
-    <span style="color:#007">@EventHandler</span>                                     <i class="conum" data-value="1"></i><b>(1)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationStartedEvent event) { <i class="conum" data-value="2"></i><b>(2)</b>
-        <span style="color:#777">// Construct a query model here</span>
+    <span style="color:#007">@EventHandler</span>                                      <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationStartedEvent event) {
+        LCView view = <span style="color:#080;font-weight:bold">new</span> LCView(event.getId(),
+                        event.getApplicantId(),
+                        event.getClientReference(),
+                        event.getState());             <i class="conum" data-value="2"></i><b>(2)</b>
+        <span style="color:#777">// Perform any transformations to optimize access</span>
+        repository.save(view);                         <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</pre></td>
 </tr></table></code></pre>
@@ -6237,6 +6306,10 @@ Note how there can exist more than one query side component to handle respective
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>The handler method needs to specify the event that we intend to listen to. There are other arguments that are supported for event handlers. Please refer to the Axon framework documentation for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We finally save the view into an appropriate query store. When persisting this data, we should consider storing it in a form that is optimized for data access. In other words, we want to reduce as much complexity and cognitive load when querying this data.</td>
 </tr>
 </table>
 </div>
@@ -6253,22 +6326,168 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="persisting-a-query-read-model"><a class="anchor" href="#persisting-a-query-read-model"></a><a class="link" href="#persisting-a-query-read-model">7.6. Persisting a query (read) model</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.7. Creating additional query (read) models</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.8. Historic event replays</a></h3>
 <div class="sect3">
-<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.8.1. The need for replays</a></h4>
-
+<h4 id="query-side-persistence-choices"><a class="anchor" href="#query-side-persistence-choices"></a><a class="link" href="#query-side-persistence-choices">7.4.3. Query side persistence choices</a></h4>
+<div class="paragraph">
+<p>Segregating the query side this way enables us to choose a persistence technology most appropriate for the problem being solved on the query side. For example, if extreme performance and simple filtering criteria are prime, it may be prudent to choose an in-memory store like Redis or MemCached. If complex search criteria and large datasets are to be supported, then we may want to consider something like ElasticSearch. Or we may even simply choose to stick with just a relational database. The point we would like to emphasize is that employing CQRS affords a level of flexibility that was previously not available to us.</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.8.2. Types of replays</a></h4>
+<h4 id="consuming-the-query-model"><a class="anchor" href="#consuming-the-query-model"></a><a class="link" href="#consuming-the-query-model">7.4.4. Consuming the query model</a></h4>
+<div class="paragraph">
+<p>Applicants usually like to view the LCs they created, specifically those in the draft state. Let&#8217;s look at how we can implement this functionality. Let&#8217;s start by defining a simple object to capture the query criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.springframework.data.domain.Pageable</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">MyLCsQuery</span> {
+
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">String</span> applicantId;
+    <span style="color:#088;font-weight:bold">private</span> LCState state;
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Pageable</span> page;
+
+    <span style="color:#777">// Getters and setters omitted for brevity</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s implement the query to retrieve the results for these criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.queryhandling.QueryHandler</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">LCViewRepository</span> <span style="color:#088;font-weight:bold">extends</span> JpaRepository&lt;LCView, LCApplicationId&gt; {
+
+    Page&lt;LCView&gt; findByApplicantIdAndState(         <i class="conum" data-value="1"></i><b>(1)</b>
+            <span style="color:#0a8;font-weight:bold">String</span> applicantId,
+            LCState state,
+            <span style="color:#0a8;font-weight:bold">Pageable</span> page);
+
+    <span style="color:#007">@QueryHandler</span>                                   <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#080;font-weight:bold">default</span> Page&lt;LCView&gt; on(MyDraftLCsQuery query) {
+        <span style="color:#080;font-weight:bold">return</span> findByApplicantIdAndState(           <i class="conum" data-value="3"></i><b>(3)</b>
+                query.getApplicantId(),
+                LCState.DRAFT,
+                query.getPage());
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the dynamic spring data finder method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>@QueryHandler</code> annotation provided by Axon framework routes query requests to the respective handler.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Finally, we invoke the finder method to allow to return results.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To connect this to the UI, we add a new method in the <code>BackendService</code> (originally introduced in Chapter 6) to invoke the query as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.queryhandling.QueryGateway</span>;
+
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BackendService</span> {
+
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> QueryGateway queryGateway;                    <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">List</span>&lt;LCView&gt; findMyDraftLCs(<span style="color:#0a8;font-weight:bold">String</span> applicantId) {
+        <span style="color:#080;font-weight:bold">return</span> queryGateway.query(                              <i class="conum" data-value="2"></i><b>(2)</b>
+                <span style="color:#080;font-weight:bold">new</span> MyDraftLCsQuery(applicantId),
+                        ResponseTypes.multipleInstancesOf(LCView.class))
+                .join();
+
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Axon framework provides the <code>QueryGateway</code> convenience that allows us to invoke the query. For more details on how to use the <code>QueryGateway</code>, please refer to the Axon framework documentation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We execute the query using the <code>MyDraftLCsQuery</code> object.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a><a class="link" href="#creating-additional-query-read-models">7.4.5. Creating additional query (read) models</a></h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a><a class="link" href="#historic-event-replays">7.5. Historic event replays</a></h3>
+<div class="sect3">
+<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a><a class="link" href="#the-need-for-replays">7.5.1. The need for replays</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a><a class="link" href="#types-of-replays">7.5.2. Types of replays</a></h4>
 <div class="sect4">
 <h5 id="full-event-replays"><a class="anchor" href="#full-event-replays"></a><a class="link" href="#full-event-replays">Full event replays</a></h5>
 
@@ -6283,7 +6502,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.8.3. Event replay considerations</a></h4>
+<h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a><a class="link" href="#event-replay-considerations">7.5.3. Event replay considerations</a></h4>
 <div class="sect4">
 <h5 id="application-availability"><a class="anchor" href="#application-availability"></a><a class="link" href="#application-availability">Application availability</a></h5>
 
@@ -6518,7 +6737,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2021-08-28 11:43:26 UTC
+Last updated 2021-08-28 16:09:50 UTC
 </div>
 </div>
 </body>
