@@ -4,18 +4,28 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain-Driven Design with Java</title>
-<date>2020-11-02</date>
+<date>Aug 28 2021 06:13 PM UTC</date>
+<authorgroup>
 <author>
 <personname>
-<firstname>Premanand Chandrasekaran&lt;https://github.com/premanandc[@premanandc]&gt; and Karthik Krishnan&lt;https://github.com/karthik-krishnan[@karthik]&gt;</firstname>
+<firstname>Premanand</firstname>
+<surname>Chandrasekaran</surname>
 </personname>
+<email>premanandc@acm.org</email>
 </author>
-<authorinitials>P</authorinitials>
+<author>
+<personname>
+<firstname>Karthik</firstname>
+<surname>Krishnan</surname>
+</personname>
+<email>karthik.krishnan@gmail.com</email>
+</author>
+</authorgroup>
 <revhistory>
 <revision>
-<revnumber>1.0</revnumber>
-<date>2020-11-02</date>
-<authorinitials>P</authorinitials>
+<revnumber>1.0.0-SNAPSHOT</revnumber>
+<date>Aug 28 2021 06:13 PM UTC</date>
+<authorinitials>PC</authorinitials>
 </revision>
 </revhistory>
 </info>
@@ -39,11 +49,7 @@ Write more here&#8230;&#8203; TODO.</simpara>
 <part xml:id="part-1-foundations">
 <title>Part 1: Foundations</title>
 <partintro>
-<simpara>    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practising Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will also do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age.
-:tip-caption: 💡</simpara>
-<tip>
-<simpara>It&#8217;s possible to use Unicode glyphs as admonition icons.</simpara>
-</tip>
+<simpara>    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practising Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will also do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age.</simpara>
 </partintro>
 <chapter xml:id="the-rationale-for-domain-driven-design" role="text-justify">
 <title>The Rationale for Domain-Driven Design</title>
