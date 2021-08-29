@@ -451,8 +451,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#identifying-queries">Identifying queries</a></li>
 <li><a href="#creating-the-query-model">Creating the query model</a></li>
 <li><a href="#query-side-persistence-choices">Query side persistence choices</a></li>
-<li><a href="#consuming-the-query-model">Consuming the query model</a></li>
-<li><a href="#creating-additional-query-read-models">Creating additional query (read) models</a></li>
+<li><a href="#exposing-a-query-api">Exposing a query API</a></li>
+<li><a href="#advanced-query-scenarios">Advanced query scenarios</a></li>
 </ul>
 </li>
 <li><a href="#historic-event-replays">Historic event replays</a>
@@ -790,7 +790,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="consuming-the-query-model"><a class="anchor" href="#consuming-the-query-model"></a>Consuming the query model</h4>
+<h4 id="exposing-a-query-api"><a class="anchor" href="#exposing-a-query-api"></a>Exposing a query API</h4>
 <div class="paragraph">
 <p>Applicants like to view the LCs they created, specifically those in the draft state. Let&#8217;s look at how we can implement this functionality. Let&#8217;s start by defining a simple object to capture the query criteria:</p>
 </div>
@@ -929,10 +929,18 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>What we looked at above, is an example of a very simple query implementation where we have a single <code>@QueryHandler</code> to service the query results. This implementation returns results as a one-time fetch. Let&#8217;s look at more complex query scenarios.</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="creating-additional-query-read-models"><a class="anchor" href="#creating-additional-query-read-models"></a>Creating additional query (read) models</h4>
-
+<h4 id="advanced-query-scenarios"><a class="anchor" href="#advanced-query-scenarios"></a>Advanced query scenarios</h4>
+<div class="paragraph">
+<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
+</div>
+<div class="paragraph">
+<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -971,10 +979,19 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-08-29 12:25:33 UTC
+Last updated 2021-08-29 14:26:28 UTC
 </div>
 </div>
 </body>

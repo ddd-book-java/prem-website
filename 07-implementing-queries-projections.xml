@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Queries and Projections (10 pages)</title>
-<date>Aug 29 2021 12:25 PM UTC</date>
+<date>Aug 29 2021 02:26 PM UTC</date>
 </info>
 <section xml:id="implementing-queries-and-projections-10-pages" role="text-justify">
 <title>Implementing Queries and Projections (10 pages)</title>
@@ -205,8 +205,8 @@ class LCApplicationStartedEventHandler {
 <title>Query side persistence choices</title>
 <simpara>Segregating the query side this way enables us to choose a persistence technology most appropriate for the problem being solved on the query side. For example, if extreme performance and simple filtering criteria are prime, it may be prudent to choose an in-memory store like Redis or Memcached. If complex search/analytics requirements and large datasets are to be supported, then we may want to consider something like ElasticSearch. Or we may even simply choose to stick with just a relational database. The point we would like to emphasize is that employing CQRS affords a level of flexibility that was previously not available to us.</simpara>
 </section>
-<section xml:id="consuming-the-query-model">
-<title>Consuming the query model</title>
+<section xml:id="exposing-a-query-api">
+<title>Exposing a query API</title>
 <simpara>Applicants like to view the LCs they created, specifically those in the draft state. Let&#8217;s look at how we can implement this functionality. Let&#8217;s start by defining a simple object to capture the query criteria:</simpara>
 <programlisting language="java" linenumbering="numbered">import org.springframework.data.domain.Pageable;
 
@@ -269,10 +269,12 @@ public class BackendService {
 <para>We execute the query using the <literal>MyDraftLCsQuery</literal> object to return results.</para>
 </callout>
 </calloutlist>
+<simpara>What we looked at above, is an example of a very simple query implementation where we have a single <literal>@QueryHandler</literal> to service the query results. This implementation returns results as a one-time fetch. Let&#8217;s look at more complex query scenarios.</simpara>
 </section>
-<section xml:id="creating-additional-query-read-models">
-<title>Creating additional query (read) models</title>
-
+<section xml:id="advanced-query-scenarios">
+<title>Advanced query scenarios</title>
+<simpara>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <link xl:href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</link><footnote><simpara><link xl:href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</link></simpara></footnote> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</simpara>
+<simpara>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <link xl:href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</link><footnote><simpara><link xl:href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</link></simpara></footnote> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</simpara>
 </section>
 </section>
 <section xml:id="historic-event-replays">
