@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain-Driven Design with Java</title>
-<date>Aug 29 2021 02:26 PM UTC</date>
+<date>Aug 29 2021 02:27 PM UTC</date>
 <authorgroup>
 <author>
 <personname>
@@ -24,7 +24,7 @@
 <revhistory>
 <revision>
 <revnumber>1.0.0-SNAPSHOT</revnumber>
-<date>Aug 29 2021 02:26 PM UTC</date>
+<date>Aug 29 2021 02:27 PM UTC</date>
 <authorinitials>PC</authorinitials>
 </revision>
 </revhistory>
@@ -640,7 +640,7 @@ Bob Goff
 <simpara>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
 <section xml:id="_when_to_use_cqrs">
 <title>When to use CQRS?</title>
-<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios.We discuss some of these scenarios below:</simpara>
+<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios. We discuss some of these scenarios below:</simpara>
 <itemizedlist>
 <listitem>
 <simpara><emphasis role="strong">Volume imbalance between read and writes</emphasis>: In most systems, read operations often outnumber write operations by significant orders of magnitude. For example, consider the number of times a trader checks stock prices vs. the number of times they actually transact (buy or sell stock trades). It is also usually true that write operations are the ones that make businesses money. Having a single model for both reads and writes in a system with a majority of read operations can overwhelm a system to an extent where write performance can start getting affected.</simpara>
@@ -652,7 +652,7 @@ Bob Goff
 <simpara><emphasis role="strong">Different security requirements</emphasis>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</simpara>
 </listitem>
 <listitem>
-<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
+<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
 </listitem>
 </itemizedlist>
 </section>
@@ -694,7 +694,7 @@ Chinese Proverb
 <simpara>EventStorming</simpara>
 </listitem>
 </itemizedlist>
-<simpara>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved.Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</simpara>
+<simpara>This chapter will help developers and architects learn how to apply these techniques in real-life situations to produce elegant software solutions that mirror the problem domain that needs to be solved. Similarly, non-technical domain experts will understand how to communicate their ideas and collaborate effectively with technical team members to accelerate the process of arriving at a shared understanding.</simpara>
 </section>
 <section xml:id="technical-requirements">
 <title>Technical requirements</title>
@@ -1211,7 +1211,7 @@ Eric Evans
 </attribution>
 <simpara>To communicate effectively, the code must be based on the same language used to write the requirements—the same language that the developers speak with each other and with domain experts.</simpara>
 </blockquote>
-<simpara>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates.The list of topics to be covered is as follows:</simpara>
+<simpara>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates. The list of topics to be covered is as follows:</simpara>
 <itemizedlist>
 <listitem>
 <simpara>Identifying aggregates</simpara>
@@ -1229,7 +1229,7 @@ Eric Evans
 <simpara>Performing validations</simpara>
 </listitem>
 </itemizedlist>
-<simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns.Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
+<simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
 <section xml:id="technical-requirements-2">
 <title>Technical requirements</title>
 <simpara>To follow the examples in this chapter, you will need access to:</simpara>
@@ -1590,7 +1590,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 </section>
 <section xml:id="_persisting_aggregates">
 <title>Persisting aggregates</title>
-<simpara>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc.So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</simpara>
+<simpara>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc. So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
 <simpara>State stored</simpara>
@@ -1602,7 +1602,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 <simpara>Let&#8217;s examine each of these techniques in more detail below:</simpara>
 <section xml:id="_state_stored_aggregates">
 <title>State stored aggregates</title>
-<simpara>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate.And there is good reason for this ubiquity.Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations.For example, for our <literal>LCApplication</literal>, it is conceivable that we could use a relational database with a structure that would look something like below:</simpara>
+<simpara>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate. And there is good reason for this ubiquity. Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations. For example, for our <literal>LCApplication</literal>, it is conceivable that we could use a relational database with a structure that would look something like below:</simpara>
 <figure role="text-center">
 <title>Typical entity relationship model</title>
 <mediaobject>
@@ -1612,13 +1612,13 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 <textobject><phrase>relational structure</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <emphasis>state stored</emphasis>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</simpara>
+<simpara>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <emphasis>state stored</emphasis>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</simpara>
 </section>
 <section xml:id="_event_sourced_aggregates">
 <title>Event sourced aggregates</title>
-<simpara>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time.Similarly, relational databases have been employing commit logs to store information durably almost since their inception.However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</simpara>
+<simpara>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time. Similarly, relational databases have been employing commit logs to store information durably almost since their inception. However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</simpara>
 <note>
-<simpara>A log is an extremely simple, append-only sequence of immutable records ordered by time.The diagram here illustrates the structure of a log where records are written sequentially. In essence, a log is an append-only data structure as depicted here:.</simpara>
+<simpara>A log is an extremely simple, append-only sequence of immutable records ordered by time. The diagram here illustrates the structure of a log where records are written sequentially. In essence, a log is an append-only data structure as depicted here:.</simpara>
 </note>
 <figure role="text-center">
 <title>The log data structure</title>
@@ -1629,7 +1629,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 <textobject><phrase>log records</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance.Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes.We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</simpara>
+<simpara>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</simpara>
 <informaltable frame="all" rowsep="1" colsep="1">
 <tgroup cols="3">
 <colspec colname="col_1" colwidth="25*"/>

@@ -493,7 +493,7 @@ To communicate effectively, the code must be based on the same language used to 
 </div>
 </div>
 <div class="paragraph">
-<p>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates.The list of topics to be covered is as follows:</p>
+<p>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates. The list of topics to be covered is as follows:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -515,7 +515,7 @@ To communicate effectively, the code must be based on the same language used to 
 </ul>
 </div>
 <div class="paragraph">
-<p>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns.Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</p>
+<p>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns. Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</p>
 </div>
 <div class="sect2">
 <h3 id="technical-requirements"><a class="anchor" href="#technical-requirements"></a>Technical requirements</h3>
@@ -1141,7 +1141,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="sect2">
 <h3 id="_persisting_aggregates"><a class="anchor" href="#_persisting_aggregates"></a>Persisting aggregates</h3>
 <div class="paragraph">
-<p>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc.So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</p>
+<p>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc. So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1159,7 +1159,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="sect3">
 <h4 id="_state_stored_aggregates"><a class="anchor" href="#_state_stored_aggregates"></a>State stored aggregates</h4>
 <div class="paragraph">
-<p>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate.And there is good reason for this ubiquity.Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations.For example, for our <code>LCApplication</code>, it is conceivable that we could use a relational database with a structure that would look something like below:</p>
+<p>Saving current values of entities is by far the most popular way to persist state&#8201;&#8212;&#8201;thanks to the immense popularity of relational databases and object-relational mapping (ORM) tools like Hibernate. And there is good reason for this ubiquity. Until recently, a majority of enterprise systems used relational databases almost as a default to create business solutions, with ORMs arguably providing a very convenient mechanism to interact with relational databases and their object representations. For example, for our <code>LCApplication</code>, it is conceivable that we could use a relational database with a structure that would look something like below:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1168,13 +1168,13 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="title">Figure 8. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
-<p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
+<p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_event_sourced_aggregates"><a class="anchor" href="#_event_sourced_aggregates"></a>Event sourced aggregates</h4>
 <div class="paragraph">
-<p>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time.Similarly, relational databases have been employing commit logs to store information durably almost since their inception.However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</p>
+<p>Developers have also been relying on logs for a variety of diagnostic purposes for a very long time. Similarly, relational databases have been employing commit logs to store information durably almost since their inception. However, developers' use of logs as a first class persistence solution for structured information in mainstream systems remains extremely rare.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1183,7 +1183,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-A log is an extremely simple, append-only sequence of immutable records ordered by time.The diagram here illustrates the structure of a log where records are written sequentially. In essence, a log is an append-only data structure as depicted here:.
+A log is an extremely simple, append-only sequence of immutable records ordered by time. The diagram here illustrates the structure of a log where records are written sequentially. In essence, a log is an append-only data structure as depicted here:.
 </td>
 </tr>
 </table>
@@ -1195,7 +1195,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="title">Figure 9. The log data structure</div>
 </div>
 <div class="paragraph">
-<p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance.Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes.We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
+<p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2332,7 +2332,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-08-29 14:26:28 UTC
+Last updated 2021-08-29 14:27:01 UTC
 </div>
 </div>
 </body>
