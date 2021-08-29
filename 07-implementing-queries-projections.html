@@ -445,14 +445,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
-<li><a href="#applying-cqrs">Applying CQRS</a>
-<ul class="sectlevel3">
-<li><a href="#why-cqrs">Why CQRS?</a></li>
-<li><a href="#tooling-choices">Tooling choices</a></li>
-</ul>
-</li>
 <li><a href="#implementing-the-query-side">Implementing the query side</a>
 <ul class="sectlevel3">
+<li><a href="#tooling-choices">Tooling choices</a></li>
 <li><a href="#identifying-queries">Identifying queries</a></li>
 <li><a href="#creating-the-query-model">Creating the query model</a></li>
 <li><a href="#query-side-persistence-choices">Query side persistence choices</a></li>
@@ -549,31 +544,13 @@ The best view comes after the hardest climb.
 <div class="title">Figure 1. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <a href="#_why_cqrs">Why CQRS</a> section in <a href="#_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</p>
+<p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="applying-cqrs"><a class="anchor" href="#applying-cqrs"></a>Applying CQRS</h3>
+<h3 id="implementing-the-query-side"><a class="anchor" href="#implementing-the-query-side"></a>Implementing the query side</h3>
 <div class="paragraph">
-<p>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</p>
-</div>
-<div class="sect3">
-<h4 id="why-cqrs"><a class="anchor" href="#why-cqrs"></a>Why CQRS?</h4>
-<div class="paragraph">
-<p>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>One for the command side</p>
-</li>
-<li>
-<p>One or more for the query side</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
+<p>In <a href="#_implementing_the_command_side">Chapter 5</a>, we examined how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -627,16 +604,11 @@ Note how there can exist more than one query side component to handle respective
 <div class="paragraph">
 <p>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</p>
 </div>
-</div>
 <div class="sect3">
 <h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a>Tooling choices</h4>
 <div class="paragraph">
 <p>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="implementing-the-query-side"><a class="anchor" href="#implementing-the-query-side"></a>Implementing the query side</h3>
 <div class="paragraph">
 <p>When implementing the query side, we have two concerns to solve for:</p>
 </div>
@@ -658,6 +630,7 @@ Note how there can exist more than one query side component to handle respective
 </div>
 <div class="paragraph">
 <p>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="identifying-queries"><a class="anchor" href="#identifying-queries"></a>Identifying queries</h4>
@@ -1001,7 +974,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-08-29 11:30:34 UTC
+Last updated 2021-08-29 12:25:33 UTC
 </div>
 </div>
 </body>

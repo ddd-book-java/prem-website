@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Queries and Projections (10 pages)</title>
-<date>Aug 29 2021 11:30 AM UTC</date>
+<date>Aug 29 2021 12:25 PM UTC</date>
 </info>
 <section xml:id="implementing-queries-and-projections-10-pages" role="text-justify">
 <title>Implementing Queries and Projections (10 pages)</title>
@@ -71,23 +71,11 @@ Anonymous
 <textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <link linkend="_why_cqrs">Why CQRS</link> section in <link linkend="_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</simpara>
+<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<link linkend="_when_to_use_cqrs">When to use CQRS</link>" section in <link linkend="_where_does_ddd_fit">Chapter 3</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</simpara>
 </section>
-<section xml:id="applying-cqrs">
-<title>Applying CQRS</title>
-<simpara>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</simpara>
-<section xml:id="why-cqrs">
-<title>Why CQRS?</title>
-<simpara>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</simpara>
-<itemizedlist>
-<listitem>
-<simpara>One for the command side</simpara>
-</listitem>
-<listitem>
-<simpara>One or more for the query side</simpara>
-</listitem>
-</itemizedlist>
-<simpara>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
+<section xml:id="implementing-the-query-side">
+<title>Implementing the query side</title>
+<simpara>In <link linkend="_implementing_the_command_side">Chapter 5</link>, we examined how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
 <title>CQRS application&#8201;&#8212;&#8201;query side</title>
 <mediaobject>
@@ -119,14 +107,9 @@ Anonymous
 <simpara>Note how there can exist more than one query side component to handle respective scenarios.</simpara>
 </note>
 <simpara>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</simpara>
-</section>
 <section xml:id="tooling-choices">
 <title>Tooling choices</title>
 <simpara>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</simpara>
-</section>
-</section>
-<section xml:id="implementing-the-query-side">
-<title>Implementing the query side</title>
 <simpara>When implementing the query side, we have two concerns to solve for:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
@@ -146,6 +129,7 @@ Anonymous
 </mediaobject>
 </figure>
 <simpara>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</simpara>
+</section>
 <section xml:id="identifying-queries">
 <title>Identifying queries</title>
 <simpara>From the eventstorming session, we have the following queries to start with:</simpara>

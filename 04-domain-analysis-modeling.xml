@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Domain Analysis and Modeling</title>
-<date>Aug 29 2021 11:30 AM UTC</date>
+<date>Aug 29 2021 12:25 PM UTC</date>
 </info>
 <section xml:id="_domain_analysis_and_modeling" role="text-justify">
 <title>Domain Analysis and Modeling</title>
@@ -12,11 +12,11 @@
 <attribution>
 Chinese Proverb
 </attribution>
-<simpara>He who asks a question remains a fool for five minutes.He who does not ask remains a fool forever.</simpara>
+<simpara>He who asks a question remains a fool for five minutes. He who does not ask remains a fool forever.</simpara>
 </blockquote>
 <section xml:id="introduction">
 <title>Introduction</title>
-<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail.Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts.In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
+<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail. Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts. In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
 <simpara>The following topics will be covered in this chapter:</simpara>
 <itemizedlist>
 <listitem>

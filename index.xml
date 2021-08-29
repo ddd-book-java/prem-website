@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain-Driven Design with Java</title>
-<date>Aug 29 2021 11:30 AM UTC</date>
+<date>Aug 29 2021 12:25 PM UTC</date>
 <authorgroup>
 <author>
 <personname>
@@ -24,7 +24,7 @@
 <revhistory>
 <revision>
 <revnumber>1.0.0-SNAPSHOT</revnumber>
-<date>Aug 29 2021 11:30 AM UTC</date>
+<date>Aug 29 2021 12:25 PM UTC</date>
 <authorinitials>PC</authorinitials>
 </revision>
 </revhistory>
@@ -120,7 +120,7 @@ Henry Ford
 <section xml:id="inaccurate-requirements">
 <title>Inaccurate requirements</title>
 <simpara>PMI&#8217;s <emphasis>Pulse of the Profession</emphasis> report from 2017 highlights a very starking fact&#8201;&#8212;&#8201;a vast majority of projects fail due to inaccurate or misinterpreted requirements. It follows that it is impossible to build something that clients can use, are happy with and makes them more effective at their jobs if the wrong thing gets built&#8201;&#8212;&#8201;even much less for the project to be built on time, and under budget.</simpara>
-<simpara>IT teams, especially in large organizations are staffed with mono-skilled roles such as UX designer, developer, tester, architect, business analyst, project manager, product owner, business sponsor, etc.In a lot of cases, these people are parts of distinct organization units/departments&#8201;&#8212;&#8201;each with its own set of priorities and motivations. To make matters even worse, the geographical separation between these people only keeps increasing. The need to keep costs down and the current COVID-19 ecosystem does not help matters either.</simpara>
+<simpara>IT teams, especially in large organizations are staffed with mono-skilled roles such as UX designer, developer, tester, architect, business analyst, project manager, product owner, business sponsor, etc. In a lot of cases, these people are parts of distinct organization units/departments&#8201;&#8212;&#8201;each with its own set of priorities and motivations. To make matters even worse, the geographical separation between these people only keeps increasing. The need to keep costs down and the current COVID-19 ecosystem does not help matters either.</simpara>
 <figure>
 <title>Silo mentality and the loss of information fidelity</title>
 <mediaobject>
@@ -134,8 +134,8 @@ Henry Ford
 </section>
 <section xml:id="too-much-architecture">
 <title>Too much architecture</title>
-<simpara>Writing complex software is quite a task.One cannot just hope to sit down and start typing code&#8201;&#8212;&#8201;although that approach might work in some trivial cases.Before translating business ideas into working software, a thorough understanding of the problem at hand is necessary.For example, it is not possible (or at least extremely hard) to build credit card software without understanding how credit cards work in the first place.To communicate one&#8217;s understanding of a problem, it is not uncommon to create software models of the problem, before writing code.This model or collection of models represents the understanding of the problem and the architecture of the solution.</simpara>
-<simpara>Efforts to create a perfect model of the problem&#8201;&#8212;&#8201;one that is accurate in a very broad context, are not dissimilar to the proverbial holy grail quest.Those accountable to produce the architecture can get stuck in <link xl:href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis">analysis paralysis</link> and/or <link xl:href="https://wiki.c2.com/?BigDesignUpFront">big design up front</link>, producing artifacts that are one or more of too high level, wishful, gold plated, buzzword-driven, disconnected from the real world&#8201;&#8212;&#8201;while not solving any real business problems.This kind of <emphasis>lock-in</emphasis> can be especially detrimental during the early phases of the project when knowledge levels of team members are still up and coming.Needless to say, projects adopting such approaches find it hard to meet with success consistently.</simpara>
+<simpara>Writing complex software is quite a task. One cannot just hope to sit down and start typing code&#8201;&#8212;&#8201;although that approach might work in some trivial cases. Before translating business ideas into working software, a thorough understanding of the problem at hand is necessary. For example, it is not possible (or at least extremely hard) to build credit card software without understanding how credit cards work in the first place. To communicate one&#8217;s understanding of a problem, it is not uncommon to create software models of the problem, before writing code. This model or collection of models represents the understanding of the problem and the architecture of the solution.</simpara>
+<simpara>Efforts to create a perfect model of the problem&#8201;&#8212;&#8201;one that is accurate in a very broad context, are not dissimilar to the proverbial holy grail quest. Those accountable to produce the architecture can get stuck in <link xl:href="https://proxy.c2.com/cgi/wiki?AnalysisParalysis">analysis paralysis</link> and/or <link xl:href="https://wiki.c2.com/?BigDesignUpFront">big design up front</link>, producing artifacts that are one or more of too high level, wishful, gold plated, buzzword-driven, disconnected from the real world&#8201;&#8212;&#8201;while not solving any real business problems. This kind of <emphasis>lock-in</emphasis> can be especially detrimental during the early phases of the project when knowledge levels of team members are still up and coming. Needless to say, projects adopting such approaches find it hard to meet with success consistently.</simpara>
 <note>
 <simpara>For a more comprehensive list of <link xl:href="http://agilemodeling.com/essays/enterpriseModelingAntiPatterns.htm">modeling anti-patterns</link>, refer to Scott W. Ambler&#8217;s <link xl:href="http://agilemodeling.com">website</link> (<link xl:href="http://agilemodeling.com">http://agilemodeling.com</link>) and <link xl:href="https://www.amazon.com/Agile-Modeling-Effective-Practices-Programming/dp/0471202827">book</link> dedicated to the subject.</simpara>
 </note>
@@ -585,7 +585,7 @@ Creighton Abrams
 
 </section>
 </chapter>
-<chapter xml:id="where-and-how-does-ddd-fit-15-pages">
+<chapter xml:id="_where_does_ddd_fit">
 <title>Where and How Does DDD Fit? (15 pages)</title>
 <blockquote>
 <attribution>
@@ -622,9 +622,40 @@ Bob Goff
 <title>Event-Driven Architecture (EDA)</title>
 
 </section>
-<section xml:id="command-query-responsibility-segregation-cqrs">
+<section xml:id="_cqrs_pattern">
 <title>Command Query Responsibility Segregation (CQRS)</title>
-
+<simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates (commands) and enquiries. This is depicted in the following diagram:</simpara>
+<figure>
+<title>Traditional versus CQRS Architecture</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/cqrs/traditional-vs-cqrs-architecture.png"/>
+</imageobject>
+<textobject><phrase>traditional vs cqrs architecture</phrase></textobject>
+</mediaobject>
+</figure>
+<note>
+<simpara>We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.</simpara>
+</note>
+<simpara>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
+<section xml:id="_when_to_use_cqrs">
+<title>When to use CQRS?</title>
+<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios.We discuss some of these scenarios below:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Volume imbalance between read and writes</emphasis>: In most systems, read operations often outnumber write operations by significant orders of magnitude. For example, consider the number of times a trader checks stock prices vs. the number of times they actually transact (buy or sell stock trades). It is also usually true that write operations are the ones that make businesses money. Having a single model for both reads and writes in a system with a majority of read operations can overwhelm a system to an extent where write performance can start getting affected.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Need for multiple read representations</emphasis>: When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view. While these views can be computed on the fly from the <emphasis>raw</emphasis> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system. Several times, it is not possible to predict ahead of time, the nature of these requirements. By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements. Creating domain models specifically designed to meet a focused set of requirements can be much easier.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Different security requirements</emphasis>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
+</listitem>
+</itemizedlist>
+</section>
 </section>
 <section xml:id="serverless-architecture">
 <title>Serverless Architecture</title>
@@ -643,11 +674,11 @@ Bob Goff
 <attribution>
 Chinese Proverb
 </attribution>
-<simpara>He who asks a question remains a fool for five minutes.He who does not ask remains a fool forever.</simpara>
+<simpara>He who asks a question remains a fool for five minutes. He who does not ask remains a fool forever.</simpara>
 </blockquote>
 <section xml:id="introduction-2">
 <title>Introduction</title>
-<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail.Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts.In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
+<simpara>As we saw in the previous chapter, misinterpreted requirements cause a significant portion of software projects to fail. Arriving at a shared understanding and creating a useful domain model necessitates high degrees of collaboration with domain experts. In this chapter, we will introduce the sample application we will use throughout the book and explore modeling techniques such as domain storytelling and eventstorming to enhance our collective understanding of the problem in a reliable and structured manner.</simpara>
 <simpara>The following topics will be covered in this chapter:</simpara>
 <itemizedlist>
 <listitem>
@@ -1180,7 +1211,7 @@ Eric Evans
 </attribution>
 <simpara>To communicate effectively, the code must be based on the same language used to write the requirements—the same language that the developers speak with each other and with domain experts.</simpara>
 </blockquote>
-<simpara>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic.In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates.The list of topics to be covered is as follows:</simpara>
+<simpara>In the Command Query Responsibility Segregation (CQRS) section, we describe how DDD and CQRS complement each other and how the command side (write requests) is the home of business logic. In this chapter, we will implement the command side API for the LC application using Spring Boot and Axon Framework, JSR-303 Bean Validations and persistence options by contrasting between state-stored vs event-sourced aggregates.The list of topics to be covered is as follows:</simpara>
 <itemizedlist>
 <listitem>
 <simpara>Identifying aggregates</simpara>
@@ -1198,7 +1229,7 @@ Eric Evans
 <simpara>Performing validations</simpara>
 </listitem>
 </itemizedlist>
-<simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner.You will also learn how to decouple your domain model from persistence concerns.Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
+<simpara>By the end of this chapter, you would have learned how to implement the core of your system (the domain logic) in a robust, well encapsulated manner. You will also learn how to decouple your domain model from persistence concerns.Finally, you will be able to appreciate how to perform DDD&#8217;s tactical design using services, repositories, aggregates, entities and value objects.</simpara>
 <section xml:id="technical-requirements-2">
 <title>Technical requirements</title>
 <simpara>To follow the examples in this chapter, you will need access to:</simpara>
@@ -1238,54 +1269,11 @@ Eric Evans
 <textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>As mentioned previously, the <emphasis role="strong">blue</emphasis> stickies in this diagram represent <emphasis role="strong">commands</emphasis>. We will be using the Command Query Responsibility Segregation (CQRS) pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and why we are using it and how it can result in an elegant solution.</simpara>
-</section>
-<section xml:id="applying-cqrs">
-<title>Applying CQRS</title>
-<simpara>As covered in chapter 3, the CQRS pattern separates <emphasis role="strong">write</emphasis> (operations that mutate state) and <emphasis role="strong">read</emphasis> (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let&#8217;s look at what it means to apply CQRS in practical terms.</simpara>
-<section xml:id="recap-what-is-cqrs">
-<title>Recap: What is CQRS</title>
-<simpara>In traditional applications, a single domain, data/persistence model is used to handle all kinds of operations. With CQRS, we create distinct models to handle updates (commands) and enquiries. This is depicted in the following diagram:</simpara>
-<figure>
-<title>Traditional versus CQRS Architecture</title>
-<mediaobject>
-<imageobject>
-<imagedata fileref="./images/cqrs/traditional-vs-cqrs-architecture.png"/>
-</imageobject>
-<textobject><phrase>traditional vs cqrs architecture</phrase></textobject>
-</mediaobject>
-</figure>
+<simpara>As mentioned previously, the <emphasis role="strong">blue</emphasis> stickies in this diagram represent <emphasis role="strong">commands</emphasis>. We will be using the  <link linkend="_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</link> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<link linkend="_when_to_use_cqrs">When to use CQRS</link>" section in <link linkend="_where_does_ddd_fit">Chapter 3</link>.</simpara>
 <note>
-<simpara>We depict multiple query models above because it is possible (but not necessary) to create more than one query model, depending on the kinds of query use cases that need to be supported.</simpara>
+<simpara>CQRS is by no means a silver bullet. Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems. Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.</simpara>
 </note>
-<simpara>For this to work predictably, the query model(s) need to be kept in sync with the write models (we will examine some of the techniques to do that in detail later.</simpara>
-</section>
-<section xml:id="_why_cqrs">
-<title>Why CQRS?</title>
-<simpara>The traditional, single-model approach works well for simple, CRUD-style applications, but starts to become unwieldy for more complex scenarios.We discuss some of these scenarios below:</simpara>
-<itemizedlist>
-<listitem>
-<simpara><emphasis role="strong">Volume imbalance between read and writes</emphasis>: In most systems, read operations often outnumber write operations by significant orders of magnitude. For example, consider the number of times a trader checks stock prices vs. the number of times they actually transact (buy or sell stock trades). It is also usually true that write operations are the ones that make businesses money. Having a single model for both reads and writes in a system with a majority of read operations can overwhelm a system to an extent where write performance can start getting affected.</simpara>
-</listitem>
-<listitem>
-<simpara><emphasis role="strong">Need for multiple read representations</emphasis>: When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view. While these views can be computed on the fly from the <emphasis>raw</emphasis> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system. Several times, it is not possible to predict ahead of time, the nature of these requirements. By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements. Creating domain models specifically designed to meet a focused set of requirements can be much easier.</simpara>
-</listitem>
-<listitem>
-<simpara><emphasis role="strong">Different security requirements</emphasis>: Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</simpara>
-</listitem>
-<listitem>
-<simpara><emphasis role="strong">More uniform distribution of complexity</emphasis>: Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</simpara>
-</listitem>
-</itemizedlist>
-<note>
-<simpara>CQRS is by no means a silver bullet.Although it is general-purpose enough to be used in a variety of scenarios, it is a paradigm shift as applied to mainstream software problems.Like any other architecture decision, you should apply due diligence when choosing to adopt CQRS to your situation.</simpara>
-</note>
-<simpara>Let’s look at how this works in practice by implementing a representative sliver of the Letter of Credit application using the Spring and Axon frameworks.</simpara>
-</section>
-<section xml:id="tooling-choices">
-<title>Tooling choices</title>
-<simpara>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</link><footnote><simpara><link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</link></simpara></footnote>, which is worth taking a look at. Using a <emphasis>good</emphasis> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <link xl:href="http://axonframework.org/">Axon Framework</link><footnote><simpara><link xl:href="http://axonframework.org/">http://axonframework.org/</link></simpara></footnote> to implement application functionality as we have real-world experience of having used in large scale enterprise development.There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
-</section>
+<simpara>Let’s look at how this works in practice by implementing a representative sliver of the <emphasis role="strong">command</emphasis> side of the Letter of Credit application using the Spring and Axon frameworks.</simpara>
 </section>
 <section xml:id="_implementing_the_command_side">
 <title>Implementing the command side</title>
@@ -1318,6 +1306,10 @@ Eric Evans
 </listitem>
 </orderedlist>
 <simpara>Let&#8217;s look at how we can implement this in the context of our Letter of Credit (LC) issuance application.</simpara>
+<section xml:id="tooling-choices">
+<title>Tooling choices</title>
+<simpara>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</link><footnote><simpara><link xl:href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</link></simpara></footnote>, which is worth taking a look at. Using a <emphasis>good</emphasis> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <link xl:href="http://axonframework.org/">Axon Framework</link><footnote><simpara><link xl:href="http://axonframework.org/">http://axonframework.org/</link></simpara></footnote> to implement application functionality as we have real-world experience of having used it in large scale enterprise development with success. There are other frameworks that work comparably, like <link xl:href="https://www.lagomframework.com/">Lagom Framework</link><footnote><simpara><link xl:href="https://www.lagomframework.com/">https://www.lagomframework.com/</link></simpara></footnote> and <link xl:href="https://eventuate.io/">Eventuate</link><footnote><simpara><link xl:href="https://eventuate.io/">https://eventuate.io/</link></simpara></footnote> that are worth exploring as well.</simpara>
+</section>
 <section xml:id="bootstrapping-the-application">
 <title>Bootstrapping the application</title>
 <simpara>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <link xl:href="https://start.spring.io">https://start.spring.io</link> to create this application. Here, we will make use of the <literal>spring</literal> CLI to bootstrap the application.</simpara>
@@ -1598,7 +1590,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 </section>
 <section xml:id="_persisting_aggregates">
 <title>Persisting aggregates</title>
-<simpara>When working with any system of even moderate complexity, we are required to make interactions durable.That is, interactions need to outlast system restarts, crashes, etc.So the need for persistence is a given.While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution.We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</simpara>
+<simpara>When working with any system of even moderate complexity, we are required to make interactions durable. That is, interactions need to outlast system restarts, crashes, etc.So the need for persistence is a given. While we should always endeavour to abstract persistence concerns from the rest of the system, our persistence technology choices can have a significant impact on the way we architect our overall solution. We have a couple of choices in terms of how we choose to persist aggregate state that are worth mentioning:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
 <simpara>State stored</simpara>
@@ -1620,7 +1612,7 @@ public class LCApplicationCreatedEvent {   <co xml:id="CO4-1"/>
 <textobject><phrase>relational structure</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <emphasis>state stored</emphasis>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information.We will look at this in more detail below.</simpara>
+<simpara>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity.When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <emphasis>state stored</emphasis>.This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</simpara>
 </section>
 <section xml:id="_event_sourced_aggregates">
 <title>Event sourced aggregates</title>
@@ -2293,7 +2285,7 @@ public class CreateLCApplicationCommandHandler {
 <simpara>Refer to section <xref linkend="_persisting_aggregates"/>, note down the pros and cons of state stored and event sourced approach, and discuss the reasons for your choice with your teammates.</simpara>
 </listitem>
 <listitem>
-<simpara>Refer to section <xref linkend="_why_cqrs"/> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</simpara>
+<simpara>Refer to section <xref linkend="_when_to_use_cqrs"/> to list down the advantages of the approach versus the traditional approach.  Share the reasoning with your teammates.</simpara>
 </listitem>
 </orderedlist>
 </section>
@@ -3524,23 +3516,11 @@ Anonymous
 <textobject><phrase>05 query models</phrase></textobject>
 </mediaobject>
 </figure>
-<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the <link linkend="_why_cqrs">Why CQRS</link> section in <link linkend="_implementing_domain_logic">Chapter 5 - Implementing Domain Logic</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant).</simpara>
+<simpara>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<link linkend="_when_to_use_cqrs">When to use CQRS</link>" section in <link linkend="_where_does_ddd_fit">Chapter 3</link>. In the diagram above, the <emphasis role="strong">green</emphasis> stickies represent <emphasis role="strong">read/query models</emphasis>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <literal>ValidateProduct</literal> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</simpara>
 </section>
-<section xml:id="applying-cqrs-2">
-<title>Applying CQRS</title>
-<simpara>As covered in chapter 3, the CQRS pattern separates write (operations that mutate state) and read (operations that answer questions) operations into distinct (logical and/or physical) components from an architecture perspective. Let’s look at what it means to apply CQRS in practical terms.</simpara>
-<section xml:id="why-cqrs">
-<title>Why CQRS?</title>
-<simpara>As we have seen previously, in a CQRS-based system, there are distinct sets of models:</simpara>
-<itemizedlist>
-<listitem>
-<simpara>One for the command side</simpara>
-</listitem>
-<listitem>
-<simpara>One or more for the query side</simpara>
-</listitem>
-</itemizedlist>
-<simpara>In chapter 5, we saw how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
+<section xml:id="implementing-the-query-side">
+<title>Implementing the query side</title>
+<simpara>In <link linkend="_implementing_the_command_side">Chapter 5</link>, we examined how to publish events when a command is successfully processed. Now, let&#8217;s look at how we can construct a query model by listening to these domain events. Logically, this will look something like how it is depicted here:</simpara>
 <figure role="text-center">
 <title>CQRS application&#8201;&#8212;&#8201;query side</title>
 <mediaobject>
@@ -3572,14 +3552,9 @@ Anonymous
 <simpara>Note how there can exist more than one query side component to handle respective scenarios.</simpara>
 </note>
 <simpara>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</simpara>
-</section>
 <section xml:id="tooling-choices-2">
 <title>Tooling choices</title>
 <simpara>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</simpara>
-</section>
-</section>
-<section xml:id="implementing-the-query-side">
-<title>Implementing the query side</title>
 <simpara>When implementing the query side, we have two concerns to solve for:</simpara>
 <orderedlist numeration="arabic">
 <listitem>
@@ -3599,6 +3574,7 @@ Anonymous
 </mediaobject>
 </figure>
 <simpara>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</simpara>
+</section>
 <section xml:id="identifying-queries">
 <title>Identifying queries</title>
 <simpara>From the eventstorming session, we have the following queries to start with:</simpara>
