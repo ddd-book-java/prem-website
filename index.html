@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:karthik.krishnan@gmail.com">karthik.krishnan@gmail.com</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Aug 28 2021 06:13 PM UTC</span>
+<span id="revdate">Aug 29 2021 11:30 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6317,13 +6317,13 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <div class="sect3">
 <h4 id="query-side-persistence-choices"><a class="anchor" href="#query-side-persistence-choices"></a><a class="link" href="#query-side-persistence-choices">7.4.3. Query side persistence choices</a></h4>
 <div class="paragraph">
-<p>Segregating the query side this way enables us to choose a persistence technology most appropriate for the problem being solved on the query side. For example, if extreme performance and simple filtering criteria are prime, it may be prudent to choose an in-memory store like Redis or MemCached. If complex search criteria and large datasets are to be supported, then we may want to consider something like ElasticSearch. Or we may even simply choose to stick with just a relational database. The point we would like to emphasize is that employing CQRS affords a level of flexibility that was previously not available to us.</p>
+<p>Segregating the query side this way enables us to choose a persistence technology most appropriate for the problem being solved on the query side. For example, if extreme performance and simple filtering criteria are prime, it may be prudent to choose an in-memory store like Redis or Memcached. If complex search/analytics requirements and large datasets are to be supported, then we may want to consider something like ElasticSearch. Or we may even simply choose to stick with just a relational database. The point we would like to emphasize is that employing CQRS affords a level of flexibility that was previously not available to us.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="consuming-the-query-model"><a class="anchor" href="#consuming-the-query-model"></a><a class="link" href="#consuming-the-query-model">7.4.4. Consuming the query model</a></h4>
 <div class="paragraph">
-<p>Applicants usually like to view the LCs they created, specifically those in the draft state. Let&#8217;s look at how we can implement this functionality. Let&#8217;s start by defining a simple object to capture the query criteria:</p>
+<p>Applicants like to view the LCs they created, specifically those in the draft state. Let&#8217;s look at how we can implement this functionality. Let&#8217;s start by defining a simple object to capture the query criteria:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6337,14 +6337,12 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 7
 8
 9
-10
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.springframework.data.domain.Pageable</span>;
 
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">MyLCsQuery</span> {
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">MyDraftLCsQuery</span> {
 
-    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">String</span> applicantId;
-    <span style="color:#088;font-weight:bold">private</span> LCState state;
+    <span style="color:#088;font-weight:bold">private</span> ApplicantId applicantId;
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Pageable</span> page;
 
     <span style="color:#777">// Getters and setters omitted for brevity</span>
@@ -6400,7 +6398,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>This is the dynamic spring data finder method.</td>
+<td>This is the dynamic spring data finder method we will use to query the database.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -6408,7 +6406,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Finally, we invoke the finder method to allow to return results.</td>
+<td>Finally, we invoke the finder method to return results.</td>
 </tr>
 </table>
 </div>
@@ -6458,7 +6456,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We execute the query using the <code>MyDraftLCsQuery</code> object.</td>
+<td>We execute the query using the <code>MyDraftLCsQuery</code> object to return results.</td>
 </tr>
 </table>
 </div>
@@ -6725,7 +6723,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-08-28 18:13:19 UTC
+Last updated 2021-08-29 11:30:34 UTC
 </div>
 </div>
 </body>
