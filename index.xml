@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain-Driven Design with Java</title>
-<date>Aug 29 2021 02:27 PM UTC</date>
+<date>Aug 31 2021 11:31 AM UTC</date>
 <authorgroup>
 <author>
 <personname>
@@ -18,13 +18,13 @@
 <firstname>Karthik</firstname>
 <surname>Krishnan</surname>
 </personname>
-<email>karthik.krishnan@gmail.com</email>
+<email>me@karthiks.in</email>
 </author>
 </authorgroup>
 <revhistory>
 <revision>
 <revnumber>1.0.0-SNAPSHOT</revnumber>
-<date>Aug 29 2021 02:27 PM UTC</date>
+<date>Aug 31 2021 11:31 AM UTC</date>
 <authorinitials>PC</authorinitials>
 </revision>
 </revhistory>
@@ -750,6 +750,10 @@ Usually the exporter has a pre-existing relationship with this bank.</simpara>
 <simpara>It is important to note that the same bank can play more than one role for a given transaction.
 In the most complex cases, there can be four distinct banks involved for a transaction (sometimes even more, but we will skip those cases for brevity).</simpara>
 </note>
+</section>
+<section xml:id="the-letter-of-credit-business">
+<title>The Letter of Credit business</title>
+<simpara>TODO</simpara>
 </section>
 <section xml:id="the-lc-issuance-application">
 <title>The LC issuance application</title>
@@ -3724,24 +3728,22 @@ public class BackendService {
 </section>
 <section xml:id="historic-event-replays">
 <title>Historic event replays</title>
-<section xml:id="the-need-for-replays">
-<title>The need for replays</title>
-
-</section>
+<simpara>The example we have looked at thus far allows us to listen to events as they occur. Consider a scenario where we need to build a new query from historic events to satisfy an unanticipated new requirement. This new requirement may necessitate the need to create a new query model or in a more extreme case, a completely new bounded context. Another scenario might be when we may need to correct a bug in the way we had built an existing query model and now need to recreate it from scratch. Given that we have a record of all events that have transpired in the event store, we can use replay events to enable us to construct both new and/or correct existing query models with relative ease.</simpara>
+<note>
+<simpara>We have used the term <emphasis>event replay</emphasis> in the context of reconstituting state of event-sourced aggregate instances. The event replay mentioned here, although similar in concept, is still very different. In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance. In this case though, we will likely work with events that span more than one aggregate.</simpara>
+</note>
+<simpara>Let&#8217;s look at how the different types of replays and how we can use each of them.</simpara>
 <section xml:id="types-of-replays">
 <title>Types of replays</title>
-<section xml:id="full-event-replays">
-<title>Full event replays</title>
-
-</section>
-<section xml:id="partial-event-replays">
-<title>Partial event replays</title>
-
-</section>
-<section xml:id="adhoc-event-replays">
-<title>Adhoc event replays</title>
-
-</section>
+<simpara>When replaying events, there are at least two types of replays depending on the requirements we need to meet. Let&#8217;s look at each type in turn:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Full event replay</emphasis> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this sub-domain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Partial/Adhoc event replay</emphasis> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <link xl:href="https://axoniq.io/product-overview/axon">Axon Server</link><footnote><simpara><link xl:href="https://axoniq.io/product-overview/axon">https://axoniq.io/product-overview/axon</link></simpara></footnote> and <link xl:href="https://www.eventstore.com/eventstoredb">EventStoreDB</link><footnote><simpara><link xl:href="https://www.eventstore.com/eventstoredb">https://www.eventstore.com/eventstoredb</link></simpara></footnote> to name a few) can be extremely beneficial.</simpara>
+</listitem>
+</itemizedlist>
 </section>
 <section xml:id="event-replay-considerations">
 <title>Event replay considerations</title>
@@ -3751,6 +3753,10 @@ public class BackendService {
 </section>
 <section xml:id="optimization-techniques">
 <title>Optimization techniques</title>
+
+</section>
+<section xml:id="event-upcasting">
+<title>Event upcasting</title>
 
 </section>
 </section>

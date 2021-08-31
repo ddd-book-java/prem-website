@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Domain Analysis and Modeling</title>
-<date>Aug 29 2021 02:27 PM UTC</date>
+<date>Aug 31 2021 11:31 AM UTC</date>
 </info>
 <section xml:id="_domain_analysis_and_modeling" role="text-justify">
 <title>Domain Analysis and Modeling</title>
@@ -88,6 +88,10 @@ Usually the exporter has a pre-existing relationship with this bank.</simpara>
 <simpara>It is important to note that the same bank can play more than one role for a given transaction.
 In the most complex cases, there can be four distinct banks involved for a transaction (sometimes even more, but we will skip those cases for brevity).</simpara>
 </note>
+</section>
+<section xml:id="the-letter-of-credit-business">
+<title>The Letter of Credit business</title>
+<simpara>TODO</simpara>
 </section>
 <section xml:id="the-lc-issuance-application">
 <title>The LC issuance application</title>

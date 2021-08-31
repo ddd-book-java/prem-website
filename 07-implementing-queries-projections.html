@@ -457,7 +457,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#historic-event-replays">Historic event replays</a>
 <ul class="sectlevel3">
-<li><a href="#the-need-for-replays">The need for replays</a></li>
 <li><a href="#types-of-replays">Types of replays</a></li>
 <li><a href="#event-replay-considerations">Event replay considerations</a></li>
 </ul>
@@ -945,23 +944,38 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 <div class="sect2">
 <h3 id="historic-event-replays"><a class="anchor" href="#historic-event-replays"></a>Historic event replays</h3>
-<div class="sect3">
-<h4 id="the-need-for-replays"><a class="anchor" href="#the-need-for-replays"></a>The need for replays</h4>
-
+<div class="paragraph">
+<p>The example we have looked at thus far allows us to listen to events as they occur. Consider a scenario where we need to build a new query from historic events to satisfy an unanticipated new requirement. This new requirement may necessitate the need to create a new query model or in a more extreme case, a completely new bounded context. Another scenario might be when we may need to correct a bug in the way we had built an existing query model and now need to recreate it from scratch. Given that we have a record of all events that have transpired in the event store, we can use replay events to enable us to construct both new and/or correct existing query models with relative ease.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We have used the term <em>event replay</em> in the context of reconstituting state of event-sourced aggregate instances. The event replay mentioned here, although similar in concept, is still very different. In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance. In this case though, we will likely work with events that span more than one aggregate.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at how the different types of replays and how we can use each of them.</p>
 </div>
 <div class="sect3">
 <h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a>Types of replays</h4>
-<div class="sect4">
-<h5 id="full-event-replays"><a class="anchor" href="#full-event-replays"></a>Full event replays</h5>
-
+<div class="paragraph">
+<p>When replaying events, there are at least two types of replays depending on the requirements we need to meet. Let&#8217;s look at each type in turn:</p>
 </div>
-<div class="sect4">
-<h5 id="partial-event-replays"><a class="anchor" href="#partial-event-replays"></a>Partial event replays</h5>
-
-</div>
-<div class="sect4">
-<h5 id="adhoc-event-replays"><a class="anchor" href="#adhoc-event-replays"></a>Adhoc event replays</h5>
-
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this sub-domain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
+</li>
+<li>
+<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> to name a few) can be extremely beneficial.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -972,6 +986,10 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 <div class="sect4">
 <h5 id="optimization-techniques"><a class="anchor" href="#optimization-techniques"></a>Optimization techniques</h5>
+
+</div>
+<div class="sect4">
+<h5 id="event-upcasting"><a class="anchor" href="#event-upcasting"></a>Event upcasting</h5>
 
 </div>
 </div>
@@ -987,11 +1005,17 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <div class="footnote" id="_footnotedef_2">
 <a href="#_footnoteref_2">2</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
 </div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
+</div>
+<div class="footnote" id="_footnotedef_4">
+<a href="#_footnoteref_4">4</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-08-29 14:27:01 UTC
+Last updated 2021-08-31 11:30:53 UTC
 </div>
 </div>
 </body>
