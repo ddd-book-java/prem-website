@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Implementing Domain-Driven Design with Java</title>
-<date>Sep 06 2021 02:07 AM UTC</date>
+<date>Sep 06 2021 02:38 PM UTC</date>
 <authorgroup>
 <author>
 <personname>
@@ -24,7 +24,7 @@
 <revhistory>
 <revision>
 <revnumber>1.0.0-SNAPSHOT</revnumber>
-<date>Sep 06 2021 02:07 AM UTC</date>
+<date>Sep 06 2021 02:38 PM UTC</date>
 <authorinitials>PC</authorinitials>
 </revision>
 </revhistory>
@@ -3455,8 +3455,8 @@ public class BackendService {
 </informaltable>
 </section>
 </chapter>
-<chapter xml:id="implementing-queries-10-pages" role="text-justify">
-<title>Implementing Queries (10 pages)</title>
+<chapter xml:id="implementing-queries" role="text-justify">
+<title>Implementing Queries</title>
 <blockquote>
 <attribution>
 Anonymous
