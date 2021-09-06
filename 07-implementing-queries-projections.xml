@@ -3,11 +3,11 @@
 <?asciidoc-numbered?>
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
-<title>Implementing Queries and Projections (10 pages)</title>
-<date>Sep 02 2021 01:41 AM UTC</date>
+<title>Implementing Queries (10 pages)</title>
+<date>Sep 06 2021 02:05 AM UTC</date>
 </info>
-<section xml:id="implementing-queries-and-projections-10-pages" role="text-justify">
-<title>Implementing Queries and Projections (10 pages)</title>
+<section xml:id="implementing-queries-10-pages" role="text-justify">
+<title>Implementing Queries (10 pages)</title>
 <blockquote>
 <attribution>
 Anonymous
@@ -107,6 +107,11 @@ Anonymous
 <simpara>Note how there can exist more than one query side component to handle respective scenarios.</simpara>
 </note>
 <simpara>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Query: A request for data from a data source</simpara>
+</listitem>
+</itemizedlist>
 <section xml:id="tooling-choices">
 <title>Tooling choices</title>
 <simpara>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</simpara>
@@ -194,7 +199,7 @@ class LCApplicationStartedEventHandler {
 <para>The handler method needs to specify the event that we intend to listen to. There are other arguments that are supported for event handlers. Please refer to the Axon framework documentation for more information.</para>
 </callout>
 <callout arearefs="CO1-3">
-<para>We finally save the view into an appropriate query store. When persisting this data, we should consider storing it in a form that is optimized for data access. In other words, we want to reduce as much complexity and cognitive load when querying this data.</para>
+<para>We finally save the query model into an appropriate query store. When persisting this data, we should consider storing it in a form that is optimized for data access. In other words, we want to reduce as much complexity and cognitive load when querying this data.</para>
 </callout>
 </calloutlist>
 <note>
@@ -298,19 +303,155 @@ public class BackendService {
 </section>
 <section xml:id="event-replay-considerations">
 <title>Event replay considerations</title>
+<simpara>The ability to replay events and create new query models can be invaluable. However, like everything else, there are considerations that we need to keep in mind when working with replays. Let&#8217;s examine some of these in more detail:</simpara>
+<section xml:id="event-store-design">
+<title>Event store design</title>
+<simpara>As mentioned in Chapter 5, when working with event-sourced aggregates, we persist immutable events in the persistence store. The primary use-cases that we need to support are:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Provide consistent and predictable <emphasis role="strong">write</emphasis> performance when acting as an append-only store.</simpara>
+</listitem>
+<listitem>
+<simpara>Provide consistent and predictable <emphasis role="strong">read</emphasis> performance when querying for events using the aggregate identifier.</simpara>
+</listitem>
+</orderedlist>
+<simpara>However, replays (especially partial/adhoc) require the event store to support much richer querying capabilities. Consider a scenario where we found an issue where the amount is incorrectly reported for LCs that were approved during a certain time period only for a certain currency. To fix this issue, we need to:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Identify affected LCs from the event store.</simpara>
+</listitem>
+<listitem>
+<simpara>Fix the issue in the application.</simpara>
+</listitem>
+<listitem>
+<simpara>Reset the query store for these affected aggregates</simpara>
+</listitem>
+<listitem>
+<simpara>Do a replay of a subset of events for the affected aggregates and reconstruct the query model.</simpara>
+</listitem>
+</orderedlist>
+<simpara>Identifying affected aggregates from the event store can be tricky if we don&#8217;t support querying capabilities that allow us to introspect the event payload. Even if this kind of adhoc querying were to be supported, these queries can adversely impact command handling performance of the event store. One of the primary reasons to employ CQRS was to make use of query-side stores for such complex read scenarios.</simpara>
+<simpara>Event replays seem to introduce a chicken and egg problem where the query store has an issue which can only be corrected by querying the event store. A few options to mitigate this issue are discussed here:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">General purpose store</emphasis>: Choose an event store that offers predictable performance for both scenarios (command handling and replay querying).</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Built-in datastore replication</emphasis>: Make use of read replicas for event replay querying</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Distinct datastores</emphasis>: Make use of two distinct data stores to solve each problem on its own (for example, use a relational database/key-value store for command handling and a search-optimized document store for event replay querying).</simpara>
+</listitem>
+</itemizedlist>
+<note>
+<simpara>Do note that the <emphasis role="strong">distinct datastores</emphasis> approach for replays is used to satisfy an operational problem as opposed to query-side business use-cases discussed earlier in this chapter. Arguably, it is more complex because the technology team on the command side has to be equipped to maintain more than one database technology.</simpara>
+</note>
+</section>
+</section>
+<section xml:id="event-design">
+<title>Event design</title>
+<simpara>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <link xl:href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</link><footnote><simpara><link xl:href="https://martinfowler.com/articles/201701-event-driven.html">https://martinfowler.com/articles/201701-event-driven.html</link></simpara></footnote>, Martin Fowler talks about three different styles of events. If we employ the <emphasis>event carried state transfer</emphasis> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>All events may now require to carry a lot of additional information that may not be relevant to that event. Assembling all this information when publishing the event can add to the cognitive complexity on the command side.</simpara>
+</listitem>
+<listitem>
+<simpara>The amount of data that needs to be stored and flow through the wire can increase drastically.</simpara>
+</listitem>
+<listitem>
+<simpara>On the query side, it can increase cognitive complexity when understanding the structure of the event and processing it.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>In a lot of ways, this leads back to the CRUD-based vs task-based approach for APIs discussed in Chapter 5. Our general preference is to design events with as lean a payload as possible. However, your experiences may be different depending on your specific problem or situation.</simpara>
 <section xml:id="application-availability">
 <title>Application availability</title>
+<simpara>In an event-driven system, it is common to accumulate an extremely large number of events over a period of time, even in a relatively simple application. Replaying a large number of events can be time-consuming. Let&#8217;s look at the mechanics of how replays typically work:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>We suspend listening to new events in preparation for a replay.</simpara>
+</listitem>
+<listitem>
+<simpara>Clear the query store for impacted aggregates.</simpara>
+</listitem>
+<listitem>
+<simpara>Start an event replay for impacted aggregates.</simpara>
+</listitem>
+<listitem>
+<simpara>Resume listening to new events after replay is complete.</simpara>
+</listitem>
+</orderedlist>
+<simpara>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that SLOs (service level objectives) are continued to be met.</simpara>
+</section>
+</section>
+<section xml:id="event-handlers-with-side-effects">
+<title>Event handlers with side effects</title>
+<simpara>When replaying events, we re-trigger event handlers either to fix logic that was previously erroneous or to support new functionality. Invoking most (if not all) event handlers usually results in some sort of side effect (for example, update a query store). This means that some event handlers may not be running for the first time. To prevent unwanted side effects, it is important to undo the effects of having invoked these event handlers previously or code event handlers in an idempotent manner (for example, by using an <emphasis>upsert</emphasis> instead of a simple insert or an update). The effect of some event handlers can be hard (if not impossible) to undo (for example, invoking a command, sending an email or SMS). In such cases, it might be required to mark such event handlers as being ineligible to run during replay. When using the Axon framework, this is fairly simple to do:</simpara>
+<programlisting language="java" linenumbering="numbered">import org.axonframework.eventhandling.DisallowReplay;
 
+class LCApplicationEventHandlers {
+    @EventHandler
+    @DisallowReplay  <co xml:id="CO4-1"/>
+    public void on(CardIssuedEvent event) {
+        // Behavior that we don't want replayed
+    }
+}</programlisting>
+<calloutlist>
+<callout arearefs="CO4-1">
+<para>The <literal>@DisallowReplay</literal> (or its counterpart <literal>@AllowReplay</literal>) can be used to explicitly mark event handlers ineligible to run during replay.</para>
+</callout>
+</calloutlist>
+<section xml:id="events-as-an-api">
+<title>Events as an API</title>
+<simpara>In an event-sourced system where events are persisted instead of domain state, it is natural for the structure of events to evolve over a period of time. Consider an example of an <literal>BeneficiaryInformationChangedEvent</literal> that has evolved over a period of time as shown here:</simpara>
+<figure role="text-center">
+<title>Event evolution</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="./images/cqrs/event-evolution.png"/>
+</imageobject>
+<textobject><phrase>event evolution</phrase></textobject>
+</mediaobject>
+</figure>
+<simpara>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>The producer can simply provide the historic event as it exists in the event store and allow consumers to deal with resolving how to deal with older versions of the event.</simpara>
+</listitem>
+<listitem>
+<simpara>The producer can upgrade older versions of events to the latest version before exposing it to the consumer.</simpara>
+</listitem>
+<listitem>
+<simpara>Allow the consumer to specify an explicit version of the event that they are able to work with and upgrade it to that version before exposing it to the consumer.</simpara>
+</listitem>
+<listitem>
+<simpara>Migrate the events in the event store to the latest version as evolutions occur. This may not be feasible given the immutable promise of events in the event store.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <link xl:href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><emphasis role="strong">event upcasting</emphasis></link><footnote><simpara><link xl:href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</link></simpara></footnote> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</simpara>
+<simpara>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</simpara>
 </section>
-<section xml:id="optimization-techniques">
-<title>Optimization techniques</title>
-
-</section>
-<section xml:id="event-upcasting">
-<title>Event upcasting</title>
-
 </section>
 </section>
+<section xml:id="summary">
+<title>Summary</title>
+<simpara>In this chapter we examined how to implement the query side of a CQRS-based system. We looked at how domain events can be consumed in real-time to construct materialized views that can be used to service query APIs. We looked at the different query types that can be used to efficiently access the underlying query models. We rounded off by looking at persistence options for the query side.</simpara>
+<simpara>Finally, we looked at historic event replays and how it can be used to correct errors or introduce new functionality in an event-driven system.</simpara>
+<simpara>This chapter should give you a good idea of how to build and evolve the query side of a CQRS-based system to meet changing business requirements while retaining all the business logic on the command side.</simpara>
+<simpara>In this chapter, we looked at how to consume events in a stateless manner ( where no two event handlers have knowledge of each other&#8217;s existence). In the next chapter, we will continue to look at how to consume events, but this time in a stateful manner in the form of long-running user transactions (also known as sagas).</simpara>
+</section>
+<section xml:id="questions">
+<title>Questions</title>
+<itemizedlist>
+<listitem>
+<simpara>In your context, are you segregating commands and queries (even if the segregation is logical)?</simpara>
+</listitem>
+<listitem>
+<simpara>What read/query models are you able to come up with?</simpara>
+</listitem>
+<listitem>
+<simpara>What do you do if you build a query model, and it turns out to be wrong?</simpara>
+</listitem>
+</itemizedlist>
 </section>
 </section>
 </article>

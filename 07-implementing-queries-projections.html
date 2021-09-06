@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.14">
-<title>Implementing Queries and Projections (10 pages)</title>
+<title>Implementing Queries (10 pages)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,7 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#implementing-queries-and-projections-10-pages">Implementing Queries and Projections (10 pages)</a>
+<li><a href="#implementing-queries-10-pages">Implementing Queries (10 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
@@ -459,8 +459,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#types-of-replays">Types of replays</a></li>
 <li><a href="#event-replay-considerations">Event replay considerations</a></li>
+<li><a href="#event-design">Event design</a></li>
+<li><a href="#event-handlers-with-side-effects">Event handlers with side effects</a></li>
 </ul>
 </li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#questions">Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -468,7 +472,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1 text-justify">
-<h2 id="implementing-queries-and-projections-10-pages"><a class="anchor" href="#implementing-queries-and-projections-10-pages"></a>Implementing Queries and Projections (10 pages)</h2>
+<h2 id="implementing-queries-10-pages"><a class="anchor" href="#implementing-queries-10-pages"></a>Implementing Queries (10 pages)</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -602,6 +606,13 @@ Note how there can exist more than one query side component to handle respective
 </div>
 <div class="paragraph">
 <p>Let&#8217;s implement each of these steps to see how this works for our LC issuance application.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Query: A request for data from a data source</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a>Tooling choices</h4>
@@ -765,7 +776,7 @@ Note how there can exist more than one query side component to handle respective
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>We finally save the view into an appropriate query store. When persisting this data, we should consider storing it in a form that is optimized for data access. In other words, we want to reduce as much complexity and cognitive load when querying this data.</td>
+<td>We finally save the query model into an appropriate query store. When persisting this data, we should consider storing it in a form that is optimized for data access. In other words, we want to reduce as much complexity and cognitive load when querying this data.</td>
 </tr>
 </table>
 </div>
@@ -980,18 +991,229 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 </div>
 <div class="sect3">
 <h4 id="event-replay-considerations"><a class="anchor" href="#event-replay-considerations"></a>Event replay considerations</h4>
+<div class="paragraph">
+<p>The ability to replay events and create new query models can be invaluable. However, like everything else, there are considerations that we need to keep in mind when working with replays. Let&#8217;s examine some of these in more detail:</p>
+</div>
+<div class="sect4">
+<h5 id="event-store-design"><a class="anchor" href="#event-store-design"></a>Event store design</h5>
+<div class="paragraph">
+<p>As mentioned in Chapter 5, when working with event-sourced aggregates, we persist immutable events in the persistence store. The primary use-cases that we need to support are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Provide consistent and predictable <strong>write</strong> performance when acting as an append-only store.</p>
+</li>
+<li>
+<p>Provide consistent and predictable <strong>read</strong> performance when querying for events using the aggregate identifier.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>However, replays (especially partial/adhoc) require the event store to support much richer querying capabilities. Consider a scenario where we found an issue where the amount is incorrectly reported for LCs that were approved during a certain time period only for a certain currency. To fix this issue, we need to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Identify affected LCs from the event store.</p>
+</li>
+<li>
+<p>Fix the issue in the application.</p>
+</li>
+<li>
+<p>Reset the query store for these affected aggregates</p>
+</li>
+<li>
+<p>Do a replay of a subset of events for the affected aggregates and reconstruct the query model.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Identifying affected aggregates from the event store can be tricky if we don&#8217;t support querying capabilities that allow us to introspect the event payload. Even if this kind of adhoc querying were to be supported, these queries can adversely impact command handling performance of the event store. One of the primary reasons to employ CQRS was to make use of query-side stores for such complex read scenarios.</p>
+</div>
+<div class="paragraph">
+<p>Event replays seem to introduce a chicken and egg problem where the query store has an issue which can only be corrected by querying the event store. A few options to mitigate this issue are discussed here:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>General purpose store</strong>: Choose an event store that offers predictable performance for both scenarios (command handling and replay querying).</p>
+</li>
+<li>
+<p><strong>Built-in datastore replication</strong>: Make use of read replicas for event replay querying</p>
+</li>
+<li>
+<p><strong>Distinct datastores</strong>: Make use of two distinct data stores to solve each problem on its own (for example, use a relational database/key-value store for command handling and a search-optimized document store for event replay querying).</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Do note that the <strong>distinct datastores</strong> approach for replays is used to satisfy an operational problem as opposed to query-side business use-cases discussed earlier in this chapter. Arguably, it is more complex because the technology team on the command side has to be equipped to maintain more than one database technology.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="event-design"><a class="anchor" href="#event-design"></a>Event design</h4>
+<div class="paragraph">
+<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All events may now require to carry a lot of additional information that may not be relevant to that event. Assembling all this information when publishing the event can add to the cognitive complexity on the command side.</p>
+</li>
+<li>
+<p>The amount of data that needs to be stored and flow through the wire can increase drastically.</p>
+</li>
+<li>
+<p>On the query side, it can increase cognitive complexity when understanding the structure of the event and processing it.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In a lot of ways, this leads back to the CRUD-based vs task-based approach for APIs discussed in Chapter 5. Our general preference is to design events with as lean a payload as possible. However, your experiences may be different depending on your specific problem or situation.</p>
+</div>
 <div class="sect4">
 <h5 id="application-availability"><a class="anchor" href="#application-availability"></a>Application availability</h5>
+<div class="paragraph">
+<p>In an event-driven system, it is common to accumulate an extremely large number of events over a period of time, even in a relatively simple application. Replaying a large number of events can be time-consuming. Let&#8217;s look at the mechanics of how replays typically work:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>We suspend listening to new events in preparation for a replay.</p>
+</li>
+<li>
+<p>Clear the query store for impacted aggregates.</p>
+</li>
+<li>
+<p>Start an event replay for impacted aggregates.</p>
+</li>
+<li>
+<p>Resume listening to new events after replay is complete.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that SLOs (service level objectives) are continued to be met.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="event-handlers-with-side-effects"><a class="anchor" href="#event-handlers-with-side-effects"></a>Event handlers with side effects</h4>
+<div class="paragraph">
+<p>When replaying events, we re-trigger event handlers either to fix logic that was previously erroneous or to support new functionality. Invoking most (if not all) event handlers usually results in some sort of side effect (for example, update a query store). This means that some event handlers may not be running for the first time. To prevent unwanted side effects, it is important to undo the effects of having invoked these event handlers previously or code event handlers in an idempotent manner (for example, by using an <em>upsert</em> instead of a simple insert or an update). The effect of some event handlers can be hard (if not impossible) to undo (for example, invoking a command, sending an email or SMS). In such cases, it might be required to mark such event handlers as being ineligible to run during replay. When using the Axon framework, this is fairly simple to do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.eventhandling.DisallowReplay</span>;
 
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationEventHandlers</span> {
+    <span style="color:#007">@EventHandler</span>
+    <span style="color:#007">@DisallowReplay</span>  <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(CardIssuedEvent event) {
+        <span style="color:#777">// Behavior that we don't want replayed</span>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>@DisallowReplay</code> (or its counterpart <code>@AllowReplay</code>) can be used to explicitly mark event handlers ineligible to run during replay.</td>
+</tr>
+</table>
 </div>
 <div class="sect4">
-<h5 id="optimization-techniques"><a class="anchor" href="#optimization-techniques"></a>Optimization techniques</h5>
-
+<h5 id="events-as-an-api"><a class="anchor" href="#events-as-an-api"></a>Events as an API</h5>
+<div class="paragraph">
+<p>In an event-sourced system where events are persisted instead of domain state, it is natural for the structure of events to evolve over a period of time. Consider an example of an <code>BeneficiaryInformationChangedEvent</code> that has evolved over a period of time as shown here:</p>
 </div>
-<div class="sect4">
-<h5 id="event-upcasting"><a class="anchor" href="#event-upcasting"></a>Event upcasting</h5>
-
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
+<div class="title">Figure 5. Event evolution</div>
+</div>
+<div class="paragraph">
+<p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The producer can simply provide the historic event as it exists in the event store and allow consumers to deal with resolving how to deal with older versions of the event.</p>
+</li>
+<li>
+<p>The producer can upgrade older versions of events to the latest version before exposing it to the consumer.</p>
+</li>
+<li>
+<p>Allow the consumer to specify an explicit version of the event that they are able to work with and upgrade it to that version before exposing it to the consumer.</p>
+</li>
+<li>
+<p>Migrate the events in the event store to the latest version as evolutions occur. This may not be feasible given the immutable promise of events in the event store.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
+</div>
+<div class="paragraph">
+<p>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p>In this chapter we examined how to implement the query side of a CQRS-based system. We looked at how domain events can be consumed in real-time to construct materialized views that can be used to service query APIs. We looked at the different query types that can be used to efficiently access the underlying query models. We rounded off by looking at persistence options for the query side.</p>
+</div>
+<div class="paragraph">
+<p>Finally, we looked at historic event replays and how it can be used to correct errors or introduce new functionality in an event-driven system.</p>
+</div>
+<div class="paragraph">
+<p>This chapter should give you a good idea of how to build and evolve the query side of a CQRS-based system to meet changing business requirements while retaining all the business logic on the command side.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter, we looked at how to consume events in a stateless manner ( where no two event handlers have knowledge of each other&#8217;s existence). In the next chapter, we will continue to look at how to consume events, but this time in a stateful manner in the form of long-running user transactions (also known as sagas).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>In your context, are you segregating commands and queries (even if the segregation is logical)?</p>
+</li>
+<li>
+<p>What read/query models are you able to come up with?</p>
+</li>
+<li>
+<p>What do you do if you build a query model, and it turns out to be wrong?</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1011,11 +1233,17 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <div class="footnote" id="_footnotedef_4">
 <a href="#_footnoteref_4">4</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
 </div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-02 01:40:36 UTC
+Last updated 2021-09-06 02:05:07 UTC
 </div>
 </div>
 </body>
