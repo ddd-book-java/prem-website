@@ -445,19 +445,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#long-running-user-flows-10-pages">Long-Running User Flows (10 pages)</a>
 <ul class="sectlevel2">
+<li><a href="#technical-requirements">Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
-<li><a href="#implementing-sagas">Implementing Sagas</a></li>
-<li><a href="#taking-care-of-deadlines">Taking Care of Deadlines</a></li>
-<li><a href="#distributed-exception-handling">Distributed Exception Handling</a></li>
-<li><a href="#keeping-track-of-the-overall-flow">Keeping Track of the Overall Flow</a></li>
-<li><a href="#deciding-between-orchestration-and-choreography">Deciding between Orchestration and Choreography</a></li>
+<li><a href="#implementing-sagas">Implementing sagas</a>
+<ul class="sectlevel3">
+<li><a href="#orchestration">Orchestration</a></li>
+<li><a href="#choreography">Choreography</a></li>
+<li><a href="#orchestration-versus-choreography">Orchestration versus choreography</a></li>
+</ul>
+</li>
+<li><a href="#handling-distributed-exceptions">Handling distributed exceptions</a>
+<ul class="sectlevel3">
+<li><a href="#types-of-exceptions">Types of exceptions</a></li>
+<li><a href="#recovery">Recovery</a></li>
+</ul>
+</li>
+<li><a href="#handling-deadlines">Handling deadlines</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#questions">Questions</a></li>
+<li><a href="#further-reading">Further reading</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="long-running-user-flows-10-pages"><a class="anchor" href="#long-running-user-flows-10-pages"></a>Long-Running User Flows (10 pages)</h2>
 <div class="sectionbody">
 <div class="quoteblock">
@@ -469,7 +482,57 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 </div>
 <div class="paragraph">
-<p>Not all capabilities can be implemented in the form of a simple request-response interaction, requiring the management of complex state and interactions either with external systems or human-centric operations or both. In other cases, there may be a need to perform business logic at a certain time in the future. In this chapter, we will look at implementing both long-running user operations (sagas) and deadlines. We will also look at how we can keep track of the overall flow using log aggregation and distributed tracing. We will round off by looking at when/whether to choose explicit orchestrations components or implicit choreography.</p>
+<p>In the previous chapters, we have looked at handling commands and queries within the context of a single aggregate. All the scenarios we have looked at thus far, have been limited to a single interaction. However, not all capabilities can be implemented in the form of a simple request-response interaction, requiring coordination across multiple external systems or human-centric operations or both. In other cases, there may be a need to react to triggers that are indeterministic (those that may only occur conditionally) and/or be time-bound (<strong>deadline</strong>). This may require managing business transactions across multiple bounded contexts that may run over a long duration of time, while continuing to maintain consistency (<strong>saga</strong>).</p>
+</div>
+<div class="paragraph">
+<p>There are at least two common patterns to implement the saga pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Explicit orchestration</strong>: A designated component acts as a centralized coordinator&#8201;&#8212;&#8201;where the system relies on the coordinator to react to domain events to manage the flow.</p>
+</li>
+<li>
+<p><strong>Implicit choreography</strong>: No single component is required to act as a centralized coordinator&#8201;&#8212;&#8201;where the components simply react to domain events in other components to manage the flow.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By the end of this chapter, you will have learned how to implement sagas using both techniques. You will also have learnt how to handle exceptions using retries, compensating actions and deadlines. You will finally be able to appreciate when/whether to choose an explicit orchestrator or simply stick to implicit choreography without resorting to the use of potentially expensive distributed transactions.</p>
+</div>
+<div class="sect2">
+<h3 id="technical-requirements"><a class="anchor" href="#technical-requirements"></a>Technical requirements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 1.8+ (We have used Java 17 to compile sample sources)</p>
+</li>
+<li>
+<p>Spring Boot 2.4.x</p>
+</li>
+<li>
+<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
+</li>
+<li>
+<p>JUnit 5.7.x (Included with spring boot)</p>
+</li>
+<li>
+<p>TestFX (for UI testing)</p>
+</li>
+<li>
+<p>OpenJFX Monocle (for headless UI testing)</p>
+</li>
+<li>
+<p>Project Lombok (To reduce verbosity)</p>
+</li>
+<li>
+<p>Axon server to act as an event store</p>
+</li>
+<li>
+<p>Maven 3.x</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
@@ -481,24 +544,93 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-sagas"><a class="anchor" href="#implementing-sagas"></a>Implementing Sagas</h3>
+<h3 id="implementing-sagas"><a class="anchor" href="#implementing-sagas"></a>Implementing sagas</h3>
+<div class="sect3">
+<h4 id="orchestration"><a class="anchor" href="#orchestration"></a>Orchestration</h4>
+
+</div>
+<div class="sect3">
+<h4 id="choreography"><a class="anchor" href="#choreography"></a>Choreography</h4>
+
+</div>
+<div class="sect3">
+<h4 id="orchestration-versus-choreography"><a class="anchor" href="#orchestration-versus-choreography"></a>Orchestration versus choreography</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="handling-distributed-exceptions"><a class="anchor" href="#handling-distributed-exceptions"></a>Handling distributed exceptions</h3>
+<div class="sect3">
+<h4 id="types-of-exceptions"><a class="anchor" href="#types-of-exceptions"></a>Types of exceptions</h4>
+<div class="sect4">
+<h5 id="business-exceptions"><a class="anchor" href="#business-exceptions"></a>Business exceptions</h5>
+
+</div>
+<div class="sect4">
+<h5 id="system-exceptions"><a class="anchor" href="#system-exceptions"></a>System exceptions</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="recovery"><a class="anchor" href="#recovery"></a>Recovery</h4>
+<div class="sect4">
+<h5 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a>Automated recovery</h5>
+
+</div>
+<div class="sect4">
+<h5 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h5>
+
+</div>
+<div class="sect4">
+<h5 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a>Compensating actions</h5>
+
+</div>
+<div class="sect4">
+<h5 id="retries"><a class="anchor" href="#retries"></a>Retries</h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="handling-deadlines"><a class="anchor" href="#handling-deadlines"></a>Handling deadlines</h3>
 
 </div>
 <div class="sect2">
-<h3 id="taking-care-of-deadlines"><a class="anchor" href="#taking-care-of-deadlines"></a>Taking Care of Deadlines</h3>
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
 
 </div>
 <div class="sect2">
-<h3 id="distributed-exception-handling"><a class="anchor" href="#distributed-exception-handling"></a>Distributed Exception Handling</h3>
+<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
 
 </div>
 <div class="sect2">
-<h3 id="keeping-track-of-the-overall-flow"><a class="anchor" href="#keeping-track-of-the-overall-flow"></a>Keeping Track of the Overall Flow</h3>
-
-</div>
-<div class="sect2">
-<h3 id="deciding-between-orchestration-and-choreography"><a class="anchor" href="#deciding-between-orchestration-and-choreography"></a>Deciding between Orchestration and Choreography</h3>
-
+<h3 id="further-reading"><a class="anchor" href="#further-reading"></a>Further reading</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Title</th>
+<th class="tableblock halign-left valign-top">Author</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Example</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Author</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.example.com" class="bare">https://www.example.com</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Example</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Author</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.example.com" class="bare">https://www.example.com</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -506,7 +638,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-17 22:50:23 UTC
+Last updated 2021-09-18 14:05:34 UTC
 </div>
 </div>
 </body>
