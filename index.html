@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 20 2021 09:25 PM UTC</span>
+<span id="revdate">Sep 20 2021 09:39 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -625,22 +625,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#bootstrapping-the-ui">6.3. Bootstrapping the UI</a></li>
-<li><a href="#ui-design-patterns">6.4. UI Design Patterns</a>
+<li><a href="#implementing-the-ui">6.4. Implementing the UI</a>
 <ul class="sectlevel3">
-<li><a href="#model-view-controller-mvc">6.4.1. Model View Controller (MVC)</a></li>
-<li><a href="#model-view-presenter-mvp">6.4.2. Model View Presenter (MVP)</a></li>
-<li><a href="#model-view-view-model-mvvm">6.4.3. Model View View-Model (MVVM)</a></li>
-<li><a href="#which-one-mvc-mvp-or-mvvm">6.4.4. Which one: MVC, MVP or MVVM</a></li>
+<li><a href="#creating-a-new-lc">6.4.1. Creating a new LC</a></li>
 </ul>
 </li>
-<li><a href="#implementing-the-ui">6.5. Implementing the UI</a>
-<ul class="sectlevel3">
-<li><a href="#mvvm-deep-dive">6.5.1. MVVM deep-dive</a></li>
-</ul>
-</li>
-<li><a href="#summary-4">6.6. Summary</a></li>
-<li><a href="#questions-4">6.7. Questions</a></li>
-<li><a href="#further-reading-4">6.8. Further reading</a></li>
+<li><a href="#summary-4">6.5. Summary</a></li>
+<li><a href="#questions-4">6.6. Questions</a></li>
+<li><a href="#further-reading-4">6.7. Further reading</a></li>
 </ul>
 </li>
 <li><a href="#implementing-queries">7. Implementing Queries</a>
@@ -4028,9 +4020,6 @@ To accomplish a difficult task, one must first make it easy.
 <p>API styles</p>
 </li>
 <li>
-<p>UI design patterns</p>
-</li>
-<li>
 <p>Implementing the UI</p>
 </li>
 </ul>
@@ -4361,7 +4350,10 @@ To accomplish a difficult task, one must first make it easy.
 </tbody>
 </table>
 <div class="paragraph">
-<p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
+<p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. Our preference is to design interfaces as task-based where possible, because they result in more intuitive interfaces that better express the problem domain.</p>
+</div>
+<div class="paragraph">
+<p>In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
 </div>
 <div class="paragraph">
 <p>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. Moreover, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</p>
@@ -4614,7 +4606,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </div>
 </div>
 <div class="sect2">
-<h3 id="ui-design-patterns"><a class="anchor" href="#ui-design-patterns"></a><a class="link" href="#ui-design-patterns">6.4. UI Design Patterns</a></h3>
+<h3 id="implementing-the-ui"><a class="anchor" href="#implementing-the-ui"></a><a class="link" href="#implementing-the-ui">6.4. Implementing the UI</a></h3>
 <div class="paragraph">
 <p>When working with user interfaces, it is fairly customary to use one of these presentation patterns:</p>
 </div>
@@ -4632,121 +4624,10 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </ul>
 </div>
 <div class="paragraph">
-<p>Each of these patterns enable us to produce code that is loosely coupled, testable and maintainable. Let&#8217;s briefly examine each of these in more detail here:</p>
-</div>
-<div class="sect3">
-<h4 id="model-view-controller-mvc"><a class="anchor" href="#model-view-controller-mvc"></a><a class="link" href="#model-view-controller-mvc">6.4.1. Model View Controller (MVC)</a></h4>
-<div class="paragraph">
-<p>This is arguably the oldest, most popular when implementing user interfaces, given that it has been in existence since the early 1970s. The pattern breaks the app into three components:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/ui-patterns/mvc.png" alt="mvc">
-</div>
-<div class="title">Figure 1- 41. MVC design pattern</div>
-</div>
-<div class="paragraph">
-<p>The pattern comprises the following components:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Model</strong>: responsible to house the business logic and managing the state of the application.</p>
-</li>
-<li>
-<p><strong>View</strong>: responsible for presenting data to the user.</p>
-</li>
-<li>
-<p><strong>Controller</strong>: responsible to act as a glue between the model and the view. It is also responsible for handling user interactions, data management, networking and validation.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-There are different schools of thought when it comes where concerns such as data fetching, persistence and related network interactions need to live. Some implementations (such as the active record<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup> pattern) advocate making use of the model to house this logic. In other cases, the controller delegates to a repository<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup> to interact with dumb models. Which variation you prefer to use comes down to personal tastes.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="model-view-presenter-mvp"><a class="anchor" href="#model-view-presenter-mvp"></a><a class="link" href="#model-view-presenter-mvp">6.4.2. Model View Presenter (MVP)</a></h4>
-<div class="paragraph">
-<p>MVP is a refinement of the MVC design pattern that originated in the early 1990s. Here, the <code>presenter</code> acts as a middleman between the <code>view</code> and the <code>model</code>. A high level visual of how this pattern is implemented is shown here:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/ui-patterns/mvp.png" alt="mvp">
-</div>
-<div class="title">Figure 1- 42. MVP design pattern</div>
-</div>
-<div class="paragraph">
-<p>The pattern comprises the following components:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Model</strong>: responsible to house the business logic and managing the state of the application.</p>
-</li>
-<li>
-<p><strong>View</strong>: responsible for presenting data to the user and notifying the presenter about user interactions.</p>
-</li>
-<li>
-<p><strong>Presenter</strong>: responsible for handling user interactions on behalf of the view. The presenter usually interacts with the view through an interface that the view implements. This allows for easier unit testing of the presenter independent of the view. The presenter interacts with the model for updates and read operations.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="model-view-view-model-mvvm"><a class="anchor" href="#model-view-view-model-mvvm"></a><a class="link" href="#model-view-view-model-mvvm">6.4.3. Model View View-Model (MVVM)</a></h4>
-<div class="paragraph">
-<p>Modern UI frameworks started adopting a declarative style to express the view. MVVM was designed to remove all GUI code (code-behind) from the view by making use of binding expressions. This allowed for a cleaner separation of stylistic vs. programming concerns. A high level visual of how this pattern is implemented is shown here:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/ui-patterns/mvvm.png" alt="mvvm">
-</div>
-<div class="title">Figure 1- 43. MVVM design pattern</div>
-</div>
-<div class="paragraph">
-<p>The pattern comprises the following components:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Model</strong> : responsible to house the business logic and managing the state of the application.</p>
-</li>
-<li>
-<p><strong>View</strong> : responsible for presenting data to the user and notifying the view-model about user interactions.</p>
-</li>
-<li>
-<p><strong>View-Model</strong>: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Now that we understand the mechanics of each of these patterns, let&#8217;s look at which one to use.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="which-one-mvc-mvp-or-mvvm"><a class="anchor" href="#which-one-mvc-mvp-or-mvvm"></a><a class="link" href="#which-one-mvc-mvp-or-mvvm">6.4.4. Which one: MVC, MVP or MVVM</a></h4>
-<div class="paragraph">
 <p>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="implementing-the-ui"><a class="anchor" href="#implementing-the-ui"></a><a class="link" href="#implementing-the-ui">6.5. Implementing the UI</a></h3>
-<div class="paragraph">
-<p>As discussed in the previous section, the MVVM design pattern provides a robust means to implement the UI. Let&#8217;s look at each of the components we implement in detail:</p>
-</div>
 <div class="sect3">
-<h4 id="mvvm-deep-dive"><a class="anchor" href="#mvvm-deep-dive"></a><a class="link" href="#mvvm-deep-dive">6.5.1. MVVM deep-dive</a></h4>
+<h4 id="creating-a-new-lc"><a class="anchor" href="#creating-a-new-lc"></a><a class="link" href="#creating-a-new-lc">6.4.1. Creating a new LC</a></h4>
 <div class="paragraph">
 <p>Let&#8217;s consider the example of creating a new LC. To start creation of a new LC, all we need is for the applicant to provide a friendly client reference. This is an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
 </div>
@@ -4754,7 +4635,7 @@ There are different schools of thought when it comes where concerns such as data
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 44. Start LC creation screen</div>
+<div class="title">Figure 1- 41. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5068,7 +4949,7 @@ There are different schools of thought when it comes where concerns such as data
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -5356,7 +5237,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 45. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 42. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5365,7 +5246,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 44</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 41</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5921,7 +5802,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.6. Summary</a></h3>
+<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">6.5. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we looked the nuances of API styles and clarified why it is very important to design APIs that capture the users' intent closely. We looked at the differences between CRUD-based and task-based APIs. Finally, we implemented the UI making use of the MVVM design pattern and demonstrated how it aids in test-driving frontend functionality.</p>
 </div>
@@ -5930,7 +5811,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.7. Questions</a></h3>
+<h3 id="questions-4"><a class="anchor" href="#questions-4"></a><a class="link" href="#questions-4">6.6. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -5946,7 +5827,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.8. Further reading</a></h3>
+<h3 id="further-reading-4"><a class="anchor" href="#further-reading-4"></a><a class="link" href="#further-reading-4">6.7. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -6047,7 +5928,7 @@ The best view comes after the hardest climb.
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 46. Recap of eventstorming session</div>
+<div class="title">Figure 1- 43. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
@@ -6062,7 +5943,7 @@ The best view comes after the hardest climb.
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 47. CQRS application&#8201;&#8212;&#8201;query side</div>
+<div class="title">Figure 1- 44. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6132,7 +6013,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side-dissected.png" alt="cqrs query side dissected">
 </div>
-<div class="title">Figure 1- 48. Query side dissected</div>
+<div class="title">Figure 1- 45. Query side dissected</div>
 </div>
 <div class="paragraph">
 <p>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</p>
@@ -6147,7 +6028,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 49. Identified queries</div>
+<div class="title">Figure 1- 46. Identified queries</div>
 </div>
 <div class="paragraph">
 <p>The queries marked in green, all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
@@ -6442,10 +6323,10 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <div class="sect3">
 <h4 id="advanced-query-scenarios"><a class="anchor" href="#advanced-query-scenarios"></a><a class="link" href="#advanced-query-scenarios">7.3.6. Advanced query scenarios</a></h4>
 <div class="paragraph">
-<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
+<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
-<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_15" class="footnote" href="#_footnotedef_15" title="View footnote.">15</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
+<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
 </div>
 </div>
 </div>
@@ -6480,7 +6361,7 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this sub-domain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
 </li>
 <li>
-<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_16" class="footnote" href="#_footnotedef_16" title="View footnote.">16</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_17" class="footnote" href="#_footnotedef_17" title="View footnote.">17</a>]</sup> to name a few) can be extremely beneficial.</p>
+<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_15" class="footnote" href="#_footnotedef_15" title="View footnote.">15</a>]</sup> to name a few) can be extremely beneficial.</p>
 </li>
 </ul>
 </div>
@@ -6560,7 +6441,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="sect3">
 <h4 id="event-design"><a class="anchor" href="#event-design"></a><a class="link" href="#event-design">7.4.3. Event design</a></h4>
 <div class="paragraph">
-<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
+<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_16" class="footnote" href="#_footnotedef_16" title="View footnote.">16</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -6651,7 +6532,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="content">
 <img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
-<div class="title">Figure 1- 50. Event evolution</div>
+<div class="title">Figure 1- 47. Event evolution</div>
 </div>
 <div class="paragraph">
 <p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
@@ -6673,7 +6554,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ul>
 </div>
 <div class="paragraph">
-<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_19" class="footnote" href="#_footnotedef_19" title="View footnote.">19</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
+<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_17" class="footnote" href="#_footnotedef_17" title="View footnote.">17</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
 <p>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</p>
@@ -6778,7 +6659,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <div class="content">
 <img src="./images/sagas/auto-approval-saga.png" alt="auto approval saga">
 </div>
-<div class="title">Figure 1- 51. Recap of eventstorming session</div>
+<div class="title">Figure 1- 48. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As depicted in the visual above, Letter of Credit (LC) applications go through the following validations before the trade finance manager makes a decision to either approve or decline the application:</p>
@@ -6812,7 +6693,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_20" class="footnote" href="#_footnotedef_20" title="View footnote.">20</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
+In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
 </td>
 </tr>
 </table>
@@ -7083,43 +6964,37 @@ Sometimes I feel like I am being forgotten.
 <a href="#_footnoteref_9">9</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_10">
-<a href="#_footnoteref_10">10</a>. <a href="https://martinfowler.com/eaaCatalog/activeRecord.html" class="bare">https://martinfowler.com/eaaCatalog/activeRecord.html</a>
+<a href="#_footnoteref_10">10</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
 </div>
 <div class="footnote" id="_footnotedef_11">
-<a href="#_footnoteref_11">11</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+<a href="#_footnoteref_11">11</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 <div class="footnote" id="_footnotedef_12">
-<a href="#_footnoteref_12">12</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_12">12</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
 </div>
 <div class="footnote" id="_footnotedef_13">
-<a href="#_footnoteref_13">13</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_13">13</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_14">
-<a href="#_footnoteref_14">14</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
+<a href="#_footnoteref_14">14</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
 </div>
 <div class="footnote" id="_footnotedef_15">
-<a href="#_footnoteref_15">15</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
+<a href="#_footnoteref_15">15</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
 </div>
 <div class="footnote" id="_footnotedef_16">
-<a href="#_footnoteref_16">16</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
+<a href="#_footnoteref_16">16</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 <div class="footnote" id="_footnotedef_17">
-<a href="#_footnoteref_17">17</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
+<a href="#_footnoteref_17">17</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
 </div>
 <div class="footnote" id="_footnotedef_18">
-<a href="#_footnoteref_18">18</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
-</div>
-<div class="footnote" id="_footnotedef_19">
-<a href="#_footnoteref_19">19</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
-</div>
-<div class="footnote" id="_footnotedef_20">
-<a href="#_footnoteref_20">20</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
+<a href="#_footnoteref_18">18</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-20 21:25:29 UTC
+Last updated 2021-09-20 21:39:30 UTC
 </div>
 </div>
 </body>
