@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 18 2021 02:05 PM UTC</span>
+<span id="revdate">Sep 20 2021 09:25 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6021,28 +6021,16 @@ The best view comes after the hardest climb.
 <p>JDK 1.8+ (We have used Java 16 to compile sample sources)</p>
 </li>
 <li>
-<p>JavaFX SDK 16 and SceneBuilder</p>
-</li>
-<li>
 <p>Spring Boot 2.4.x</p>
 </li>
 <li>
-<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
+<p>Axon framework 4.5.3</p>
 </li>
 <li>
 <p>JUnit 5.7.x (Included with spring boot)</p>
 </li>
 <li>
-<p>TestFX (for UI testing)</p>
-</li>
-<li>
-<p>OpenJFX Monocle (for headless UI testing)</p>
-</li>
-<li>
 <p>Project Lombok (To reduce verbosity)</p>
-</li>
-<li>
-<p>Axon server to act as an event store</p>
 </li>
 <li>
 <p>Maven 3.x</p>
@@ -6738,7 +6726,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 </div>
 <div class="paragraph">
-<p>In the previous chapters, we have looked at handling commands and queries within the context of a single aggregate. All the scenarios we have looked at thus far, have been limited to a single interaction. However, not all capabilities can be implemented in the form of a simple request-response interaction, requiring coordination across multiple external systems or human-centric operations or both. In other cases, there may be a need to react to triggers that are indeterministic (those that may only occur conditionally) and/or be time-bound (<strong>deadline</strong>). This may require managing business transactions across multiple bounded contexts that may run over a long duration of time, while continuing to maintain consistency (<strong>saga</strong>).</p>
+<p>In the previous chapters, we have looked at handling commands and queries within the context of a single aggregate. All the scenarios we have looked at thus far, have been limited to a single interaction. However, not all capabilities can be implemented in the form of a simple request-response interaction, requiring coordination across multiple external systems or human-centric operations or both. In other cases, there may be a need to react to triggers that are nondeterministic (occur conditionally or not at all) and/or be time-bound (based on a deadline). This may require managing business transactions across multiple bounded contexts that may run over a long duration of time, while continuing to maintain consistency (<strong>saga</strong>).</p>
 </div>
 <div class="paragraph">
 <p>There are at least two common patterns to implement the saga pattern:</p>
@@ -6767,22 +6755,13 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <p>Spring Boot 2.4.x</p>
 </li>
 <li>
-<p>mvvmFX 1.8 (<a href="https://sialcasa.github.io/mvvmFX/" class="bare">https://sialcasa.github.io/mvvmFX/</a>)</p>
+<p>Axon framework 4.5.3</p>
 </li>
 <li>
 <p>JUnit 5.7.x (Included with spring boot)</p>
 </li>
 <li>
-<p>TestFX (for UI testing)</p>
-</li>
-<li>
-<p>OpenJFX Monocle (for headless UI testing)</p>
-</li>
-<li>
 <p>Project Lombok (To reduce verbosity)</p>
-</li>
-<li>
-<p>Axon server to act as an event store</p>
 </li>
 <li>
 <p>Maven 3.x</p>
@@ -6792,11 +6771,54 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey-3"><a class="anchor" href="#continuing-our-design-journey-3"></a><a class="link" href="#continuing-our-design-journey-3">8.2. Continuing our design journey</a></h3>
+<div class="paragraph">
+<p>In <a href="#_domain_analysis_and_modeling">Chapter 4 - Domain analysis and modeling</a>, we discussed eventstorming as a lightweight method to clarify business flows. As a reminder, this is the output produced from our eventstorming session:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/event-storming/05-query-models.png" alt="05 query models">
+<img src="./images/sagas/auto-approval-saga.png" alt="auto approval saga">
 </div>
 <div class="title">Figure 1- 51. Recap of eventstorming session</div>
+</div>
+<div class="paragraph">
+<p>As depicted in the visual above, Letter of Credit (LC) applications go through the following validations before the trade finance manager makes a decision to either approve or decline the application:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Product value is validated for correctness</p>
+</li>
+<li>
+<p>Product legality is validated</p>
+</li>
+<li>
+<p>Applicant&#8217;s credit worthiness is validated</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Currently, this is a manual process. It is pertinent to note that the product value and legality checks happen as part of the work done by the product analysis department, whereas applicant credit worthiness checks happens in the credit analysis department. Both departments make use of their own systems to perform these functions and notify us through the respective events. An LC application is <strong>not ready</strong> to either be approved or declined until <strong>each</strong> of these checks are completed. Each of these processes happen mostly independently of the other and may take a nondeterministic amount of time (typically in the order of a few days). After these checks have happened, the trade finance manager manually reviews the application and makes the final decision.</p>
+</div>
+<div class="paragraph">
+<p>Given the growing volumes of LC applications received, the bank is looking to introduce a process optimization to automatically approve applications with an amount below a certain threshold (USD 10,000 at this time). The business has deemed that the three checks above are sufficient and that no further human intervention is required when approving such applications.</p>
+</div>
+<div class="paragraph">
+<p>From an overall system perspective, it is pertinent to note that the product analyst system notifies us through the <code>ProductValueValidatedEvent</code> and <code>ProductLegalityValidatedEvent</code>, whereas the credit analyst system does the same through the <code>ApplicantCreditValidatedEvent</code> event. Each of these events can and indeed happen independently of the other. For us to be able to auto-approve applications our solution needs to wait for all of these events to occur. Once these events have occurred, we need to examine the outcome of each of these events to finally make a decision.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_20" class="footnote" href="#_footnotedef_20" title="View footnote.">20</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As is evident, the LC auto-approval functionality is an example of a long-running business process where <em>some thing</em> in our system needs to keep track of the fact that these independent events have occurred before proceeding further.  Such functionality can be implemented using the saga pattern.</p>
 </div>
 </div>
 <div class="sect2">
@@ -7090,11 +7112,14 @@ Sometimes I feel like I am being forgotten.
 <div class="footnote" id="_footnotedef_19">
 <a href="#_footnoteref_19">19</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
 </div>
+<div class="footnote" id="_footnotedef_20">
+<a href="#_footnoteref_20">20</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-18 14:05:35 UTC
+Last updated 2021-09-20 21:25:29 UTC
 </div>
 </div>
 </body>
