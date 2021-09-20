@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 20 2021 09:39 PM UTC</span>
+<span id="revdate">Sep 20 2021 11:53 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -585,7 +585,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_implementing_the_command_side">5.3. Implementing the command side</a>
 <ul class="sectlevel3">
 <li><a href="#tooling-choices">5.3.1. Tooling choices</a></li>
-<li><a href="#bootstrapping-the-application">5.3.2. Bootstrapping the application</a></li>
+<li><a href="#_bootstapping_the_application">5.3.2. Bootstrapping the application</a></li>
 <li><a href="#identifying-commands">5.3.3. Identifying commands</a></li>
 <li><a href="#_identifying_aggregates">5.3.4. Identifying aggregates</a></li>
 <li><a href="#test-driving-the-system">5.3.5. Test-driving the system</a></li>
@@ -2314,7 +2314,7 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 </div>
 </div>
 <div class="sect3">
-<h4 id="bootstrapping-the-application"><a class="anchor" href="#bootstrapping-the-application"></a><a class="link" href="#bootstrapping-the-application">5.3.2. Bootstrapping the application</a></h4>
+<h4 id="_bootstapping_the_application"><a class="anchor" href="#_bootstapping_the_application"></a><a class="link" href="#_bootstapping_the_application">5.3.2. Bootstrapping the application</a></h4>
 <div class="paragraph">
 <p>To get started, let&#8217;s create a simple spring boot application. There are several ways to do this. You can always use the Spring starter application at <a href="https://start.spring.io" class="bare">https://start.spring.io</a> to create this application. Here, we will make use of the <code>spring</code> CLI to bootstrap the application.</p>
 </div>
@@ -4321,13 +4321,19 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Scalability</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based interfaces are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup></em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity of the system as a whole is proportional to the number of features that need to be implemented. Assuming accidental complexity is avoided in both cases, task-based interfaces allow spreading complexity more or less uniformly across multiple simpler interfaces.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Latency</p></td>
@@ -4341,29 +4347,59 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="gray"><span class="icon"><i class="fa fa-question-circle"></i></span></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="gray"><span class="icon"><i class="fa fa-question-circle"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity of the system as a whole is proportional to the number of features that need to be implemented. Irrespective of API style, this usually remains constant. However, spreading complexity relatively uniformly across multiple simpler interfaces can enable managing complexity a lot more effectively.</p></td>
-</tr>
 </tbody>
 </table>
 <div class="paragraph">
 <p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. Our preference is to design interfaces as task-based where possible, because they result in more intuitive interfaces that better express the problem domain.</p>
 </div>
 <div class="paragraph">
-<p>In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
+<p>As systems evolve, and the support richer user experiences and multiple channels, CRUD-based seem to require additional translation layers to cater to user experience needs. The visual here depicts a typical layered architecture of a solution that supports multiple user experience channels:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ui-patterns/bff.png" alt="bff">
+</div>
 </div>
 <div class="paragraph">
-<p>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. Moreover, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</p>
+<p>This set up is usually composed of:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Domain tier comprised of CRUD-based services that simply map closely to database entities.</p>
+</li>
+<li>
+<p>Composite tier comprised of business capabilities that span more than one core service.</p>
+</li>
+<li>
+<p>Backend-for-frontend (<a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>) tier comprised of channel-specific APIs.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Do note that the composite and BFF tiers exist primarily as a means to map backend capabilities to user intent. In an ideal world, where backend APIs reflect user intent closely, the need for translations should be minimal (if at all). Our experience suggests that such a setup causes business logic to get pushed closer to the user channels as opposed to being encapsulated within the confines of well-factored business services. In addition, these tiers cause inconsistent experiences across channels for the same functionality, given that modern teams are structured along tier boundaries.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+We are not opposed to the use of layered architectures. We recognize that a layered architecture can bring modularity, separation of concerns and other related benefits. However, we are opposed to creating additional tiers merely as a means to compensate for poorly factored core domain APIs.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A well factored API tier can have a profound effect on how great user experiences are built. However, this is a chapter on implementing the user interface. Let&#8217;s revert to creating the user interface for the LC application.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="bootstrapping-the-ui"><a class="anchor" href="#bootstrapping-the-ui"></a><a class="link" href="#bootstrapping-the-ui">6.3. Bootstrapping the UI</a></h3>
 <div class="paragraph">
-<p>We will be building the UI on top of the LC issuance application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on <em>Bootstrapping the application</em>. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
+<p>We will be building the UI for the LC issuance application we created in <a href="#_implementing_domain_logic">Chapter 5: Implementing Domain Logic</a>. For detailed instructions, refer to the section on <a href="#_bootstapping_the_application"><em>Bootstrapping the application</em></a>. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4949,7 +4985,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -6323,10 +6359,10 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <div class="sect3">
 <h4 id="advanced-query-scenarios"><a class="anchor" href="#advanced-query-scenarios"></a><a class="link" href="#advanced-query-scenarios">7.3.6. Advanced query scenarios</a></h4>
 <div class="paragraph">
-<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
+<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
-<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
+<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
 </div>
 </div>
 </div>
@@ -6361,7 +6397,7 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this sub-domain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
 </li>
 <li>
-<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_15" class="footnote" href="#_footnotedef_15" title="View footnote.">15</a>]</sup> to name a few) can be extremely beneficial.</p>
+<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_15" class="footnote" href="#_footnotedef_15" title="View footnote.">15</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_16" class="footnote" href="#_footnotedef_16" title="View footnote.">16</a>]</sup> to name a few) can be extremely beneficial.</p>
 </li>
 </ul>
 </div>
@@ -6441,7 +6477,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="sect3">
 <h4 id="event-design"><a class="anchor" href="#event-design"></a><a class="link" href="#event-design">7.4.3. Event design</a></h4>
 <div class="paragraph">
-<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_16" class="footnote" href="#_footnotedef_16" title="View footnote.">16</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
+<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_17" class="footnote" href="#_footnotedef_17" title="View footnote.">17</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -6554,7 +6590,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ul>
 </div>
 <div class="paragraph">
-<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_17" class="footnote" href="#_footnotedef_17" title="View footnote.">17</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
+<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
 <p>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</p>
@@ -6693,7 +6729,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
+In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_19" class="footnote" href="#_footnotedef_19" title="View footnote.">19</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
 </td>
 </tr>
 </table>
@@ -6964,37 +7000,40 @@ Sometimes I feel like I am being forgotten.
 <a href="#_footnoteref_9">9</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_10">
-<a href="#_footnoteref_10">10</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_10">10</a>. <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html" class="bare">https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html</a>
 </div>
 <div class="footnote" id="_footnotedef_11">
-<a href="#_footnoteref_11">11</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_11">11</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
 </div>
 <div class="footnote" id="_footnotedef_12">
-<a href="#_footnoteref_12">12</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
+<a href="#_footnoteref_12">12</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 <div class="footnote" id="_footnotedef_13">
-<a href="#_footnoteref_13">13</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
+<a href="#_footnoteref_13">13</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
 </div>
 <div class="footnote" id="_footnotedef_14">
-<a href="#_footnoteref_14">14</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
+<a href="#_footnoteref_14">14</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_15">
-<a href="#_footnoteref_15">15</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
+<a href="#_footnoteref_15">15</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
 </div>
 <div class="footnote" id="_footnotedef_16">
-<a href="#_footnoteref_16">16</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
+<a href="#_footnoteref_16">16</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
 </div>
 <div class="footnote" id="_footnotedef_17">
-<a href="#_footnoteref_17">17</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
+<a href="#_footnoteref_17">17</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 <div class="footnote" id="_footnotedef_18">
-<a href="#_footnoteref_18">18</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
+<a href="#_footnoteref_18">18</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
+</div>
+<div class="footnote" id="_footnotedef_19">
+<a href="#_footnoteref_19">19</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-20 21:39:30 UTC
+Last updated 2021-09-20 23:53:45 UTC
 </div>
 </div>
 </body>

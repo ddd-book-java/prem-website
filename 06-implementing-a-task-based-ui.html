@@ -792,13 +792,19 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Scalability</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based APIs are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces have an advantage because they can provide the ability to independently scale specific features. However, if the fine-grained task-based interfaces are used almost all the time in unison, it may be required to re-examine whether the users' intents are accurately captured.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup></em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity of the system as a whole is proportional to the number of features that need to be implemented. Assuming accidental complexity is avoided in both cases, task-based interfaces allow spreading complexity more or less uniformly across multiple simpler interfaces.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Latency</p></td>
@@ -812,29 +818,59 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">For the provider, fine-grained interfaces require a lot more work managing a larger number of interfaces.</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="gray"><span class="icon"><i class="fa fa-question-circle"></i></span></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="gray"><span class="icon"><i class="fa fa-question-circle"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Complexity of the system as a whole is proportional to the number of features that need to be implemented. Irrespective of API style, this usually remains constant. However, spreading complexity relatively uniformly across multiple simpler interfaces can enable managing complexity a lot more effectively.</p></td>
-</tr>
 </tbody>
 </table>
 <div class="paragraph">
 <p>As we can see, the decision between CRUD-based and task-based interfaces is nuanced. We are not suggesting that you should choose one over the other. Which style you use will depend on your specific requirements and context. In our experience, task-based interfaces treat user intents as first class citizens and perpetrate the spirit of DDD&#8217;s ubiquitous language very elegantly. Our preference is to design interfaces as task-based where possible, because they result in more intuitive interfaces that better express the problem domain.</p>
 </div>
 <div class="paragraph">
-<p>In a lot of scenarios, providing both styles of APIs may work well for consumers, although it may add a certain amount of overhead to the interface provider.</p>
+<p>As systems evolve, and the support richer user experiences and multiple channels, CRUD-based seem to require additional translation layers to cater to user experience needs. The visual here depicts a typical layered architecture of a solution that supports multiple user experience channels:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ui-patterns/bff.png" alt="bff">
+</div>
 </div>
 <div class="paragraph">
-<p>This is a chapter on evolving the user interface, however, we have spent a lot of time discussing the backend APIs. Moreover, the same principles apply when designing graphical user interfaces as well. Let&#8217;s revert back to creating the user interface for the LC application.</p>
+<p>This set up is usually composed of:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Domain tier comprised of CRUD-based services that simply map closely to database entities.</p>
+</li>
+<li>
+<p>Composite tier comprised of business capabilities that span more than one core service.</p>
+</li>
+<li>
+<p>Backend-for-frontend (<a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>) tier comprised of channel-specific APIs.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Do note that the composite and BFF tiers exist primarily as a means to map backend capabilities to user intent. In an ideal world, where backend APIs reflect user intent closely, the need for translations should be minimal (if at all). Our experience suggests that such a setup causes business logic to get pushed closer to the user channels as opposed to being encapsulated within the confines of well-factored business services. In addition, these tiers cause inconsistent experiences across channels for the same functionality, given that modern teams are structured along tier boundaries.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+We are not opposed to the use of layered architectures. We recognize that a layered architecture can bring modularity, separation of concerns and other related benefits. However, we are opposed to creating additional tiers merely as a means to compensate for poorly factored core domain APIs.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A well factored API tier can have a profound effect on how great user experiences are built. However, this is a chapter on implementing the user interface. Let&#8217;s revert to creating the user interface for the LC application.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="bootstrapping-the-ui"><a class="anchor" href="#bootstrapping-the-ui"></a>Bootstrapping the UI</h3>
 <div class="paragraph">
-<p>We will be building the UI on top of the LC issuance application we created in Chapter 5: Implementing Domain Logic. For detailed instructions, refer to the section on <em>Bootstrapping the application</em>. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
+<p>We will be building the UI for the LC issuance application we created in <a href="#_implementing_domain_logic">Chapter 5: Implementing Domain Logic</a>. For detailed instructions, refer to the section on <a href="#_bootstapping_the_application"><em>Bootstrapping the application</em></a>. In addition, we will need to add the following dependencies to the <code>dependencies</code> section of the Maven <code>pom.xml</code> file in the root directory of the project:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1420,7 +1456,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -2348,16 +2384,19 @@ This may feel contrary to the notion of centralizing business validations on the
 <a href="#_footnoteref_2">2</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_3">3</a>. <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html" class="bare">https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+</div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-20 21:39:30 UTC
+Last updated 2021-09-20 23:53:44 UTC
 </div>
 </div>
 </body>
