@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 21 2021 10:16 AM UTC</span>
+<span id="revdate">Sep 21 2021 11:02 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -627,7 +627,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#bootstrapping-the-ui">6.3. Bootstrapping the UI</a></li>
 <li><a href="#implementing-the-ui">6.4. Implementing the UI</a>
 <ul class="sectlevel3">
-<li><a href="#creating-a-new-lc">6.4.1. Creating a new LC</a></li>
+<li><a href="#model-view-view-model-mvvm-primer">6.4.1. Model View View-Model (MVVM) primer</a></li>
+<li><a href="#creating-a-new-lc">6.4.2. Creating a new LC</a></li>
 </ul>
 </li>
 <li><a href="#summary-4">6.5. Summary</a></li>
@@ -4660,10 +4661,41 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </ul>
 </div>
 <div class="paragraph">
-<p>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us.</p>
+<p>The MVC pattern has been around for the longest time. The idea of separating concerns among collaborating model, view and controller objects is a sound one. However, beyond the definition of these objects, actual implementations seem to vary wildly&#8201;&#8212;&#8201;with the controller becoming overly complex in a lot of cases. In contrast, MVP and MVVM, while being derivatives of MVC, seem to bring out better separation of concerns between the collaborating objects. MVVM, in particular when coupled with data binding constructs, make for code that is much more readable, maintainable and testable. In this book, we make use of MVVM because it enables test-driven development which is a strong personal preference for us. Let&#8217;s look at a quick MVVM primer as implemented in the <code>mvvmfx</code> framework.</p>
 </div>
 <div class="sect3">
-<h4 id="creating-a-new-lc"><a class="anchor" href="#creating-a-new-lc"></a><a class="link" href="#creating-a-new-lc">6.4.1. Creating a new LC</a></h4>
+<h4 id="model-view-view-model-mvvm-primer"><a class="anchor" href="#model-view-view-model-mvvm-primer"></a><a class="link" href="#model-view-view-model-mvvm-primer">6.4.1. Model View View-Model (MVVM) primer</a></h4>
+<div class="paragraph">
+<p>Modern UI frameworks started adopting a declarative style to express the view. MVVM was designed to remove all GUI code (code-behind) from the view by making use of binding expressions. This allowed for a cleaner separation of stylistic vs. programming concerns. A high level visual of how this pattern is implemented is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ui-patterns/mvvm.png" alt="mvvm">
+</div>
+<div class="title">Figure 1- 41. MVVM design pattern</div>
+</div>
+<div class="paragraph">
+<p>The pattern comprises the following components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Model</strong>: responsible to house the business logic and managing the state of the application.</p>
+</li>
+<li>
+<p><strong>View</strong>: responsible for presenting data to the user and notifying the view-model about user interactions through the view delegate.</p>
+</li>
+<li>
+<p><strong>View Delegate</strong>: responsible for keeping the view and the view model in sync as changes are made by the user or on the view model.</p>
+</li>
+<li>
+<p><strong>View-Model</strong>: responsible for handling user interactions on behalf of the view. The view-model interacts with the view using the observer pattern (typically one-way or two-way data binding to make it more convenient). The view-model interacts with the model for updates and read operations.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="creating-a-new-lc"><a class="anchor" href="#creating-a-new-lc"></a><a class="link" href="#creating-a-new-lc">6.4.2. Creating a new LC</a></h4>
 <div class="paragraph">
 <p>Let&#8217;s consider the example of creating a new LC. To start creation of a new LC, all we need is for the applicant to provide a friendly client reference. This is an easy to remember string of free text. A simple rendition of this UI is shown here:</p>
 </div>
@@ -4671,7 +4703,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 41. Start LC creation screen</div>
+<div class="title">Figure 1- 42. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -4733,11 +4765,11 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>In order to reference <code>client-reference</code> textbox in the view delegate, we use the <code>fx:id</code> annotation&#8201;&#8212;&#8201;<code>clientReference</code> in this case.</td>
+<td>In order to reference <code>client-reference</code> input field in the view delegate, we use the <code>fx:id</code> annotation&#8201;&#8212;&#8201;<code>clientReference</code> in this case.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Similarly, the <code>start-button</code> is referenced using <code>fx:id=startButton</code> in the view delegate. Furthermore, the <code>start</code> method in the view delegate is assigned to handle the default action (the button press event for <code>javafx.scene.control.Button</code>).</td>
+<td>Similarly, the <code>start-button</code> is referenced using <code>fx:id="startButton"</code> in the view delegate. Furthermore, the <code>start</code> method in the view delegate is assigned to handle the default action (the button press event for <code>javafx.scene.control.Button</code>).</td>
 </tr>
 </table>
 </div>
@@ -5273,7 +5305,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 42. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 43. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5282,7 +5314,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 41</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 42</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5964,7 +5996,7 @@ The best view comes after the hardest climb.
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 43. Recap of eventstorming session</div>
+<div class="title">Figure 1- 44. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
@@ -5979,7 +6011,7 @@ The best view comes after the hardest climb.
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 44. CQRS application&#8201;&#8212;&#8201;query side</div>
+<div class="title">Figure 1- 45. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6049,7 +6081,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side-dissected.png" alt="cqrs query side dissected">
 </div>
-<div class="title">Figure 1- 45. Query side dissected</div>
+<div class="title">Figure 1- 46. Query side dissected</div>
 </div>
 <div class="paragraph">
 <p>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</p>
@@ -6064,7 +6096,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 46. Identified queries</div>
+<div class="title">Figure 1- 47. Identified queries</div>
 </div>
 <div class="paragraph">
 <p>The queries marked in green, all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
@@ -6568,7 +6600,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="content">
 <img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
-<div class="title">Figure 1- 47. Event evolution</div>
+<div class="title">Figure 1- 48. Event evolution</div>
 </div>
 <div class="paragraph">
 <p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
@@ -6695,7 +6727,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <div class="content">
 <img src="./images/sagas/auto-approval-saga.png" alt="auto approval saga">
 </div>
-<div class="title">Figure 1- 48. Recap of eventstorming session</div>
+<div class="title">Figure 1- 49. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As depicted in the visual above, Letter of Credit (LC) applications go through the following validations before the trade finance manager makes a decision to either approve or decline the application:</p>
@@ -7033,7 +7065,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-21 10:16:08 UTC
+Last updated 2021-09-21 11:02:20 UTC
 </div>
 </div>
 </body>
