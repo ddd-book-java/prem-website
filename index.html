@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 21 2021 11:05 AM UTC</span>
+<span id="revdate">Sep 21 2021 03:27 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -5609,6 +5609,7 @@ This may feel contrary to the notion of centralizing business validations on the
 24
 25
 26
+27
 </pre></td>
   <td class="code"><pre><span style="color:#007">@UITest</span>
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">StartLCViewTests</span> {
@@ -5631,7 +5632,8 @@ This may feel contrary to the notion of centralizing business validations on the
             .setText(clientReference);                                <i class="conum" data-value="3"></i><b>(3)</b>
         robot.clickOn(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#start-button</span><span style="color:#710">&quot;</span></span>);                               <i class="conum" data-value="4"></i><b>(4)</b>
 
-        Mockito.verify(service).startNewLC(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">test-applicant</span><span style="color:#710">&quot;</span></span>, clientReference); <i class="conum" data-value="5"></i><b>(5)</b>
+        Mockito.verify(service).startNewLC(
+                <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">test-applicant</span><span style="color:#710">&quot;</span></span>, clientReference);                   <i class="conum" data-value="5"></i><b>(5)</b>
 
         verifyThat(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#lc-details-screen</span><span style="color:#710">&quot;</span></span>, isVisible());                <i class="conum" data-value="6"></i><b>(6)</b>
     }
@@ -7065,7 +7067,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-21 11:05:08 UTC
+Last updated 2021-09-21 15:27:37 UTC
 </div>
 </div>
 </body>
