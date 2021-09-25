@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 25 2021 11:55 AM UTC</span>
+<span id="revdate">Sep 25 2021 02:39 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6733,12 +6733,12 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/sagas/auto-approval-saga.png" alt="auto approval saga">
+<img src="./images/sagas/event-storming-auto-approval-saga.png" alt="event storming auto approval saga">
 </div>
 <div class="title">Figure 1- 49. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As depicted in the visual above, Letter of Credit (LC) applications go through the following validations before the trade finance manager makes a decision to either approve or decline the application:</p>
+<p>As depicted in the visual above, some aspects of Letter of Credit (LC) application processing happens outside our current bounded context), before the trade finance manager makes a decision to either approve or decline the application as listed here:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6754,10 +6754,10 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </ol>
 </div>
 <div class="paragraph">
-<p>Currently, this is a manual process. It is pertinent to note that the product value and legality checks happen as part of the work done by the product analysis department, whereas applicant credit worthiness checks happens in the credit analysis department. Both departments make use of their own systems to perform these functions and notify us through the respective events. An LC application is <strong>not ready</strong> to either be approved or declined until <strong>each</strong> of these checks are completed. Each of these processes happen mostly independently of the other and may take a nondeterministic amount of time (typically in the order of a few days). After these checks have happened, the trade finance manager manually reviews the application and makes the final decision.</p>
+<p>Currently, the final approval is a manual process. It is pertinent to note that the product value and legality checks happen as part of the work done by the product analysis department, whereas applicant credit worthiness checks happens in the credit analysis department. Both departments make use of their own systems to perform these functions and notify us through the respective events. An LC application is <strong>not ready</strong> to either be approved or declined until <strong>each</strong> of these checks are completed. Each of these processes happen mostly independently of the other and may take a nondeterministic amount of time (typically in the order of a few days). After these checks have happened, the trade finance manager manually reviews the application and makes the final decision.</p>
 </div>
 <div class="paragraph">
-<p>Given the growing volumes of LC applications received, the bank is looking to introduce a process optimization to automatically approve applications with an amount below a certain threshold (USD 10,000 at this time). The business has deemed that the three checks above are sufficient and that no further human intervention is required when approving such applications.</p>
+<p>Given the growing volumes of LC applications received, the bank is looking to introduce a process optimization to automatically approve applications with an amount below a certain threshold (<strong>USD 10,000</strong> at this time). The business has deemed that the three checks above are sufficient and that no further human intervention is required when approving such applications.</p>
 </div>
 <div class="paragraph">
 <p>From an overall system perspective, it is pertinent to note that the product analyst system notifies us through the <code>ProductValueValidatedEvent</code> and <code>ProductLegalityValidatedEvent</code>, whereas the credit analyst system does the same through the <code>ApplicantCreditValidatedEvent</code> event. Each of these events can and indeed happen independently of the other. For us to be able to auto-approve applications our solution needs to wait for all of these events to occur. Once these events have occurred, we need to examine the outcome of each of these events to finally make a decision.</p>
@@ -6775,14 +6775,194 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 </table>
 </div>
 <div class="paragraph">
-<p>As is evident, the LC auto-approval functionality is an example of a long-running business process where <em>some thing</em> in our system needs to keep track of the fact that these independent events have occurred before proceeding further.  Such functionality can be implemented using the saga pattern.</p>
+<p>As is evident, the LC auto-approval functionality is an example of a long-running business process where <em>some thing</em> in our system needs to keep track of the fact that these independent events have occurred before proceeding further.  Such functionality can be implemented using the saga pattern. Let&#8217;s look at how we can do this.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="implementing-sagas"><a class="anchor" href="#implementing-sagas"></a><a class="link" href="#implementing-sagas">8.3. Implementing sagas</a></h3>
+<div class="paragraph">
+<p>Before we delve into how we can implement this auto-approval functionality, let&#8217;s take a look at how this works from a logical perspective as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/sagas/auto-approval-saga-logical.png" alt="auto approval saga logical">
+</div>
+<div class="title">Figure 1- 50. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
+</div>
+<div class="paragraph">
+<p>As is depicted in the visual above, there are three bounded contexts in play:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>LC Application (the bounded context we have been implementing thus far)</p>
+</li>
+<li>
+<p>The Applicant bounded context</p>
+</li>
+<li>
+<p>The Product bounded context</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The flow gets triggered when the LC application is submitted. This in turn sets in motion three independent functions that establish the:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Value of the product being transacted</p>
+</li>
+<li>
+<p>Legality of the product being transacted</p>
+</li>
+<li>
+<p>Credit worthiness of the applicant</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>LC approval can proceed only after <strong>all</strong> of these functions have completed. Furthermore, to <strong>auto-approve</strong>, all of these checks have to complete <strong>favorably</strong> and as mentioned earlier, the LC amount has to be lesser than the <strong>USD 10000</strong> threshold.</p>
+</div>
+<div class="paragraph">
+<p>As shown in the event storming artifact, the <code>LC Application</code> aggregate is able to handle an <code>ApproveLCApplicationCommand</code>, which results in a LCApplicationApprovedEvent`. To auto-approve, this command needs to be invoked automatically when all the conditions mentioned earlier are satisfied. We are building an event-driven system, and we can see that each of these validations produce events when their respective actions complete. There are at least two ways to implement this functionality:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Orchestration: where a single component in the system coordinates the state of the flow and triggers subsequent actions as necessary.</p>
+</li>
+<li>
+<p>Choreography: where actions in the flow are triggered without requiring an explicit coordinating component.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s examine these methods in more detail:</p>
+</div>
 <div class="sect3">
 <h4 id="orchestration"><a class="anchor" href="#orchestration"></a><a class="link" href="#orchestration">8.3.1. Orchestration</a></h4>
+<div class="paragraph">
+<p>When implementing sagas using an orchestrating component, the system looks similar to the one depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/sagas/auto-approval-saga-orchestrator.png" alt="auto approval saga orchestrator">
+</div>
+<div class="title">Figure 1- 51. Saga implementation using an orchestrator</div>
+</div>
+<div class="paragraph">
+<p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.EndSaga</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.SagaEventHandler</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.StartSaga</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.spring.stereotype.Saga</span>;
 
+<span style="color:#007">@Saga</span>                                                          <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ApplicantCreditValidatedEvent event) {
+        <span style="color:#777">//</span>
+    }
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductValueValidatedEvent event) {
+        <span style="color:#777">//</span>
+    }
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
+        <span style="color:#777">//</span>
+    }
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#007">@StartSaga</span>                                                 <i class="conum" data-value="3"></i><b>(3)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationSubmittedEvent event) {
+        <span style="color:#777">//</span>
+    }
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
+    <span style="color:#007">@EndSaga</span>                                                   <i class="conum" data-value="4"></i><b>(4)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationApprovedEvent event) {
+        <span style="color:#777">//</span>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When working with Axon and Spring, the orchestrator is annotated with the <code>@Saga</code> annotation to mark it as a spring bean. In order to track each submitted LC application, the <code>@Saga</code> annotation is prototype-scoped (as opposed to singleton-scoped), to allow creation of multiple saga instances. Please refer to the Axon and Spring documentation for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The saga listens to relevant events happening in the system to keep track of the flow (as denoted by the <code>@SagaEventHandler</code> annotation). Conceptually, the <code>@SagaEventHandler</code> annotation is very similar to the <code>@EventHandler</code> annotation that we discussed previously. However, in contrast to the <code>@EventHandler</code> which are singletons, a distinct instance of the saga is created for each LC application. This distinction is established by the value of the <code>associationProperty</code> attribute. In this example, the <code>associationProperty</code> looks for the <code>lcApplicationId</code> attribute in the incoming event&#8217;s payload.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>In the case of the <code>AutoApprovalSaga</code>, the <code>LCApplicationSubmittedEvent</code> marks the beginning of the saga lifecycle (as denoted by the <code>@StartSaga</code> annotation).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The saga ends unconditionally when the <code>LCApplicationApprovedEvent</code> occurs (as denoted by the <code>@EndSaga</code> annotation). As mentioned previously, it is possible to end sagas conditionally as well. We will look at how we can do this later in this section.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Axon framework uses the term <strong>saga</strong> for its orchestrator-based implementation, whereas we have used the term saga to denote the pattern of tracking long-running transactions.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="choreography"><a class="anchor" href="#choreography"></a><a class="link" href="#choreography">8.3.2. Choreography</a></h4>
@@ -7073,7 +7253,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-25 11:55:19 UTC
+Last updated 2021-09-25 14:39:21 UTC
 </div>
 </div>
 </body>
