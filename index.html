@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 22 2021 09:32 PM UTC</span>
+<span id="revdate">Sep 25 2021 12:06 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -5966,6 +5966,9 @@ The best view comes after the hardest climb.
 </div>
 <div class="sect2">
 <h3 id="technical-requirements-4"><a class="anchor" href="#technical-requirements-4"></a><a class="link" href="#technical-requirements-4">7.1. Technical requirements</a></h3>
+<div class="paragraph">
+<p>To follow the examples in this chapter, you will need access to:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -6067,7 +6070,13 @@ Note how there can exist more than one query side component to handle respective
 <p>In a CQRS application, there is a separation between the command and query side. At this time, this separation is logical in our application because both the command and query side are running as components within the same application process. To illustrate the concepts, we will use conveniences provided by the Axon framework to implement the query side in this chapter. In Chapter 10, we will look at how it may not be necessary to use a specialized framework (like Axon) to implement the query side.</p>
 </div>
 <div class="paragraph">
-<p>When implementing the query side, we have two concerns to solve for:</p>
+<p>When implementing the query side, we have two concerns to solve for as depicted in the following picture :</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/cqrs/cqrs-query-side-dissected.png" alt="cqrs query side dissected">
+</div>
+<div class="title">Figure 1- 46. Query side dissected</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6078,12 +6087,6 @@ Note how there can exist more than one query side component to handle respective
 <p>Exposing the query model as an API.</p>
 </li>
 </ol>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/cqrs/cqrs-query-side-dissected.png" alt="cqrs query side dissected">
-</div>
-<div class="title">Figure 1- 46. Query side dissected</div>
 </div>
 <div class="paragraph">
 <p>Before we start implementing these concerns, let&#8217;s identify the queries we need to implement for our LC issuance application.</p>
@@ -7067,7 +7070,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-22 21:31:35 UTC
+Last updated 2021-09-25 00:05:21 UTC
 </div>
 </div>
 </body>
