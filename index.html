@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Sep 26 2021 10:43 PM UTC</span>
+<span id="revdate">Oct 01 2021 11:03 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -644,7 +644,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#tooling-choices-2">7.3.1. Tooling choices</a></li>
 <li><a href="#identifying-queries">7.3.2. Identifying queries</a></li>
-<li><a href="#creating-the-query-model">7.3.3. Creating the query model</a></li>
+<li><a href="#_creating_the_query_model">7.3.3. Creating the query model</a></li>
 <li><a href="#query-side-persistence-choices">7.3.4. Query side persistence choices</a></li>
 <li><a href="#exposing-a-query-api">7.3.5. Exposing a query API</a></li>
 <li><a href="#advanced-query-scenarios">7.3.6. Advanced query scenarios</a></li>
@@ -6142,7 +6142,7 @@ Note how there can exist more than one query side component to handle respective
 </div>
 </div>
 <div class="sect3">
-<h4 id="creating-the-query-model"><a class="anchor" href="#creating-the-query-model"></a><a class="link" href="#creating-the-query-model">7.3.3. Creating the query model</a></h4>
+<h4 id="_creating_the_query_model"><a class="anchor" href="#_creating_the_query_model"></a><a class="link" href="#_creating_the_query_model">7.3.3. Creating the query model</a></h4>
 <div class="paragraph">
 <p>As seen in chapter 5, when starting a new LC application, the importer sends a <code>StartNewLCApplicationCommand</code>, which results in the <code>LCApplicationStartedEvent</code> being emitted as shown here:</p>
 </div>
@@ -6743,7 +6743,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Product value is validated for correctness</p>
+<p>Product value is validated</p>
 </li>
 <li>
 <p>Product legality is validated</p>
@@ -6830,10 +6830,10 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Orchestration: where a single component in the system coordinates the state of the flow and triggers subsequent actions as necessary.</p>
+<p><strong>Orchestration</strong>: where a single component in the system coordinates the state of the flow and triggers subsequent actions as necessary.</p>
 </li>
 <li>
-<p>Choreography: where actions in the flow are triggered without requiring an explicit coordinating component.</p>
+<p><strong>Choreography</strong>: where actions in the flow are triggered without requiring an explicit coordinating component.</p>
 </li>
 </ol>
 </div>
@@ -6852,7 +6852,291 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="title">Figure 1- 51. Saga implementation using an orchestrator</div>
 </div>
 <div class="paragraph">
-<p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework:</p>
+<p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework. As usual, let&#8217;s test drive this functionality that a new auto approval saga instance is created when an LC application is submitted:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.test.saga.FixtureConfiguration</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.test.saga.SagaTestFixture</span>;
+
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSagaTests</span> {
+
+    <span style="color:#088;font-weight:bold">private</span> FixtureConfiguration fixture;                                       <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span style="color:#007">@BeforeEach</span>
+    <span style="color:#339;font-weight:bold">void</span> setUp() {
+        fixture = <span style="color:#080;font-weight:bold">new</span> SagaTestFixture&lt;&gt;(AutoApprovalSaga.class);                <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldStartSagaOnSubmit() {
+        <span style="color:#088;font-weight:bold">final</span> LCApplicationId lcApplicationId = LCApplicationId.randomId();
+        fixture.givenNoPriorActivity()                                          <i class="conum" data-value="2"></i><b>(2)</b>
+                .whenPublishingA(                                               <i class="conum" data-value="3"></i><b>(3)</b>
+                        <span style="color:#080;font-weight:bold">new</span> LCApplicationSubmittedEvent(lcApplicationId,
+                            AUTO_APPROVAL_THRESHOLD_AMOUNT
+                               .subtract(ONE_DOLLAR)))
+                .expectActiveSagas(<span style="color:#00D">1</span>);                                          <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We make use of the Axon provided <code>FixtureConfiguration</code> and <code>SagaTestFixture</code> that allow us to test saga functionality.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Given no prior activity has occurred (from the perspective of the saga)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>When a <code>LCApplicationSubmittedEvent</code> is published</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We expect one active saga to exist</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The implementation to make this test pass looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.SagaEventHandler</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.StartSaga</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.spring.stereotype.Saga</span>;
+
+<span style="color:#007">@Saga</span>                                                          <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    <span style="color:#007">@StartSaga</span>                                                 <i class="conum" data-value="3"></i><b>(3)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationSubmittedEvent event) {
+        <span style="color:#777">//</span>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When working with Axon and Spring, the orchestrator is annotated with the <code>@Saga</code> annotation to mark it as a spring bean. In order to track each submitted LC application, the <code>@Saga</code> annotation is prototype-scoped (as opposed to singleton-scoped), to allow creation of multiple saga instances. Please refer to the Axon and Spring documentation for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The saga listens to the <code>LCApplicationSubmittedEvent</code> to keep track of the flow (as denoted by the <code>@SagaEventHandler</code> annotation). Conceptually, the <code>@SagaEventHandler</code> annotation is very similar to the <code>@EventHandler</code> annotation that we discussed previously in <a href="#_creating_the_query_model">Chapter 7</a>. However, the <code>@SagaEventHandler</code> annotation is used specifically for event listeners within a saga. The <code>associationProperty</code> attribute on the <code>@SagaEventHandler</code> annotation causes this event handler method to get invoked only for the saga with matching value of the <code>lcApplicationId</code> attribute in the event payload. Also, the <code>@SagaEventHandler</code> is a transaction boundary. Every time such a method completes successfully, the Axon framework commits a transaction, thereby allowing it to keep track of state stored in the saga. We will look at this in more detail shortly.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Every saga needs to have at least one <code>@SagaEventHandler</code> method that is also annotated with the <code>@StartSaga</code> annotation to denote the beginning of the saga.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We have a requirement that an LC cannot be auto-approved if its amount exceeds the threshold (USD 10000 in our case). The test for this scenario looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSagaTests</span> {
+    <span style="color:#777">//...</span>
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldEndSagaImmediatelyIfAmountGreaterThanAutoApprovalThreshold() {
+        <span style="color:#088;font-weight:bold">final</span> LCApplicationId lcApplicationId = LCApplicationId.randomId();
+        fixture.givenAggregate(lcApplicationId.toString()).published()
+                .whenPublishingA(
+                        <span style="color:#080;font-weight:bold">new</span> LCApplicationSubmittedEvent(lcApplicationId,
+                            AUTO_APPROVAL_THRESHOLD_AMOUNT.add(ONE_DOLLAR))) <i class="conum" data-value="1"></i><b>(1)</b>
+                .expectActiveSagas(<span style="color:#00D">0</span>);                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When the LC amount exceeds the auto approval threshold amount</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We expect no active sagas to exist for that LC</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The implementation to satisfy this condition looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.SagaLifecycle</span>;
+
+<span style="color:#007">@Saga</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#007">@StartSaga</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationSubmittedEvent event) {
+        <span style="color:#080;font-weight:bold">if</span> (AUTO_APPROVAL_THRESHOLD_AMOUNT.isLessThan(event.getAmount())) { <i class="conum" data-value="1"></i><b>(1)</b>
+            SagaLifecycle.end();                                            <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We check for the condition of the LC amount being greater than the threshold amount</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If so, we end the saga using the framework provided <code>SagaLifecycle.end()</code> method. Here we end the saga programmatically. It is also possible to declaratively end the saga as well using the <code>@EndSaga</code> annotation when the <code>LCApplicationApprovedEvent</code> occurs. Please refer to the full code examples included with this chapter for more information.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We need to auto-approve the saga if all of <code>ApplicantCreditValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ProductValueValidatedEvent</code> have all occurred successfully.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSagaTests</span> {
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldAutoApprove() {
+        <span style="color:#777">// Initialization code removed for brevity</span>
+
+        fixture.givenAggregate(lcApplicationId.toString())
+            .published(submitted, legalityValidated, valueValidated)        <i class="conum" data-value="1"></i><b>(1)</b>
+                .whenPublishingA(applicantValidated)                        <i class="conum" data-value="2"></i><b>(2)</b>
+                .expectActiveSagas(<span style="color:#00D">1</span>)                                       <i class="conum" data-value="3"></i><b>(3)</b>
+                .expectDispatchedCommands(
+                        <span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId));  <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Given that the LC application has been submitted and the <code>ProductValueValidatedEvent</code> and the <code>ProductLegalityValidatedEvent</code> have occurred successfully.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>When the <code>ApplicantCreditValidatedEvent</code> is published</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We expect one active saga instance AND</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We expect the <code>ApproveLCApplicationCommand</code> to be dispatched for that LC</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The implementation for this looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6883,50 +7167,32 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 24
 25
 26
-27
-28
-29
-30
-31
-32
-33
-34
-35
 </pre></td>
-  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.EndSaga</span>;
-<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.SagaEventHandler</span>;
-<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.saga.StartSaga</span>;
-<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.spring.stereotype.Saga</span>;
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
 
-<span style="color:#007">@Saga</span>                                                          <i class="conum" data-value="1"></i><b>(1)</b>
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">boolean</span> productValueValidated;                              <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">boolean</span> productLegalityValidated;                           <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#339;font-weight:bold">boolean</span> applicantValidated;                                 <i class="conum" data-value="1"></i><b>(1)</b>
 
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ApplicantCreditValidatedEvent event) {
-        <span style="color:#777">//</span>
+    <span style="color:#007">@Autowired</span>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">transient</span> CommandGateway gateway;                           <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span style="color:#777">// Other event handlers omitted for brevity</span>
+
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ApplicantCreditValidatedEvent event) {               <i class="conum" data-value="3"></i><b>(3)</b>
+        <span style="color:#080;font-weight:bold">if</span> (event.getDecision().isRejected()) {                         <i class="conum" data-value="4"></i><b>(4)</b>
+            SagaLifecycle.end();
+        } <span style="color:#080;font-weight:bold">else</span> {
+            <span style="color:#950">this</span>.applicantValidated = <span style="color:#069">true</span>;                             <i class="conum" data-value="5"></i><b>(5)</b>
+            <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; productLegalityValidated) {    <i class="conum" data-value="6"></i><b>(6)</b>
+                LCApplicationId id = event.getLcApplicationId();
+                gateway.send(ApproveLCApplicationCommand.with(id));     <i class="conum" data-value="7"></i><b>(7)</b>
+            }
+        }
     }
 
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductValueValidatedEvent event) {
-        <span style="color:#777">//</span>
-    }
-
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
-        <span style="color:#777">//</span>
-    }
-
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
-    <span style="color:#007">@StartSaga</span>                                                 <i class="conum" data-value="3"></i><b>(3)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationSubmittedEvent event) {
-        <span style="color:#777">//</span>
-    }
-
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
-    <span style="color:#007">@EndSaga</span>                                                   <i class="conum" data-value="4"></i><b>(4)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationApprovedEvent event) {
-        <span style="color:#777">//</span>
-    }
+    <span style="color:#777">// Other event handlers omitted for brevity</span>
 }</pre></td>
 </tr></table></code></pre>
 </div>
@@ -6935,19 +7201,31 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>When working with Axon and Spring, the orchestrator is annotated with the <code>@Saga</code> annotation to mark it as a spring bean. In order to track each submitted LC application, the <code>@Saga</code> annotation is prototype-scoped (as opposed to singleton-scoped), to allow creation of multiple saga instances. Please refer to the Axon and Spring documentation for more information.</td>
+<td>As mentioned previously, sagas can maintain state. In this case, we are maintaining three boolean variables, each to denote the occurrence of the respective event.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The saga listens to relevant events happening in the system to keep track of the flow (as denoted by the <code>@SagaEventHandler</code> annotation). Conceptually, the <code>@SagaEventHandler</code> annotation is very similar to the <code>@EventHandler</code> annotation that we discussed previously. However, in contrast to the <code>@EventHandler</code> which are singletons, a distinct instance of the saga is created for each LC application. This distinction is established by the value of the <code>associationProperty</code> attribute. In this example, the <code>associationProperty</code> looks for the <code>lcApplicationId</code> attribute in the incoming event&#8217;s payload.</td>
+<td>We have declared the Axon <code>CommandGateway</code> as a <code>transient</code> member because we need it to dispatch commands, but not be persisted along with other saga state.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>In the case of the <code>AutoApprovalSaga</code>, the <code>LCApplicationSubmittedEvent</code> marks the beginning of the saga lifecycle (as denoted by the <code>@StartSaga</code> annotation).</td>
+<td>This event handler intercepts the <code>ApplicantCreditValidatedEvent</code> for the specific LC application (as denoted by the <code>associationProperty</code> in the @SagaEventHandler annotation).</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The saga ends unconditionally when the <code>LCApplicationApprovedEvent</code> occurs (as denoted by the <code>@EndSaga</code> annotation). As mentioned previously, it is possible to end sagas conditionally as well. We will look at how we can do this later in this section.</td>
+<td>If the decision from the <code>ApplicantCreditValidatedEvent</code> is rejected, we end the saga immediately.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Otherwise, we <em>remember</em> the fact that the applicant&#8217;s credit has been validated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>We then check to see if the product&#8217;s value and legality have already been validated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>If so, we issue the command to auto-approve the LC.</td>
 </tr>
 </table>
 </div>
@@ -6958,15 +7236,121 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The Axon framework uses the term <strong>saga</strong> for its orchestrator-based implementation, whereas we have used the term saga to denote the pattern of tracking long-running transactions.
+The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegalityValidatedEvent</code> is very similar to that in the saga event handler for the <code>ApplicantCreditValidatedEvent</code>. We have omitted it here for brevity. Please refer to the source code for this chapter for the full example along with the tests.
 </td>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Finally, we can end the saga when we receive the LCApplicationApprovedEvent for this application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSagaTests</span> {
+    <span style="color:#007">@Test</span>
+    <span style="color:#007">@DisplayName</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">should end saga after auto approval</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#339;font-weight:bold">void</span> shouldEndSagaAfterAutoApproval() {
+        <span style="color:#777">// Initialization code omitted for brevity</span>
+
+        fixture.givenAggregate(lcApplicationId.toString())
+                .published(
+                    submitted, applicantValidated,
+                    legalityValidated, valueValidated)                             <i class="conum" data-value="1"></i><b>(1)</b>
+                .whenPublishingA(<span style="color:#080;font-weight:bold">new</span> LCApplicationApprovedEvent(lcApplicationId))  <i class="conum" data-value="2"></i><b>(2)</b>
+                .expectActiveSagas(<span style="color:#00D">0</span>)                                              <i class="conum" data-value="3"></i><b>(3)</b>
+                .expectNoDispatchedCommands();                                     <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Given that the LC has been submitted and all the validations have been completed successfully.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>When a <code>LCApplicationApprovedEvent</code> is published.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We expect zero active sagas to be running.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>And we also expect to not dispatch any commands.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The above implementation should give you a good idea of how to implement a saga orchestrator. Now let&#8217;s look at how we can do this without the use of an explicit orchestrator.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="choreography"><a class="anchor" href="#choreography"></a><a class="link" href="#choreography">8.3.2. Choreography</a></h4>
-
+<div class="paragraph">
+<p>Saga orchestrators keep track of the current state of the flow, usually making use of some kind of data store. Another way to implement this functionality is without using any stateful component. Logically, this looks like the setup shown in the diagram here:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sagas/auto-approval-saga-choreography.png" alt="Saga implementation using choreography">
+</div>
+<div class="title">Figure 1- 52. Saga implementation using choreography</div>
+</div>
+<div class="paragraph">
+<p>As you can see, there is no single component that tracks the saga lifecycle. However, to make the auto-approval decision, each of these stateless event handlers need to have knowledge of the same three events having occurred:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Product value is validated</p>
+</li>
+<li>
+<p>Product legality is validated</p>
+</li>
+<li>
+<p>Applicant&#8217;s credit worthiness is validated</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Given that the event listeners themselves are stateless, there are at least two ways to provide this information to them:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Each of the events carry this information in their respective payloads.</p>
+</li>
+<li>
+<p>The event listeners query the source systems (in this case, the product and applicant bounded contexts respectively).</p>
+</li>
+<li>
+<p>The LC application bounded context maintains a query model to keep track of these events having occurred.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Just like in the orchestrator example, when all events have occurred and the LC amount is below the specified threshold, these event listeners can issue the <code>ApproveLCApplicationCommand</code>.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="orchestration-versus-choreography"><a class="anchor" href="#orchestration-versus-choreography"></a><a class="link" href="#orchestration-versus-choreography">8.3.3. Orchestration versus choreography</a></h4>
@@ -7253,7 +7637,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-26 22:42:41 UTC
+Last updated 2021-10-01 23:03:01 UTC
 </div>
 </div>
 </body>
