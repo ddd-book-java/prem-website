@@ -448,6 +448,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#right-sizing-components">Right Sizing Components</a></li>
 <li><a href="#maintaining-autonomy">Maintaining Autonomy</a></li>
 <li><a href="#understanding-the-costs-of-distribution">Understanding the Costs of Distribution</a></li>
+<li><a href="#handling-exceptions">Handling exceptions</a>
+<ul class="sectlevel3">
+<li><a href="#recovery">Recovery</a></li>
+</ul>
+</li>
 <li><a href="#testing-the-overall-system">Testing the Overall System</a></li>
 </ul>
 </li>
@@ -482,6 +487,106 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 
 </div>
 <div class="sect2">
+<h3 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a>Handling exceptions</h3>
+<div class="quoteblock">
+<blockquote>
+Everything fails all the time.
+</blockquote>
+<div class="attribution">
+&#8212; Werner Vogels<br>
+<cite>CTO -- Amazon Web Services</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
+        <span style="color:#777">//..</span>
+        productLegalityValidated = <span style="color:#069">true</span>;
+        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
+               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
+</li>
+<li>
+<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
+</li>
+<li>
+<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
+</li>
+<li>
+<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
+</li>
+<li>
+<p>We can choose to only wait</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="recovery"><a class="anchor" href="#recovery"></a>Recovery</h4>
+<div class="sect4">
+<h5 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a>Automated recovery</h5>
+
+</div>
+<div class="sect4">
+<h5 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h5>
+
+</div>
+<div class="sect4">
+<h5 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a>Compensating actions</h5>
+
+</div>
+<div class="sect4">
+<h5 id="retries"><a class="anchor" href="#retries"></a>Retries</h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a>Testing the Overall System</h3>
 
 </div>
@@ -491,7 +596,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-01 23:03:34 UTC
+Last updated 2021-10-10 14:25:16 UTC
 </div>
 </div>
 </body>

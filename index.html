@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Oct 01 2021 11:04 PM UTC</span>
+<span id="revdate">Oct 10 2021 02:25 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -546,9 +546,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the Real World</a>
+<li><a href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the real world</a>
 <ul class="sectlevel1">
-<li><a href="#_domain_analysis_and_modeling">4. Domain Analysis and Modeling</a>
+<li><a href="#_domain_analysis_and_modeling">4. Domain analysis and modeling</a>
 <ul class="sectlevel2">
 <li><a href="#introduction-2">4.1. Introduction</a></li>
 <li><a href="#technical-requirements">4.2. Technical requirements</a></li>
@@ -662,7 +662,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#questions-5">7.6. Questions</a></li>
 </ul>
 </li>
-<li><a href="#long-running-user-flows-10-pages">8. Long-Running User Flows (10 pages)</a>
+<li><a href="#long-running-workflows">8. Long-Running Workflows</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-5">8.1. Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey-3">8.2. Continuing our design journey</a></li>
@@ -670,19 +670,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#orchestration">8.3.1. Orchestration</a></li>
 <li><a href="#choreography">8.3.2. Choreography</a></li>
-<li><a href="#orchestration-versus-choreography">8.3.3. Orchestration versus choreography</a></li>
 </ul>
 </li>
-<li><a href="#handling-distributed-exceptions">8.4. Handling distributed exceptions</a>
-<ul class="sectlevel3">
-<li><a href="#types-of-exceptions">8.4.1. Types of exceptions</a></li>
-<li><a href="#recovery">8.4.2. Recovery</a></li>
-</ul>
-</li>
-<li><a href="#handling-deadlines">8.5. Handling deadlines</a></li>
-<li><a href="#summary-6">8.6. Summary</a></li>
-<li><a href="#questions-6">8.7. Questions</a></li>
-<li><a href="#further-reading-5">8.8. Further reading</a></li>
+<li><a href="#handling-deadlines">8.4. Handling deadlines</a></li>
+<li><a href="#summary-6">8.5. Summary</a></li>
+<li><a href="#questions-6">8.6. Questions</a></li>
+<li><a href="#further-reading-5">8.7. Further reading</a></li>
 </ul>
 </li>
 <li><a href="#integrating-with-external-systems-15-pages">9. Integrating with External Systems (15 pages)</a>
@@ -704,7 +697,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#right-sizing-components">10.1. Right Sizing Components</a></li>
 <li><a href="#maintaining-autonomy">10.2. Maintaining Autonomy</a></li>
 <li><a href="#understanding-the-costs-of-distribution">10.3. Understanding the Costs of Distribution</a></li>
-<li><a href="#testing-the-overall-system">10.4. Testing the Overall System</a></li>
+<li><a href="#handling-exceptions">10.4. Handling exceptions</a>
+<ul class="sectlevel3">
+<li><a href="#recovery">10.4.1. Recovery</a></li>
+</ul>
+</li>
+<li><a href="#testing-the-overall-system">10.5. Testing the Overall System</a></li>
 </ul>
 </li>
 <li><a href="#non-functional-requirements-25-pages">11. Non-Functional Requirements (25 pages)</a>
@@ -1521,14 +1519,14 @@ We depict multiple query models above because it is possible (but not necessary)
 </div>
 </div>
 </div>
-<h1 id="part-2-implementing-ddd-in-the-real-world" class="sect0"><a class="anchor" href="#part-2-implementing-ddd-in-the-real-world"></a><a class="link" href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the Real World</a></h1>
+<h1 id="part-2-implementing-ddd-in-the-real-world" class="sect0"><a class="anchor" href="#part-2-implementing-ddd-in-the-real-world"></a><a class="link" href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the real world</a></h1>
 <div class="openblock partintro">
 <div class="content">
 In Part 2, we will implement a real-world application using JVM-based technologies such as Vaadin, Spring Boot, Axon Framework, Cadence, among others.
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="_domain_analysis_and_modeling"><a class="anchor" href="#_domain_analysis_and_modeling"></a><a class="link" href="#_domain_analysis_and_modeling">4. Domain Analysis and Modeling</a></h2>
+<h2 id="_domain_analysis_and_modeling"><a class="anchor" href="#_domain_analysis_and_modeling"></a><a class="link" href="#_domain_analysis_and_modeling">4. Domain analysis and modeling</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -4308,8 +4306,8 @@ To accomplish a difficult task, one must first make it easy.
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Usability</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-thumbs-down"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-thumbs-up"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Task-based interfaces tend to provide more fine-grained controls that capture user intent a lot more explicitly, making them naturally more usable&#8201;&#8212;&#8201;especially in cases where the domain is complex.</p></td>
 </tr>
 <tr>
@@ -6641,10 +6639,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="sect2">
 <h3 id="summary-5"><a class="anchor" href="#summary-5"></a><a class="link" href="#summary-5">7.5. Summary</a></h3>
 <div class="paragraph">
-<p>In this chapter we examined how to implement the query side of a CQRS-based system. We looked at how domain events can be consumed in real-time to construct materialized views that can be used to service query APIs. We looked at the different query types that can be used to efficiently access the underlying query models. We rounded off by looking at persistence options for the query side.</p>
-</div>
-<div class="paragraph">
-<p>Finally, we looked at historic event replays and how it can be used to correct errors or introduce new functionality in an event-driven system.</p>
+<p>In this chapter we examined how to implement the query side of a CQRS-based system. We looked at how domain events can be consumed in real-time to construct materialized views that can be used to service query APIs. We looked at the different query types that can be used to efficiently access the underlying query models. We rounded off by looking at persistence options for the query side. Finally, we looked at historic event replays and how it can be used to correct errors or introduce new functionality in an event-driven system.</p>
 </div>
 <div class="paragraph">
 <p>This chapter should give you a good idea of how to build and evolve the query side of a CQRS-based system to meet changing business requirements while retaining all the business logic on the command side.</p>
@@ -6672,7 +6667,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="long-running-user-flows-10-pages"><a class="anchor" href="#long-running-user-flows-10-pages"></a><a class="link" href="#long-running-user-flows-10-pages">8. Long-Running User Flows (10 pages)</a></h2>
+<h2 id="long-running-workflows"><a class="anchor" href="#long-running-workflows"></a><a class="link" href="#long-running-workflows">8. Long-Running Workflows</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -6699,7 +6694,7 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </ul>
 </div>
 <div class="paragraph">
-<p>By the end of this chapter, you will have learned how to implement sagas using both techniques. You will also have learnt how to handle exceptions using retries, compensating actions and deadlines. You will finally be able to appreciate when/whether to choose an explicit orchestrator or simply stick to implicit choreography without resorting to the use of potentially expensive distributed transactions.</p>
+<p>By the end of this chapter, you will have learned how to implement sagas using both techniques. You will also have learnt how to work with deadlines when no explicit events occur within the system. You will finally be able to appreciate when/whether to choose an explicit orchestrator or simply stick to implicit choreography without resorting to the use of potentially expensive distributed transactions.</p>
 </div>
 <div class="sect2">
 <h3 id="technical-requirements-5"><a class="anchor" href="#technical-requirements-5"></a><a class="link" href="#technical-requirements-5">8.1. Technical requirements</a></h3>
@@ -7301,8 +7296,46 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 </tr>
 </table>
 </div>
+<div class="sect4">
+<h5 id="pros"><a class="anchor" href="#pros"></a><a class="link" href="#pros">Pros</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Complex workflows</strong>: Having an explicit orchestrator can be very helpful when dealing with flows that involve multiple participants and have a lot of conditionals because the orchestrator can keep track of the overall progress in a fine-grained manner.</p>
+</li>
+<li>
+<p><strong>Testing</strong>: As we have seen in the implementation above, testing flow logic in isolation is relatively straightforward.</p>
+</li>
+<li>
+<p><strong>Debugging</strong>: Given that we have a single coordinator, debugging the current state of the flow can be relatively easier.</p>
+</li>
+<li>
+<p><strong>Handling exceptions</strong>: Given that the orchestrator has fine-grained control of the flow, recovering gracefully from exceptions can be easier.</p>
+</li>
+<li>
+<p><strong>System knowledge</strong>: Components in different bounded contexts do not need to have knowledge of each other&#8217;s internals (e.g. commands and events) to progress the flow.</p>
+</li>
+<li>
+<p><strong>Cyclic dependencies</strong>: Having a central coordinator allows avoiding accidental cyclic dependencies between components.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="cons"><a class="anchor" href="#cons"></a><a class="link" href="#cons">Cons</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Single point of failure</strong>: From an operational perspective, orchestrators can become single points of failure because they are the only ones that have knowledge of the flow. This means that these components need to exhibit higher resilience characteristics as compared to other components.</p>
+</li>
+<li>
+<p><strong>Leaking of domain logic</strong>: In an ideal world, the aggregate will remain the custodian of all domain logic. Given that the orchestrator is also stateful, business logic may inadvertently shift to the orchestrator. Care should be taken to ensure that the orchestrator only has flow-control logic while business invariants remains within the confines of the aggregate.</p>
+</li>
+</ul>
+</div>
 <div class="paragraph">
 <p>The above implementation should give you a good idea of how to implement a saga orchestrator. Now let&#8217;s look at how we can do this without the use of an explicit orchestrator.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -7351,64 +7384,456 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 <div class="paragraph">
 <p>Just like in the orchestrator example, when all events have occurred and the LC amount is below the specified threshold, these event listeners can issue the <code>ApproveLCApplicationCommand</code>.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We will skip covering code examples for the choreography implementation because this is no different from the material we have covered previously in this and prior chapters.
+</td>
+</tr>
+</table>
 </div>
-<div class="sect3">
-<h4 id="orchestration-versus-choreography"><a class="anchor" href="#orchestration-versus-choreography"></a><a class="link" href="#orchestration-versus-choreography">8.3.3. Orchestration versus choreography</a></h4>
-
+<div class="paragraph">
+<p>Now that we have looked at how to implement both styles of sagas, let&#8217;s examine some design decisions that we may need to consider when working with sagas.</p>
+</div>
+<div class="sect4">
+<h5 id="pros-2"><a class="anchor" href="#pros-2"></a><a class="link" href="#pros-2">Pros</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Simple workflows</strong>: For simple flows, the choreography approach can be relatively straightforward because it does not require the overhead of an additional coordinating component.</p>
+</li>
+<li>
+<p><strong>No single points of failure</strong>: From an operational perspective, there is one less  high resilience component to worry about.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="cons-2"><a class="anchor" href="#cons-2"></a><a class="link" href="#cons-2">Cons</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Workflow tracking</strong>: Especially with complex workflows that involve numerous steps and conditionals, tracking and debugging the current state of the flow may become challenging.</p>
+</li>
+<li>
+<p><strong>Cyclic dependencies</strong>: It is possible to inadvertently introduce cyclic dependencies among components when workflows become gnarly.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Sagas enable applications to maintain data, transactional consistency when more than one bounded context is required to complete the business functionality without having to resort to using <a href="https://en.wikipedia.org/wiki/Distributed_transaction"><em>distributed transactions</em></a><sup class="footnote">[<a id="_footnoteref_20" class="footnote" href="#_footnotedef_20" title="View footnote.">20</a>]</sup>. However, it does introduce a level of complexity to the programming model, especially when it comes to handling failures. We will look at exception handling in a lot more detail when we discuss working with distributed systems in upcoming chapters. Let&#8217;s look at how to progress flows when there are no explicit stimuli by looking at how deadlines work.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="handling-distributed-exceptions"><a class="anchor" href="#handling-distributed-exceptions"></a><a class="link" href="#handling-distributed-exceptions">8.4. Handling distributed exceptions</a></h3>
-<div class="sect3">
-<h4 id="types-of-exceptions"><a class="anchor" href="#types-of-exceptions"></a><a class="link" href="#types-of-exceptions">8.4.1. Types of exceptions</a></h4>
-<div class="sect4">
-<h5 id="business-exceptions"><a class="anchor" href="#business-exceptions"></a><a class="link" href="#business-exceptions">Business exceptions</a></h5>
+<h3 id="handling-deadlines"><a class="anchor" href="#handling-deadlines"></a><a class="link" href="#handling-deadlines">8.4. Handling deadlines</a></h3>
+<div class="paragraph">
+<p>Thus far, we have looked at events that are caused by human (for example, the applicant submitting an LC application) or system (for example, the auto-approval of an LC application) action. However, in an event-driven system, not all events occur due to an explicit human or system stimulus. Events may need to be emitted due to inactivity over a period of time.</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s examine the case where the bank needs <em>submitted LC applications</em> to be decisioned as quickly as possible. When applications are not acted upon by the trade finance managers within ten calendar days, the system should send them notifications.</p>
+</div>
+<div class="paragraph">
+<p>To deal with such inactivity, we need a means to trigger system action (read&#8201;&#8212;&#8201;emit events) based on the passage of time&#8201;&#8212;&#8201;in other words, perform actions when a <em>deadline</em> occurs. Let&#8217;s look at how to test-drive this functionality.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationAggregateTests</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldCreateSubmissionReminderDeadlineWhenApplicationIsSubmitted() {
+        <span style="color:#088;font-weight:bold">final</span> LCApplicationId id = LCApplicationId.randomId();
+        fixture.given(<span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(id, ApplicantId.randomId(),
+                                <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">My LC</span><span style="color:#710">&quot;</span></span>, LCState.DRAFT),
+                        <span style="color:#080;font-weight:bold">new</span> LCAmountChangedEvent(id, THOUSAND_DOLLARS),
+                        <span style="color:#080;font-weight:bold">new</span> MerchandiseChangedEvent(id, merchandise()))
 
-</div>
-<div class="sect4">
-<h5 id="system-exceptions"><a class="anchor" href="#system-exceptions"></a><a class="link" href="#system-exceptions">System exceptions</a></h5>
+                .when(<span style="color:#080;font-weight:bold">new</span> SubmitLCApplicationCommand(id)) <i class="conum" data-value="1"></i><b>(1)</b>
+                .expectEvents(<span style="color:#080;font-weight:bold">new</span> LCApplicationSubmittedEvent(id,
+                                THOUSAND_DOLLARS))
 
+                .expectScheduledDeadlineWithName(
+                        <span style="color:#0a8;font-weight:bold">Duration</span>.ofDays(<span style="color:#00D">10</span>),
+                        LC_APPROVAL_PENDING_REMINDER);    <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="recovery"><a class="anchor" href="#recovery"></a><a class="link" href="#recovery">8.4.2. Recovery</a></h4>
-<div class="sect4">
-<h5 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a><a class="link" href="#automated-recovery">Automated recovery</a></h5>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When the LC application is submitted</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We expect a deadline for the reminder to be scheduled</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The implementation for this is fairly straightforward:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.deadline.DeadlineManager</span>;
 
-</div>
-<div class="sect4">
-<h5 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a><a class="link" href="#manual-recovery">Manual recovery</a></h5>
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@CommandHandler</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(SubmitLCApplicationCommand command,
+                    DeadlineManager deadlineManager) { <i class="conum" data-value="1"></i><b>(1)</b>
+        assertPositive(amount);
+        assertMerchandise(merchandise);
+        assertInDraft(state);
+        apply(<span style="color:#080;font-weight:bold">new</span> LCApplicationSubmittedEvent(id, amount));
 
+        deadlineManager.schedule(<span style="color:#0a8;font-weight:bold">Duration</span>.ofDays(<span style="color:#00D">10</span>),  <i class="conum" data-value="2"></i><b>(2)</b>
+            <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">LC_APPROVAL_REMINDER</span><span style="color:#710">&quot;</span></span>,
+            LCApprovalPendingNotification.first(id));  <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+    <span style="color:#777">//...</span>
+}</pre></td>
+</tr></table></code></pre>
 </div>
-<div class="sect4">
-<h5 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a><a class="link" href="#compensating-actions">Compensating actions</a></h5>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>To allow working with deadlines, the Axon framework provides a <code>DeadlineManager</code> that allows working with deadlines. This is injected into the command handler method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We use the <code>deadlineManager</code> to schedule a named deadline (<code>"LC_APPROVAL_REMINDER"</code> in this case) that will expire in 10 days.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>When the deadline is met, it will result in a <code>LCApprovalPendingNotification</code> which can be handled just like a command. Except in this case, the behavior is triggered by the passage of time.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If no action is taken for ten days, this is what we expect:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
 
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldTriggerApprovalPendingEventTenDaysAfterSubmission() {
+        <span style="color:#088;font-weight:bold">final</span> LCApplicationId id = LCApplicationId.randomId();
+        fixture.given(<span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(id, ApplicantId.randomId(),
+                                <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">My LC</span><span style="color:#710">&quot;</span></span>, LCState.DRAFT),
+                        <span style="color:#080;font-weight:bold">new</span> LCAmountChangedEvent(id, THOUSAND_DOLLARS),
+                        <span style="color:#080;font-weight:bold">new</span> MerchandiseChangedEvent(id, merchandise()))
+                .andGivenCommands(<span style="color:#080;font-weight:bold">new</span> SubmitLCApplicationCommand(id)) <i class="conum" data-value="1"></i><b>(1)</b>
+                .whenThenTimeElapses(<span style="color:#0a8;font-weight:bold">Duration</span>.ofDays(<span style="color:#00D">10</span>))             <i class="conum" data-value="2"></i><b>(2)</b>
+                .expectDeadlinesMet(
+                        LCApprovalPendingNotification.first(id))      <i class="conum" data-value="3"></i><b>(3)</b>
+                .expectEvents(<span style="color:#080;font-weight:bold">new</span> LCApprovalPendingEvent(id));        <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
 </div>
-<div class="sect4">
-<h5 id="retries"><a class="anchor" href="#retries"></a><a class="link" href="#retries">Retries</a></h5>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Given that the LC application is submitted.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>When the period of ten days elapses.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The deadline should be met.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>And the <code>LCApprovalPendingEvent</code> should be emitted.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at how to implement this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+  <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.deadline.annotation.DeadlineHandler</span>;
 
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
+
+    <span style="color:#007">@DeadlineHandler</span>(deadlineName = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">LC_APPROVAL_REMINDER</span><span style="color:#710">&quot;</span></span>)       <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApprovalPendingNotification notification) {  <i class="conum" data-value="2"></i><b>(2)</b>
+
+        AggregateLifecycle.apply(<span style="color:#080;font-weight:bold">new</span> LCApprovalPendingEvent(id)); <i class="conum" data-value="3"></i><b>(3)</b>
+
+    }
+}</pre></td>
+</tr></table></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Deadlines are handled by annotating handler methods with the <code>@DeadlineHandler</code> annotation. Note that the same deadline name used previously is being referenced here.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the deadline handler method and uses the same payload that was passed along when it was scheduled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We emit the <code>LCApprovalPendingEvent</code> when the deadline occurs.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The deadline handling logic should only be triggered if no action is taken. However, if the LC is either approved or rejected within a duration of ten days, none of this behavior should be triggered:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationAggregateTests</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldNotTriggerPendingReminderIfApplicationIsApprovedWithinTenDays() {
+        <span style="color:#088;font-weight:bold">final</span> LCApplicationId id = LCApplicationId.randomId();
+        fixture.given(<span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(id, ApplicantId.randomId(),
+                                <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">My LC</span><span style="color:#710">&quot;</span></span>, LCState.DRAFT),
+                        <span style="color:#080;font-weight:bold">new</span> LCAmountChangedEvent(id, THOUSAND_DOLLARS),
+                        <span style="color:#080;font-weight:bold">new</span> MerchandiseChangedEvent(id, merchandise()))
+                .andGivenCommands(<span style="color:#080;font-weight:bold">new</span> SubmitLCApplicationCommand(id)) <i class="conum" data-value="1"></i><b>(1)</b>
+
+                .when(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(id))            <i class="conum" data-value="2"></i><b>(2)</b>
+                .expectEvents(<span style="color:#080;font-weight:bold">new</span> LCApplicationApprovedEvent(id))
+                .expectNoScheduledDeadlines();                        <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+
+    <span style="color:#007">@Test</span>
+    <span style="color:#339;font-weight:bold">void</span> shouldNotTriggerPendingReminderIfApplicationIsDeclinedWithinTenDays() {
+        <span style="color:#777">// Test code is very similar. Excluded for brevity</span>
+    }
+
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Given that the LC application is submitted</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>When it is approved within a duration of ten days (in this case, almost immediately)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We expect no scheduled deadlines</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>And the implementation for this looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@CommandHandler</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ApproveLCApplicationCommand command,
+                   DeadlineManager deadlineManager) {
+        assertInSubmitted(state);
+        AggregateLifecycle.apply(<span style="color:#080;font-weight:bold">new</span> LCApplicationApprovedEvent(id));
+        deadlineManager.cancelAllWithinScope(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">LC_APPROVAL_REMINDER</span><span style="color:#710">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    <span style="color:#007">@CommandHandler</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(DeclineLCApplicationCommand command,
+                   DeadlineManager deadlineManager) {
+        assertInSubmitted(state);
+        AggregateLifecycle.apply(<span style="color:#080;font-weight:bold">new</span> LCApplicationDeclinedEvent(id));
+        deadlineManager.cancelAllWithinScope(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">LC_APPROVAL_REMINDER</span><span style="color:#710">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    <span style="color:#777">//...</span>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We cancel all the deadlines with the name <code>LC_APPROVAL_REMINDER</code> (in this case, we only have one deadline with that name) within the scope of this aggregate.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="handling-deadlines"><a class="anchor" href="#handling-deadlines"></a><a class="link" href="#handling-deadlines">8.5. Handling deadlines</a></h3>
-
+<h3 id="summary-6"><a class="anchor" href="#summary-6"></a><a class="link" href="#summary-6">8.5. Summary</a></h3>
+<div class="paragraph">
+<p>In this chapter, we examined how to work with long-running workflows using sagas and the different styles we can use to implement them. We also looked at the implications of using explicit orchestration versus implicit choreography. We finally looked at how we can handle deadlines when there are no user-initiated actions.</p>
+</div>
+<div class="paragraph">
+<p>You should have learnt how sagas can act as a first-class citizen in addition to aggregates when designing a system that makes use of domain-driven design principles.</p>
+</div>
+<div class="paragraph">
+<p>In the next chapter, we will look at how we can interact with external systems while respecting bounded context boundaries between core and peripheral systems.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="summary-6"><a class="anchor" href="#summary-6"></a><a class="link" href="#summary-6">8.6. Summary</a></h3>
-
+<h3 id="questions-6"><a class="anchor" href="#questions-6"></a><a class="link" href="#questions-6">8.6. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Are you seeing the need to implement long-running workflows in your current ecosystem?</p>
+</li>
+<li>
+<p>Do you see yourself picking one style over the other most of the time?</p>
+</li>
+<li>
+<p>Are you using external deadline handlers (for instance, batch jobs) in your existing systems as opposed to embedding time-based logic in the core?</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="questions-6"><a class="anchor" href="#questions-6"></a><a class="link" href="#questions-6">8.7. Questions</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="further-reading-5"><a class="anchor" href="#further-reading-5"></a><a class="link" href="#further-reading-5">8.8. Further reading</a></h3>
+<h3 id="further-reading-5"><a class="anchor" href="#further-reading-5"></a><a class="link" href="#further-reading-5">8.7. Further reading</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 35.7142%;">
+<col style="width: 21.4285%;">
+<col style="width: 42.8573%;">
 </colgroup>
 <thead>
 <tr>
@@ -7419,14 +7844,29 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Example</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Author</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.example.com" class="bare">https://www.example.com</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Saga persistence and event-driven architectures</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Udi Dahan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://udidahan.com/2009/04/20/saga-persistence-and-event-driven-architectures/" class="bare">https://udidahan.com/2009/04/20/saga-persistence-and-event-driven-architectures/</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Example</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Author</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.example.com" class="bare">https://www.example.com</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sagas solve stupid transaction timeouts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Udi Dahan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://udidahan.com/2008/06/23/sagas-solve-stupid-transaction-timeouts/" class="bare">https://udidahan.com/2008/06/23/sagas-solve-stupid-transaction-timeouts/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microservices&#8201;&#8212;&#8201;when to react vs. orchestrate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Andrew Bonham</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://medium.com/capital-one-tech/microservices-when-to-react-vs-orchestrate-c6b18308a14c" class="bare">https://medium.com/capital-one-tech/microservices-when-to-react-vs-orchestrate-c6b18308a14c</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Saga orchestration for microservices using the outbox pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gunnar Morling</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.infoq.com/articles/saga-orchestration-outbox/" class="bare">https://www.infoq.com/articles/saga-orchestration-outbox/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Patterns for distributed transactions within a microservices architecture</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keyang Xiang</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://developers.redhat.com/blog/2018/10/01/patterns-for-distributed-transactions-within-a-microservices-architecture" class="bare">https://developers.redhat.com/blog/2018/10/01/patterns-for-distributed-transactions-within-a-microservices-architecture</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -7508,7 +7948,107 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 
 </div>
 <div class="sect2">
-<h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">10.4. Testing the Overall System</a></h3>
+<h3 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a><a class="link" href="#handling-exceptions">10.4. Handling exceptions</a></h3>
+<div class="quoteblock">
+<blockquote>
+Everything fails all the time.
+</blockquote>
+<div class="attribution">
+&#8212; Werner Vogels<br>
+<cite>CTO -- Amazon Web Services</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
+        <span style="color:#777">//..</span>
+        productLegalityValidated = <span style="color:#069">true</span>;
+        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
+               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
+</li>
+<li>
+<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
+</li>
+<li>
+<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
+</li>
+<li>
+<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
+</li>
+<li>
+<p>We can choose to only wait</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="recovery"><a class="anchor" href="#recovery"></a><a class="link" href="#recovery">10.4.1. Recovery</a></h4>
+<div class="sect4">
+<h5 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a><a class="link" href="#automated-recovery">Automated recovery</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a><a class="link" href="#manual-recovery">Manual recovery</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a><a class="link" href="#compensating-actions">Compensating actions</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="retries"><a class="anchor" href="#retries"></a><a class="link" href="#retries">Retries</a></h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">10.5. Testing the Overall System</a></h3>
 
 </div>
 </div>
@@ -7633,11 +8173,14 @@ Sometimes I feel like I am being forgotten.
 <div class="footnote" id="_footnotedef_19">
 <a href="#_footnoteref_19">19</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
 </div>
+<div class="footnote" id="_footnotedef_20">
+<a href="#_footnoteref_20">20</a>. <a href="https://en.wikipedia.org/wiki/Distributed_transaction" class="bare">https://en.wikipedia.org/wiki/Distributed_transaction</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-01 23:03:34 UTC
+Last updated 2021-10-10 14:25:16 UTC
 </div>
 </div>
 </body>
