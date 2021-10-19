@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Oct 15 2021 02:49 PM UTC</span>
+<span id="revdate">Oct 19 2021 09:11 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6710,6 +6710,9 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 </div>
 <div class="sect2">
 <h3 id="technical-requirements-5"><a class="anchor" href="#technical-requirements-5"></a><a class="link" href="#technical-requirements-5">8.1. Technical requirements</a></h3>
+<div class="paragraph">
+<p>To follow the examples in this chapter, you will need access to:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -6731,6 +6734,18 @@ In the long run, the pessimist may be proven right, but the optimist has a bette
 <p>Maven 3.x</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please refer to the ch06 directory of the book&#8217;s accompanying source code repository for complete working examples.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -6782,7 +6797,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 </table>
 </div>
 <div class="paragraph">
-<p>As is evident, the LC auto-approval functionality is an example of a long-running business process where <em>some thing</em> in our system needs to keep track of the fact that these independent events have occurred before proceeding further.  Such functionality can be implemented using the saga pattern. Let&#8217;s look at how we can do this.</p>
+<p>As is evident from the diagram above, the LC auto-approval functionality is an example of a long-running business process where <em>some thing</em> in our system needs to keep track of the fact that these independent events have occurred before proceeding further.  Such functionality can be implemented using the saga pattern. Let&#8217;s look at how we can do this.</p>
 </div>
 </div>
 <div class="sect2">
@@ -7085,7 +7100,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 </table>
 </div>
 <div class="paragraph">
-<p>We need to auto-approve the saga if all of <code>ApplicantCreditValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ProductValueValidatedEvent</code> have all occurred successfully.</p>
+<p>We need to auto-approve the saga if all of <code>ApplicantCreditValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ProductValueValidatedEvent</code> have occurred successfully. The test to verify this functionality is shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7308,6 +7323,9 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Now that we have looked at how to implement sagas using an orchestrator, let&#8217;s examine some design decisions that we may need to consider when working with them.</p>
+</div>
 <div class="sect4">
 <h5 id="pros"><a class="anchor" href="#pros"></a><a class="link" href="#pros">Pros</a></h5>
 <div class="ulist">
@@ -7409,7 +7427,7 @@ We will skip covering code examples for the choreography implementation because 
 </table>
 </div>
 <div class="paragraph">
-<p>Now that we have looked at how to implement both styles of sagas, let&#8217;s examine some design decisions that we may need to consider when working with sagas.</p>
+<p>Now that we have looked at how to implement the choreography style of sagas, let&#8217;s examine some design decisions that we may need to consider when working with them.</p>
 </div>
 <div class="sect4">
 <h5 id="pros-2"><a class="anchor" href="#pros-2"></a><a class="link" href="#pros-2">Pros</a></h5>
@@ -7437,7 +7455,7 @@ We will skip covering code examples for the choreography implementation because 
 </ul>
 </div>
 <div class="paragraph">
-<p>Sagas enable applications to maintain data, transactional consistency when more than one bounded context is required to complete the business functionality without having to resort to using <a href="https://en.wikipedia.org/wiki/Distributed_transaction"><em>distributed transactions</em></a><sup class="footnote">[<a id="_footnoteref_20" class="footnote" href="#_footnotedef_20" title="View footnote.">20</a>]</sup>. However, it does introduce a level of complexity to the programming model, especially when it comes to handling failures. We will look at exception handling in a lot more detail when we discuss working with distributed systems in upcoming chapters. Let&#8217;s look at how to progress flows when there are no explicit stimuli by looking at how deadlines work.</p>
+<p>Sagas enable applications to maintain data and transactional consistency when more than one bounded context is required to complete the business functionality without having to resort to using <a href="https://en.wikipedia.org/wiki/Distributed_transaction"><em>distributed transactions</em></a><sup class="footnote">[<a id="_footnoteref_20" class="footnote" href="#_footnotedef_20" title="View footnote.">20</a>]</sup>. However, it does introduce a level of complexity to the programming model, especially when it comes to handling failures. We will look at exception handling in a lot more detail when we discuss working with distributed systems in upcoming chapters. Let&#8217;s look at how to progress flows when there are no explicit stimuli by looking at how deadlines work.</p>
 </div>
 </div>
 </div>
@@ -8192,7 +8210,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-15 14:49:14 UTC
+Last updated 2021-10-19 21:11:42 UTC
 </div>
 </div>
 </body>
