@@ -530,6 +530,18 @@ The best view comes after the hardest climb.
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please refer to the ch07 directory of the book&#8217;s accompanying source code repository for complete working examples.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
@@ -643,7 +655,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="title">Figure 4. Identified queries</div>
 </div>
 <div class="paragraph">
-<p>The queries marked in green, all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
+<p>The queries marked in green (in the output from eventstorming session), all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
 </div>
 <div class="paragraph">
 <p>The <code>LCView</code> class is an extremely simple object devoid of any logic.</p>
@@ -819,7 +831,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s implement the query to retrieve the results for these criteria:</p>
+<p>Let&#8217;s implement the query using spring&#8217;s repository pattern to retrieve the results for these criteria:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -875,6 +887,18 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>Finally, we invoke the finder method to return results.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the above example, we have implemented the <code>QueryHandler</code> method within the <code>Repository</code> itself for brevity. The <code>QueryHandler</code> can be placed elsewhere as well.
+</td>
 </tr>
 </table>
 </div>
@@ -954,7 +978,7 @@ The <code>@EventHandler</code> annotation should not be confused with the <code>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We have used the term <em>event replay</em> in the context of reconstituting state of event-sourced aggregate instances. The event replay mentioned here, although similar in concept, is still very different. In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance. In this case though, we will likely work with events that span more than one aggregate.
+We have used the term <em>event replay</em> in the context of reconstituting state of event-sourced aggregate instances (discussed in <a href="#_event_sourced_aggregates">event-sourced aggregates</a> in <a href="#_implementing_domain_logic">Chapter 5</a>). The event replay mentioned here, although similar in concept, is still very different. In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance. In this case though, we will likely work with events that span more than one aggregate.
 </td>
 </tr>
 </table>
@@ -1093,7 +1117,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ol>
 </div>
 <div class="paragraph">
-<p>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that SLOs (service level objectives) are continued to be met.</p>
+<p>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that <a href="https://sre.google/sre-book/service-level-objectives/">SLOs</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> (service level objectives) are continued to be met.</p>
 </div>
 </div>
 </div>
@@ -1166,7 +1190,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ul>
 </div>
 <div class="paragraph">
-<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
+<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
 <p>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</p>
@@ -1223,13 +1247,16 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <a href="#_footnoteref_5">5</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 <div class="footnote" id="_footnotedef_6">
-<a href="#_footnoteref_6">6</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
+<a href="#_footnoteref_6">6</a>. <a href="https://sre.google/sre-book/service-level-objectives" class="bare">https://sre.google/sre-book/service-level-objectives</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-19 21:33:26 UTC
+Last updated 2021-10-24 13:09:10 UTC
 </div>
 </div>
 </body>
