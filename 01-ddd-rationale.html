@@ -804,7 +804,7 @@ It is important to note that the notion of core vs. supporting vs. generic subdo
 <p>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
 </div>
 <div class="paragraph">
-<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
+<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1046,6 +1046,39 @@ He who has a why to live for can bear almost any how.
 </tr>
 </tbody>
 </table>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Account</span> {
+
+    <span style="color:#339;font-weight:bold">void</span> openCardAccount(Applicant applicant,
+                         MonetaryAmount initialAmount) {
+        Status status = checkCreditWorthiness(applicant);
+        <span style="color:#080;font-weight:bold">if</span> (status.isWorthy()) {
+            Account account = Account.createFor(applicant);
+            account.deposit(initialAmount);
+            account.activate();
+        }
+
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="answers"><a class="anchor" href="#answers"></a>Answers</h3>
@@ -1075,7 +1108,7 @@ He who has a why to live for can bear almost any how.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-25 21:10:02 UTC
+Last updated 2021-11-09 13:45:48 UTC
 </div>
 </div>
 </body>

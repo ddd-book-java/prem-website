@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Oct 25 2021 09:10 PM UTC</span>
+<span id="revdate">Nov 09 2021 01:45 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -681,11 +681,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#integrating-with-external-systems-15-pages">9. Integrating with External Systems (15 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-6">9.1. Technical Requirements</a></li>
-<li><a href="#implementing-consumer-driven-contracts">9.2. Implementing consumer-driven contracts</a></li>
-<li><a href="#exposing-a-rest-based-api">9.3. Exposing a REST-based API</a></li>
-<li><a href="#exposing-an-events-based-api">9.4. Exposing an events-based API</a></li>
-<li><a href="#implementing-an-anti-corruption-layer">9.5. Implementing an Anti-Corruption Layer</a></li>
-<li><a href="#legacy-application-migration-patterns">9.6. Legacy Application Migration Patterns</a></li>
+<li><a href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></li>
+<li><a href="#integration-mechanisms">9.3. Integration mechanisms</a>
+<ul class="sectlevel3">
+<li><a href="#shared-kernel-versus-separate-ways">9.3.1. Shared kernel versus separate ways</a></li>
+<li><a href="#producer-consumer-versus-conformist">9.3.2. Producer-consumer versus conformist</a></li>
+<li><a href="#open-host-service">9.3.3. Open host service</a></li>
+<li><a href="#anti-corruption-layer">9.3.4. Anti-corruption layer</a></li>
+</ul>
+</li>
+<li><a href="#implementing-consumer-driven-contracts">9.4. Implementing consumer-driven contracts</a></li>
+<li><a href="#exposing-a-rest-based-api">9.5. Exposing a REST-based API</a></li>
+<li><a href="#exposing-an-events-based-api">9.6. Exposing an events-based API</a></li>
+<li><a href="#legacy-application-migration-patterns">9.7. Legacy Application Migration Patterns</a></li>
 </ul>
 </li>
 </ul>
@@ -1079,7 +1087,7 @@ It is important to note that the notion of core vs. supporting vs. generic subdo
 <p>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
 </div>
 <div class="paragraph">
-<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
+<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1321,6 +1329,39 @@ He who has a why to live for can bear almost any how.
 </tr>
 </tbody>
 </table>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Account</span> {
+
+    <span style="color:#339;font-weight:bold">void</span> openCardAccount(Applicant applicant,
+                         MonetaryAmount initialAmount) {
+        Status status = checkCreditWorthiness(applicant);
+        <span style="color:#080;font-weight:bold">if</span> (status.isWorthy()) {
+            Account account = Account.createFor(applicant);
+            account.deposit(initialAmount);
+            account.activate();
+        }
+
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="answers"><a class="anchor" href="#answers"></a><a class="link" href="#answers">1.9. Answers</a></h3>
@@ -7946,25 +7987,48 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 
 </div>
 <div class="sect2">
-<h3 id="implementing-consumer-driven-contracts"><a class="anchor" href="#implementing-consumer-driven-contracts"></a><a class="link" href="#implementing-consumer-driven-contracts">9.2. Implementing consumer-driven contracts</a></h3>
+<h3 id="continuing-our-design-journey-4"><a class="anchor" href="#continuing-our-design-journey-4"></a><a class="link" href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/event-storming/06-bounded-contexts.png" alt="06 bounded contexts">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a><a class="link" href="#integration-mechanisms">9.3. Integration mechanisms</a></h3>
+<div class="sect3">
+<h4 id="shared-kernel-versus-separate-ways"><a class="anchor" href="#shared-kernel-versus-separate-ways"></a><a class="link" href="#shared-kernel-versus-separate-ways">9.3.1. Shared kernel versus separate ways</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="producer-consumer-versus-conformist"><a class="anchor" href="#producer-consumer-versus-conformist"></a><a class="link" href="#producer-consumer-versus-conformist">9.3.2. Producer-consumer versus conformist</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="open-host-service"><a class="anchor" href="#open-host-service"></a><a class="link" href="#open-host-service">9.3.3. Open host service</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a><a class="link" href="#anti-corruption-layer">9.3.4. Anti-corruption layer</a></h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="implementing-consumer-driven-contracts"><a class="anchor" href="#implementing-consumer-driven-contracts"></a><a class="link" href="#implementing-consumer-driven-contracts">9.4. Implementing consumer-driven contracts</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="exposing-a-rest-based-api"><a class="anchor" href="#exposing-a-rest-based-api"></a><a class="link" href="#exposing-a-rest-based-api">9.3. Exposing a REST-based API</a></h3>
+<h3 id="exposing-a-rest-based-api"><a class="anchor" href="#exposing-a-rest-based-api"></a><a class="link" href="#exposing-a-rest-based-api">9.5. Exposing a REST-based API</a></h3>
 <div class="paragraph">
-<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a RESTful interface.</p>
+<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a ReSTful interface.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="exposing-an-events-based-api"><a class="anchor" href="#exposing-an-events-based-api"></a><a class="link" href="#exposing-an-events-based-api">9.4. Exposing an events-based API</a></h3>
+<h3 id="exposing-an-events-based-api"><a class="anchor" href="#exposing-an-events-based-api"></a><a class="link" href="#exposing-an-events-based-api">9.6. Exposing an events-based API</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="implementing-an-anti-corruption-layer"><a class="anchor" href="#implementing-an-anti-corruption-layer"></a><a class="link" href="#implementing-an-anti-corruption-layer">9.5. Implementing an Anti-Corruption Layer</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a><a class="link" href="#legacy-application-migration-patterns">9.6. Legacy Application Migration Patterns</a></h3>
+<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a><a class="link" href="#legacy-application-migration-patterns">9.7. Legacy Application Migration Patterns</a></h3>
 
 </div>
 </div>
@@ -8237,7 +8301,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-25 21:10:02 UTC
+Last updated 2021-11-09 13:45:48 UTC
 </div>
 </div>
 </body>

@@ -446,10 +446,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#integrating-with-external-systems-15-pages">Integrating with External Systems (15 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical Requirements</a></li>
+<li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
+<li><a href="#integration-mechanisms">Integration mechanisms</a>
+<ul class="sectlevel3">
+<li><a href="#shared-kernel-versus-separate-ways">Shared kernel versus separate ways</a></li>
+<li><a href="#producer-consumer-versus-conformist">Producer-consumer versus conformist</a></li>
+<li><a href="#open-host-service">Open host service</a></li>
+<li><a href="#anti-corruption-layer">Anti-corruption layer</a></li>
+</ul>
+</li>
 <li><a href="#implementing-consumer-driven-contracts">Implementing consumer-driven contracts</a></li>
 <li><a href="#exposing-a-rest-based-api">Exposing a REST-based API</a></li>
 <li><a href="#exposing-an-events-based-api">Exposing an events-based API</a></li>
-<li><a href="#implementing-an-anti-corruption-layer">Implementing an Anti-Corruption Layer</a></li>
 <li><a href="#legacy-application-migration-patterns">Legacy Application Migration Patterns</a></li>
 </ul>
 </li>
@@ -476,21 +484,44 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 
 </div>
 <div class="sect2">
+<h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/event-storming/06-bounded-contexts.png" alt="06 bounded contexts">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a>Integration mechanisms</h3>
+<div class="sect3">
+<h4 id="shared-kernel-versus-separate-ways"><a class="anchor" href="#shared-kernel-versus-separate-ways"></a>Shared kernel versus separate ways</h4>
+
+</div>
+<div class="sect3">
+<h4 id="producer-consumer-versus-conformist"><a class="anchor" href="#producer-consumer-versus-conformist"></a>Producer-consumer versus conformist</h4>
+
+</div>
+<div class="sect3">
+<h4 id="open-host-service"><a class="anchor" href="#open-host-service"></a>Open host service</h4>
+
+</div>
+<div class="sect3">
+<h4 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a>Anti-corruption layer</h4>
+
+</div>
+</div>
+<div class="sect2">
 <h3 id="implementing-consumer-driven-contracts"><a class="anchor" href="#implementing-consumer-driven-contracts"></a>Implementing consumer-driven contracts</h3>
 
 </div>
 <div class="sect2">
 <h3 id="exposing-a-rest-based-api"><a class="anchor" href="#exposing-a-rest-based-api"></a>Exposing a REST-based API</h3>
 <div class="paragraph">
-<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a RESTful interface.</p>
+<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a ReSTful interface.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="exposing-an-events-based-api"><a class="anchor" href="#exposing-an-events-based-api"></a>Exposing an events-based API</h3>
-
-</div>
-<div class="sect2">
-<h3 id="implementing-an-anti-corruption-layer"><a class="anchor" href="#implementing-an-anti-corruption-layer"></a>Implementing an Anti-Corruption Layer</h3>
 
 </div>
 <div class="sect2">
@@ -503,7 +534,7 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-10-25 21:10:02 UTC
+Last updated 2021-11-09 13:45:48 UTC
 </div>
 </div>
 </body>
