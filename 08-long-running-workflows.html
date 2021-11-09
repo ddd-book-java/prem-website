@@ -1248,13 +1248,13 @@ We will skip covering code examples for the choreography implementation because 
 <div class="sect2">
 <h3 id="handling-deadlines"><a class="anchor" href="#handling-deadlines"></a>Handling deadlines</h3>
 <div class="paragraph">
-<p>Thus far, we have looked at events that are caused by human (for example, the applicant submitting an LC application) or system (for example, the auto-approval of an LC application) action. However, in an event-driven system, not all events occur due to an explicit human or system stimulus. Events may need to be emitted due to inactivity over a period of time.</p>
+<p>Thus far, we have looked at events that are caused by human (for example, the applicant submitting an LC application) or system (for example, the auto-approval of an LC application) action. However, in an event-driven system, not all events occur due to an explicit human or system stimulus. Events may need to be emitted either due to inactivity over a period of time, or on a recurring schedule based on prevailing conditions.</p>
 </div>
 <div class="paragraph">
-<p>For example, let&#8217;s examine the case where the bank needs <em>submitted LC applications</em> to be decisioned as quickly as possible. When applications are not acted upon by the trade finance managers within ten calendar days, the system should send them notifications.</p>
+<p>For example, let&#8217;s examine the case where the bank needs <em>submitted LC applications</em> to be decisioned as quickly as possible. When applications are not acted upon by the trade finance managers within ten calendar days, the system should send them reminders.</p>
 </div>
 <div class="paragraph">
-<p>To deal with such inactivity, we need a means to trigger system action (read&#8201;&#8212;&#8201;emit events) based on the passage of time&#8201;&#8212;&#8201;in other words, perform actions when a <em>deadline</em> occurs. Let&#8217;s look at how to test-drive this functionality.</p>
+<p>To deal with such inactivity, we need a means to trigger system action (read&#8201;&#8212;&#8201;emit events) based on the passage of time&#8201;&#8212;&#8201;in other words, perform actions when a <em>deadline</em> expires. In a happy path scenario, we expect either the user or the system to take certain action. In such cases, we will also need to account for cases we will need to cancel t the trigger scheduled to occur on deadline expiry. Let&#8217;s look at how to test-drive this functionality.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1481,7 +1481,7 @@ We will skip covering code examples for the choreography implementation because 
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>We emit the <code>LCApprovalPendingEvent</code> when the deadline occurs.</td>
+<td>We emit the <code>LCApprovalPendingEvent</code> when the deadline expires.</td>
 </tr>
 </table>
 </div>
@@ -1701,7 +1701,7 @@ We will skip covering code examples for the choreography implementation because 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-09 13:45:48 UTC
+Last updated 2021-11-09 13:46:11 UTC
 </div>
 </div>
 </body>
