@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Nov 09 2021 02:37 PM UTC</span>
+<span id="revdate">Nov 14 2021 02:51 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -501,7 +501,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#answers">1.9. Answers</a></li>
 </ul>
 </li>
-<li><a href="#the-mechanics-of-domain-driven-design-30-pages">2. The Mechanics of Domain-Driven Design (30 Pages)</a>
+<li><a href="#_mechanics_of_domain_driven_design">2. The Mechanics of Domain-Driven Design (30 Pages)</a>
 <ul class="sectlevel2">
 <li><a href="#understanding-the-problem">2.1. Understanding the Problem</a>
 <ul class="sectlevel3">
@@ -521,10 +521,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#what-is-a-model">2.4.1. What is a Model?</a></li>
 <li><a href="#context-maps">2.4.2. Context Maps</a></li>
-<li><a href="#bounded-contexts">2.4.3. Bounded Contexts</a></li>
+<li><a href="#_bounded_contexts">2.4.3. Bounded Contexts</a></li>
 </ul>
 </li>
-<li><a href="#implementing-the-solution">2.5. Implementing the Solution</a></li>
+<li><a href="#implementing-the-solution">2.5. Implementing the Solution</a>
+<ul class="sectlevel3">
+<li><a href="#_entities">2.5.1. Entities</a></li>
+<li><a href="#value-objects">2.5.2. Value objects</a></li>
+<li><a href="#_aggregates">2.5.3. Aggregates</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_where_does_ddd_fit">3. Where and How Does DDD Fit? (15 pages)</a>
@@ -588,10 +594,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_bootstapping_the_application">5.3.2. Bootstrapping the application</a></li>
 <li><a href="#identifying-commands">5.3.3. Identifying commands</a></li>
 <li><a href="#_identifying_aggregates">5.3.4. Identifying aggregates</a></li>
-<li><a href="#test-driving-the-system">5.3.5. Test-driving the system</a></li>
-<li><a href="#implementing-the-command">5.3.6. Implementing the command</a></li>
-<li><a href="#implementing-the-event">5.3.7. Implementing the event</a></li>
-<li><a href="#designing-the-aggregate">5.3.8. Designing the aggregate</a></li>
+<li><a href="#discovering-bounded-contexts">5.3.5. Discovering bounded contexts</a></li>
+<li><a href="#correlating-aggregates-to-bounded-contexts">5.3.6. Correlating aggregates to bounded contexts</a></li>
+<li><a href="#test-driving-the-system">5.3.7. Test-driving the system</a></li>
+<li><a href="#implementing-the-command">5.3.8. Implementing the command</a></li>
+<li><a href="#implementing-the-event">5.3.9. Implementing the event</a></li>
+<li><a href="#designing-the-aggregate">5.3.10. Designing the aggregate</a></li>
 </ul>
 </li>
 <li><a href="#_persisting_aggregates">5.4. Persisting aggregates</a>
@@ -684,16 +692,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></li>
 <li><a href="#integration-mechanisms">9.3. Integration mechanisms</a>
 <ul class="sectlevel3">
-<li><a href="#shared-kernel-versus-separate-ways">9.3.1. Shared kernel versus separate ways</a></li>
-<li><a href="#producer-consumer-versus-conformist">9.3.2. Producer-consumer versus conformist</a></li>
-<li><a href="#open-host-service">9.3.3. Open host service</a></li>
-<li><a href="#anti-corruption-layer">9.3.4. Anti-corruption layer</a></li>
+<li><a href="#symmetric-relationship-patterns">9.3.1. Symmetric relationship patterns</a></li>
+<li><a href="#asymmetric-relationship-patterns">9.3.2. Asymmetric relationship patterns</a></li>
 </ul>
 </li>
-<li><a href="#implementing-consumer-driven-contracts">9.4. Implementing consumer-driven contracts</a></li>
-<li><a href="#exposing-a-rest-based-api">9.5. Exposing a REST-based API</a></li>
-<li><a href="#exposing-an-events-based-api">9.6. Exposing an events-based API</a></li>
-<li><a href="#legacy-application-migration-patterns">9.7. Legacy Application Migration Patterns</a></li>
+<li><a href="#implementation-patterns">9.4. Implementation patterns</a>
+<ul class="sectlevel3">
+<li><a href="#data-based">9.4.1. Data-based</a></li>
+<li><a href="#api-based">9.4.2. API-based</a></li>
+<li><a href="#shared-code-artifacts">9.4.3. Shared code artifacts</a></li>
+<li><a href="#enforcing-contracts">9.4.4. Enforcing contracts</a></li>
+</ul>
+</li>
+<li><a href="#legacy-application-migration-patterns">9.5. Legacy Application Migration Patterns</a></li>
 </ul>
 </li>
 </ul>
@@ -1388,7 +1399,7 @@ He who has a why to live for can bear almost any how.
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-mechanics-of-domain-driven-design-30-pages"><a class="anchor" href="#the-mechanics-of-domain-driven-design-30-pages"></a><a class="link" href="#the-mechanics-of-domain-driven-design-30-pages">2. The Mechanics of Domain-Driven Design (30 Pages)</a></h2>
+<h2 id="_mechanics_of_domain_driven_design"><a class="anchor" href="#_mechanics_of_domain_driven_design"></a><a class="link" href="#_mechanics_of_domain_driven_design">2. The Mechanics of Domain-Driven Design (30 Pages)</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -1399,7 +1410,7 @@ When eating an elephant, take one bite at a time.
 </div>
 </div>
 <div class="paragraph">
-<p>As mentioned in the previous chapter, many things can put a project off course. In this chapter, we look at how DDD gives us a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
+<p>As mentioned in the previous chapter, many things can put a project off course.In this chapter, we look at how DDD gives us a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
 </div>
 <div class="sect2">
 <h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a><a class="link" href="#understanding-the-problem">2.1. Understanding the Problem</a></h3>
@@ -1453,13 +1464,24 @@ Anemic domain models
 
 </div>
 <div class="sect3">
-<h4 id="bounded-contexts"><a class="anchor" href="#bounded-contexts"></a><a class="link" href="#bounded-contexts">2.4.3. Bounded Contexts</a></h4>
+<h4 id="_bounded_contexts"><a class="anchor" href="#_bounded_contexts"></a><a class="link" href="#_bounded_contexts">2.4.3. Bounded Contexts</a></h4>
 
 </div>
 </div>
 <div class="sect2">
 <h3 id="implementing-the-solution"><a class="anchor" href="#implementing-the-solution"></a><a class="link" href="#implementing-the-solution">2.5. Implementing the Solution</a></h3>
+<div class="sect3">
+<h4 id="_entities"><a class="anchor" href="#_entities"></a><a class="link" href="#_entities">2.5.1. Entities</a></h4>
 
+</div>
+<div class="sect3">
+<h4 id="value-objects"><a class="anchor" href="#value-objects"></a><a class="link" href="#value-objects">2.5.2. Value objects</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="_aggregates"><a class="anchor" href="#_aggregates"></a><a class="link" href="#_aggregates">2.5.3. Aggregates</a></h4>
+
+</div>
 </div>
 </div>
 </div>
@@ -2482,7 +2504,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="sect3">
 <h4 id="_identifying_aggregates"><a class="anchor" href="#_identifying_aggregates"></a><a class="link" href="#_identifying_aggregates">5.3.4. Identifying aggregates</a></h4>
 <div class="paragraph">
-<p>Looking at the output of the eventstorming session of our LC (Letter of Credit) application, one potential grouping can be as follows:</p>
+<p>Looking at the output of the eventstorming session of our LC (Letter of Credit) application, one potential grouping of commands can be as follows:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2491,44 +2513,70 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="title">Figure 1- 31. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
-<p>At first glance, it appears that we have four potential entities to handle these commands:</p>
+<p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_mechanics_of_domain_driven_design">Chapter 2</a>
+).</p>
+</div>
+<div class="paragraph">
+<p>At first glance, it appears that we have four potential aggregates to handle these commands:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/potential-aggregates.png" alt="potential aggregates" width="259" height="201">
+<img src="./images/potential-aggregates.png" alt="potential aggregates" width="304" height="237">
 </div>
 <div class="title">Figure 1- 32. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
-<p>At first glance, each of these entities may be classified as aggregates in our solution. Here, the <code>LC Application</code> feels like a reasonably good choice for aggregate, given that we are building a solution to manage LC applications. However, do the others make sense to be classified as such? The <code>Product</code> and <code>Applicant</code> look like potential entities, but we need to ask ourselves if we will need to operate on these outside of the purview of the <code>LC Application</code>. If the answer is a <strong>yes</strong>, then <code>Product</code> and <code>Applicant</code> <em>may</em> be classified as aggregates. But both <code>Product</code> and <code>Applicant</code> do not seem to require being operated on without an enveloping <code>LC Application</code> within this bounded context. It feels that way because both product and applicant details are required to be provided as part of the LC application process. At least from what we know of the process thus far, this seems to be true. This means we are left with two potential aggregates&#8201;&#8212;&#8201;<code>LC</code> and <code>LC Application</code>.</p>
+<p>However, it is a bit more nuanced than that. Before we conclude this conversation on aggregates, let&#8217;s also examine our current organizational structures because they can and will play a very influential role in how we choose aggregates. When implementing the solution, these organizational structures decompose into bounded contexts, so let&#8217;s also examine how that works.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="discovering-bounded-contexts"><a class="anchor" href="#discovering-bounded-contexts"></a><a class="link" href="#discovering-bounded-contexts">5.3.5. Discovering bounded contexts</a></h4>
+<div class="paragraph">
+<p>Our current organization is segregated to handle the business functions outlined here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application.png" alt="lc application" width="326" height="148">
+<img src="./images/lc-application.png" alt="lc application" width="410" height="251">
 </div>
-<div class="title">Figure 1- 33. Slightly refined aggregate structure</div>
 </div>
 <div class="paragraph">
-<p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle. Let&#8217;s work on the <code>LC Application</code> right now, and suspend further analysis on the need for the <code>LC</code> aggregate to a later time.</p>
+<p>As a starting point, we can use these business functions as natural boundaries to act as <a href="#_bounded_contexts">bounded contexts</a> for our solution. We may evolve this design in the future as we gain more understanding of the problem and the solution, but for now, this will suffice. Aggregates live within the confines of a single bounded context, so we need to correlate the two concepts. Let&#8217;s look at how this works.</p>
 </div>
-<div class="admonitionblock note">
+</div>
+<div class="sect3">
+<h4 id="correlating-aggregates-to-bounded-contexts"><a class="anchor" href="#correlating-aggregates-to-bounded-contexts"></a><a class="link" href="#correlating-aggregates-to-bounded-contexts">5.3.6. Correlating aggregates to bounded contexts</a></h4>
+<div class="paragraph">
+<p>If we examine the lifecycle of the letter of credit (LC) as a whole, we notice the structure outlined here. Each of these bounded contexts work with the same entities, but call them by different names making use of their own ubiquitous language.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
+</div>
+</div>
+<div class="paragraph">
+<p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
+</div>
+<div class="admonitionblock caution">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-caution" title="Caution"></i>
 </td>
 <td class="content">
-For a more detailed explanation of the differences between aggregates, aggregate roots, entities and value objects, refer to Chapter 2, The Mechanics of Domain-Driven Design.
+The terms aggregate and aggregate root are sometimes used interchangeably to mean the same thing. While both aggregates and aggregate roots handle commands, only one aggregate can exist as the root in a given context, and it encapsulates access to its child aggregates.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s start writing our first command to see how this manifests itself in code.</p>
+<p>It is important to note that entities may be required to be treated as aggregates in a different bounded context and this kind of treatment is entirely context dependent.</p>
+</div>
+<div class="paragraph">
+<p>When we look at the output of our eventstorming session, the <code>LC Application</code> transitions to become an <code>LC</code> much later in the lifecycle in the Issuance context. Our focus right now is to optimize and automate the LC application flow of the overall issuance process. Now that we have settled on working with the <code>LC Application</code> aggregate (root), let&#8217;s start writing our first command to see how this manifests itself in code.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.3.5. Test-driving the system</a></h4>
+<h4 id="test-driving-the-system"><a class="anchor" href="#test-driving-the-system"></a><a class="link" href="#test-driving-the-system">5.3.7. Test-driving the system</a></h4>
 <div class="paragraph">
 <p>While we have a reasonably good conceptual understanding of the system, we are still in the process of refining this understanding. Test-driving the system allows us to exercise our understanding by acting as the first client of the solution that we are producing.</p>
 </div>
@@ -2551,7 +2599,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 34. An event-driven system</div>
+<div class="title">Figure 1- 33. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2677,7 +2725,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.3.6. Implementing the command</a></h4>
+<h4 id="implementing-the-command"><a class="anchor" href="#implementing-the-command"></a><a class="link" href="#implementing-the-command">5.3.8. Implementing the command</a></h4>
 <div class="paragraph">
 <p>The <code>CreateLCApplicationCommand</code> in the previous simplistic example does not carry any state. Realistically, the command will likely look something like what is depicted as follows:</p>
 </div>
@@ -2743,7 +2791,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.3.7. Implementing the event</a></h4>
+<h4 id="implementing-the-event"><a class="anchor" href="#implementing-the-event"></a><a class="link" href="#implementing-the-event">5.3.9. Implementing the event</a></h4>
 <div class="paragraph">
 <p>In an event-driven system, mutating system state by successfully processing a command usually results in a domain event being emitted to signal the state mutation to the rest of the system. A simplified representation of a real-world <code>LCApplicationCreatedEvent</code> is shown here:</p>
 </div>
@@ -2800,7 +2848,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 </div>
 </div>
 <div class="sect3">
-<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.3.8. Designing the aggregate</a></h4>
+<h4 id="designing-the-aggregate"><a class="anchor" href="#designing-the-aggregate"></a><a class="link" href="#designing-the-aggregate">5.3.10. Designing the aggregate</a></h4>
 <div class="paragraph">
 <p>The aggregate is the place where commands are handled and events are emitted. The good thing about the test that we have written is that it is expressed in a manner that hides the implementation details. But let&#8217;s look at the implementation to be able to appreciate how we can get our tests to pass and meet the business requirement.</p>
 </div>
@@ -2910,7 +2958,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 35. Typical entity relationship model</div>
+<div class="title">Figure 1- 34. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
@@ -2937,7 +2985,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 36. The log data structure</div>
+<div class="title">Figure 1- 35. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -3428,7 +3476,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 37. Validations during the submit LC process</div>
+<div class="title">Figure 1- 36. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -4128,7 +4176,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 38. Commands from the event storming session</div>
+<div class="title">Figure 1- 37. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -4137,7 +4185,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 39. Decomposed commands</div>
+<div class="title">Figure 1- 38. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4288,7 +4336,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 40. Revised commands</div>
+<div class="title">Figure 1- 39. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4723,7 +4771,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 41. MVVM design pattern</div>
+<div class="title">Figure 1- 40. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4754,7 +4802,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 42. Start LC creation screen</div>
+<div class="title">Figure 1- 41. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5356,7 +5404,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 43. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 42. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5365,7 +5413,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 42</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 41</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6067,7 +6115,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 44. Recap of eventstorming session</div>
+<div class="title">Figure 1- 43. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
@@ -6082,7 +6130,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 45. CQRS application&#8201;&#8212;&#8201;query side</div>
+<div class="title">Figure 1- 44. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6142,7 +6190,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side-dissected.png" alt="Query side dissected">
 </div>
-<div class="title">Figure 1- 46. Query side dissected</div>
+<div class="title">Figure 1- 45. Query side dissected</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6167,7 +6215,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 47. Identified queries</div>
+<div class="title">Figure 1- 46. Identified queries</div>
 </div>
 <div class="paragraph">
 <p>The queries marked in green (in the output from eventstorming session), all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
@@ -6683,7 +6731,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="content">
 <img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
-<div class="title">Figure 1- 48. Event evolution</div>
+<div class="title">Figure 1- 47. Event evolution</div>
 </div>
 <div class="paragraph">
 <p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
@@ -6822,7 +6870,7 @@ Please refer to the ch08 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/sagas/event-storming-auto-approval-saga.png" alt="event storming auto approval saga">
 </div>
-<div class="title">Figure 1- 49. Recap of eventstorming session</div>
+<div class="title">Figure 1- 48. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As depicted in the visual above, some aspects of Letter of Credit (LC) application processing happens outside our current bounded context), before the trade finance manager makes a decision to either approve or decline the application as listed here:</p>
@@ -6874,7 +6922,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-logical.png" alt="auto approval saga logical">
 </div>
-<div class="title">Figure 1- 50. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
+<div class="title">Figure 1- 49. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
 </div>
 <div class="paragraph">
 <p>As is depicted in the visual above, there are three bounded contexts in play:</p>
@@ -6936,7 +6984,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-orchestrator.png" alt="auto approval saga orchestrator">
 </div>
-<div class="title">Figure 1- 51. Saga implementation using an orchestrator</div>
+<div class="title">Figure 1- 50. Saga implementation using an orchestrator</div>
 </div>
 <div class="paragraph">
 <p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework. As usual, let&#8217;s test drive this functionality that a new auto approval saga instance is created when an LC application is submitted:</p>
@@ -7442,7 +7490,7 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-choreography.png" alt="Saga implementation using choreography">
 </div>
-<div class="title">Figure 1- 52. Saga implementation using choreography</div>
+<div class="title">Figure 1- 51. Saga implementation using choreography</div>
 </div>
 <div class="paragraph">
 <p>As you can see, there is no single component that tracks the saga lifecycle. However, to make the auto-approval decision, each of these stateless event handlers need to have knowledge of the same three events having occurred:</p>
@@ -7988,47 +8036,82 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey-4"><a class="anchor" href="#continuing-our-design-journey-4"></a><a class="link" href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/event-storming/06-bounded-contexts.png" alt="06 bounded contexts">
+<div class="paragraph">
+<p>From our eventstorming session, we have arrived at four bounded contexts for our application as depicted here:</p>
 </div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-context-map.png" alt="lc application context map">
+</div>
+<div class="title">Figure 1- 52. A simple context map for the LC application</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a><a class="link" href="#integration-mechanisms">9.3. Integration mechanisms</a></h3>
 <div class="sect3">
-<h4 id="shared-kernel-versus-separate-ways"><a class="anchor" href="#shared-kernel-versus-separate-ways"></a><a class="link" href="#shared-kernel-versus-separate-ways">9.3.1. Shared kernel versus separate ways</a></h4>
+<h4 id="symmetric-relationship-patterns"><a class="anchor" href="#symmetric-relationship-patterns"></a><a class="link" href="#symmetric-relationship-patterns">9.3.1. Symmetric relationship patterns</a></h4>
+<div class="sect4">
+<h5 id="partnership"><a class="anchor" href="#partnership"></a><a class="link" href="#partnership">Partnership</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="shared-kernel"><a class="anchor" href="#shared-kernel"></a><a class="link" href="#shared-kernel">Shared kernel</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="separate-ways"><a class="anchor" href="#separate-ways"></a><a class="link" href="#separate-ways">Separate ways</a></h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="asymmetric-relationship-patterns"><a class="anchor" href="#asymmetric-relationship-patterns"></a><a class="link" href="#asymmetric-relationship-patterns">9.3.2. Asymmetric relationship patterns</a></h4>
+<div class="sect4">
+<h5 id="conformist"><a class="anchor" href="#conformist"></a><a class="link" href="#conformist">Conformist</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a><a class="link" href="#anti-corruption-layer">Anti-corruption layer</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="open-host-service"><a class="anchor" href="#open-host-service"></a><a class="link" href="#open-host-service">Open host service</a></h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="implementation-patterns"><a class="anchor" href="#implementation-patterns"></a><a class="link" href="#implementation-patterns">9.4. Implementation patterns</a></h3>
+<div class="sect3">
+<h4 id="data-based"><a class="anchor" href="#data-based"></a><a class="link" href="#data-based">9.4.1. Data-based</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="producer-consumer-versus-conformist"><a class="anchor" href="#producer-consumer-versus-conformist"></a><a class="link" href="#producer-consumer-versus-conformist">9.3.2. Producer-consumer versus conformist</a></h4>
+<h4 id="api-based"><a class="anchor" href="#api-based"></a><a class="link" href="#api-based">9.4.2. API-based</a></h4>
+<div class="sect4">
+<h5 id="http-based-apis"><a class="anchor" href="#http-based-apis"></a><a class="link" href="#http-based-apis">HTTP-based APIs</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="message-based-apis"><a class="anchor" href="#message-based-apis"></a><a class="link" href="#message-based-apis">Message-based APIs</a></h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="shared-code-artifacts"><a class="anchor" href="#shared-code-artifacts"></a><a class="link" href="#shared-code-artifacts">9.4.3. Shared code artifacts</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="open-host-service"><a class="anchor" href="#open-host-service"></a><a class="link" href="#open-host-service">9.3.3. Open host service</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a><a class="link" href="#anti-corruption-layer">9.3.4. Anti-corruption layer</a></h4>
+<h4 id="enforcing-contracts"><a class="anchor" href="#enforcing-contracts"></a><a class="link" href="#enforcing-contracts">9.4.4. Enforcing contracts</a></h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-consumer-driven-contracts"><a class="anchor" href="#implementing-consumer-driven-contracts"></a><a class="link" href="#implementing-consumer-driven-contracts">9.4. Implementing consumer-driven contracts</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="exposing-a-rest-based-api"><a class="anchor" href="#exposing-a-rest-based-api"></a><a class="link" href="#exposing-a-rest-based-api">9.5. Exposing a REST-based API</a></h3>
-<div class="paragraph">
-<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a ReSTful interface.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="exposing-an-events-based-api"><a class="anchor" href="#exposing-an-events-based-api"></a><a class="link" href="#exposing-an-events-based-api">9.6. Exposing an events-based API</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a><a class="link" href="#legacy-application-migration-patterns">9.7. Legacy Application Migration Patterns</a></h3>
+<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a><a class="link" href="#legacy-application-migration-patterns">9.5. Legacy Application Migration Patterns</a></h3>
 
 </div>
 </div>
@@ -8301,7 +8384,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-09 14:37:10 UTC
+Last updated 2021-11-14 14:51:29 UTC
 </div>
 </div>
 </body>

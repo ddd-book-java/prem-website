@@ -449,15 +449,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
 <li><a href="#integration-mechanisms">Integration mechanisms</a>
 <ul class="sectlevel3">
-<li><a href="#shared-kernel-versus-separate-ways">Shared kernel versus separate ways</a></li>
-<li><a href="#producer-consumer-versus-conformist">Producer-consumer versus conformist</a></li>
-<li><a href="#open-host-service">Open host service</a></li>
-<li><a href="#anti-corruption-layer">Anti-corruption layer</a></li>
+<li><a href="#symmetric-relationship-patterns">Symmetric relationship patterns</a></li>
+<li><a href="#asymmetric-relationship-patterns">Asymmetric relationship patterns</a></li>
 </ul>
 </li>
-<li><a href="#implementing-consumer-driven-contracts">Implementing consumer-driven contracts</a></li>
-<li><a href="#exposing-a-rest-based-api">Exposing a REST-based API</a></li>
-<li><a href="#exposing-an-events-based-api">Exposing an events-based API</a></li>
+<li><a href="#implementation-patterns">Implementation patterns</a>
+<ul class="sectlevel3">
+<li><a href="#data-based">Data-based</a></li>
+<li><a href="#api-based">API-based</a></li>
+<li><a href="#shared-code-artifacts">Shared code artifacts</a></li>
+<li><a href="#enforcing-contracts">Enforcing contracts</a></li>
+</ul>
+</li>
 <li><a href="#legacy-application-migration-patterns">Legacy Application Migration Patterns</a></li>
 </ul>
 </li>
@@ -485,44 +488,79 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/event-storming/06-bounded-contexts.png" alt="06 bounded contexts">
+<div class="paragraph">
+<p>From our eventstorming session, we have arrived at four bounded contexts for our application as depicted here:</p>
 </div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-context-map.png" alt="lc application context map">
+</div>
+<div class="title">Figure 1. A simple context map for the LC application</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a>Integration mechanisms</h3>
 <div class="sect3">
-<h4 id="shared-kernel-versus-separate-ways"><a class="anchor" href="#shared-kernel-versus-separate-ways"></a>Shared kernel versus separate ways</h4>
+<h4 id="symmetric-relationship-patterns"><a class="anchor" href="#symmetric-relationship-patterns"></a>Symmetric relationship patterns</h4>
+<div class="sect4">
+<h5 id="partnership"><a class="anchor" href="#partnership"></a>Partnership</h5>
 
 </div>
-<div class="sect3">
-<h4 id="producer-consumer-versus-conformist"><a class="anchor" href="#producer-consumer-versus-conformist"></a>Producer-consumer versus conformist</h4>
+<div class="sect4">
+<h5 id="shared-kernel"><a class="anchor" href="#shared-kernel"></a>Shared kernel</h5>
 
 </div>
-<div class="sect3">
-<h4 id="open-host-service"><a class="anchor" href="#open-host-service"></a>Open host service</h4>
+<div class="sect4">
+<h5 id="separate-ways"><a class="anchor" href="#separate-ways"></a>Separate ways</h5>
 
 </div>
+</div>
 <div class="sect3">
-<h4 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a>Anti-corruption layer</h4>
+<h4 id="asymmetric-relationship-patterns"><a class="anchor" href="#asymmetric-relationship-patterns"></a>Asymmetric relationship patterns</h4>
+<div class="sect4">
+<h5 id="conformist"><a class="anchor" href="#conformist"></a>Conformist</h5>
 
+</div>
+<div class="sect4">
+<h5 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a>Anti-corruption layer</h5>
+
+</div>
+<div class="sect4">
+<h5 id="open-host-service"><a class="anchor" href="#open-host-service"></a>Open host service</h5>
+
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-consumer-driven-contracts"><a class="anchor" href="#implementing-consumer-driven-contracts"></a>Implementing consumer-driven contracts</h3>
+<h3 id="implementation-patterns"><a class="anchor" href="#implementation-patterns"></a>Implementation patterns</h3>
+<div class="sect3">
+<h4 id="data-based"><a class="anchor" href="#data-based"></a>Data-based</h4>
 
 </div>
-<div class="sect2">
-<h3 id="exposing-a-rest-based-api"><a class="anchor" href="#exposing-a-rest-based-api"></a>Exposing a REST-based API</h3>
-<div class="paragraph">
-<p>Currently, we have a set of commands and an ability to handle them. However, there isn&#8217;t an entry point to invoke these commands externally. Let&#8217;s expose these via a ReSTful interface.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="exposing-an-events-based-api"><a class="anchor" href="#exposing-an-events-based-api"></a>Exposing an events-based API</h3>
+<div class="sect3">
+<h4 id="api-based"><a class="anchor" href="#api-based"></a>API-based</h4>
+<div class="sect4">
+<h5 id="http-based-apis"><a class="anchor" href="#http-based-apis"></a>HTTP-based APIs</h5>
 
+</div>
+<div class="sect4">
+<h5 id="message-based-apis"><a class="anchor" href="#message-based-apis"></a>Message-based APIs</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="shared-code-artifacts"><a class="anchor" href="#shared-code-artifacts"></a>Shared code artifacts</h4>
+
+</div>
+<div class="sect3">
+<h4 id="enforcing-contracts"><a class="anchor" href="#enforcing-contracts"></a>Enforcing contracts</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a>Legacy Application Migration Patterns</h3>
@@ -534,7 +572,7 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-09 14:37:10 UTC
+Last updated 2021-11-14 14:51:28 UTC
 </div>
 </div>
 </body>
