@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Nov 14 2021 02:51 PM UTC</span>
+<span id="revdate">Nov 24 2021 11:01 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2546,12 +2546,10 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="sect3">
 <h4 id="correlating-aggregates-to-bounded-contexts"><a class="anchor" href="#correlating-aggregates-to-bounded-contexts"></a><a class="link" href="#correlating-aggregates-to-bounded-contexts">5.3.6. Correlating aggregates to bounded contexts</a></h4>
 <div class="paragraph">
-<p>If we examine the lifecycle of the letter of credit (LC) as a whole, we notice the structure outlined here. Each of these bounded contexts work with the same entities, but call them by different names making use of their own ubiquitous language.</p>
+<p>If we examine the lifecycle of the letter of credit (LC) as a whole, we notice the structure outlined here. Each of these bounded contexts work with the same entities, but call them by different names making use of their own ubiquitous language. The context map for the system looks like this:</p>
 </div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
-</div>
+<div class="paragraph">
+<p>Unresolved directive in 05-implementing-domain-logic.adoc - include::images/context-map.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
@@ -8384,7 +8382,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-14 14:51:29 UTC
+Last updated 2021-11-24 11:01:40 UTC
 </div>
 </div>
 </body>
