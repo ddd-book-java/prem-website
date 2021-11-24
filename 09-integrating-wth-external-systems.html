@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Integrating with External Systems (15 pages)</title>
+<title>Integrating with External Systems</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -443,11 +443,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#integrating-with-external-systems-15-pages">Integrating with External Systems (15 pages)</a>
+<li><a href="#integrating-with-external-systems">Integrating with External Systems</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements">Technical Requirements</a></li>
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
-<li><a href="#integration-mechanisms">Integration mechanisms</a>
+<li><a href="#bounded-context-relationships">Bounded context relationships</a>
 <ul class="sectlevel3">
 <li><a href="#symmetric-relationship-patterns">Symmetric relationship patterns</a></li>
 <li><a href="#asymmetric-relationship-patterns">Asymmetric relationship patterns</a></li>
@@ -468,8 +468,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="integrating-with-external-systems-15-pages"><a class="anchor" href="#integrating-with-external-systems-15-pages"></a>Integrating with External Systems (15 pages)</h2>
+<div class="sect1 text-justify">
+<h2 id="integrating-with-external-systems"><a class="anchor" href="#integrating-with-external-systems"></a>Integrating with External Systems</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -489,27 +489,49 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
 <div class="paragraph">
-<p>From our eventstorming session, we have arrived at four bounded contexts for our application as depicted here:</p>
+<p>From our domain analysis in the earlier chapters, we have arrived at four bounded contexts for our application as depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
+<img src="./images/lc-application.png" alt="lc application" width="529" height="533">
 </div>
+<div class="title">Figure 1. Context map for the LC solution</div>
 </div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-context-map.png" alt="lc application context map">
-</div>
-<div class="title">Figure 1. A simple context map for the LC application</div>
+<div class="paragraph">
+<p>Thus far, our focus has been on the implementation of the internals of the <strong>LC Application</strong> bounded context. While the LC Application bounded context is independent of the other bounded contexts, it is not completely isolated from them. For example, when processing an LC application, we need to perform merchandise and applicant checks which require interactions with the <strong>Compliance</strong> and <strong>Customer Onboarding</strong> bounded contexts respectively. This means that these bounded contexts have a relationship with each other. These relationships are driven by the nature of collaboration between the teams working on the respective bounded contexts. Let&#8217;s examine how these team dynamics influence integration mechanisms between bounded contexts in a way that continues to preserve their individual integrity.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a>Integration mechanisms</h3>
+<h3 id="bounded-context-relationships"><a class="anchor" href="#bounded-context-relationships"></a>Bounded context relationships</h3>
+<div class="paragraph">
+<p>We need bounded contexts to as independent as possible. However, this does not mean that bounded contexts are completely isolated from each other. Bounded contexts need to collaborate with others to provide business value. Whenever there is collaboration required between two bounded contexts, the nature of their relationship is not only influenced by their individual goals and priorities, but also by the prevailing organizational realities.In a high performing environment, it is fairly common to have a single team assume ownership of a bounded context. The relationships between the teams owning these bounded contexts, play a significant role in influencing the integration patterns employed to arrive at a solution. At a high level, there are two categories of relationships:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Symmetric</p>
+</li>
+<li>
+<p>Asymmetric</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at these relationship types in more detail.</p>
+</div>
 <div class="sect3">
 <h4 id="symmetric-relationship-patterns"><a class="anchor" href="#symmetric-relationship-patterns"></a>Symmetric relationship patterns</h4>
+<div class="paragraph">
+<p>Two teams can be said to have a symmetric relationship when they have an equal amount of influence in the decision-making process to arrive at a solution. Both teams are in a position to and indeed, do contribute more or less equally towards the outcome. There are three variations of symmetric relationships, each of which we outline in more detail here:</p>
+</div>
 <div class="sect4">
 <h5 id="partnership"><a class="anchor" href="#partnership"></a>Partnership</h5>
-
+<div class="paragraph">
+<p>In a partnership, both teams integrate in an adhoc manner. There are no fixed responsibilities assigned when needing complete integration work. Each team picks up work as and when needed without the need for any specific ceremony or fanfare. The nature of the integration is usually two-way with both teams exchanging solution artifacts as and when needed. Such relationships require extremely high degrees of collaboration and understanding of the work done by both teams.</p>
+</div>
+<div class="paragraph">
+<p>For example, a web front-end team working in close collaboration with the APIs team building the <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a>s for the front-end. The BFF team creates experience APIs meant to be used exclusively by the front-end. To fulfill any functionality, the front-end team requires capabilities to be exposed by the APIs team. On the other hand, the APIs team is dependent on the front-end team to provide advice on what capabilities to build and the order in which to build them. Both teams freely make use of each other&#8217;s domain models (for example, the same set of request and response objects that define the API) to implement functionality. Such reuse happens mostly arbitrarily and when API changes happen, the both teams coordinate changes to keep things working.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="shared-kernel"><a class="anchor" href="#shared-kernel"></a>Shared kernel</h5>
@@ -572,7 +594,7 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-24 11:01:40 UTC
+Last updated 2021-11-24 11:02:06 UTC
 </div>
 </div>
 </body>

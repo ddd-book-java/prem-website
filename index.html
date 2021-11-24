@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Nov 24 2021 11:01 AM UTC</span>
+<span id="revdate">Nov 24 2021 11:02 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -686,11 +686,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#further-reading-5">8.7. Further reading</a></li>
 </ul>
 </li>
-<li><a href="#integrating-with-external-systems-15-pages">9. Integrating with External Systems (15 pages)</a>
+<li><a href="#integrating-with-external-systems">9. Integrating with External Systems</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-6">9.1. Technical Requirements</a></li>
 <li><a href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></li>
-<li><a href="#integration-mechanisms">9.3. Integration mechanisms</a>
+<li><a href="#bounded-context-relationships">9.3. Bounded context relationships</a>
 <ul class="sectlevel3">
 <li><a href="#symmetric-relationship-patterns">9.3.1. Symmetric relationship patterns</a></li>
 <li><a href="#asymmetric-relationship-patterns">9.3.2. Asymmetric relationship patterns</a></li>
@@ -2548,8 +2548,11 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="paragraph">
 <p>If we examine the lifecycle of the letter of credit (LC) as a whole, we notice the structure outlined here. Each of these bounded contexts work with the same entities, but call them by different names making use of their own ubiquitous language. The context map for the system looks like this:</p>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in 05-implementing-domain-logic.adoc - include::images/context-map.adoc[]</p>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application.png" alt="lc application" width="529" height="533">
+</div>
+<div class="title">Figure 1- 33. Context map for the LC solution</div>
 </div>
 <div class="paragraph">
 <p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
@@ -2597,7 +2600,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 33. An event-driven system</div>
+<div class="title">Figure 1- 34. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2956,7 +2959,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 34. Typical entity relationship model</div>
+<div class="title">Figure 1- 35. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
@@ -2983,7 +2986,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 35. The log data structure</div>
+<div class="title">Figure 1- 36. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -3474,7 +3477,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 36. Validations during the submit LC process</div>
+<div class="title">Figure 1- 37. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -4174,7 +4177,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 37. Commands from the event storming session</div>
+<div class="title">Figure 1- 38. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -4183,7 +4186,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 38. Decomposed commands</div>
+<div class="title">Figure 1- 39. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4334,7 +4337,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 39. Revised commands</div>
+<div class="title">Figure 1- 40. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4769,7 +4772,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 40. MVVM design pattern</div>
+<div class="title">Figure 1- 41. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4800,7 +4803,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 41. Start LC creation screen</div>
+<div class="title">Figure 1- 42. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5402,7 +5405,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 42. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 43. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5411,7 +5414,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 39</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 41</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 40</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 42</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6113,7 +6116,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 43. Recap of eventstorming session</div>
+<div class="title">Figure 1- 44. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
@@ -6128,7 +6131,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 44. CQRS application&#8201;&#8212;&#8201;query side</div>
+<div class="title">Figure 1- 45. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6188,7 +6191,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side-dissected.png" alt="Query side dissected">
 </div>
-<div class="title">Figure 1- 45. Query side dissected</div>
+<div class="title">Figure 1- 46. Query side dissected</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6213,7 +6216,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 46. Identified queries</div>
+<div class="title">Figure 1- 47. Identified queries</div>
 </div>
 <div class="paragraph">
 <p>The queries marked in green (in the output from eventstorming session), all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
@@ -6729,7 +6732,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="content">
 <img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
-<div class="title">Figure 1- 47. Event evolution</div>
+<div class="title">Figure 1- 48. Event evolution</div>
 </div>
 <div class="paragraph">
 <p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
@@ -6868,7 +6871,7 @@ Please refer to the ch08 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/sagas/event-storming-auto-approval-saga.png" alt="event storming auto approval saga">
 </div>
-<div class="title">Figure 1- 48. Recap of eventstorming session</div>
+<div class="title">Figure 1- 49. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As depicted in the visual above, some aspects of Letter of Credit (LC) application processing happens outside our current bounded context), before the trade finance manager makes a decision to either approve or decline the application as listed here:</p>
@@ -6920,7 +6923,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-logical.png" alt="auto approval saga logical">
 </div>
-<div class="title">Figure 1- 49. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
+<div class="title">Figure 1- 50. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
 </div>
 <div class="paragraph">
 <p>As is depicted in the visual above, there are three bounded contexts in play:</p>
@@ -6982,7 +6985,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-orchestrator.png" alt="auto approval saga orchestrator">
 </div>
-<div class="title">Figure 1- 50. Saga implementation using an orchestrator</div>
+<div class="title">Figure 1- 51. Saga implementation using an orchestrator</div>
 </div>
 <div class="paragraph">
 <p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework. As usual, let&#8217;s test drive this functionality that a new auto approval saga instance is created when an LC application is submitted:</p>
@@ -7488,7 +7491,7 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-choreography.png" alt="Saga implementation using choreography">
 </div>
-<div class="title">Figure 1- 51. Saga implementation using choreography</div>
+<div class="title">Figure 1- 52. Saga implementation using choreography</div>
 </div>
 <div class="paragraph">
 <p>As you can see, there is no single component that tracks the saga lifecycle. However, to make the auto-approval decision, each of these stateless event handlers need to have knowledge of the same three events having occurred:</p>
@@ -8014,8 +8017,8 @@ We will skip covering code examples for the choreography implementation because 
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="integrating-with-external-systems-15-pages"><a class="anchor" href="#integrating-with-external-systems-15-pages"></a><a class="link" href="#integrating-with-external-systems-15-pages">9. Integrating with External Systems (15 pages)</a></h2>
+<div class="sect1 text-justify">
+<h2 id="integrating-with-external-systems"><a class="anchor" href="#integrating-with-external-systems"></a><a class="link" href="#integrating-with-external-systems">9. Integrating with External Systems</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -8035,27 +8038,49 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div class="sect2">
 <h3 id="continuing-our-design-journey-4"><a class="anchor" href="#continuing-our-design-journey-4"></a><a class="link" href="#continuing-our-design-journey-4">9.2. Continuing our design journey</a></h3>
 <div class="paragraph">
-<p>From our eventstorming session, we have arrived at four bounded contexts for our application as depicted here:</p>
+<p>From our domain analysis in the earlier chapters, we have arrived at four bounded contexts for our application as depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application.png" alt="lc application" width="654" height="406">
+<img src="./images/lc-application.png" alt="lc application" width="529" height="533">
 </div>
+<div class="title">Figure 1- 53. Context map for the LC solution</div>
 </div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-context-map.png" alt="lc application context map">
-</div>
-<div class="title">Figure 1- 52. A simple context map for the LC application</div>
+<div class="paragraph">
+<p>Thus far, our focus has been on the implementation of the internals of the <strong>LC Application</strong> bounded context. While the LC Application bounded context is independent of the other bounded contexts, it is not completely isolated from them. For example, when processing an LC application, we need to perform merchandise and applicant checks which require interactions with the <strong>Compliance</strong> and <strong>Customer Onboarding</strong> bounded contexts respectively. This means that these bounded contexts have a relationship with each other. These relationships are driven by the nature of collaboration between the teams working on the respective bounded contexts. Let&#8217;s examine how these team dynamics influence integration mechanisms between bounded contexts in a way that continues to preserve their individual integrity.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="integration-mechanisms"><a class="anchor" href="#integration-mechanisms"></a><a class="link" href="#integration-mechanisms">9.3. Integration mechanisms</a></h3>
+<h3 id="bounded-context-relationships"><a class="anchor" href="#bounded-context-relationships"></a><a class="link" href="#bounded-context-relationships">9.3. Bounded context relationships</a></h3>
+<div class="paragraph">
+<p>We need bounded contexts to as independent as possible. However, this does not mean that bounded contexts are completely isolated from each other. Bounded contexts need to collaborate with others to provide business value. Whenever there is collaboration required between two bounded contexts, the nature of their relationship is not only influenced by their individual goals and priorities, but also by the prevailing organizational realities.In a high performing environment, it is fairly common to have a single team assume ownership of a bounded context. The relationships between the teams owning these bounded contexts, play a significant role in influencing the integration patterns employed to arrive at a solution. At a high level, there are two categories of relationships:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Symmetric</p>
+</li>
+<li>
+<p>Asymmetric</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at these relationship types in more detail.</p>
+</div>
 <div class="sect3">
 <h4 id="symmetric-relationship-patterns"><a class="anchor" href="#symmetric-relationship-patterns"></a><a class="link" href="#symmetric-relationship-patterns">9.3.1. Symmetric relationship patterns</a></h4>
+<div class="paragraph">
+<p>Two teams can be said to have a symmetric relationship when they have an equal amount of influence in the decision-making process to arrive at a solution. Both teams are in a position to and indeed, do contribute more or less equally towards the outcome. There are three variations of symmetric relationships, each of which we outline in more detail here:</p>
+</div>
 <div class="sect4">
 <h5 id="partnership"><a class="anchor" href="#partnership"></a><a class="link" href="#partnership">Partnership</a></h5>
-
+<div class="paragraph">
+<p>In a partnership, both teams integrate in an adhoc manner. There are no fixed responsibilities assigned when needing complete integration work. Each team picks up work as and when needed without the need for any specific ceremony or fanfare. The nature of the integration is usually two-way with both teams exchanging solution artifacts as and when needed. Such relationships require extremely high degrees of collaboration and understanding of the work done by both teams.</p>
+</div>
+<div class="paragraph">
+<p>For example, a web front-end team working in close collaboration with the APIs team building the <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a>s for the front-end. The BFF team creates experience APIs meant to be used exclusively by the front-end. To fulfill any functionality, the front-end team requires capabilities to be exposed by the APIs team. On the other hand, the APIs team is dependent on the front-end team to provide advice on what capabilities to build and the order in which to build them. Both teams freely make use of each other&#8217;s domain models (for example, the same set of request and response objects that define the API) to implement functionality. Such reuse happens mostly arbitrarily and when API changes happen, the both teams coordinate changes to keep things working.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="shared-kernel"><a class="anchor" href="#shared-kernel"></a><a class="link" href="#shared-kernel">Shared kernel</a></h5>
@@ -8382,7 +8407,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-24 11:01:40 UTC
+Last updated 2021-11-24 11:02:06 UTC
 </div>
 </div>
 </body>

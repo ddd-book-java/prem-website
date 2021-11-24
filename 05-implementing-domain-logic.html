@@ -797,8 +797,11 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="paragraph">
 <p>If we examine the lifecycle of the letter of credit (LC) as a whole, we notice the structure outlined here. Each of these bounded contexts work with the same entities, but call them by different names making use of their own ubiquitous language. The context map for the system looks like this:</p>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in 05-implementing-domain-logic.adoc - include::images/context-map.adoc[]</p>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application.png" alt="lc application" width="529" height="533">
+</div>
+<div class="title">Figure 6. Context map for the LC solution</div>
 </div>
 <div class="paragraph">
 <p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
@@ -846,7 +849,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 6. An event-driven system</div>
+<div class="title">Figure 7. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1205,7 +1208,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 7. Typical entity relationship model</div>
+<div class="title">Figure 8. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
@@ -1232,7 +1235,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 8. The log data structure</div>
+<div class="title">Figure 9. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -1723,7 +1726,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 9. Validations during the submit LC process</div>
+<div class="title">Figure 10. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -2372,7 +2375,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-24 11:01:40 UTC
+Last updated 2021-11-24 11:02:06 UTC
 </div>
 </div>
 </body>
