@@ -456,12 +456,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#implementation-patterns">Implementation patterns</a>
 <ul class="sectlevel3">
 <li><a href="#data-based">Data-based</a></li>
+<li><a href="#code-based">Code-based</a></li>
 <li><a href="#api-based">API-based</a></li>
-<li><a href="#shared-code-artifacts">Shared code artifacts</a></li>
 <li><a href="#enforcing-contracts">Enforcing contracts</a></li>
 </ul>
 </li>
-<li><a href="#legacy-application-migration-patterns">Legacy Application Migration Patterns</a></li>
+<li><a href="#further-reading">Further reading</a></li>
 </ul>
 </li>
 </ul>
@@ -480,7 +480,11 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 </div>
 </div>
 <div class="paragraph">
-<p>Thus far, we have used DDD to implement a robust core for our application. However, most bounded contexts usually have both upstream and downstream dependencies which usually change at a pace which is different from these core components. To maintain both agility and reliability  and enable loose coupling, it is important to create what DDD calls the anti-corruption layer in order to shield the core from everything that surrounds it. In this chapter, we will look at integrating with a legacy Inventory Management system. We will round off by looking at common patterns when integrating with legacy applications.</p>
+<p>Thus far, we have used DDD to implement a robust core for our application.
+However, most bounded contexts usually have both upstream and downstream dependencies which usually change at a pace which is different from these core components.
+To maintain both agility and reliability and enable loose coupling, it is important to create what DDD calls the anti-corruption layer in order to shield the core from everything that surrounds it.
+In this chapter, we will look at integrating with a legacy Inventory Management system.
+We will round off by looking at common patterns when integrating with legacy applications.</p>
 </div>
 <div class="sect2">
 <h3 id="technical-requirements"><a class="anchor" href="#technical-requirements"></a>Technical Requirements</h3>
@@ -498,13 +502,24 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div class="title">Figure 1. Context map for the LC solution</div>
 </div>
 <div class="paragraph">
-<p>Thus far, our focus has been on the implementation of the internals of the <strong>LC Application</strong> bounded context. While the LC Application bounded context is independent of the other bounded contexts, it is not completely isolated from them. For example, when processing an LC application, we need to perform merchandise and applicant checks which require interactions with the <strong>Compliance</strong> and <strong>Customer Onboarding</strong> bounded contexts respectively. This means that these bounded contexts have a relationship with each other. These relationships are driven by the nature of collaboration between the teams working on the respective bounded contexts. Let&#8217;s examine how these team dynamics influence integration mechanisms between bounded contexts in a way that continues to preserve their individual integrity.</p>
+<p>Thus far, our focus has been on the implementation of the internals of the <strong>LC Application</strong> bounded context.
+While the LC Application bounded context is independent of the other bounded contexts, it is not completely isolated from them.
+For example, when processing an LC application, we need to perform merchandise and applicant checks which require interactions with the <strong>Compliance</strong> and <strong>Customer Onboarding</strong> bounded contexts respectively.
+This means that these bounded contexts have a relationship with each other.
+These relationships are driven by the nature of collaboration between the teams working on the respective bounded contexts.
+Let&#8217;s examine how these team dynamics influence integration mechanisms between bounded contexts in a way that continues to preserve their individual integrity.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="bounded-context-relationships"><a class="anchor" href="#bounded-context-relationships"></a>Bounded context relationships</h3>
 <div class="paragraph">
-<p>We need bounded contexts to as independent as possible. However, this does not mean that bounded contexts are completely isolated from each other. Bounded contexts need to collaborate with others to provide business value. Whenever there is collaboration required between two bounded contexts, the nature of their relationship is not only influenced by their individual goals and priorities, but also by the prevailing organizational realities.In a high performing environment, it is fairly common to have a single team assume ownership of a bounded context. The relationships between the teams owning these bounded contexts, play a significant role in influencing the integration patterns employed to arrive at a solution. At a high level, there are two categories of relationships:</p>
+<p>We need bounded contexts to as independent as possible.
+However, this does not mean that bounded contexts are completely isolated from each other.
+Bounded contexts need to collaborate with others to provide business value.
+Whenever there is collaboration required between two bounded contexts, the nature of their relationship is not only influenced by their individual goals and priorities, but also by the prevailing organizational realities.
+In a high performing environment, it is fairly common to have a single team assume ownership of a bounded context.
+The relationships between the teams owning these bounded contexts, play a significant role in influencing the integration patterns employed to arrive at a solution.
+At a high level, there are two categories of relationships:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -522,62 +537,442 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div class="sect3">
 <h4 id="symmetric-relationship-patterns"><a class="anchor" href="#symmetric-relationship-patterns"></a>Symmetric relationship patterns</h4>
 <div class="paragraph">
-<p>Two teams can be said to have a symmetric relationship when they have an equal amount of influence in the decision-making process to arrive at a solution. Both teams are in a position to and indeed, do contribute more or less equally towards the outcome. There are three variations of symmetric relationships, each of which we outline in more detail here:</p>
+<p>Two teams can be said to have a symmetric relationship when they have an equal amount of influence in the decision-making process to arrive at a solution.
+Both teams are in a position to and indeed, do contribute more or less equally towards the outcome.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/symmetric-relationship.png" alt="symmetric relationship">
+</div>
+<div class="title">Figure 2. Both teams have an equal say in influencing the solution</div>
+</div>
+<div class="paragraph">
+<p>There are three variations of symmetric relationships, each of which we outline in more detail here:</p>
 </div>
 <div class="sect4">
 <h5 id="partnership"><a class="anchor" href="#partnership"></a>Partnership</h5>
 <div class="paragraph">
-<p>In a partnership, both teams integrate in an adhoc manner. There are no fixed responsibilities assigned when needing complete integration work. Each team picks up work as and when needed without the need for any specific ceremony or fanfare. The nature of the integration is usually two-way with both teams exchanging solution artifacts as and when needed. Such relationships require extremely high degrees of collaboration and understanding of the work done by both teams.</p>
+<p>In a partnership, both teams integrate in an adhoc manner.
+There are no fixed responsibilities assigned when needing complete integration work.
+Each team picks up work as and when needed without the need for any specific ceremony or fanfare.
+The nature of the integration is usually two-way with both teams exchanging solution artifacts as and when needed.
+Such relationships require extremely high degrees of collaboration and understanding of the work done by both teams.</p>
 </div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/partnership.png" alt="partnership">
+</div>
+<div class="title">Figure 3. There is an adhoc, mutual dependency between teams in a partnership relationship</div>
+</div>
+<div class="sect5">
+<h6 id="example"><a class="anchor" href="#example"></a>Example</h6>
 <div class="paragraph">
-<p>For example, a web front-end team working in close collaboration with the APIs team building the <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a>s for the front-end. The BFF team creates experience APIs meant to be used exclusively by the front-end. To fulfill any functionality, the front-end team requires capabilities to be exposed by the APIs team. On the other hand, the APIs team is dependent on the front-end team to provide advice on what capabilities to build and the order in which to build them. Both teams freely make use of each other&#8217;s domain models (for example, the same set of request and response objects that define the API) to implement functionality. Such reuse happens mostly arbitrarily and when API changes happen, the both teams coordinate changes to keep things working.</p>
+<p>A web front-end team working in close collaboration with the APIs team building the <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a>s for the front-end.
+The BFF team creates experience APIs meant to be used exclusively by the front-end.
+To fulfill any functionality, the front-end team requires capabilities to be exposed by the APIs team.
+On the other hand, the APIs team is dependent on the front-end team to provide advice on what capabilities to build and the order in which to build them.
+Both teams freely make use of each other&#8217;s domain models (for example, the same set of request and response objects that define the API) to implement functionality.
+Such reuse happens mostly arbitrarily and when API changes happen, the both teams coordinate changes to keep things working.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use"><a class="anchor" href="#when-to-use"></a>When to use</h6>
+<div class="paragraph">
+<p>Partnership relationship between teams require high levels of collaboration, trust and understanding.
+Teams tend to use this when team boundaries are informal.
+It also helps if these teams are co-located and/or have a significant working time overlap.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls"><a class="anchor" href="#potential-pitfalls"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Partnership relationships between teams can lead to a situation where individual team responsibilities become very unclear leading the solution towards the dreaded <em><a href="#_big_ball_of_mud">big ball of mud</a></em>.</p>
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="shared-kernel"><a class="anchor" href="#shared-kernel"></a>Shared kernel</h5>
-
+<div class="paragraph">
+<p>Unlike in a partnership, when using a shared kernel, teams have a clear understanding of the solution artifacts and models they choose to share between themselves.
+Both teams take equal responsibility in the upkeep of these shared artifacts.</p>
+</div>
+<div class="sect5">
+<h6 id="example-2"><a class="anchor" href="#example-2"></a>Example</h6>
+<div class="paragraph">
+<p>The <em>LC Application Processing</em> and <em>Customer Onboarding</em> teams in our LC application may choose to use a common model to represent the <code>CustomerCreditValidatedEvent</code>.
+Any enhancements or changes to the event schema can affect both teams.
+The responsibility to make any changes is owned by both teams.
+Intentionally, these teams do not share anything beyond this mutually agreed upon models and artifacts.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/shared-kernel.png" alt="shared kernel">
+</div>
+<div class="title">Figure 4. Teams have an explicit understanding of shared models</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-2"><a class="anchor" href="#when-to-use-2"></a>When to use</h6>
+<div class="paragraph">
+<p>The shared kernel form of collaboration works well if shared artifacts are required to be consumed in an identical fashion in both contexts.
+Furthermore, it is attractive for multiple teams to coordinate and continue sharing, as opposed to duplicating identical models in both contexts.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-2"><a class="anchor" href="#potential-pitfalls-2"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Changes made to the shared kernel affect both bounded contexts.
+This means that any change made to the shared kernel needs to remain compatible for both teams.
+Needless to say, as the number of teams using the shared kernel increases, the cost of coordination goes up manifold.</p>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="separate-ways"><a class="anchor" href="#separate-ways"></a>Separate ways</h5>
-
+<div class="paragraph">
+<p>When two teams choose to not share any artifacts or models between them, they go their own separate ways.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/separate-ways.png" alt="separate ways">
+</div>
+</div>
+<div class="sect5">
+<h6 id="example-3"><a class="anchor" href="#example-3"></a>Example</h6>
+<div class="paragraph">
+<p>The <em>LC Application Processing</em> and the <em>Customer Onboarding</em> teams may start with sharing the same build/deployment scripts for their services.
+Over a period of time, deployment requirements may diverge to a point where the shared cost of maintaining these scripts becomes prohibitively expensive, causing these teams to fork their deployments to regain independence from the other team.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-3"><a class="anchor" href="#when-to-use-3"></a>When to use</h6>
+<div class="paragraph">
+<p>In some cases, two teams may be unable to collaborate for a variety of reasons, ranging from a drift in individual team requirements to organizational politics.
+Whatever the case may be, these teams may decide that the cost of collaboration is too high, resulting in them going their own separate ways.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-3"><a class="anchor" href="#potential-pitfalls-3"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Choosing to go separate ways may result in duplicate work across affected bounded contexts.
+When working in bounded contexts that map to the core sub-domains, this may prove counter-productive as it could lead to inconsistent behaviors unintentionally.</p>
+</div>
+<div class="paragraph">
+<p>It is possible to transition from one relationship type to another over a period of time.
+In our experience, transitioning from any one of these relationships may not be straightforward.
+In cases where requirements are relatively clear at the outset, it may be easier to start with a <em>shared kernel</em>.
+On the contrary, if requirements are unclear, it may be prudent to start either with a loose <em>partnership</em> or go <em>separate ways</em> until requirements become clear.
+In any of these scenarios, it is important to keep evaluating the nature of the relationship and transition to a more appropriate type based on our enhanced understanding of the requirements and/or the relationship itself.</p>
+</div>
+<div class="paragraph">
+<p>In each of the relationships characterized above, the teams involved have a more or less equal say in how the relationship evolved and the resulting outcomes.
+However, this may not always be the case.
+Let&#8217;s look at examples of cases where one team may have a clear upper hand in terms of how the relationship evolves.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="asymmetric-relationship-patterns"><a class="anchor" href="#asymmetric-relationship-patterns"></a>Asymmetric relationship patterns</h4>
-<div class="sect4">
-<h5 id="conformist"><a class="anchor" href="#conformist"></a>Conformist</h5>
-
+<div class="paragraph">
+<p>Two teams can be said to have an asymmetric relationship when one of the teams has a stronger influence in the decision-making process to arrive at a solution.
+In other words, there is a clear customer-supplier (or upstream-downstream) relationship where either the customer or the supplier plays a dominant role that affects solution design approaches.
+It is also likely that the customer and the supplier do not share common goals.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/asymmetric-relationship.png" alt="asymmetric relationship">
+</div>
+<div class="title">Figure 5. One of the teams has a dominant say in influencing the solution</div>
+</div>
+<div class="paragraph">
+<p>There are at least three solution patterns when teams are in an asymmetric relationship, each of which we outline in more detail here:</p>
 </div>
 <div class="sect4">
-<h5 id="anti-corruption-layer"><a class="anchor" href="#anti-corruption-layer"></a>Anti-corruption layer</h5>
-
+<h5 id="_conformist"><a class="anchor" href="#_conformist"></a>Conformist (CF)</h5>
+<div class="paragraph">
+<p>It is not unusual for the side playing the supplier role to have a dominant say in how the relationship with one or more customers is implemented.
+Furthermore, the customer may simply choose to conform with the supplier-provided solution as is, making it an integral part of their own solution.
+In other words, the supplier provides a set of models and the customer uses those same models to build their solution.
+In this case, the customer is termed to be a <em>conformist</em>.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/conformist.png" alt="conformist">
+</div>
+<div class="title">Figure 6. Customer accepts dependency on supplier model</div>
+</div>
+<div class="sect5">
+<h6 id="example-4"><a class="anchor" href="#example-4"></a>Example</h6>
+<div class="paragraph">
+<p>When building a solution to validate United States postal addresses of LC applicants, we chose to conform to the <a href="https://www.usps.com/business/web-tools-apis/">USPS Web Tools</a> address validation API schema.
+Given that the business started with just US-based applicants, this made sense.
+This means that any references to the address model in our bounded contexts mimic the schema prescribed by the USPS.
+This further means that we will need to keep up with changes that occur in the USPS API as and when they occur (regardless of whether that change is needed for our own functionality).</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-4"><a class="anchor" href="#when-to-use-4"></a>When to use</h6>
+<div class="paragraph">
+<p>Being a conformist is not necessarily a negative thing.
+The supplier&#8217;s models may be a well accepted industry standard, or they may simply be good enough for our needs.
+It may also be that the team may not have the necessary skills, motivation or immediate needs to do something different from what the supplier has provided.
+This approach also enables teams to make quick progress, leveraging work mostly done by other experts.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-4"><a class="anchor" href="#potential-pitfalls-4"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>An overuse of the conformist pattern may dilute the ubiquitous language of our own bounded contexts, resulting in a situation where there is no clear separation between the supplier and customer concepts.
+It may also be that concepts that are core to the supplier&#8217;s context leaks into our own, despite those concepts carrying little to no meaning in our context.
+This may result in these bounded contexts being very tightly coupled with each other.
+And if a need arises to switch to another supplier or support multiple suppliers, the cost of change may be prohibitively expensive.</p>
+</div>
+</div>
 </div>
 <div class="sect4">
-<h5 id="open-host-service"><a class="anchor" href="#open-host-service"></a>Open host service</h5>
+<h5 id="anti-corruption-layer-acl"><a class="anchor" href="#anti-corruption-layer-acl"></a>Anti-corruption layer (ACL)</h5>
+<div class="paragraph">
+<p>There may be scenarios where a customer may need to collaborate with the supplier, but may want to shield itself from the supplier&#8217;s ubiquitous language and models.
+In such cases, it may be prudent to redefine these conflicting models in the customer&#8217;s own ubiquitous language using a translation layer at the time of integration, also known as an <em>anti-corruption layer</em> (ACL).</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/anti-corruption-layer.png" alt="anti corruption layer">
+</div>
+<div class="title">Figure 7. Customer wants to protect itself from supplier models</div>
+</div>
+<div class="sect5">
+<h6 id="example-5"><a class="anchor" href="#example-5"></a>Example</h6>
+<div class="paragraph">
+<p>In the address validation example referenced in the <a href="#_conformist">Conformist</a> section, the <em>LC Application Processing</em> team may need to support Canadian applicants as well.
+In such a case, being a conformist to a system that supports only US addresses may prove restrictive and even confusing.
+For example, the US <em>state</em> is analogous to a <em>province</em> in Canada.
+Similarly, <em>zip code</em> in the US is referred to <em>postal code</em> in Canada.
+In addition, US zip codes are numeric whereas Canadian postal codes are alphanumeric.
+Most importantly, we currently do not have the notion of a <em>country code</em> in our address model, but now we will need to introduce this concept to differentiate addresses within the respective countries.
+Let&#8217;s look at the address models from the respective countries here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/acl-example.png" alt="acl example">
+</div>
+</div>
+<div class="paragraph">
+<p>While we initially conformed to the USPS model, we have now evolved to support more countries.
+For example, <em>region</em> is used to represent the concept of <em>state</em>/<em>province</em>.
+Also, we have introduced the <em>country</em> value object, which was missing earlier.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-5"><a class="anchor" href="#when-to-use-5"></a>When to use</h6>
+<div class="paragraph">
+<p>Anti-corruption layers come in handy when the customer models are part of a core domain.
+The ACL shields the customer from changes in the supplier&#8217;s models and can help produce more loosely coupled integrations.
+It may also be necessary when we are looking to integrate similar concepts from multiple suppliers.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-5"><a class="anchor" href="#potential-pitfalls-5"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Using an anti-corruption layer may be tempting in a lot of cases.
+However, it is less beneficial when the concepts being integrated don&#8217;t often change, or are defined by a well known authority.
+Using an ACL with a custom language may only cause more confusion.
+Creating an ACL usually requires additional translations and thereby may increase the overall complexity of the customer&#8217;s bounded context and may be considered premature optimization.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="open-host-service-ohs"><a class="anchor" href="#open-host-service-ohs"></a>Open host service (OHS)</h5>
+<div class="paragraph">
+<p>Unlike the conformist and the anti-corruption layer, where customers do not have a formal means to interface with the supplier, with the open host service, the supplier defines a clear interface to interact with its customers.
+This interface may be made available in the form of a well-known published language (for example, a REST interface or a client SDK):</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/open-host-service.png" alt="open host service">
+</div>
+<div class="title">Figure 8. Open host service (OHS) using a published language (PL).</div>
+</div>
+<div class="sect5">
+<h6 id="example-6"><a class="anchor" href="#example-6"></a>Example</h6>
+<div class="paragraph">
+<p>The LC Application Processing bounded context can expose an HTTP interface for each of its commands as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="console"># Start a new LC application
+curl POST /applications/start \
+        -d '{&quot;applicant-id&quot;: &quot;8ed2d2fe&quot;, &quot;clientReference&quot;: &quot;Test LC&quot;}' \
+        -H 'content-type:application/vnd.lc-application.v2+json'
 
+# Change the amount on an existing application
+curl POST /applications/ac130002/change-amount \
+        -d '{&quot;amount&quot;: 100, &quot;currency&quot;: &quot;USD&quot;}' \
+        -H 'content-type:application/vnd.lc-application.v2+json'
+
+# Other commands omitted for brevity</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As an augment to the HTTP interface shown here, we may even provide a client SDK in some of the more popular languages used by our customers.
+This helps hide more implementation details such the MIME type and version from customers.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-6"><a class="anchor" href="#when-to-use-6"></a>When to use</h6>
+<div class="paragraph">
+<p>When the supplier wants to hide its internal models (ubiquitous language), making an open host service enables the supplier to evolve while providing a stable interface to its customers.
+In a sense, the open-host service pattern is a reversal of the anti-corruption layer pattern: instead of the customer, the supplier implements the translation of its internal model.
+Also, the supplier can consider providing an open host service when it is interested in providing a richer user experience for its customers.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-6"><a class="anchor" href="#potential-pitfalls-6"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>While suppliers may have good intentions by providing an open host service for its customers, it may result in increased implementation complexity (for example, there may be a need to support multiple versions of an API, or client SDKs in multiple languages).
+If the open host service does not take into account common usage patterns of its customers, it may result in a poor customer usability and also in degraded performance for the supplier.</p>
+</div>
+<div class="paragraph">
+<p>It is important to note that the conformist and the anti-corruption layer are patterns that customers implement, whereas the open host service is a supplier-side pattern.
+For example, the following scenario with the supplier providing an <em>open host service</em> and one customer is a <em>conformist</em> while another has an <em>anti-corruption layer</em>, can be true as depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/asymmetric-multiple-customers.png" alt="asymmetric multiple customers">
+</div>
+<div class="title">Figure 9. Asymmetric relationships with multiple customers.</div>
+</div>
+<div class="paragraph">
+<p>Now that we have seen the various ways in which bounded contexts can integrate with each other, here is one possible implementation for our LC application depicted in the form of a context map:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context-relationships/lc-application-context-map.png" alt="lc application context map">
+</div>
+<div class="title">Figure 10. Simplified context map for the LC application.</div>
+</div>
+<div class="paragraph">
+<p>Thus far we have examined the various ways in which inter-team dynamics influence integration mechanisms.
+While having clarity at the conceptual level helps, let&#8217;s see how these relationships manifest themselves at the implementation level.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="implementation-patterns"><a class="anchor" href="#implementation-patterns"></a>Implementation patterns</h3>
+<div class="paragraph">
+<p>We have looked integration between bounded contexts at a design level, but these concepts need to be translated into code.
+There are three broad categories that can be employed when integrating two bounded contexts:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Data-based</p>
+</li>
+<li>
+<p>Code-based</p>
+</li>
+<li>
+<p>API-based</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at each method in more detail now.</p>
+</div>
 <div class="sect3">
 <h4 id="data-based"><a class="anchor" href="#data-based"></a>Data-based</h4>
+<div class="paragraph">
+<p>In this style of integration, the bounded contexts in question share data between each other. If the relationship is symmetric, the teams owning these bounded contexts may choose to share entire databases with free access to both read, write and change underlying structures. Whereas in an asymmetric relationship, the supplier may constrain the scope of access, based on the type of relationship.</p>
+</div>
+<div class="sect4">
+<h5 id="shared-database"><a class="anchor" href="#shared-database"></a>Shared database</h5>
+<div class="paragraph">
+<p>The simplest form of data integration is the use of a shared database. In this style of integration, all participating bounded contexts have unrestricted access to the schemas and the underlying data as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/integration-patterns/symmetric-shared-data.png" alt="symmetric shared data">
+</div>
+<div class="title">Figure 11. Integration using a shared database</div>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-7"><a class="anchor" href="#when-to-use-7"></a>When to use</h6>
+<div class="paragraph">
+<p>The shared database presents a very low barrier to entry for teams looking to quickly enable new or enhance existing functionality by providing ready access to data for read and/or write use-cases. More importantly, it also allows the use of local database transactions, which usually provides strong consistency, lower complexity and better performance (especially when working with relational databases).</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-7"><a class="anchor" href="#potential-pitfalls-7"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>However, this symmetric integration style where multiple teams have shared ownership is usually frowned upon because it often leads to a situation where there is no clear ownership. Furthermore, the shared databases can become a source of tight coupling, accelerating the path towards the dreaded <em>big ball of mud</em>. Additionally, users of the shared database can suffer from the <em>noisy neighbor</em> effect where one co-tenant monopolizing resources adversely affects all other tenants. For these reasons, teams will be well advised to choose this style of integration sparingly.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="replicated-data"><a class="anchor" href="#replicated-data"></a>Replicated data</h5>
+<div class="paragraph">
+<p>In the case of asymmetric relationships, suppliers may be unwilling to provide direct access to their data. However, they may choose to integrate with customers using a mechanism based on data sharing. An alternate form of integration is to provide a copy of the data required by consumers. There are many variations on how this can be implemented, we depict the more common ways here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/integration-patterns/asymmetric-shared-data.png" alt="asymmetric shared data">
+</div>
+<div class="title">Figure 12. Integration using data replication.</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Database views</strong>: In this form, the consumer gets or is provided access to a subset of the data using query-based or materialized views. In either case, the customer usually has read-only access to the data and both supplier and customer continue to share the same physical resources (usually the DB engine).</p>
+</li>
+<li>
+<p><strong>Full read replica</strong>: In this form, the customer gets access to a read replica of the supplier&#8217;s entire database, usually on physically disparate infrastructure.</p>
+</li>
+<li>
+<p><strong>Partial read replica</strong>: In this form, the customer gets access to a read replica of a subset of the supplier&#8217;s database, again on physically disparate infrastructure.</p>
+</li>
+</ul>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-8"><a class="anchor" href="#when-to-use-8"></a>When to use</h6>
+<div class="paragraph">
+<p>This style of integration may be required when there is an asymmetric relationship between the supplier and the customer. Like the shared database, this integration style usually requires less upfront effort to integrate. This is also apt when suppliers intend to provide read-only access to a subset of their data. It may also suffice to use data replication when customers only require to read a subset of the supplier&#8217;s data.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-8"><a class="anchor" href="#potential-pitfalls-8"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>If we choose to use database views, we may continue to suffer from the noisy neighbor effect. On the other hand, if we choose to create physically disparate replicas, we will need to incur the cost of additional operational complexity. More importantly, the consumers remain tightly coupled to the supplier&#8217;s domain models and ubiquitous language.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="code-based"><a class="anchor" href="#code-based"></a>Code-based</h4>
+<div class="sect4">
+<h5 id="code-sharing"><a class="anchor" href="#code-sharing"></a>Code sharing</h5>
 
+</div>
+<div class="sect4">
+<h5 id="code-libraries"><a class="anchor" href="#code-libraries"></a>Code libraries</h5>
+<div class="sect5">
+<h6 id="stored-procedures"><a class="anchor" href="#stored-procedures"></a>Stored procedures</h6>
+
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="api-based"><a class="anchor" href="#api-based"></a>API-based</h4>
 <div class="sect4">
-<h5 id="http-based-apis"><a class="anchor" href="#http-based-apis"></a>HTTP-based APIs</h5>
+<h5 id="request-response-apis"><a class="anchor" href="#request-response-apis"></a>Request-response APIs</h5>
 
 </div>
 <div class="sect4">
-<h5 id="message-based-apis"><a class="anchor" href="#message-based-apis"></a>Message-based APIs</h5>
+<h5 id="publish-subscribe-apis"><a class="anchor" href="#publish-subscribe-apis"></a>Publish-subscribe APIs</h5>
 
 </div>
-</div>
-<div class="sect3">
-<h4 id="shared-code-artifacts"><a class="anchor" href="#shared-code-artifacts"></a>Shared code artifacts</h4>
-
 </div>
 <div class="sect3">
 <h4 id="enforcing-contracts"><a class="anchor" href="#enforcing-contracts"></a>Enforcing contracts</h4>
@@ -585,8 +980,28 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 </div>
 </div>
 <div class="sect2">
-<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a>Legacy Application Migration Patterns</h3>
-
+<h3 id="further-reading"><a class="anchor" href="#further-reading"></a>Further reading</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 35.7142%;">
+<col style="width: 21.4285%;">
+<col style="width: 42.8573%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Title</th>
+<th class="tableblock halign-left valign-top">Author</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integration database</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Martin Fowler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://martinfowler.com/bliki/IntegrationDatabase.html" class="bare">https://martinfowler.com/bliki/IntegrationDatabase.html</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -594,7 +1009,7 @@ Wholeness is not achieved by cutting off a portion of one&#8217;s being, but by 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-11-24 11:02:06 UTC
+Last updated 2021-12-04 15:36:44 UTC
 </div>
 </div>
 </body>
