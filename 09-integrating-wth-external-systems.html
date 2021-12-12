@@ -457,10 +457,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#data-based">Data-based</a></li>
 <li><a href="#code-based">Code-based</a></li>
-<li><a href="#api-based">API-based</a></li>
-<li><a href="#enforcing-contracts">Enforcing contracts</a></li>
+<li><a href="#ipc-based">IPC-based</a></li>
 </ul>
 </li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#questions">Questions</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
 </li>
@@ -731,7 +732,7 @@ And if a need arises to switch to another supplier or support multiple suppliers
 </div>
 </div>
 <div class="sect4">
-<h5 id="anti-corruption-layer-acl"><a class="anchor" href="#anti-corruption-layer-acl"></a>Anti-corruption layer (ACL)</h5>
+<h5 id="_anti_corruption_layer_acl"><a class="anchor" href="#_anti_corruption_layer_acl"></a>Anti-corruption layer (ACL)</h5>
 <div class="paragraph">
 <p>There may be scenarios where a customer may need to collaborate with the supplier, but may want to shield itself from the supplier&#8217;s ubiquitous language and models.
 In such cases, it may be prudent to redefine these conflicting models in the customer&#8217;s own ubiquitous language using a translation layer at the time of integration, also known as an <em>anti-corruption layer</em> (ACL).</p>
@@ -946,37 +947,265 @@ There are three broad categories that can be employed when integrating two bound
 <div class="paragraph">
 <p>If we choose to use database views, we may continue to suffer from the noisy neighbor effect. On the other hand, if we choose to create physically disparate replicas, we will need to incur the cost of additional operational complexity. More importantly, the consumers remain tightly coupled to the supplier&#8217;s domain models and ubiquitous language.</p>
 </div>
+<div class="paragraph">
+<p>Next, let&#8217;s look at some ways to make the most of data-based integrations.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="increasing-effectiveness"><a class="anchor" href="#increasing-effectiveness"></a>Increasing effectiveness</h5>
+<div class="paragraph">
+<p>When sharing data, the schema (the structure of the database) acts as a means to enforce contracts, especially when using databases that require specifying a formal structure (for example, relational databases). When multiple parties are involved, managing the schema can become a challenge.</p>
+</div>
+<div class="paragraph">
+<p>To mitigate undesirable changes, teams sharing data may want to consider the use of a schema migration tool. Relational databases work well with tools like <a href="https://www.liquibase.org/">liquibase</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> or <a href="https://flywaydb.org/">flyway</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>. When working with databases that do not formally enforce a schema, it may be best to avoid employing this style of integration, especially when working in  symmetric relationships where ownership is unclear.</p>
+</div>
+<div class="paragraph">
+<p>In any case, if using one of the shared data styles of integration is unavoidable, teams may want to strongly consider employing one or more techniques mentioned in <a href="https://databaserefactoring.com/">refactoring databases</a> to make it more manageable.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="code-based"><a class="anchor" href="#code-based"></a>Code-based</h4>
-<div class="sect4">
-<h5 id="code-sharing"><a class="anchor" href="#code-sharing"></a>Code sharing</h5>
-
+<div class="paragraph">
+<p>In this style of integration, teams coordinate by sharing code artifacts, either directly in the form of source code and/or binaries. At a high level, there are two forms:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sharing source code</p>
+</li>
+<li>
+<p>Sharing binaries</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>We describe each of these here:</p>
 </div>
 <div class="sect4">
-<h5 id="code-libraries"><a class="anchor" href="#code-libraries"></a>Code libraries</h5>
+<h5 id="sharing-source-code"><a class="anchor" href="#sharing-source-code"></a>Sharing source code</h5>
+<div class="paragraph">
+<p>A fairly common practice within organizations is to share source code with the objective of promoting reuse and standardization. This may include utilities (like logging, authentication, etc.), build/deployment scripts, data transfer objects, etc. In other words, any piece of source code where the cost of duplication is seen to be higher than reuse.</p>
+</div>
 <div class="sect5">
-<h6 id="stored-procedures"><a class="anchor" href="#stored-procedures"></a>Stored procedures</h6>
-
+<h6 id="when-to-use-9"><a class="anchor" href="#when-to-use-9"></a>When to use</h6>
+<div class="paragraph">
+<p>Depending on the relationship type (symmetric/asymmetric), teams sharing code may have varied levels of influence in how the shared artifacts evolve. This works well in a symmetric relationship, both teams are empowered to make changes compatible with each other. Similarly, in an asymmetric relationship, the supplier may accept changes from customers, while retaining ownership and control of the shared artifacts. This also tends to work well in case of non-core, infrequently changing code artifacts. Sharing source code also enables higher levels of transparency and visibility into the internals of the shared artifacts (case in point - open source software).</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-9"><a class="anchor" href="#potential-pitfalls-9"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Sharing code artifacts means that individual teams take on responsibility to make sure that the process of converting source code into binary executables is uniform and compatible with requirements for all parties. This may include code conventions, static quality checks, tests (presence or lack thereof), compilation/build flags, versioning, etc. When a relatively large number of teams are involved, maintaining this form of compatibility may become burdensome.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="sharing-binary-artifacts"><a class="anchor" href="#sharing-binary-artifacts"></a>Sharing binary artifacts</h5>
+<div class="paragraph">
+<p>Another relatively common practice is to share artifacts at the binary level. In this scenario, the consumers may or may not have direct access to source code artifacts. Examples include third party libraries, client SDKs, API documentation, etc. This form of integration is fairly common when the relationship between the coordinating parties is asymmetric. The supplier of the library has a clear ownership of maintaining the lifecycle of the shared artifacts.</p>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-10"><a class="anchor" href="#when-to-use-10"></a>When to use</h6>
+<div class="paragraph">
+<p>Sharing just binary artifacts may be necessary when the supplier is unable/unwilling to share source artifacts, possibly because they may be proprietary and/or part of the supplier&#8217;s intellectual property. Because the supplier takes ownership of the <em>build</em> process, it behooves the supplier to produce artifacts that are compatible with most potential consumers. Hence, this works well when the supplier is willing to do that. On the other hand, it requires that the customer place high levels of <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain">trust</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> in the supplier&#8217;s <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide">software supply chain</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> when producing these artifacts.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-10"><a class="anchor" href="#potential-pitfalls-10"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>Integration through the use of binary artifact sharing reduces the visibility into the build process of the shared artifacts for the consumers. If consumers rely on slow-moving suppliers, this can become untenable. For example, if a critical security bug is discovered in the shared binary, the consumer is solely reliant on the supplier to remediate. This can be a huge risk if such dependencies are in critical, business-differentiating aspects of the solution (especially in the core subdomain). This risk can be exacerbated without the use of appropriate <a href="#_anti_corruption_layer_acl">anti-corruption layers</a> (ACLs) and/or service level agreements (SLAs).</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_increasing_effectiveness_code_based"><a class="anchor" href="#_increasing_effectiveness_code_based"></a>Increasing effectiveness</h5>
+<div class="paragraph">
+<p>When sharing code artifacts, it becomes a lot more important to be explicit in how changes are made while continuing to maintain high levels of quality&#8201;&#8212;&#8201;especially when multiple teams are involved. Let&#8217;s examine some of these techniques in more detail:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Static analysis</strong>: This can be as simple as adhering to a set of coding standards using a tool like <a href="https://checkstyle.sourceforge.io/">checkstyle</a>. More importantly, these tools can be used to conform to a set of naming conventions to allow the firmer use of the ubiquitous language throughout the codebase. In addition, tools like <a href="https://spotbugs.github.io/">spotbugs</a>, <a href="https://pmd.github.io/">PMD/CPD</a> can be used to statically analyze code for the presence of bugs and duplicate code.</p>
+</li>
+<li>
+<p><strong>Code architecture tests</strong>: While static inspection tools are effective at operating at the level of a single compilation unit, runtime inspection can take this one level further to identify package cycles, dependency checks, inheritance trees, etc. to apply lightweight architecture governance. The use of tools like <a href="https://github.com/clarkware/jdepend">JDepend</a> and <a href="https://www.archunit.org/">ArchUnit</a> can help here.</p>
+</li>
+<li>
+<p><strong>Unit tests</strong>: When working with shared codebases, team members are looking to make changes in a safe and reliable manner. The presence of a comprehensive suite of fast-running unit tests can go a long way to wards increasing confidence. We strongly recommend employing test-driven design to further maximize creating a codebase that is well-designed and one that enables easier refactoring.</p>
+</li>
+<li>
+<p><strong>Code reviews</strong>: While automation can go a long way, augmenting the process where a human reviews changes can be highly effective for multiple reasons. This can take the form of offline reviews (using pull requests) or active peer reviews (using paired programming). All of these techniques serve to enhance collective understanding, thereby reducing risk when changes are made.</p>
+</li>
+<li>
+<p><strong>Documentation</strong>: Needless to say, well-structured documentation can be invaluable when making contributions and also when consuming binary code artifacts. Teams will be well advised to proliferate the use of the ubiquitous language by striving to write self-documenting code all throughout to maximize benefits derived.</p>
+</li>
+<li>
+<p><strong>Dependency management</strong>: When sharing binary code artifacts, managing dependencies can become fairly complicated due to having too many dependencies, long dependency chains, conflicting/cyclic dependencies, etc. Teams should strive to reduce afferent (incoming) coupling as much as possible to mitigate the problems described above.</p>
+</li>
+<li>
+<p><strong>Versioning</strong>: In addition to minimizing the amount of afferent coupling, using an explicit versioning strategy can go a long way towards making dependency management easier. We strongly recommend considering the use of a technique like <a href="https://semver.org/">semantic versioning</a> for shared code artifacts.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="api-based"><a class="anchor" href="#api-based"></a>API-based</h4>
-<div class="sect4">
-<h5 id="request-response-apis"><a class="anchor" href="#request-response-apis"></a>Request-response APIs</h5>
-
+<h4 id="ipc-based"><a class="anchor" href="#ipc-based"></a>IPC-based</h4>
+<div class="paragraph">
+<p>In this style of integration, the bounded contexts exchange messages using some form of inter-process communication (IPC) to interact with each other. This may take the form of synchronous or asynchronous communication.</p>
 </div>
 <div class="sect4">
-<h5 id="publish-subscribe-apis"><a class="anchor" href="#publish-subscribe-apis"></a>Publish-subscribe APIs</h5>
-
+<h5 id="synchronous-messaging"><a class="anchor" href="#synchronous-messaging"></a>Synchronous messaging</h5>
+<div class="paragraph">
+<p>Synchronous messaging is a style of communication where the sender of the request waits for a response from the receiver, which implies that the sender and the receiver need to be active for this style to work. Usually, this form of communication is point-to-point. HTTP is one of the commonly used protocols for this style of communication.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/integration-patterns/synchronous-messaging.png" alt="synchronous messaging">
+</div>
+<div class="title">Figure 13. Synchronous messaging</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please take a look at the HTTP APIs for the commands used during LC application processing included with the code examples for this chapter.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-11"><a class="anchor" href="#when-to-use-11"></a>When to use</h6>
+<div class="paragraph">
+<p>This form of integration is used when the customer is interested in the supplier&#8217;s response to the request. The response is then used to determine whether the request was successful or not. Given that the customer needs to wait for the response, it is advisable to use this style of messaging for low latency operations. This form of integration is popular when exposing public APIs over the internet (for example, <a href="https://docs.github.com/en/rest">Github&#8217;s REST API</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>).</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="enforcing-contracts"><a class="anchor" href="#enforcing-contracts"></a>Enforcing contracts</h4>
-
+<div class="sect5">
+<h6 id="potential-pitfalls-11"><a class="anchor" href="#potential-pitfalls-11"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>When using synchronous messaging, the customer&#8217;s ability to scale is heavily dependent on the supplier to satisfy the customer&#8217;s requirements. On the flip side, customers making requests at too high a rate may compromise the supplier&#8217;s ability to serve customers in a predictable manner. If there is a chain of synchronous messaging, the probability of cascading failure becomes much higher.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="asynchronous-messaging"><a class="anchor" href="#asynchronous-messaging"></a>Asynchronous messaging</h5>
+<div class="paragraph">
+<p>Asynchronous messaging is a style of communication where the sender does not wait for an explicit response from the receiver.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We are using the terms sender and receiver, instead of customer and supplier because they both can play either role of sender or receiver.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This is typically achieved by introducing an intermediary in the form of a message channel. The presence of the intermediary enables both one-to-one and one-to-many modes of communication. Typically, the intermediary can take the form of a shared filesystem, database or a queueing system.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/integration-patterns/asynchronous-messaging.png" alt="asynchronous messaging">
+</div>
+<div class="title">Figure 14. Asynchronous messaging</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please take a look at the event APIs for the commands used during LC application processing included with the code examples for this chapter.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="when-to-use-12"><a class="anchor" href="#when-to-use-12"></a>When to use</h6>
+<div class="paragraph">
+<p>This form of integration is used when the sender does not care about receiving an <strong>immediate</strong> response from the receiver(s), resulting in the respective systems becoming a lot more decoupled from each other. This further enables these systems to scale independently. This also makes it possible to have the same message to be processed by multiple receivers. For example, in our LC application processing system, the <code>LCApplicationSubmittedEvent</code> is received by both the <em>Compliance</em> and <em>Customer Onboarding</em> systems.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="potential-pitfalls-12"><a class="anchor" href="#potential-pitfalls-12"></a>Potential pitfalls</h6>
+<div class="paragraph">
+<p>The introduction of the intermediary component adds complexity to the overall solution. The <a href="#_ignoring_non_functional_requirements">non-functional</a> characteristics of the intermediary can have a profound effect on the resilience characteristics of the system as a whole. It can also be tempting to add processing logic to the intermediary, thereby coupling the overall system very tightly to this component. To ensure reliable communication between the sender and the receiver, the intermediary may have to support a variety of enhanced capabilities (such as ordering, producer flow control, durability, transactions, etc.)</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="increasing-effectiveness-2"><a class="anchor" href="#increasing-effectiveness-2"></a>Increasing effectiveness</h5>
+<div class="paragraph">
+<p>When implementing integration using some form of IPC, a lot of the techniques discussed in the <a href="#_increasing_effectiveness_code_based">code-based implementation</a> patterns section continue to apply. As discussed earlier, API documentation plays a significant role in reducing friction for customers. In addition, here are a few more techniques that apply specifically when using IPC-based integration. We outline some of these techniques here:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Typed protocols</strong>: When working with this form of integration, it is important to minimize the amount of time taken to gather feedback on structural validations. This is especially important given that the supplier and the customer may be in a constant state of independent evolution. The use of typed protocols such as protocol buffers, Avro, Netflix&#8217;s Falcor, GraphQL, etc. can make it easier for customers to interact with suppliers while maintaining a lightweight mechanism to validate correctness of requests.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+The operative word here is <strong>lightweight</strong>. It is pertinent to note that we are not advising against the use of JSON-based HTTP APIs (typically advertised as being RESTful) which do not enforce the use of an explicit schema. Neither are we promoting the use of (arguably) legacy protocols like SOAP, WSDL, CORBA, etc. Each of these, while being well-meaning suffered from being fairly heavyweight.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p><strong>Self discovery</strong>: As outlined above, when working with a IPC-based integration mechanism, we should look to reduce the barrier to entry. When working with RESTful APIs, the use of <a href="https://en.wikipedia.org/wiki/HATEOAS">HATEOAS</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>, although difficult for suppliers to implement, can make it easier for customers to understand and consume APIs. In addition, making use of a service registry and/or a schema registry can further reduce consumption friction.</p>
+</li>
+<li>
+<p><strong>Contract tests</strong>: In the spirit of failing fast and shifting left, the practice of contract testing and <a href="https://martinfowler.com/articles/consumerDrivenContracts.html">consumer-driven contracts</a> can further increase the quality and speed of integration. Tools such as <a href="https://pact.io/">Pact</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> and <a href="https://spring.io/projects/spring-cloud-contract">Spring Cloud Contract</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> make the adoption of these practices relatively simple.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p>In this chapter, we looked at the different types of bounded context relationships. We also examined common integration patterns that can be used when implementing these bounded context relationships.</p>
+</div>
+<div class="paragraph">
+<p>You should have learnt when specific techniques can be used, potential pitfalls and ideas on how to increase effectiveness when employing these methods.</p>
+</div>
+<div class="paragraph">
+<p>In the next chapter, we will explore means to distribute these bounded contexts into independently deployable components (in other words, employ a microservices-based architecture).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In your ecosystem, can you identify bounded context boundaries and the integration mechanism in use?</p>
+</li>
+<li>
+<p>Will you be able to draw a context map for your system?</p>
+</li>
+<li>
+<p>Will you recommend any changes to the existing styles of integration based on the learnings from this chapter?</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -1000,16 +1229,48 @@ There are three broad categories that can be employed when integrating two bound
 <td class="tableblock halign-left valign-top"><p class="tableblock">Martin Fowler</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://martinfowler.com/bliki/IntegrationDatabase.html" class="bare">https://martinfowler.com/bliki/IntegrationDatabase.html</a></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">REST APIs must be hypertext-driven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Roy T. Fielding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" class="bare">https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven</a></p></td>
+</tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <a href="https://www.liquibase.org/" class="bare">https://www.liquibase.org/</a>
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <a href="https://flywaydb.org/" class="bare">https://flywaydb.org/</a>
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain" class="bare">https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain</a>
+</div>
+<div class="footnote" id="_footnotedef_4">
+<a href="#_footnoteref_4">4</a>. <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide" class="bare">https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide</a>
+</div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://docs.github.com/en/rest" class="bare">https://docs.github.com/en/rest</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://en.wikipedia.org/wiki/HATEOAS" class="bare">https://en.wikipedia.org/wiki/HATEOAS</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://pact.io/" class="bare">https://pact.io/</a>
+</div>
+<div class="footnote" id="_footnotedef_8">
+<a href="#_footnoteref_8">8</a>. <a href="https://spring.io/projects/spring-cloud-contract" class="bare">https://spring.io/projects/spring-cloud-contract</a>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-04 15:36:44 UTC
+Last updated 2021-12-12 16:00:53 UTC
 </div>
 </div>
 </body>
