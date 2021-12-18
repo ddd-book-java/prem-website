@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Dec 13 2021 12:53 AM UTC</span>
+<span id="revdate">Dec 18 2021 01:51 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -503,32 +503,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_mechanics_of_domain_driven_design">2. The Mechanics of Domain-Driven Design (30 Pages)</a>
 <ul class="sectlevel2">
-<li><a href="#understanding-the-problem">2.1. Understanding the Problem</a>
+<li><a href="#understanding-the-problem">2.1. Understanding the problem</a>
 <ul class="sectlevel3">
-<li><a href="#problem-space-vs-solution-space">2.1.1. Problem Space vs. Solution Space</a></li>
-<li><a href="#dealing-with-ambiguity">2.1.2. Dealing with Ambiguity</a></li>
+<li><a href="#problem-space-versus-solution-space">2.1.1. Problem space versus solution space</a></li>
+<li><a href="#dealing-with-ambiguity">2.1.2. Dealing with ambiguity</a></li>
 </ul>
 </li>
-<li><a href="#arriving-at-a-shared-understanding">2.2. Arriving at a Shared Understanding</a></li>
-<li><a href="#breaking-down-the-problem">2.3. Breaking Down the Problem</a>
+<li><a href="#arriving-at-a-shared-understanding">2.2. Arriving at a shared understanding</a></li>
+<li><a href="#modeling-a-solution">2.3. Modeling a solution</a>
 <ul class="sectlevel3">
-<li><a href="#what-is-a-domain-2">2.3.1. What is a Domain?</a></li>
-<li><a href="#what-is-a-sub-domain">2.3.2. What is a Sub-Domain?</a></li>
-<li><a href="#the-core-sub-domain">2.3.3. The Core Sub-Domain</a></li>
+<li><a href="#strategic-design">2.3.1. Strategic design</a></li>
+<li><a href="#what-is-a-model">2.3.2. What is a model?</a></li>
+<li><a href="#domain-models">2.3.3. Domain models</a></li>
+<li><a href="#context-maps">2.3.4. Context maps</a></li>
+<li><a href="#_bounded_contexts">2.3.5. Bounded contexts</a></li>
 </ul>
 </li>
-<li><a href="#modeling-a-solution">2.4. Modeling a Solution</a>
+<li><a href="#implementing-the-solution">2.4. Implementing the solution</a>
 <ul class="sectlevel3">
-<li><a href="#what-is-a-model">2.4.1. What is a Model?</a></li>
-<li><a href="#context-maps">2.4.2. Context Maps</a></li>
-<li><a href="#_bounded_contexts">2.4.3. Bounded Contexts</a></li>
-</ul>
-</li>
-<li><a href="#implementing-the-solution">2.5. Implementing the Solution</a>
-<ul class="sectlevel3">
-<li><a href="#_entities">2.5.1. Entities</a></li>
-<li><a href="#value-objects">2.5.2. Value objects</a></li>
-<li><a href="#_aggregates">2.5.3. Aggregates</a></li>
+<li><a href="#tactical-design">2.4.1. Tactical design</a></li>
+<li><a href="#_entities">2.4.2. Entities</a></li>
+<li><a href="#value-objects">2.4.3. Value objects</a></li>
+<li><a href="#_aggregates">2.4.4. Aggregates</a></li>
+<li><a href="#services">2.4.5. Services</a></li>
+<li><a href="#repositories">2.4.6. Repositories</a></li>
+<li><a href="#factories">2.4.7. Factories</a></li>
 </ul>
 </li>
 </ul>
@@ -1416,39 +1415,32 @@ When eating an elephant, take one bite at a time.
 <p>As mentioned in the previous chapter, many things can put a project off course.In this chapter, we look at how DDD gives us a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
 </div>
 <div class="sect2">
-<h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a><a class="link" href="#understanding-the-problem">2.1. Understanding the Problem</a></h3>
+<h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a><a class="link" href="#understanding-the-problem">2.1. Understanding the problem</a></h3>
 <div class="sect3">
-<h4 id="problem-space-vs-solution-space"><a class="anchor" href="#problem-space-vs-solution-space"></a><a class="link" href="#problem-space-vs-solution-space">2.1.1. Problem Space vs. Solution Space</a></h4>
+<h4 id="problem-space-versus-solution-space"><a class="anchor" href="#problem-space-versus-solution-space"></a><a class="link" href="#problem-space-versus-solution-space">2.1.1. Problem space versus solution space</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="dealing-with-ambiguity"><a class="anchor" href="#dealing-with-ambiguity"></a><a class="link" href="#dealing-with-ambiguity">2.1.2. Dealing with Ambiguity</a></h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="arriving-at-a-shared-understanding"><a class="anchor" href="#arriving-at-a-shared-understanding"></a><a class="link" href="#arriving-at-a-shared-understanding">2.2. Arriving at a Shared Understanding</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="breaking-down-the-problem"><a class="anchor" href="#breaking-down-the-problem"></a><a class="link" href="#breaking-down-the-problem">2.3. Breaking Down the Problem</a></h3>
-<div class="sect3">
-<h4 id="what-is-a-domain-2"><a class="anchor" href="#what-is-a-domain-2"></a><a class="link" href="#what-is-a-domain-2">2.3.1. What is a Domain?</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="what-is-a-sub-domain"><a class="anchor" href="#what-is-a-sub-domain"></a><a class="link" href="#what-is-a-sub-domain">2.3.2. What is a Sub-Domain?</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="the-core-sub-domain"><a class="anchor" href="#the-core-sub-domain"></a><a class="link" href="#the-core-sub-domain">2.3.3. The Core Sub-Domain</a></h4>
+<h4 id="dealing-with-ambiguity"><a class="anchor" href="#dealing-with-ambiguity"></a><a class="link" href="#dealing-with-ambiguity">2.1.2. Dealing with ambiguity</a></h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="modeling-a-solution"><a class="anchor" href="#modeling-a-solution"></a><a class="link" href="#modeling-a-solution">2.4. Modeling a Solution</a></h3>
+<h3 id="arriving-at-a-shared-understanding"><a class="anchor" href="#arriving-at-a-shared-understanding"></a><a class="link" href="#arriving-at-a-shared-understanding">2.2. Arriving at a shared understanding</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="modeling-a-solution"><a class="anchor" href="#modeling-a-solution"></a><a class="link" href="#modeling-a-solution">2.3. Modeling a solution</a></h3>
 <div class="sect3">
-<h4 id="what-is-a-model"><a class="anchor" href="#what-is-a-model"></a><a class="link" href="#what-is-a-model">2.4.1. What is a Model?</a></h4>
+<h4 id="strategic-design"><a class="anchor" href="#strategic-design"></a><a class="link" href="#strategic-design">2.3.1. Strategic design</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="what-is-a-model"><a class="anchor" href="#what-is-a-model"></a><a class="link" href="#what-is-a-model">2.3.2. What is a model?</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="domain-models"><a class="anchor" href="#domain-models"></a><a class="link" href="#domain-models">2.3.3. Domain models</a></h4>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1463,26 +1455,42 @@ Anemic domain models
 </div>
 </div>
 <div class="sect3">
-<h4 id="context-maps"><a class="anchor" href="#context-maps"></a><a class="link" href="#context-maps">2.4.2. Context Maps</a></h4>
+<h4 id="context-maps"><a class="anchor" href="#context-maps"></a><a class="link" href="#context-maps">2.3.4. Context maps</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="_bounded_contexts"><a class="anchor" href="#_bounded_contexts"></a><a class="link" href="#_bounded_contexts">2.4.3. Bounded Contexts</a></h4>
+<h4 id="_bounded_contexts"><a class="anchor" href="#_bounded_contexts"></a><a class="link" href="#_bounded_contexts">2.3.5. Bounded contexts</a></h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-the-solution"><a class="anchor" href="#implementing-the-solution"></a><a class="link" href="#implementing-the-solution">2.5. Implementing the Solution</a></h3>
+<h3 id="implementing-the-solution"><a class="anchor" href="#implementing-the-solution"></a><a class="link" href="#implementing-the-solution">2.4. Implementing the solution</a></h3>
 <div class="sect3">
-<h4 id="_entities"><a class="anchor" href="#_entities"></a><a class="link" href="#_entities">2.5.1. Entities</a></h4>
+<h4 id="tactical-design"><a class="anchor" href="#tactical-design"></a><a class="link" href="#tactical-design">2.4.1. Tactical design</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="value-objects"><a class="anchor" href="#value-objects"></a><a class="link" href="#value-objects">2.5.2. Value objects</a></h4>
+<h4 id="_entities"><a class="anchor" href="#_entities"></a><a class="link" href="#_entities">2.4.2. Entities</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="_aggregates"><a class="anchor" href="#_aggregates"></a><a class="link" href="#_aggregates">2.5.3. Aggregates</a></h4>
+<h4 id="value-objects"><a class="anchor" href="#value-objects"></a><a class="link" href="#value-objects">2.4.3. Value objects</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="_aggregates"><a class="anchor" href="#_aggregates"></a><a class="link" href="#_aggregates">2.4.4. Aggregates</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="services"><a class="anchor" href="#services"></a><a class="link" href="#services">2.4.5. Services</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="repositories"><a class="anchor" href="#repositories"></a><a class="link" href="#repositories">2.4.6. Repositories</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="factories"><a class="anchor" href="#factories"></a><a class="link" href="#factories">2.4.7. Factories</a></h4>
 
 </div>
 </div>
@@ -9090,7 +9098,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-13 00:53:39 UTC
+Last updated 2021-12-18 13:50:53 UTC
 </div>
 </div>
 </body>

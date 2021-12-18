@@ -445,32 +445,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_mechanics_of_domain_driven_design">The Mechanics of Domain-Driven Design (30 Pages)</a>
 <ul class="sectlevel2">
-<li><a href="#understanding-the-problem">Understanding the Problem</a>
+<li><a href="#understanding-the-problem">Understanding the problem</a>
 <ul class="sectlevel3">
-<li><a href="#problem-space-vs-solution-space">Problem Space vs. Solution Space</a></li>
-<li><a href="#dealing-with-ambiguity">Dealing with Ambiguity</a></li>
+<li><a href="#problem-space-versus-solution-space">Problem space versus solution space</a></li>
+<li><a href="#dealing-with-ambiguity">Dealing with ambiguity</a></li>
 </ul>
 </li>
-<li><a href="#arriving-at-a-shared-understanding">Arriving at a Shared Understanding</a></li>
-<li><a href="#breaking-down-the-problem">Breaking Down the Problem</a>
+<li><a href="#arriving-at-a-shared-understanding">Arriving at a shared understanding</a></li>
+<li><a href="#modeling-a-solution">Modeling a solution</a>
 <ul class="sectlevel3">
-<li><a href="#what-is-a-domain">What is a Domain?</a></li>
-<li><a href="#what-is-a-sub-domain">What is a Sub-Domain?</a></li>
-<li><a href="#the-core-sub-domain">The Core Sub-Domain</a></li>
+<li><a href="#strategic-design">Strategic design</a></li>
+<li><a href="#what-is-a-model">What is a model?</a></li>
+<li><a href="#domain-models">Domain models</a></li>
+<li><a href="#context-maps">Context maps</a></li>
+<li><a href="#_bounded_contexts">Bounded contexts</a></li>
 </ul>
 </li>
-<li><a href="#modeling-a-solution">Modeling a Solution</a>
+<li><a href="#implementing-the-solution">Implementing the solution</a>
 <ul class="sectlevel3">
-<li><a href="#what-is-a-model">What is a Model?</a></li>
-<li><a href="#context-maps">Context Maps</a></li>
-<li><a href="#_bounded_contexts">Bounded Contexts</a></li>
-</ul>
-</li>
-<li><a href="#implementing-the-solution">Implementing the Solution</a>
-<ul class="sectlevel3">
+<li><a href="#tactical-design">Tactical design</a></li>
 <li><a href="#_entities">Entities</a></li>
 <li><a href="#value-objects">Value objects</a></li>
 <li><a href="#_aggregates">Aggregates</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#repositories">Repositories</a></li>
+<li><a href="#factories">Factories</a></li>
 </ul>
 </li>
 </ul>
@@ -494,39 +493,32 @@ When eating an elephant, take one bite at a time.
 <p>As mentioned in the previous chapter, many things can put a project off course.In this chapter, we look at how DDD gives us a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
 </div>
 <div class="sect2">
-<h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a>Understanding the Problem</h3>
+<h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a>Understanding the problem</h3>
 <div class="sect3">
-<h4 id="problem-space-vs-solution-space"><a class="anchor" href="#problem-space-vs-solution-space"></a>Problem Space vs. Solution Space</h4>
+<h4 id="problem-space-versus-solution-space"><a class="anchor" href="#problem-space-versus-solution-space"></a>Problem space versus solution space</h4>
 
 </div>
 <div class="sect3">
-<h4 id="dealing-with-ambiguity"><a class="anchor" href="#dealing-with-ambiguity"></a>Dealing with Ambiguity</h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="arriving-at-a-shared-understanding"><a class="anchor" href="#arriving-at-a-shared-understanding"></a>Arriving at a Shared Understanding</h3>
-
-</div>
-<div class="sect2">
-<h3 id="breaking-down-the-problem"><a class="anchor" href="#breaking-down-the-problem"></a>Breaking Down the Problem</h3>
-<div class="sect3">
-<h4 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a>What is a Domain?</h4>
-
-</div>
-<div class="sect3">
-<h4 id="what-is-a-sub-domain"><a class="anchor" href="#what-is-a-sub-domain"></a>What is a Sub-Domain?</h4>
-
-</div>
-<div class="sect3">
-<h4 id="the-core-sub-domain"><a class="anchor" href="#the-core-sub-domain"></a>The Core Sub-Domain</h4>
+<h4 id="dealing-with-ambiguity"><a class="anchor" href="#dealing-with-ambiguity"></a>Dealing with ambiguity</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="modeling-a-solution"><a class="anchor" href="#modeling-a-solution"></a>Modeling a Solution</h3>
+<h3 id="arriving-at-a-shared-understanding"><a class="anchor" href="#arriving-at-a-shared-understanding"></a>Arriving at a shared understanding</h3>
+
+</div>
+<div class="sect2">
+<h3 id="modeling-a-solution"><a class="anchor" href="#modeling-a-solution"></a>Modeling a solution</h3>
 <div class="sect3">
-<h4 id="what-is-a-model"><a class="anchor" href="#what-is-a-model"></a>What is a Model?</h4>
+<h4 id="strategic-design"><a class="anchor" href="#strategic-design"></a>Strategic design</h4>
+
+</div>
+<div class="sect3">
+<h4 id="what-is-a-model"><a class="anchor" href="#what-is-a-model"></a>What is a model?</h4>
+
+</div>
+<div class="sect3">
+<h4 id="domain-models"><a class="anchor" href="#domain-models"></a>Domain models</h4>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -541,16 +533,20 @@ Anemic domain models
 </div>
 </div>
 <div class="sect3">
-<h4 id="context-maps"><a class="anchor" href="#context-maps"></a>Context Maps</h4>
+<h4 id="context-maps"><a class="anchor" href="#context-maps"></a>Context maps</h4>
 
 </div>
 <div class="sect3">
-<h4 id="_bounded_contexts"><a class="anchor" href="#_bounded_contexts"></a>Bounded Contexts</h4>
+<h4 id="_bounded_contexts"><a class="anchor" href="#_bounded_contexts"></a>Bounded contexts</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="implementing-the-solution"><a class="anchor" href="#implementing-the-solution"></a>Implementing the Solution</h3>
+<h3 id="implementing-the-solution"><a class="anchor" href="#implementing-the-solution"></a>Implementing the solution</h3>
+<div class="sect3">
+<h4 id="tactical-design"><a class="anchor" href="#tactical-design"></a>Tactical design</h4>
+
+</div>
 <div class="sect3">
 <h4 id="_entities"><a class="anchor" href="#_entities"></a>Entities</h4>
 
@@ -563,6 +559,18 @@ Anemic domain models
 <h4 id="_aggregates"><a class="anchor" href="#_aggregates"></a>Aggregates</h4>
 
 </div>
+<div class="sect3">
+<h4 id="services"><a class="anchor" href="#services"></a>Services</h4>
+
+</div>
+<div class="sect3">
+<h4 id="repositories"><a class="anchor" href="#repositories"></a>Repositories</h4>
+
+</div>
+<div class="sect3">
+<h4 id="factories"><a class="anchor" href="#factories"></a>Factories</h4>
+
+</div>
 </div>
 </div>
 </div>
@@ -570,7 +578,7 @@ Anemic domain models
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-13 00:53:39 UTC
+Last updated 2021-12-18 13:50:52 UTC
 </div>
 </div>
 </body>
