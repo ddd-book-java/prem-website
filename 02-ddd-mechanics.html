@@ -447,16 +447,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#understanding-the-problem">Understanding the problem</a>
 <ul class="sectlevel3">
-<li><a href="#problem-space-versus-solution-space">Problem space versus solution space</a></li>
-<li><a href="#dealing-with-ambiguity">Dealing with ambiguity</a></li>
+<li><a href="#problem-domain">Problem domain</a></li>
+<li><a href="#solution-domain">Solution domain</a></li>
+<li><a href="#the-ubiquitous-language-and-domain-models">The ubiquitous language and domain models</a></li>
+<li><a href="#modeling-tools">Modeling tools</a></li>
+<li><a href="#wardley-maps">Wardley maps</a></li>
+<li><a href="#impact-maps">Impact maps</a></li>
+<li><a href="#business-model-canvas">Business model canvas</a></li>
+<li><a href="#product-strategy-canvas">Product strategy canvas</a></li>
 </ul>
 </li>
-<li><a href="#arriving-at-a-shared-understanding">Arriving at a shared understanding</a></li>
-<li><a href="#modeling-a-solution">Modeling a solution</a>
+<li><a href="#domain-model">Domain model</a></li>
+<li><a href="#strategic-design">Strategic design</a>
 <ul class="sectlevel3">
-<li><a href="#strategic-design">Strategic design</a></li>
-<li><a href="#what-is-a-model">What is a model?</a></li>
-<li><a href="#domain-models">Domain models</a></li>
 <li><a href="#context-maps">Context maps</a></li>
 <li><a href="#_bounded_contexts">Bounded contexts</a></li>
 </ul>
@@ -478,7 +481,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="_mechanics_of_domain_driven_design"><a class="anchor" href="#_mechanics_of_domain_driven_design"></a>The Mechanics of Domain-Driven Design (30 Pages)</h2>
 <div class="sectionbody">
 <div class="quoteblock">
@@ -490,35 +493,173 @@ When eating an elephant, take one bite at a time.
 </div>
 </div>
 <div class="paragraph">
-<p>As mentioned in the previous chapter, many things can put a project off course.In this chapter, we look at how DDD gives us a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
+<p>As mentioned in the previous chapter, many things can render a project to veer off-course.
+The intent of DDD is to decompose complex problems on the basis of clear domain boundaries and the communication between them.
+In this chapter, we look at a set of tenets and techniques to arrive at a collective understanding of the problem at hand in the face of ambiguity, break it down into manageable chunks and translate it into reliably working software.</p>
 </div>
 <div class="sect2">
 <h3 id="understanding-the-problem"><a class="anchor" href="#understanding-the-problem"></a>Understanding the problem</h3>
+<div class="paragraph">
+<p>Every decision we take regarding the organization, be it requirements, architecture, code has business and user consequences.
+In order to conceive, architect, design, build and evolve software effectively, our decisions need to aid in creating the optimal business impact.
+This can only be achieved if we have a clear understanding of the problem we intend to solve.
+This leads us to the realization that there exist two distinct domains when arriving at the solution for a problem:</p>
+</div>
 <div class="sect3">
-<h4 id="problem-space-versus-solution-space"><a class="anchor" href="#problem-space-versus-solution-space"></a>Problem space versus solution space</h4>
+<h4 id="problem-domain"><a class="anchor" href="#problem-domain"></a>Problem domain</h4>
+<div class="paragraph">
+<p>A term that is used to capture information that simply defines the problem while consciously avoiding any details of the solution.
+It includes details like <strong>why</strong> we are trying to solve the problem, <strong>what</strong> we are trying to achieve and <strong>how</strong> it needs to be solved.
+It is important to note that the <em>why</em>, <em>what</em> and <em>how</em> are from the perspective of the customers/stakeholders, not from the perspective of the engineers providing software solutions to the problem.</p>
+</div>
+<div class="paragraph">
+<p>Consider the example of a retail bank which already provides a checking account capability for their customers.
+They want access to more liquid funds.
+To achieve that, they need to encourage customers to maintain higher account balances.
+To do that, they are looking to introduce a new product called the <em>premium checking account</em> with additional features like higher interest rates, overdraft protection, no-charge ATM access, etc.
+The problem domain expressed in the form of why, what and how is shown here:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content text-center">
+<caption class="title">Table 1. Problem domain: why, what and how</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Question</th>
+<th class="tableblock halign-left valign-top">Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Why</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bank needs access to more liquid funds</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>What</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Have customers maintain higher account balances</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>How</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By introducing a new product&#8201;&#8212;&#8201;the premium checking account with enhanced features</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="solution-domain"><a class="anchor" href="#solution-domain"></a>Solution domain</h4>
+<div class="paragraph">
+<p>A term used to describe the environment in which the solution is developed.
+In other words, the process of translating requirements into working software (this includes design, development, testing, deployment, etc).
+Here the emphasis is on the <em>how</em> of the problem being solved.
+However, it is very difficult to arrive at a solution without having an appreciation of the why and the what.</p>
+</div>
+<div class="paragraph">
+<p>Building on the previous premium checking account example, the code-level solution for this problem may look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PremiumCheckingAccountFactory</span> {
+
+    Account openPremiumCheckingAccount(Applicant applicant,
+                                       MonetaryAmount initialAmount) {
+
+        Salary salary = checkEmployed(applicant);
+
+        <span style="color:#080;font-weight:bold">if</span> (salary.isBelowThreshold()) {
+            <span style="color:#080;font-weight:bold">throw</span> <span style="color:#080;font-weight:bold">new</span> InsufficientIncomeException(applicant);
+        }
+
+        Account account = Account.createFor(applicant);
+        account.deposit(initialAmount);
+        account.activate();
+        <span style="color:#080;font-weight:bold">return</span> account;
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This likely appears like a significant leap from a problem domain description, and indeed it is. Before a solution like this can be arrived at, there may need to exist multiple levels of refinement of the problem. As mentioned in the <a href="#_inaccurate_requirements">previous chapter</a>, this may lead to inaccuracies in the understanding of the problem, resulting in a solution that may be good, but not one that solves the problem at hand. Let&#8217;s look at how we can continuously refine our understanding by closing the gap between the problem and the solution domain.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="the-ubiquitous-language-and-domain-models"><a class="anchor" href="#the-ubiquitous-language-and-domain-models"></a>The ubiquitous language and domain models</h4>
+<div class="paragraph">
+<p>As we have discussed in the previous chapter, when a problem is presented to us, we subconsciously attempt to form mental representations of potential solutions. Further, the type and nature of these representations (models) may differ wildly based on factors like our understanding of the problem, our backgrounds and experiences, etc. This implies that it is natural for these models to be different. For example, the same problem can be thought of differently by various team members as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/multiple-models.png" alt="multiple models">
+</div>
+<div class="title">Figure 1. Multiple models to represent the solution to the problem using the ubiquitous language</div>
+</div>
+<div class="paragraph">
+<p>As iilustrated here, the business expert may think of a process model, whereas the test engineer may think of exceptions and boundary conditions to arrive at a test strategy.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The illustration above is to depict the existence of multiple models. There may be several other perspectives, for example, a customer experience model, an information security model, etc. which are not depicted.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The idea of domain-driven design is for individuals in these varied roles to increase collaboration by promoting the use of the <em>ubiquitous language</em> at every step. This enhances the collective understanding, leading to a better quality of the models, and by extension, the quality of the solution. This approach mitigates the risk of the loss in fidelity of information as we transition organizational boundaries.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="modeling-tools"><a class="anchor" href="#modeling-tools"></a>Modeling tools</h4>
 
 </div>
 <div class="sect3">
-<h4 id="dealing-with-ambiguity"><a class="anchor" href="#dealing-with-ambiguity"></a>Dealing with ambiguity</h4>
+<h4 id="wardley-maps"><a class="anchor" href="#wardley-maps"></a>Wardley maps</h4>
+
+</div>
+<div class="sect3">
+<h4 id="impact-maps"><a class="anchor" href="#impact-maps"></a>Impact maps</h4>
+
+</div>
+<div class="sect3">
+<h4 id="business-model-canvas"><a class="anchor" href="#business-model-canvas"></a>Business model canvas</h4>
+
+</div>
+<div class="sect3">
+<h4 id="product-strategy-canvas"><a class="anchor" href="#product-strategy-canvas"></a>Product strategy canvas</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="arriving-at-a-shared-understanding"><a class="anchor" href="#arriving-at-a-shared-understanding"></a>Arriving at a shared understanding</h3>
+<h3 id="domain-model"><a class="anchor" href="#domain-model"></a>Domain model</h3>
 
 </div>
 <div class="sect2">
-<h3 id="modeling-a-solution"><a class="anchor" href="#modeling-a-solution"></a>Modeling a solution</h3>
-<div class="sect3">
-<h4 id="strategic-design"><a class="anchor" href="#strategic-design"></a>Strategic design</h4>
-
-</div>
-<div class="sect3">
-<h4 id="what-is-a-model"><a class="anchor" href="#what-is-a-model"></a>What is a model?</h4>
-
-</div>
-<div class="sect3">
-<h4 id="domain-models"><a class="anchor" href="#domain-models"></a>Domain models</h4>
+<h3 id="strategic-design"><a class="anchor" href="#strategic-design"></a>Strategic design</h3>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -530,7 +671,6 @@ Anemic domain models
 </td>
 </tr>
 </table>
-</div>
 </div>
 <div class="sect3">
 <h4 id="context-maps"><a class="anchor" href="#context-maps"></a>Context maps</h4>
@@ -578,7 +718,7 @@ Anemic domain models
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-18 13:50:52 UTC
+Last updated 2021-12-21 13:41:21 UTC
 </div>
 </div>
 </body>
