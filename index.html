@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Dec 21 2021 01:41 PM UTC</span>
+<span id="revdate">Dec 26 2021 12:39 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -473,21 +473,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#excessive-incidental-complexity">1.2.4. Excessive incidental complexity</a></li>
 <li><a href="#uncontrolled-technical-debt">1.2.5. Uncontrolled technical debt</a></li>
 <li><a href="#_ignoring_non_functional_requirements">1.2.6. Ignoring Non-Functional Requirements (NFRs)</a></li>
-<li><a href="#where-to-from-here">1.2.7. Where To From Here?</a></li>
 </ul>
 </li>
-<li><a href="#modern-systems-and-dealing-with-complexity">1.3. Modern Systems and Dealing with Complexity</a></li>
-<li><a href="#what-is-domain-driven-design">1.4. What is Domain-Driven Design?</a>
+<li><a href="#modern-systems-and-dealing-with-complexity">1.3. Modern systems and dealing with complexity</a>
 <ul class="sectlevel3">
-<li><a href="#what-is-a-domain">1.4.1. What is a Domain?</a></li>
-<li><a href="#what-is-a-subdomain">1.4.2. What is a Subdomain?</a></li>
-<li><a href="#types-of-subdomains">1.4.3. Types of Subdomains</a></li>
-<li><a href="#domain-experts">1.4.4. Domain Experts</a></li>
-<li><a href="#promoting-a-shared-understanding">1.4.5. Promoting a Shared Understanding</a></li>
-<li><a href="#evolving-a-domain-model-and-a-solution">1.4.6. Evolving a Domain Model and a Solution</a></li>
-<li><a href="#the-essence-of-ddd">1.4.7. The Essence of DDD</a></li>
+<li><a href="#how-software-gets-built">1.3.1. How software gets built</a></li>
+<li><a href="#complexity-is-inevitable">1.3.2. Complexity is inevitable</a></li>
+<li><a href="#optimizing-the-feedback-loop">1.3.3. Optimizing the feedback loop</a></li>
 </ul>
 </li>
+<li><a href="#what-is-domain-driven-design">1.4. What is Domain-Driven Design?</a></li>
 <li><a href="#why-is-ddd-relevant-why-now">1.5. Why is DDD Relevant? Why Now?</a>
 <ul class="sectlevel3">
 <li><a href="#rise-of-open-source">1.5.1. Rise of Open Source</a></li>
@@ -498,7 +493,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary">1.6. Summary</a></li>
 <li><a href="#questions">1.7. Questions</a></li>
 <li><a href="#further-reading">1.8. Further Reading</a></li>
-<li><a href="#answers">1.9. Answers</a></li>
 </ul>
 </li>
 <li><a href="#_mechanics_of_domain_driven_design">2. The Mechanics of Domain-Driven Design (30 Pages)</a>
@@ -507,12 +501,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#problem-domain">2.1.1. Problem domain</a></li>
 <li><a href="#solution-domain">2.1.2. Solution domain</a></li>
-<li><a href="#the-ubiquitous-language-and-domain-models">2.1.3. The ubiquitous language and domain models</a></li>
-<li><a href="#modeling-tools">2.1.4. Modeling tools</a></li>
-<li><a href="#wardley-maps">2.1.5. Wardley maps</a></li>
-<li><a href="#impact-maps">2.1.6. Impact maps</a></li>
-<li><a href="#business-model-canvas">2.1.7. Business model canvas</a></li>
-<li><a href="#product-strategy-canvas">2.1.8. Product strategy canvas</a></li>
+<li><a href="#what-is-a-domain">2.1.3. What is a <em>domain</em>?</a></li>
+<li><a href="#domain-experts">2.1.4. Domain Experts</a></li>
+<li><a href="#promoting-a-shared-understanding">2.1.5. Promoting a Shared Understanding</a></li>
+<li><a href="#evolving-a-domain-model-and-a-solution">2.1.6. Evolving a Domain Model and a Solution</a></li>
+<li><a href="#what-is-a-subdomain">2.1.7. What is a Subdomain?</a></li>
+<li><a href="#types-of-subdomains">2.1.8. Types of Subdomains</a></li>
+<li><a href="#the-ubiquitous-language-and-domain-models">2.1.9. The ubiquitous language and domain models</a></li>
+<li><a href="#modeling-tools">2.1.10. Modeling tools</a></li>
+<li><a href="#wardley-maps">2.1.11. Wardley maps</a></li>
+<li><a href="#impact-maps">2.1.12. Impact maps</a></li>
+<li><a href="#business-model-canvas">2.1.13. Business model canvas</a></li>
+<li><a href="#product-strategy-canvas">2.1.14. Product strategy canvas</a></li>
 </ul>
 </li>
 <li><a href="#domain-model">2.2. Domain model</a></li>
@@ -584,7 +584,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-2">4.7. Summary</a></li>
 <li><a href="#questions-2">4.8. Questions</a></li>
 <li><a href="#further-reading-2">4.9. Further reading</a></li>
-<li><a href="#answers-2">4.10. Answers</a></li>
+<li><a href="#answers">4.10. Answers</a></li>
 </ul>
 </li>
 <li><a href="#_implementing_domain_logic">5. Implementing Domain Logic</a>
@@ -622,7 +622,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-3">5.6. Summary</a></li>
 <li><a href="#questions-3">5.7. Questions</a></li>
 <li><a href="#further-reading-3">5.8. Further reading</a></li>
-<li><a href="#answers-3">5.9. Answers</a></li>
+<li><a href="#answers-2">5.9. Answers</a></li>
 </ul>
 </li>
 <li><a href="#implementing-the-user-interfacetask-based">6. Implementing the User Interface&#8201;&#8212;&#8201;Task-based</a>
@@ -962,16 +962,13 @@ For a more comprehensive list of <a href="http://agilemodeling.com/essays/enterp
 <div class="paragraph">
 <p>Very rarely do users explicitly request non-functional requirements, but almost always expect these features to be part of any system they use.Oftentimes, systems may continue to function without NFRs being met, but not without having an adverse impact on the <em>quality</em> of the user experience.For example, the home page of a web site that loads in under 1 second under low load and takes upwards of 30 seconds under higher loads may not be usable during those times of stress.Needless to say, not treating non-functional requirements with the same amount of rigor as explicit, value-adding functional features, can lead to unusable systems&#8201;&#8212;&#8201;and subsequently failure.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="where-to-from-here"><a class="anchor" href="#where-to-from-here"></a><a class="link" href="#where-to-from-here">1.2.7. Where To From Here?</a></h4>
 <div class="paragraph">
-<p>In this section we examined some common reasons that cause software projects to fail. In the upcoming section, we will look at characteristics of modern systems and look at more effective ways to deal with software complexity. In upcoming chapters, we will look at how applying domain-driven design helps mitigate these causes of failure.</p>
+<p>In this section we examined some common reasons that cause software projects to fail. Is it possible to improve our odds? Before we do that, let&#8217;s look at the nature of modern software systems and how we can deal with the ensuing complexity.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="modern-systems-and-dealing-with-complexity"><a class="anchor" href="#modern-systems-and-dealing-with-complexity"></a><a class="link" href="#modern-systems-and-dealing-with-complexity">1.3. Modern Systems and Dealing with Complexity</a></h3>
+<h3 id="modern-systems-and-dealing-with-complexity"><a class="anchor" href="#modern-systems-and-dealing-with-complexity"></a><a class="link" href="#modern-systems-and-dealing-with-complexity">1.3. Modern systems and dealing with complexity</a></h3>
 <div class="quoteblock">
 <blockquote>
 We can not solve our problems with the same level of thinking that created them.
@@ -981,31 +978,73 @@ We can not solve our problems with the same level of thinking that created them.
 </div>
 </div>
 <div class="paragraph">
-<p>We find ourselves in the midst of the fourth industrial revolution where the world is becoming more and more digital&#8201;&#8212;&#8201;with technology being a significant driver of value for businesses. Exponential advances in computing technology as illustrated by Moore&#8217;s Law below,</p>
+<p>As we have seen in the previous section, there are several reasons that cause software endeavors to fail. In this section, we will look to understand how software gets built, what the currently prevailing realities are and what adjustments we need to make in order to cope.</p>
+</div>
+<div class="sect3">
+<h4 id="how-software-gets-built"><a class="anchor" href="#how-software-gets-built"></a><a class="link" href="#how-software-gets-built">1.3.1. How software gets built</a></h4>
+<div class="paragraph">
+<p>Building successful software is an iterative process of constantly refining knowledge and expressing it in the form of models. We have attempted to capture the essence of the process at a high level here:</p>
 </div>
 <div class="imageblock">
 <div class="content">
+<img src="./images/how-software-gets-built.png" alt="how software gets built">
+</div>
+<div class="title">Figure 1- 5. Building software is a continuous refinement of knowledge and models</div>
+</div>
+<div class="paragraph">
+<p>Before we express a solution in working code, it is necessary to understand <strong>what</strong> the problem entails, <strong>why</strong> the problem is important to solve, and finally, <strong>how</strong> it can be solved. Irrespective of the methodology used (waterfall, agile, and/or anything in between), the process of building software is one where we need to constantly use our knowledge to refine mental/conceptual models to be able to create valuable solutions.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="complexity-is-inevitable"><a class="anchor" href="#complexity-is-inevitable"></a><a class="link" href="#complexity-is-inevitable">1.3.2. Complexity is inevitable</a></h4>
+<div class="paragraph">
+<p>We find ourselves in the midst of the fourth industrial revolution where the world is becoming more and more digital&#8201;&#8212;&#8201;with technology being a significant driver of value for businesses. Exponential advances in computing technology as illustrated by Moore&#8217;s Law below,</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
 <img src="./images/moores-law.png" alt="Moore&#8217;s Law">
 </div>
-<div class="title">Figure 1- 5. Moore&#8217;s Law</div>
+<div class="title">Figure 1- 6. Moore&#8217;s Law</div>
 </div>
 <div class="paragraph">
 <p>along with the rise of the internet as illustrated below,</p>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
 <img src="./images/global-internet-traffic.png" alt="Global Internet Traffic">
 </div>
-<div class="title">Figure 1- 6. Global Internet Traffic</div>
+<div class="title">Figure 1- 7. Global Internet Traffic</div>
 </div>
 <div class="paragraph">
 <p>has meant that companies are being required to modernize their software systems much more rapidly than they ever have. Along with all this, the onset of commodity computing services such as the public cloud has led to a move away from expensive centralized computing systems to more distributed computing ecosystems. As we attempt building our most complex solutions, monoliths are being replaced by an environ of distributed, collaborating microservices. Modern philosophies and practices such as automated testing, architecture fitness functions, continuous integration, continuous delivery, devops, security automation, infrastructure as code, to name a few, are disrupting the way we deliver software solutions.</p>
 </div>
 <div class="paragraph">
+<p>All these advances introduce their own share of complexity. Instead of attempting to control the amount of complexity, there is a need to embrace and cope with it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="optimizing-the-feedback-loop"><a class="anchor" href="#optimizing-the-feedback-loop"></a><a class="link" href="#optimizing-the-feedback-loop">1.3.3. Optimizing the feedback loop</a></h4>
+<div class="paragraph">
 <p>As we enter an age of encountering our most complex business problems, we need to embrace new ways of thinking, a development philosophy and an arsenal of techniques to iteratively evolve mature software solutions that will stand the test of time. We need better ways of communicating, analyzing problems, arriving at a collective understanding, creating and modeling abstractions, and then implementing, enhancing the solution.</p>
 </div>
 <div class="paragraph">
+<p>To state the obvious&#8201;&#8212;&#8201;we’re all building software with seemingly brilliant business ideas on one side and our ever-demanding customers on the other, as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/optimizing-the-feedback-loop.png" alt="optimizing the feedback loop">
+</div>
+<div class="title">Figure 1- 8. The software delivery continuum</div>
+</div>
+<div class="paragraph">
+<p>In between, we have two chasms to cross&#8201;&#8212;&#8201;the <em>delivery pipeline</em> and the <em>feedback pipeline</em>. The delivery pipeline enables us to put software in the hands of our customers, whereas the feedback pipeline allows us to adjust and adapt. As we can see, this is a continuum. And if we are to build better, more valuable software, this continuum, this potentially infinite loop has to be optimized!</p>
+</div>
+<div class="paragraph">
+<p>To optimize this loop, we need three characteristics to be present: we need to be fast, we need to be reliable, and we need to do this over and over again. In other words, we need to be rapid, reliable and repeatable&#8201;&#8212;&#8201;all at the same time!! Take any one of these away, and it just won’t sustain.</p>
+</div>
+<div class="paragraph">
 <p>Domain-driven design promises to provide answers on how to do this in a systematic manner. In the upcoming section, and indeed the rest of this book, we will examine what DDD is and why it is indispensable when working to provide solutions for non-trivial problems in today&#8217;s world of massively distributed teams and applications.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1022,149 +1061,58 @@ Life is really simple, but we insist on making it complicated.
 <p>In the previous section, we saw how a myriad of reasons coupled with system complexity get in the way of software project success. The idea of domain-driven design, originally conceived by Eric Evans in his 2003 book, is an approach to software development that focuses on expressing software solutions in the form of a model that closely embodies the core of the problem being solved. It provides a set of principles and systematic techniques to analyze, architect and implement software solutions in a manner that enhances chances of success.</p>
 </div>
 <div class="paragraph">
-<p>While Evans' work was indeed seminal, ground-breaking, and way ahead of its time, over the years, practical application has continued to remain a challenge. In this section, we will look at some of the foundational terms and concepts behind domain-driven design. Elaboration and practical application of these concepts will happen in upcoming chapters of this book.</p>
+<p>While Evans' work is indeed seminal, ground-breaking, and way ahead of its time, it is not prescriptive at all. This is a strength in that it has enabled evolution of DDD beyond what Evans had originally conceived at the time. On the other hand, it also makes it extremely hard to define what DDD actually encompasses, making practical application a challenge. In this section, we will look at some foundational terms and concepts behind domain-driven design. Elaboration and practical application of these concepts will happen in upcoming chapters of this book.</p>
 </div>
 <div class="paragraph">
-<p>To understand DDD, first and foremost, we need to understand what we mean by the first "D"&#8201;&#8212;&#8201;<strong>domain</strong>.</p>
+<p>When encountered with a complex business problem:</p>
 </div>
-<div class="sect3">
-<h4 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a><a class="link" href="#what-is-a-domain">1.4.1. What is a Domain?</a></h4>
-<div class="paragraph">
-<p>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <a href="https://en.wiktionary.org/wiki/domain"><mark><em>domain</em></mark></a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<a class="image" href="https://en.wiktionary.org/wiki/domain#Noun" target="_blank" rel="noopener"><img src="./images/domain-definition.png" alt="Domain"></a>
-</div>
-<div class="title">Figure 1- 7. <strong>Domain</strong>: Means many things depending on context</div>
-</div>
-<div class="paragraph">
-<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <strong><em>problem domain</em></strong>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a><a class="link" href="#what-is-a-subdomain">1.4.2. What is a Subdomain?</a></h4>
-<div class="paragraph">
-<p>The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. With a view to better deal with this complexity, domain-driven design advises decomposing the domain of a business into multiple manageable parts called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/domains.png" alt="domains" width="603" height="412">
-</div>
-<div class="title">Figure 1- 8. Subdomains in the Retail domain</div>
-</div>
-<div class="paragraph">
-<p>In certain businesses, subdomains themselves may turn out to become very complex on their own and may require further decomposition. For instance, in the retail example above, it may be required to break the products subdomain into further constituent subdomains such as catalog, search, recommendations, reviews, etc. as shown below:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/subdomains.png" alt="subdomains" width="442" height="280">
-</div>
-<div class="title">Figure 1- 9. Subdomains in the Products subdomain</div>
-</div>
-<div class="paragraph">
-<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a><a class="link" href="#types-of-subdomains">1.4.3. Types of Subdomains</a></h4>
-<div class="paragraph">
-<p>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</p>
-</div>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core sub-domains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above,</p>
+<p><strong>Understand the problem</strong>: To have a deep, shared understanding of the problem, it is necessary for business experts and technology experts to collaborate closely. Here we collectively understand what the problem is and why it is valuable to solve. This is termed as the <strong>domain</strong> for the problem.</p>
 </li>
 <li>
-<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
+<p><strong>Break down the problem</strong> into more manageable parts: To keep complexity at manageable levels, break down complex problems into smaller, independently solvable parts. These parts are termed as <strong>subdomains</strong>. It may be necessary to further break down subdomains where the subdomain is still too complex. Assign explicit boundaries to limit the functionality of each subdomain. This boundary is termed as the <strong>bounded context</strong> for that subdomain. It may also be convenient to think of the subdomain as a concept that makes more sense to the domain experts (in the problem space), whereas the bounded context is a concept that makes more sense to the technology experts (in the solution space).</p>
 </li>
 <li>
-<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
+<p>For each of these bounded contexts:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Agree on a shared language</strong>: Formalize the understanding by establishing a shared language that is applicable unambiguously within the bounds of the subdomain. This shared language is termed as the ubiquitous language of the domain.</p>
 </li>
-</ul>
+<li>
+<p><strong>Express understanding in shared models</strong>: In order to produce working software, express the ubiquitous language in the form of shared models. This model is termed as the <strong>domain model</strong>. There may exist multiple variations of this model, each meant to clarify a specific aspect of the solution. For example, a process model, a sequence diagram, working code, a deployment topology, etc.</p>
+</li>
+</ol>
 </div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
-</td>
-<td class="content">
-It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="domain-experts"><a class="anchor" href="#domain-experts"></a><a class="link" href="#domain-experts">1.4.4. Domain Experts</a></h4>
-<div class="paragraph">
-<p>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
+</li>
+<li>
+<p><strong>Embrace incidental complexity</strong> of the problem: It is important to note that it is not possible to shy away from the essential complexity of a given problem. By breaking down the problem into subdomains and bounded contexts, we are attempting to distribute it (more or less) evenly across more manageable parts.</p>
+</li>
+<li>
+<p><strong>Continuously evolve</strong> for greater insight: It is important to understand that the above steps are not a one-time activity. Businesses, technologies, processes and our understanding of these evolve, it is important for our shared understanding to remain in sync with these models through continuous refactoring.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="promoting-a-shared-understanding"><a class="anchor" href="#promoting-a-shared-understanding"></a><a class="link" href="#promoting-a-shared-understanding">1.4.5. Promoting a Shared Understanding</a></h4>
-<div class="paragraph">
-<p>Previously, we saw how <a href="#_silo_mentality">organizational silos</a> can result in valuable information getting diluted. At a credit card company I used to work with, the words plastic, payment instrument, account, PAN (Primary Account Number), BIN (Bank Identification Number), card were all used by different team members to mean the exact same thing - the <strong><em>credit card</em></strong> when working in the same area of the application. To make matters worse, a lot of this muddled use of terms got implemented in code as well. While this might feel like a trivial thing, it had far-reaching consequences. Product experts, architects, developers, all came and went, each regressively contributing to more confusion, muddled designs, implementation and technical debt with every new enhancement&#8201;&#8212;&#8201;accelerating the journey towards the dreaded, unmaintainable, <a href="http://www.laputan.org/mud/">big ball of mud</a>.</p>
-</div>
-<div class="paragraph">
-<p>DDD advocates breaking down these artificial barriers, and putting the domain experts and the developers on the same level footing by working collaboratively towards creating what DDD calls a <strong><em>ubiquitous language</em></strong>&#8201;&#8212;&#8201;a shared vocabulary of terms, words, phrases to continuously enhance the collective understanding of the entire team. This phraseology is then used actively in every aspect of the solution: the everyday vocabulary, the designs, the code&#8201;&#8212;&#8201;in short by <strong>everyone</strong> and <strong>everywhere</strong>. Consistent use of the common ubiquitous language helps reinforce a shared understanding and  produce solutions that better reflect the mental model of the domain experts.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="evolving-a-domain-model-and-a-solution"><a class="anchor" href="#evolving-a-domain-model-and-a-solution"></a><a class="link" href="#evolving-a-domain-model-and-a-solution">1.4.6. Evolving a Domain Model and a Solution</a></h4>
-<div class="paragraph">
-<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This boundary is termed as a <strong><em>bounded context</em></strong> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>.</p>
-</div>
-<div class="paragraph">
-<p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/bounded-context.png" alt="bounded context" width="566" height="366">
-</div>
-</div>
-<div class="paragraph">
-<p>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <a href="https://domainstorytelling.org/">domain storytelling</a>, <a href="https://www.eventstorming.com/">event storming</a>, and <a href="https://evolutionaryarchitecture.com/">evolutionary architecture</a> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-The thrust of DDD is that <strong>one single model</strong> form the bedrock of team communication, design, and implementation. While teams may and will indeed require a variety of means to express the model, it is very important to keep the executable code and the various representations up to date at all times.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="the-essence-of-ddd"><a class="anchor" href="#the-essence-of-ddd"></a><a class="link" href="#the-essence-of-ddd">1.4.7. The Essence of DDD</a></h4>
-<div class="paragraph">
-<p>In this section we have taken a look at DDD at a very high level. Enclosed below is an attempt to capture the essence of what domain-driven design means.</p>
+<p>A pictorial representation of the essence of domain-driven design is expressed here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/ddd-essence.png" alt="ddd essence">
 </div>
-<div class="title">Figure 1- 10. Essence of DDD</div>
+<div class="title">Figure 1- 9. Essence of DDD</div>
 </div>
 <div class="paragraph">
-<p>In subsequent chapters we will reinforce all of the concepts introduced here in a lot more detail. In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</p>
-</div>
+<p>We appreciate that this is quite a whirlwind introduction to the subject of domain-driven design. In subsequent chapters we will reinforce all the concepts introduced here in a lot more detail. In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="why-is-ddd-relevant-why-now"><a class="anchor" href="#why-is-ddd-relevant-why-now"></a><a class="link" href="#why-is-ddd-relevant-why-now">1.5. Why is DDD Relevant? Why Now?</a></h3>
 <div class="quoteblock">
 <blockquote>
-He who has a why to live for can bear almost any how.
+He who has a why to live for can bear almost anyhow.
 </blockquote>
 <div class="attribution">
 &#8212; Friedrich Nietzsche
@@ -1182,7 +1130,7 @@ He who has a why to live for can bear almost any how.
 <div class="content">
 <a class="image" href="https://mvnrepository.com/" target="_blank" rel="noopener"><img src="./images/oss-stats.png" alt="oss stats"></a>
 </div>
-<div class="title">Figure 1- 11. Open source Java over the years. Source: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></div>
+<div class="title">Figure 1- 10. Open source Java over the years. Source: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></div>
 </div>
 <div class="paragraph">
 <p>Java stalwarts like the <a href="https://spring.io/">spring framework</a> and more recent innovations like <a href="https://start.spring.io/">spring boot</a>, <a href="https://quarkus.io/">quarkus</a>, etc. make it a no-brainer to create production grade applications, literally in a matter of minutes. Furtheremore, frameworks like <a href="https://axoniq.io/product-overview/axon-framework">Axon</a>, <a href="https://www.lagomframework.com">Lagom</a>, etc. make it relatively simple to implement advanced architecture patterns such are CQRS, event sourcing, that are very complementary to implementing DDD-based solutions.</p>
@@ -1194,7 +1142,7 @@ He who has a why to live for can bear almost any how.
 <p>DDD by no means is just about technology, it could not be completely agnostic to the choices available at the time. 2003 was the heyday of heavyweight and ceremony-heavy frameworks like J2EE (Java 2 Enterprise Edition), EJBs (Enterprise JavaBeans), SQL databases, ORMs (Object Relational Mappers) and the like&#8201;&#8212;&#8201;with not much choice beyond that when it came to enterprise tools and patterns to build complex software&#8201;&#8212;&#8201;at least out in the public domain. The software world has evolved and come a very long way from there. In fact, modern game changers like Ruby on Rails and the public cloud were just getting released. In contrast though, we now have no shortage of application frameworks, NoSQL databases, programmatic APIs to create infrastructure components with a lot more releasing with monotonous regularity.</p>
 </div>
 <div class="paragraph">
-<p>All these innovations allow for rapid experimentation, continuous learning and iteration at pace. These game changing advances in technology have also coincided with the exponential rise of the internet and ecommerce as viable means to carry out successful businesses. In fact the impact of the internet is so pervasive that it is almost inconceivable to launch businesses without a digital component being an integral component. Finally, the consumerization and wide scale penetration of smartphones, IoT devices and social media has meant that data is being produced at rates inconceivable as recent as a decade ago. This means that we are buiding for and solving the most complicated problems by several orders of magnitude.</p>
+<p>All these innovations allow for rapid experimentation, continuous learning and iteration at pace. These game changing advances in technology have also coincided with the exponential rise of the internet and ecommerce as viable means to carry out successful businesses. In fact the impact of the internet is so pervasive that it is almost inconceivable to launch businesses without a digital component being an integral component. Finally, the consumerization and wide scale penetration of smartphones, IoT devices and social media has meant that data is being produced at rates inconceivable as recent as a decade ago. This means that we are building for and solving the most complicated problems by several orders of magnitude.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1206,10 +1154,10 @@ He who has a why to live for can bear almost any how.
 <div class="content">
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Hilbert_InfoGrowth.png" alt="Hilbert InfoGrowth">
 </div>
-<div class="title">Figure 1- 12. Global Information Storage Capacity</div>
+<div class="title">Figure 1- 11. Global Information Storage Capacity</div>
 </div>
 <div class="paragraph">
-<p>Domain-driven design with its emphasis on dealing with complexity by breaking unwieldy monoliths into more manageable units in the form of subdomains and bounded contexts, fits naturally to this style of programming. Hence it is no surprise to see a renewed interest in adopting DDD principles and techniques when crafting modern solutions. To quote Eric Evans, it is no surprise that Domain-Driven Design is even more relevant now than when it was originally conceived!</p>
+<p>Domain-driven design with its emphasis on dealing with complexity by breaking unwieldy monoliths into more manageable units in the form of subdomains and bounded contexts, fits naturally to this style of programming. Hence, it is no surprise to see a renewed interest in adopting DDD principles and techniques when crafting modern solutions. To quote Eric Evans, it is no surprise that Domain-Driven Design is even more relevant now than when it was originally conceived!</p>
 </div>
 </div>
 </div>
@@ -1231,15 +1179,6 @@ He who has a why to live for can bear almost any how.
 <ol class="arabic">
 <li>
 <p>What are the most common reasons for software projects to fail?</p>
-</li>
-<li>
-<p>What do the terms domain and sub-domain mean?</p>
-</li>
-<li>
-<p>What are the different types of sub-domains?</p>
-</li>
-<li>
-<p>What is the difference between sub-domains and bounded contexts?</p>
 </li>
 <li>
 <p>Why is DDD relevant in today’s context?</p>
@@ -1345,61 +1284,6 @@ He who has a why to live for can bear almost any how.
 </tr>
 </tbody>
 </table>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Account</span> {
-
-    <span style="color:#339;font-weight:bold">void</span> openCardAccount(Applicant applicant,
-                         MonetaryAmount initialAmount) {
-        Status status = checkCreditWorthiness(applicant);
-        <span style="color:#080;font-weight:bold">if</span> (status.isWorthy()) {
-            Account account = Account.createFor(applicant);
-            account.deposit(initialAmount);
-            account.activate();
-        }
-
-    }
-}</pre></td>
-</tr></table></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="answers"><a class="anchor" href="#answers"></a><a class="link" href="#answers">1.9. Answers</a></h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Refer to section 1.2</p>
-</li>
-<li>
-<p>Refer to sections 1.4.1 and 1.4.2</p>
-</li>
-<li>
-<p>Refer to section 1.4.3</p>
-</li>
-<li>
-<p>Refer to section 1.4.7</p>
-</li>
-<li>
-<p>Refer to section 1.5</p>
-</li>
-</ol>
-</div>
 </div>
 </div>
 </div>
@@ -1526,7 +1410,124 @@ However, it is very difficult to arrive at a solution without having an apprecia
 </div>
 </div>
 <div class="sect3">
-<h4 id="the-ubiquitous-language-and-domain-models"><a class="anchor" href="#the-ubiquitous-language-and-domain-models"></a><a class="link" href="#the-ubiquitous-language-and-domain-models">2.1.3. The ubiquitous language and domain models</a></h4>
+<h4 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a><a class="link" href="#what-is-a-domain">2.1.3. What is a <em>domain</em>?</a></h4>
+<div class="paragraph">
+<p>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <a href="https://en.wiktionary.org/wiki/domain"><mark><em>domain</em></mark></a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://en.wiktionary.org/wiki/domain#Noun" target="_blank" rel="noopener"><img src="./images/domain-definition.png" alt="Domain"></a>
+</div>
+<div class="title">Figure 1- 12. <strong>Domain</strong>: Means many things depending on context</div>
+</div>
+<div class="paragraph">
+<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <strong><em>problem domain</em></strong>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others. These domains tend to be fairly complex. To cope with this complexity, it is usual to decompose these domains into more manageable pieces called subdomains. We will examine subdomains in more detail in the next chapter.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="domain-experts"><a class="anchor" href="#domain-experts"></a><a class="link" href="#domain-experts">2.1.4. Domain Experts</a></h4>
+<div class="paragraph">
+<p>To run a successful digital business, you need specialists&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject-matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
+</div>
+<div class="paragraph">
+<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. While the domain experts specify the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts (software developers) specify the <strong><em>how</em></strong>. Strong contributions and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="promoting-a-shared-understanding"><a class="anchor" href="#promoting-a-shared-understanding"></a><a class="link" href="#promoting-a-shared-understanding">2.1.5. Promoting a Shared Understanding</a></h4>
+<div class="paragraph">
+<p>Previously, we saw how <a href="#_silo_mentality">organizational silos</a> can result in valuable information getting diluted. At a credit card company I used to work with, the words plastic, payment instrument, account, PAN (Primary Account Number), BIN (Bank Identification Number), card were all used by different team members to mean the exact same thing - the <strong><em>credit card</em></strong> when working in the same area of the application. On the other hand, a term like <strong><em>user</em></strong> would be used to sometimes mean a customer, a relationship manager, a technical customer support employee. To make matters worse, a lot of these muddled use of terms got implemented in code as well. While this might feel like a trivial thing, it had far-reaching consequences. Product experts, architects, developers, all came and went, each regressively contributing to more confusion, muddled designs, implementation and technical debt with every new enhancement&#8201;&#8212;&#8201;accelerating the journey towards the dreaded, unmaintainable, <a href="http://www.laputan.org/mud/">big ball of mud</a>.</p>
+</div>
+<div class="paragraph">
+<p>DDD advocates breaking down these artificial barriers, and putting the domain experts and the developers on the same level footing by working collaboratively towards creating what DDD calls a <strong><em>ubiquitous language</em></strong>&#8201;&#8212;&#8201;a shared vocabulary of terms, words, phrases to continuously enhance the collective understanding of the entire team. This phraseology is then used actively in every aspect of the solution: the everyday vocabulary, the designs, the code&#8201;&#8212;&#8201;in short by <strong>everyone</strong> and <strong>everywhere</strong>. Consistent use of the common ubiquitous language helps reinforce a shared understanding and  produce solutions that better reflect the mental model of the domain experts.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="evolving-a-domain-model-and-a-solution"><a class="anchor" href="#evolving-a-domain-model-and-a-solution"></a><a class="link" href="#evolving-a-domain-model-and-a-solution">2.1.6. Evolving a Domain Model and a Solution</a></h4>
+<div class="paragraph">
+<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. It is very important to note that this domain model is modeled to fall within the context of a single subdomain for which a solution is being explored, not the entire domain of the business. This boundary is termed as a <strong><em>bounded context</em></strong> i.e. the ubiquitous language and domain model are only valid within those bounds and context&#8201;&#8212;&#8201;not outside of it. This means that the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>.</p>
+</div>
+<div class="paragraph">
+<p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/bounded-context.png" alt="bounded context" width="566" height="366">
+</div>
+</div>
+<div class="paragraph">
+<p>DDD has a catalog of strategic and tactical patterns which accelerate this process of continuous learning. In addition, modern techniques such as <a href="https://domainstorytelling.org/">domain storytelling</a>, <a href="https://www.eventstorming.com/">event storming</a>, and <a href="https://evolutionaryarchitecture.com/">evolutionary architecture</a> can greatly aid this process of evolving the ubiquitous language and domain model. We will examine all of these in much detail in upcoming chapters,</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The thrust of DDD is that <strong>one single model</strong> form the bedrock of team communication, design, and implementation. While teams may and will indeed require a variety of means to express the model, it is very important to keep the executable code and the various representations up to date at all times.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a><a class="link" href="#what-is-a-subdomain">2.1.7. What is a Subdomain?</a></h4>
+<div class="paragraph">
+<p>The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. With a view to better deal with this complexity, domain-driven design advises decomposing the domain of a business into multiple manageable parts called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/domains.png" alt="domains" width="603" height="412">
+</div>
+<div class="title">Figure 1- 13. Subdomains in the Retail domain</div>
+</div>
+<div class="paragraph">
+<p>In certain businesses, subdomains themselves may turn out to become very complex on their own and may require further decomposition. For instance, in the retail example above, it may be required to break the products subdomain into further constituent subdomains such as catalog, search, recommendations, reviews, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/subdomains.png" alt="subdomains" width="442" height="280">
+</div>
+<div class="title">Figure 1- 14. Subdomains in the Products subdomain</div>
+</div>
+<div class="paragraph">
+<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a><a class="link" href="#types-of-subdomains">2.1.8. Types of Subdomains</a></h4>
+<div class="paragraph">
+<p>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core sub-domains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above,</p>
+</li>
+<li>
+<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
+</li>
+<li>
+<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="the-ubiquitous-language-and-domain-models"><a class="anchor" href="#the-ubiquitous-language-and-domain-models"></a><a class="link" href="#the-ubiquitous-language-and-domain-models">2.1.9. The ubiquitous language and domain models</a></h4>
 <div class="paragraph">
 <p>As we have discussed in the previous chapter, when a problem is presented to us, we subconsciously attempt to form mental representations of potential solutions. Further, the type and nature of these representations (models) may differ wildly based on factors like our understanding of the problem, our backgrounds and experiences, etc. This implies that it is natural for these models to be different. For example, the same problem can be thought of differently by various team members as shown here:</p>
 </div>
@@ -1534,7 +1535,7 @@ However, it is very difficult to arrive at a solution without having an apprecia
 <div class="content">
 <img src="./images/multiple-models.png" alt="multiple models">
 </div>
-<div class="title">Figure 1- 13. Multiple models to represent the solution to the problem using the ubiquitous language</div>
+<div class="title">Figure 1- 15. Multiple models to represent the solution to the problem using the ubiquitous language</div>
 </div>
 <div class="paragraph">
 <p>As iilustrated here, the business expert may think of a process model, whereas the test engineer may think of exceptions and boundary conditions to arrive at a test strategy.</p>
@@ -1556,23 +1557,23 @@ The illustration above is to depict the existence of multiple models. There may 
 </div>
 </div>
 <div class="sect3">
-<h4 id="modeling-tools"><a class="anchor" href="#modeling-tools"></a><a class="link" href="#modeling-tools">2.1.4. Modeling tools</a></h4>
+<h4 id="modeling-tools"><a class="anchor" href="#modeling-tools"></a><a class="link" href="#modeling-tools">2.1.10. Modeling tools</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="wardley-maps"><a class="anchor" href="#wardley-maps"></a><a class="link" href="#wardley-maps">2.1.5. Wardley maps</a></h4>
+<h4 id="wardley-maps"><a class="anchor" href="#wardley-maps"></a><a class="link" href="#wardley-maps">2.1.11. Wardley maps</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="impact-maps"><a class="anchor" href="#impact-maps"></a><a class="link" href="#impact-maps">2.1.6. Impact maps</a></h4>
+<h4 id="impact-maps"><a class="anchor" href="#impact-maps"></a><a class="link" href="#impact-maps">2.1.12. Impact maps</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="business-model-canvas"><a class="anchor" href="#business-model-canvas"></a><a class="link" href="#business-model-canvas">2.1.7. Business model canvas</a></h4>
+<h4 id="business-model-canvas"><a class="anchor" href="#business-model-canvas"></a><a class="link" href="#business-model-canvas">2.1.13. Business model canvas</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="product-strategy-canvas"><a class="anchor" href="#product-strategy-canvas"></a><a class="link" href="#product-strategy-canvas">2.1.8. Product strategy canvas</a></h4>
+<h4 id="product-strategy-canvas"><a class="anchor" href="#product-strategy-canvas"></a><a class="link" href="#product-strategy-canvas">2.1.14. Product strategy canvas</a></h4>
 
 </div>
 </div>
@@ -1687,7 +1688,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture">
 </div>
-<div class="title">Figure 1- 14. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 1- 16. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1955,7 +1956,7 @@ Domain Storytelling is a technique invented and popularized by Stefan Hofer and 
 <div class="content">
 <img src="./images/domain-storytelling/dst-summary.png" alt="dst summary">
 </div>
-<div class="title">Figure 1- 15. Domain storytelling summarized</div>
+<div class="title">Figure 1- 17. Domain storytelling summarized</div>
 </div>
 <div class="paragraph">
 <p>A domain story is conveyed using the following attributes:</p>
@@ -2013,7 +2014,7 @@ These details may be captured in a purchase order&#8201;&#8212;&#8201;which is a
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step01.png" alt="lc issue step01">
 </div>
-<div class="title">Figure 1- 16. Interaction between importer and exporter</div>
+<div class="title">Figure 1- 18. Interaction between importer and exporter</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"Seems straight forward, so where does the bank come into the picture?"</em><br>
@@ -2037,7 +2038,7 @@ The importer provides the details of the transaction by making an <strong>LC app
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step02.png" alt="lc issue step02">
 </div>
-<div class="title">Figure 1- 17. Introducing the LC and the issuing bank</div>
+<div class="title">Figure 1- 19. Introducing the LC and the issuing bank</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"What does the issuing bank do when they receive this LC application?"</em><br>
@@ -2050,7 +2051,7 @@ What happens if everything checks out?"<br>
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step03.png" alt="lc issue step03">
 </div>
-<div class="title">Figure 1- 18. Notifying LC approval to the importer</div>
+<div class="title">Figure 1- 20. Notifying LC approval to the importer</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"What happens next?
@@ -2064,7 +2065,7 @@ This bank is called the <strong>advising bank</strong>."</em><br></p>
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step04.png" alt="lc issue step04">
 </div>
-<div class="title">Figure 1- 19. Introducing the advising bank</div>
+<div class="title">Figure 1- 21. Introducing the advising bank</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"What does the advising bank do?"</em><br>
@@ -2077,7 +2078,7 @@ The issuing bank notifies the importer that the LC has been advised to the expor
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step05.png" alt="lc issue step05">
 </div>
-<div class="title">Figure 1- 20. Advice notification to the importer</div>
+<div class="title">Figure 1- 22. Advice notification to the importer</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"How does the exporter know how to proceed?"</em><br>
@@ -2087,7 +2088,7 @@ The issuing bank notifies the importer that the LC has been advised to the expor
 <div class="content">
 <img src="./images/domain-storytelling/lc-issue-step06.png" alt="lc issue step06">
 </div>
-<div class="title">Figure 1- 21. Dispatching the advice to the exporter</div>
+<div class="title">Figure 1- 23. Dispatching the advice to the exporter</div>
 </div>
 <div class="paragraph">
 <p><strong>Patrick</strong> : <em>"Does the exporter initiate shipping at this time and how do they get paid?"</em><br>
@@ -2160,7 +2161,7 @@ This is either user initiated or system initiated, in response to a domain event
 <div class="content">
 <img src="./images/event-storming/00-event-storming-summary.png" alt="00 event storming summary">
 </div>
-<div class="title">Figure 1- 22. EventStorming legend</div>
+<div class="title">Figure 1- 24. EventStorming legend</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2195,7 +2196,7 @@ As the timeline is enforced, the business flow will begin to emerge.</p>
 <div class="content">
 <img src="./images/event-storming/01-events.png" alt="01 events">
 </div>
-<div class="title">Figure 1- 23. Event chronology</div>
+<div class="title">Figure 1- 25. Event chronology</div>
 </div>
 <div class="paragraph">
 <p>This acts as an aid to understand the big picture.
@@ -2209,7 +2210,7 @@ In the above illustration, we realized that, the process to handle "declined LC 
 <div class="content">
 <img src="./images/event-storming/02-events.png" alt="02 events">
 </div>
-<div class="title">Figure 1- 24. New event to handle declined applications</div>
+<div class="title">Figure 1- 26. New event to handle declined applications</div>
 </div>
 </div>
 <div class="sect4">
@@ -2221,7 +2222,7 @@ In the above illustration, we realized that, the process to handle "declined LC 
 <div class="content">
 <img src="./images/event-storming/03-activities-and-external-systems.png" alt="03 activities and external systems">
 </div>
-<div class="title">Figure 1- 25. Activities and external systems</div>
+<div class="title">Figure 1- 27. Activities and external systems</div>
 </div>
 </div>
 <div class="sect4">
@@ -2233,7 +2234,7 @@ In the above illustration, we realized that, the process to handle "declined LC 
 <div class="content">
 <img src="./images/event-storming/04-users-and-policies-full.png" alt="04 users and policies full">
 </div>
-<div class="title">Figure 1- 26. Users and policies</div>
+<div class="title">Figure 1- 28. Users and policies</div>
 </div>
 </div>
 <div class="sect4">
@@ -2247,7 +2248,7 @@ These sets of data are represented as <strong>query models</strong> (using green
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 27. Big picture eventstorming workshop board</div>
+<div class="title">Figure 1- 29. Big picture eventstorming workshop board</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2273,7 +2274,7 @@ The picture below is an attempt to clarify:</p>
 <div class="content">
 <img src="./images/domain-requirements-elaboration.png" alt="domain requirements elaboration">
 </div>
-<div class="title">Figure 1- 28. Domain requirements elaboration continuum</div>
+<div class="title">Figure 1- 30. Domain requirements elaboration continuum</div>
 </div>
 <div class="paragraph">
 <p>In subsequent chapters we will examine the other techniques in more detail.</p>
@@ -2371,7 +2372,7 @@ Eventstorming, on the other hand, uses a chronological ordering of domain events
 </table>
 </div>
 <div class="sect2">
-<h3 id="answers-2"><a class="anchor" href="#answers-2"></a><a class="link" href="#answers-2">4.10. Answers</a></h3>
+<h3 id="answers"><a class="anchor" href="#answers"></a><a class="link" href="#answers">4.10. Answers</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2467,7 +2468,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 29. Recap of eventstorming session</div>
+<div class="title">Figure 1- 31. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the  <a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>.</p>
@@ -2497,7 +2498,7 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 <div class="content">
 <img src="./images/cqrs/cqrs-command-side.png" alt="cqrs command side">
 </div>
-<div class="title">Figure 1- 30. CQRS application&#8201;&#8212;&#8201;command side</div>
+<div class="title">Figure 1- 32. CQRS application&#8201;&#8212;&#8201;command side</div>
 </div>
 <div class="paragraph">
 <p>The high level sequence on the command side is described here:</p>
@@ -2650,7 +2651,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="680" height="408">
 </div>
-<div class="title">Figure 1- 31. Identified commands</div>
+<div class="title">Figure 1- 33. Identified commands</div>
 </div>
 <div class="paragraph">
 <p>Commands are always directed to an aggregate (the root entity) for processing (handling). This means that we need to resolve each of these commands to be handled by an aggregate. While the sender of the command does not care which component within the system handles it, we need to decide which aggregate will handle each command. It is also important to note that any given command can only be handled by a single aggregate within the system. Let&#8217;s look at how to group these commands and assign them to aggregates. To be able to do that, we need to identify the aggregates in the system first.</p>
@@ -2665,7 +2666,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="content">
 <img src="./images/aggregate-design/aggregate-design-01.png" alt="aggregate design 01">
 </div>
-<div class="title">Figure 1- 32. First cut attempt at aggregate design</div>
+<div class="title">Figure 1- 34. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
 <p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_mechanics_of_domain_driven_design">Chapter 2</a>
@@ -2678,7 +2679,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="content">
 <img src="./images/potential-aggregates.png" alt="potential aggregates" width="304" height="237">
 </div>
-<div class="title">Figure 1- 33. Potential aggregates at first glance</div>
+<div class="title">Figure 1- 35. Potential aggregates at first glance</div>
 </div>
 <div class="paragraph">
 <p>However, it is a bit more nuanced than that. Before we conclude this conversation on aggregates, let&#8217;s also examine our current organizational structures because they can and will play a very influential role in how we choose aggregates. When implementing the solution, these organizational structures decompose into bounded contexts, so let&#8217;s also examine how that works.</p>
@@ -2707,7 +2708,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="529" height="533">
 </div>
-<div class="title">Figure 1- 34. Context map for the LC solution</div>
+<div class="title">Figure 1- 36. Context map for the LC solution</div>
 </div>
 <div class="paragraph">
 <p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
@@ -2755,7 +2756,7 @@ The practice of test-driving the system is very well illustrated in the best-sel
 <div class="content">
 <img src="./images/event-driven-system.png" alt="event driven system">
 </div>
-<div class="title">Figure 1- 35. An event-driven system</div>
+<div class="title">Figure 1- 37. An event-driven system</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -3114,7 +3115,7 @@ The code snippets shown in this chapter are excerpts to highlight significant co
 <div class="content">
 <img src="./images/relational-structure.png" alt="relational structure" width="818" height="475">
 </div>
-<div class="title">Figure 1- 36. Typical entity relationship model</div>
+<div class="title">Figure 1- 38. Typical entity relationship model</div>
 </div>
 <div class="paragraph">
 <p>Irrespective of whether we choose to use a relational database or a more modern NoSql store&#8201;&#8212;&#8201;for instance, a document store, key-value store, column family store, etc., the style we use to persist information remains more or less the same&#8201;&#8212;&#8201;which is to store the current values of the attributes of the said aggregate/entity. When the values of attributes change, we simply overwrite old values with newer ones i.e. we store the current state of aggregates and entities&#8201;&#8212;&#8201;hence the name <em>state stored</em>. This technique has served us very well over the years, but there is at least one more mechanism that we can use to persist information. We will look at this in more detail below.</p>
@@ -3141,7 +3142,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="content">
 <img src="./images/log-records.png" alt="log records" width="600" height="154">
 </div>
-<div class="title">Figure 1- 37. The log data structure</div>
+<div class="title">Figure 1- 39. The log data structure</div>
 </div>
 <div class="paragraph">
 <p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
@@ -3632,7 +3633,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 1- 38. Validations during the submit LC process</div>
+<div class="title">Figure 1- 40. Validations during the submit LC process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -4236,7 +4237,7 @@ Wheat bread</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="answers-3"><a class="anchor" href="#answers-3"></a><a class="link" href="#answers-3">5.9. Answers</a></h3>
+<h3 id="answers-2"><a class="anchor" href="#answers-2"></a><a class="link" href="#answers-2">5.9. Answers</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4332,7 +4333,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/command-flow.png" alt="command flow" width="488" height="742">
 </div>
-<div class="title">Figure 1- 39. Commands from the event storming session</div>
+<div class="title">Figure 1- 41. Commands from the event storming session</div>
 </div>
 <div class="paragraph">
 <p>If you observe carefully, there seem to be commands at two levels of granularity. The "Create LC Application" and "Update LC application" are coarse grained, whereas the others are a lot more focused in terms of their intent. One possible decomposition of the coarse grained commands can be as depicted here:</p>
@@ -4341,7 +4342,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/decomposed-commands.png" alt="decomposed commands">
 </div>
-<div class="title">Figure 1- 40. Decomposed commands</div>
+<div class="title">Figure 1- 42. Decomposed commands</div>
 </div>
 <div class="paragraph">
 <p>In addition to just being more fine-grained than the commands in the previous iteration, the revised commands seem to better capture the user&#8217;s intent. This may feel like a minor change in semantics, but can have a huge impact on the way our solution is used by its ultimate end-users. The question then is whether we should <em>always</em> prefer fine-grained APIs over coarse grained ones. The answer can be a lot more nuanced. When designing APIs and experiences, we see two main styles being employed:</p>
@@ -4492,7 +4493,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="content">
 <img src="./images/ui-patterns/revised-commands-recap.png" alt="revised commands recap">
 </div>
-<div class="title">Figure 1- 41. Revised commands</div>
+<div class="title">Figure 1- 43. Revised commands</div>
 </div>
 <div class="paragraph">
 <p>While it may have appeared previously that we have simply converted our coarse-grained APIs to become more fine-grained, this in reality is a better representation of the tasks that the user intended to perform. So, in essence, task-based APIs are the decomposition of work in a manner that aligns more closely to the users' intents. With our new APIs, product validation can commence as soon as <code>ChangeMerchandise</code> happens. Also, it is unambiguously clear what the user did and what needs to happen in reaction to the user&#8217;s action. It then begs the question on whether we should employ task-based APIs all the time? Let&#8217;s look at the implications in more detail.</p>
@@ -4927,7 +4928,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/ui-patterns/mvvm.png" alt="mvvm">
 </div>
-<div class="title">Figure 1- 42. MVVM design pattern</div>
+<div class="title">Figure 1- 44. MVVM design pattern</div>
 </div>
 <div class="paragraph">
 <p>The pattern comprises the following components:</p>
@@ -4958,7 +4959,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <div class="content">
 <img src="./images/mvvm/start-lc-ui.png" alt="start lc ui">
 </div>
-<div class="title">Figure 1- 43. Start LC creation screen</div>
+<div class="title">Figure 1- 45. Start LC creation screen</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s examine the implementation and purpose of each component in more detail.</p>
@@ -5560,7 +5561,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="content">
 <img src="./images/mvvm/valid-client-reference-input.png" alt="valid client reference input">
 </div>
-<div class="title">Figure 1- 44. The start button is enabled with a valid client reference</div>
+<div class="title">Figure 1- 46. The start button is enabled with a valid client reference</div>
 </div>
 <div class="paragraph">
 <p>Now that we have the start button enabling correctly, let&#8217;s implement the actual creation of the LC itself by invoking the backend API.</p>
@@ -5569,7 +5570,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div class="sect4">
 <h5 id="integrating-with-the-backend"><a class="anchor" href="#integrating-with-the-backend"></a><a class="link" href="#integrating-with-the-backend">Integrating with the backend</a></h5>
 <div class="paragraph">
-<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 41</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 43</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
+<p>LC creation is a complex process, requiring information about a variety of items as evidenced in figure <a href="#revised-commands">Figure 1- 43</a> when we decomposed the LC creation process. In this section, we will integrate the UI with the command to start creation of a new LC. This happens when we press the <em>Start</em> button on the <a href="#start-lc-creation-screen">Figure 1- 45</a>. The revised <code>StartNewLCApplicationCommand</code> looks as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6271,7 +6272,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/event-storming/05-query-models.png" alt="05 query models">
 </div>
-<div class="title">Figure 1- 45. Recap of eventstorming session</div>
+<div class="title">Figure 1- 47. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As mentioned previously, we are making use of the CQRS architecture pattern to create the solution. For a detailed explanation on why this is a sound method to employ, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>. In the diagram above, the <strong>green</strong> stickies represent <strong>read/query models</strong>. These query models are required when validating a command (for example: list of valid product identifiers when processing the <code>ValidateProduct</code> command) or if information is simply required to be presented to the user (for example: a list of LCs created by an applicant). Let’s look at what it means to apply CQRS in practical terms for the query side.</p>
@@ -6286,7 +6287,7 @@ Please refer to the ch07 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side.png" alt="cqrs query side">
 </div>
-<div class="title">Figure 1- 46. CQRS application&#8201;&#8212;&#8201;query side</div>
+<div class="title">Figure 1- 48. CQRS application&#8201;&#8212;&#8201;query side</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -6346,7 +6347,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/cqrs/cqrs-query-side-dissected.png" alt="Query side dissected">
 </div>
-<div class="title">Figure 1- 47. Query side dissected</div>
+<div class="title">Figure 1- 49. Query side dissected</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6371,7 +6372,7 @@ Note how there can exist more than one query side component to handle respective
 <div class="content">
 <img src="./images/potential-commands.png" alt="potential commands" width="1209" height="674">
 </div>
-<div class="title">Figure 1- 48. Identified queries</div>
+<div class="title">Figure 1- 50. Identified queries</div>
 </div>
 <div class="paragraph">
 <p>The queries marked in green (in the output from eventstorming session), all require us to expose a collection of LCs in various states. To represent this, we can create an <code>LCView</code> as shown here:</p>
@@ -6887,7 +6888,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="content">
 <img src="./images/cqrs/event-evolution.png" alt="event evolution">
 </div>
-<div class="title">Figure 1- 49. Event evolution</div>
+<div class="title">Figure 1- 51. Event evolution</div>
 </div>
 <div class="paragraph">
 <p>Given that the event store is immutable, it is conceivable that we may have one or more combinations of these event versions for a given LC. This can present a number of decisions we will need to make when performing an event replay:</p>
@@ -7026,7 +7027,7 @@ Please refer to the ch08 directory of the book&#8217;s accompanying source code 
 <div class="content">
 <img src="./images/sagas/event-storming-auto-approval-saga.png" alt="event storming auto approval saga">
 </div>
-<div class="title">Figure 1- 50. Recap of eventstorming session</div>
+<div class="title">Figure 1- 52. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
 <p>As depicted in the visual above, some aspects of Letter of Credit (LC) application processing happens outside our current bounded context), before the trade finance manager makes a decision to either approve or decline the application as listed here:</p>
@@ -7078,7 +7079,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-logical.png" alt="auto approval saga logical">
 </div>
-<div class="title">Figure 1- 51. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
+<div class="title">Figure 1- 53. Auto-approval process&#8201;&#8212;&#8201;logical view</div>
 </div>
 <div class="paragraph">
 <p>As is depicted in the visual above, there are three bounded contexts in play:</p>
@@ -7140,7 +7141,7 @@ In this context, we are using the term <strong><em>long-running</em></strong> to
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-orchestrator.png" alt="auto approval saga orchestrator">
 </div>
-<div class="title">Figure 1- 52. Saga implementation using an orchestrator</div>
+<div class="title">Figure 1- 54. Saga implementation using an orchestrator</div>
 </div>
 <div class="paragraph">
 <p>The orchestrator starts tracking the flow when the LC application is submitted. It will then need to wait for each of the <code>ProductValueValidatedEvent</code>, <code>ProductLegalityValidatedEvent</code> and <code>ApplicantCreditValidatedEvent</code> events to occur and decide if it is appropriate to trigger the <code>ApproveLCApplicationCommand</code>. Finally, the saga lifecycle ends unconditionally when the LC application is approved. There are other conditions that may cause the saga to end abruptly. We will examine those scenarios in detail later. It is pertinent to note that there will be a <strong>distinct</strong> auto-approval saga instance for each LC application that gets submitted. Let&#8217;s look at how to implement this functionality using the Axon framework. As usual, let&#8217;s test drive this functionality that a new auto approval saga instance is created when an LC application is submitted:</p>
@@ -7646,7 +7647,7 @@ The logic in the <code>ProductValueValidatedEvent</code> and <code>ProductLegali
 <div class="content">
 <img src="./images/sagas/auto-approval-saga-choreography.png" alt="Saga implementation using choreography">
 </div>
-<div class="title">Figure 1- 53. Saga implementation using choreography</div>
+<div class="title">Figure 1- 55. Saga implementation using choreography</div>
 </div>
 <div class="paragraph">
 <p>As you can see, there is no single component that tracks the saga lifecycle. However, to make the auto-approval decision, each of these stateless event handlers need to have knowledge of the same three events having occurred:</p>
@@ -8203,7 +8204,7 @@ We will round off by looking at common patterns when integrating with legacy app
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="529" height="533">
 </div>
-<div class="title">Figure 1- 54. Context map for the LC solution</div>
+<div class="title">Figure 1- 56. Context map for the LC solution</div>
 </div>
 <div class="paragraph">
 <p>Thus far, our focus has been on the implementation of the internals of the <strong>LC Application</strong> bounded context.
@@ -8248,7 +8249,7 @@ Both teams are in a position to and indeed, do contribute more or less equally t
 <div class="content">
 <img src="./images/bounded-context-relationships/symmetric-relationship.png" alt="symmetric relationship">
 </div>
-<div class="title">Figure 1- 55. Both teams have an equal say in influencing the solution</div>
+<div class="title">Figure 1- 57. Both teams have an equal say in influencing the solution</div>
 </div>
 <div class="paragraph">
 <p>There are three variations of symmetric relationships, each of which we outline in more detail here:</p>
@@ -8266,7 +8267,7 @@ Such relationships require extremely high degrees of collaboration and understan
 <div class="content">
 <img src="./images/bounded-context-relationships/partnership.png" alt="partnership">
 </div>
-<div class="title">Figure 1- 56. There is an adhoc, mutual dependency between teams in a partnership relationship</div>
+<div class="title">Figure 1- 58. There is an adhoc, mutual dependency between teams in a partnership relationship</div>
 </div>
 <div class="sect5">
 <h6 id="example"><a class="anchor" href="#example"></a><a class="link" href="#example">Example</a></h6>
@@ -8312,7 +8313,7 @@ Intentionally, these teams do not share anything beyond this mutually agreed upo
 <div class="content">
 <img src="./images/bounded-context-relationships/shared-kernel.png" alt="shared kernel">
 </div>
-<div class="title">Figure 1- 57. Teams have an explicit understanding of shared models</div>
+<div class="title">Figure 1- 59. Teams have an explicit understanding of shared models</div>
 </div>
 </div>
 <div class="sect5">
@@ -8387,7 +8388,7 @@ It is also likely that the customer and the supplier do not share common goals.<
 <div class="content">
 <img src="./images/bounded-context-relationships/asymmetric-relationship.png" alt="asymmetric relationship">
 </div>
-<div class="title">Figure 1- 58. One of the teams has a dominant say in influencing the solution</div>
+<div class="title">Figure 1- 60. One of the teams has a dominant say in influencing the solution</div>
 </div>
 <div class="paragraph">
 <p>There are at least three solution patterns when teams are in an asymmetric relationship, each of which we outline in more detail here:</p>
@@ -8404,7 +8405,7 @@ In this case, the customer is termed to be a <em>conformist</em>.</p>
 <div class="content">
 <img src="./images/bounded-context-relationships/conformist.png" alt="conformist">
 </div>
-<div class="title">Figure 1- 59. Customer accepts dependency on supplier model</div>
+<div class="title">Figure 1- 61. Customer accepts dependency on supplier model</div>
 </div>
 <div class="sect5">
 <h6 id="example-4"><a class="anchor" href="#example-4"></a><a class="link" href="#example-4">Example</a></h6>
@@ -8444,7 +8445,7 @@ In such cases, it may be prudent to redefine these conflicting models in the cus
 <div class="content">
 <img src="./images/bounded-context-relationships/anti-corruption-layer.png" alt="anti corruption layer">
 </div>
-<div class="title">Figure 1- 60. Customer wants to protect itself from supplier models</div>
+<div class="title">Figure 1- 62. Customer wants to protect itself from supplier models</div>
 </div>
 <div class="sect5">
 <h6 id="example-5"><a class="anchor" href="#example-5"></a><a class="link" href="#example-5">Example</a></h6>
@@ -8496,7 +8497,7 @@ This interface may be made available in the form of a well-known published langu
 <div class="content">
 <img src="./images/bounded-context-relationships/open-host-service.png" alt="open host service">
 </div>
-<div class="title">Figure 1- 61. Open host service (OHS) using a published language (PL).</div>
+<div class="title">Figure 1- 63. Open host service (OHS) using a published language (PL).</div>
 </div>
 <div class="sect5">
 <h6 id="example-6"><a class="anchor" href="#example-6"></a><a class="link" href="#example-6">Example</a></h6>
@@ -8545,7 +8546,7 @@ For example, the following scenario with the supplier providing an <em>open host
 <div class="content">
 <img src="./images/bounded-context-relationships/asymmetric-multiple-customers.png" alt="asymmetric multiple customers">
 </div>
-<div class="title">Figure 1- 62. Asymmetric relationships with multiple customers.</div>
+<div class="title">Figure 1- 64. Asymmetric relationships with multiple customers.</div>
 </div>
 <div class="paragraph">
 <p>Now that we have seen the various ways in which bounded contexts can integrate with each other, here is one possible implementation for our LC application depicted in the form of a context map:</p>
@@ -8554,7 +8555,7 @@ For example, the following scenario with the supplier providing an <em>open host
 <div class="content">
 <img src="./images/bounded-context-relationships/lc-application-context-map.png" alt="lc application context map">
 </div>
-<div class="title">Figure 1- 63. Simplified context map for the LC application.</div>
+<div class="title">Figure 1- 65. Simplified context map for the LC application.</div>
 </div>
 <div class="paragraph">
 <p>Thus far we have examined the various ways in which inter-team dynamics influence integration mechanisms.
@@ -8600,7 +8601,7 @@ There are three broad categories that can be employed when integrating two bound
 <div class="content">
 <img src="./images/integration-patterns/symmetric-shared-data.png" alt="symmetric shared data">
 </div>
-<div class="title">Figure 1- 64. Integration using a shared database</div>
+<div class="title">Figure 1- 66. Integration using a shared database</div>
 </div>
 <div class="sect5">
 <h6 id="when-to-use-7"><a class="anchor" href="#when-to-use-7"></a><a class="link" href="#when-to-use-7">When to use</a></h6>
@@ -8624,7 +8625,7 @@ There are three broad categories that can be employed when integrating two bound
 <div class="content">
 <img src="./images/integration-patterns/asymmetric-shared-data.png" alt="asymmetric shared data">
 </div>
-<div class="title">Figure 1- 65. Integration using data replication.</div>
+<div class="title">Figure 1- 67. Integration using data replication.</div>
 </div>
 <div class="ulist">
 <ul>
@@ -8768,7 +8769,7 @@ There are three broad categories that can be employed when integrating two bound
 <div class="content">
 <img src="./images/integration-patterns/synchronous-messaging.png" alt="synchronous messaging">
 </div>
-<div class="title">Figure 1- 66. Synchronous messaging</div>
+<div class="title">Figure 1- 68. Synchronous messaging</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -8819,7 +8820,7 @@ We are using the terms sender and receiver, instead of customer and supplier bec
 <div class="content">
 <img src="./images/integration-patterns/asynchronous-messaging.png" alt="asynchronous messaging">
 </div>
-<div class="title">Figure 1- 67. Asynchronous messaging</div>
+<div class="title">Figure 1- 69. Asynchronous messaging</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -9238,7 +9239,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-21 13:41:21 UTC
+Last updated 2021-12-26 12:39:02 UTC
 </div>
 </div>
 </body>
