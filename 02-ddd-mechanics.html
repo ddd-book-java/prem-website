@@ -461,9 +461,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#strategic-design-tools">Strategic design tools</a>
 <ul class="sectlevel3">
+<li><a href="#business-model-canvas">Business model canvas</a></li>
 <li><a href="#wardley-maps">Wardley maps</a></li>
 <li><a href="#impact-maps">Impact maps</a></li>
-<li><a href="#business-model-canvas">Business model canvas</a></li>
 <li><a href="#product-strategy-canvas">Product strategy canvas</a></li>
 <li><a href="#lean-canvas">Lean canvas</a></li>
 </ul>
@@ -840,13 +840,14 @@ Anemic domain models
 <div class="paragraph">
 <p>While bounded contexts ideally need to be as independent as possible,  they may still need to communicate with each other. When using domain-driven design, the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>. A sample context map is shown here.</p>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
 <img src="./images/sample-context-map.png" alt="sample context map">
 </div>
+<div class="title">Figure 10. Sample context map for Acme bank</div>
 </div>
 <div class="paragraph">
-<p>We will discuss more details on context maps and communication patterns in <a href="#_integrating_with_external_systems">Chapter 9: Integrating with external systems</a>.</p>
+<p>The context map shows the bounded contexts the relationship between them. These relationships can be a lot more nuanced than what is depicted here. We will discuss more details on context maps and communication patterns in <a href="#_integrating_with_external_systems">Chapter 9: Integrating with external systems</a>.</p>
 </div>
 <div class="paragraph">
 <p>We have now covered a catalog of concepts that are core to the strategic design tenets of domain-driven design. Let&#8217;s look at some tools that can help expedite this process.</p>
@@ -856,7 +857,7 @@ Anemic domain models
 <div class="sect2">
 <h3 id="strategic-design-tools"><a class="anchor" href="#strategic-design-tools"></a>Strategic design tools</h3>
 <div class="paragraph">
-<p>To arrive at an optimal solution, it is important to have a strong appreciation of the business goals and its alignment to support the needs of the users of the solution. We introduce a set of tools and techniques we have found to be useful.</p>
+<p>To arrive at an optimal solution, it is important to have a strong appreciation of the business goals and their alignment to support the needs of the users of the solution. We introduce a set of tools and techniques we have found to be useful.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -871,21 +872,67 @@ These tools are not really tied to DDD in any way and can be practiced regardles
 </table>
 </div>
 <div class="sect3">
+<h4 id="business-model-canvas"><a class="anchor" href="#business-model-canvas"></a>Business model canvas</h4>
+<div class="paragraph">
+<p>As we have mentioned several times, it is important to make sure that we are solving the right problem before attempting to solving it right. The business model canvas is a quick and easy way to establish that we are solving a valuable problem in a single visual that captures nine elements of your business namely:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Value propositions</em>: what do you do?</p>
+</li>
+<li>
+<p><em>Key activities</em>: how do you do it?</p>
+</li>
+<li>
+<p><em>Key resources</em>: what do you need?</p>
+</li>
+<li>
+<p><em>Key partners</em>: who will help you?</p>
+</li>
+<li>
+<p><em>Cost structure</em>: what will it cost?</p>
+</li>
+<li>
+<p><em>Revenue streams</em>: how much will you make?</p>
+</li>
+<li>
+<p><em>Customer segments</em>: who are you creating value for?</p>
+</li>
+<li>
+<p><em>Customer relationships</em>: who do you interact with?</p>
+</li>
+<li>
+<p><em>Channels</em>: How do you reach your customers?</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/sample-business-model-canvas.png" alt="sample business model canvas">
+</div>
+<div class="title">Figure 11. Business model canvas of a popular online movie subscription provider</div>
+</div>
+<div class="paragraph">
+<p>The business model canvas helps establish a shared understanding of the big picture among a varied set of groups including business stakeholders, domain experts, product owners, architects and developers. We have found it very useful when embarking on both greenfield and brownfield engagements alike.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="wardley-maps"><a class="anchor" href="#wardley-maps"></a>Wardley maps</h4>
 <div class="paragraph">
-<p>A tool that can be used to map your business strategy. It integrates value chain with evolution. Value chain is the chain of systems or activities performed to provide value to the customer. Each of these activities is then placed on the map based on its evolutionary stage.</p>
+<p>The business model canvas can help establish clarity of purpose at a high level. The Wardley map is another tool to help build a business strategy. It provides a sketch of the people that the system is built for, followed by the benefits the system offers them and a chain of needs required to provide those benefits.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/wardley-map.png" alt="wardley map">
+</div>
+<div class="title">Figure 12. Wardley map</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="impact-maps"><a class="anchor" href="#impact-maps"></a>Impact maps</h4>
 <div class="paragraph">
 <p>A visual technique that helps to identify the features for product development that align with primary business goals.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="business-model-canvas"><a class="anchor" href="#business-model-canvas"></a>Business model canvas</h4>
-<div class="paragraph">
-<p>A strategic tool that enables you to summarize your business model. It’s a single image document which focuses on key drivers of your business such as customers, infrastructure, revenue and resources.</p>
 </div>
 </div>
 <div class="sect3">
@@ -969,7 +1016,7 @@ These tools are not really tied to DDD in any way and can be practiced regardles
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-12-30 04:15:58 UTC
+Last updated 2021-12-30 19:56:18 UTC
 </div>
 </div>
 </body>
