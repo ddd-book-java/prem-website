@@ -464,18 +464,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#business-model-canvas">Business model canvas</a></li>
 <li><a href="#wardley-maps">Wardley maps</a></li>
 <li><a href="#impact-maps">Impact maps</a></li>
-<li><a href="#product-strategy-canvas">Product strategy canvas</a></li>
-<li><a href="#lean-canvas">Lean canvas</a></li>
 </ul>
 </li>
 <li><a href="#implementing-the-solution-using-tactical-design">Implementing the solution using tactical design</a>
 <ul class="sectlevel3">
-<li><a href="#_entities">Entities</a></li>
 <li><a href="#value-objects">Value objects</a></li>
+<li><a href="#_entities">Entities</a></li>
 <li><a href="#_aggregates">Aggregates</a></li>
-<li><a href="#services">Services</a></li>
 <li><a href="#repositories">Repositories</a></li>
 <li><a href="#factories">Factories</a></li>
+<li><a href="#services">Services</a></li>
 </ul>
 </li>
 <li><a href="#tactical-design-tools">Tactical design tools</a>
@@ -907,6 +905,9 @@ These tools are not really tied to DDD in any way and can be practiced regardles
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Here is a sample canvas for a popular movie subscription provider:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/sample-business-model-canvas.png" alt="sample business model canvas">
@@ -916,74 +917,275 @@ These tools are not really tied to DDD in any way and can be practiced regardles
 <div class="paragraph">
 <p>The business model canvas helps establish a shared understanding of the big picture among a varied set of groups including business stakeholders, domain experts, product owners, architects and developers. We have found it very useful when embarking on both greenfield and brownfield engagements alike.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A variation of the business model canvas is the <em>lean canvas</em>, which is a one-page document that has been adapted from Business Model Canvas that is entrepreneur focused and has customer-centric approach that emphasizes on problem, solution, key metrics and competitive advantage.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="wardley-maps"><a class="anchor" href="#wardley-maps"></a>Wardley maps</h4>
 <div class="paragraph">
-<p>The business model canvas can help establish clarity of purpose at a high level. The Wardley map is another tool to help build a business strategy. It provides a sketch of the people that the system is built for, followed by the benefits the system offers them and a chain of needs required to provide those benefits.</p>
+<p>The business model canvas can help establish clarity of purpose at a high level. The Wardley map is another tool to help build a business strategy. It provides a sketch of the people that the system is built for, followed by the benefits the system offers them and a chain of needs required to provide those benefits (called the <em>value chain</em>). Next the value chain is plotted along an evolution axis which ranges from something that is uncharted and uncertain to something that is highly standardized.</p>
+</div>
+<div class="paragraph">
+<p>Here is a sample Wardley map for a bank that is looking to provide a suite of next generation credit card products:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/wardley-map.png" alt="wardley map">
 </div>
-<div class="title">Figure 12. Wardley map</div>
+<div class="title">Figure 12. Value chain to a Wardley map</div>
+</div>
+<div class="paragraph">
+<p>The Wardley map makes it easy to understand the capabilities provided by our solution, their dependencies and how value is derived. It also helps depict how these capabilities play out in comparison to those offered by competitors, allowing you to prioritize attention appropriately and make build versus buy decisions.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="impact-maps"><a class="anchor" href="#impact-maps"></a>Impact maps</h4>
 <div class="paragraph">
-<p>A visual technique that helps to identify the features for product development that align with primary business goals.</p>
+<p>An impact map is a visualisation of scope and underlying assumptions, created collaboratively by senior technical and business people. It is a mind-map grown during a discussion facilitated by considering the following four aspects:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Goals</em>: <strong>Why</strong> are we doing this?</p>
+</li>
+<li>
+<p><em>Actors</em>: <strong>Who</strong> are the consumers or users of our product?. In other words, who will be impacted by it.</p>
+</li>
+<li>
+<p><em>Impacts</em>: <strong>How</strong> can the consumers' change in behavior help achieve our goals? In other words, the impacts that we’re trying to create.</p>
+</li>
+<li>
+<p><em>Deliverables</em>: <strong>What</strong> we can do, as an organisation or a delivery team, to support the required impacts? In other words, the software features or process changes required to be realized as part of the solution.</p>
+</li>
+</ul>
 </div>
-<div class="sect3">
-<h4 id="product-strategy-canvas"><a class="anchor" href="#product-strategy-canvas"></a>Product strategy canvas</h4>
 <div class="paragraph">
-<p>A system of achievable goals and visions that work together to align the team around desirable outcomes for both the business and your customers.</p>
+<p>TODO: Example</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="lean-canvas"><a class="anchor" href="#lean-canvas"></a>Lean canvas</h4>
 <div class="paragraph">
-<p>A one-page document that has been adapted from Business Model Canvas that is entrepreneur focused and has customer-centric approach that emphasizes on problem, solution, key metrics and competitive advantage.</p>
+<p>Impact mapping provides an easy to understand visual representation of the relationship between the goals, the users and the impacts to the deliverables.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="implementing-the-solution-using-tactical-design"><a class="anchor" href="#implementing-the-solution-using-tactical-design"></a>Implementing the solution using tactical design</h3>
-<div class="sect3">
-<h4 id="_entities"><a class="anchor" href="#_entities"></a>Entities</h4>
 <div class="paragraph">
-<p>Entity is an object with unique identity and encapsulates the object behaviour and attributes.</p>
+<p>In the previous section, we have seen how we can arrive at a shared understanding of the problem using the strategic design tools. We need to use this understanding to create a solution. DDD&#8217;s tactical design aspects, tools and techniques help translate this understanding into working software. Let&#8217;s look at these aspects in detail. In part 2 of the book, we will apply these to solve a real-world problem.</p>
 </div>
+<div class="paragraph">
+<p>It is convenient to think of the tactical design aspects as depicted in this picture:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ddd-tactical-design.png" alt="ddd tactical design">
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at the definitions of these elements.</p>
 </div>
 <div class="sect3">
 <h4 id="value-objects"><a class="anchor" href="#value-objects"></a>Value objects</h4>
 <div class="paragraph">
-<p>Value objects are immutable objects which do not have an identity but hold value and are defined by their attributes.</p>
+<p>Value objects are immutable objects that encapsulate the data and behavior of one or more related attributes. It may be convenient to think of value objects as named primitives. For example, consider a <code>MonetaryAmount</code> value object. A simple implementation can contain two attributes&#8201;&#8212;&#8201;an <em>amount</em> and a <em>currency code</em>. This allows encapsulation of behavior such as adding two <code>MonetaryAmount</code> objects safely.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/entity-example.png" alt="entity example" width="158" height="132">
+</div>
+<div class="title">Figure 13. A simple <code>MonetaryAmount</code> value object</div>
+</div>
+<div class="paragraph">
+<p>The effective use of value objects helps protect from the <a href="https://wiki.c2.com/?PrimitiveObsession">primitive obsession</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> antipattern, while increasing clarity. It also allows composing higher level abstractions using one or more value objects. It is important to note that value objects do not have the notion of identity. That is, two value having the same value are treated equal. So two <code>MonetaryAmount</code> objects having the same <code>amount</code> and <code>currency code</code> will be considered equal. Also, it is important to make value objects immutable. That is, a need to change any of the attributes should result in the creation of a new attribute.</p>
+</div>
+<div class="paragraph">
+<p>It is easy to dismiss the use of value objects as a mere engineering technique, but the consequences of (not) using them can be far-reaching. In the <code>MonetaryAmount</code> example above, it is possible for the <code>amount</code> and <code>currency code</code> to exist as independent attributes. However, the use of the <code>MonetaryAmount</code> enforces the notion of the <em>ubiquitous language</em>. Hence, we recommend the use of value objects as a default instead of using primitives.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Critics may be quick to point out problems such as class explosion and performance issues. But in our experience, the benefits usually outweigh the costs. But it may be necessary to re-examine this approach if problems occur.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_entities"><a class="anchor" href="#_entities"></a>Entities</h4>
+<div class="paragraph">
+<p>An entity is an object with a <strong>unique identity</strong> and <strong>encapsulates</strong> the data and behaviour of its attributes. It may be convenient to view entities as a collection of other entities and value objects that need to be grouped together. A very simple example of an entity is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/entity-example.png" alt="entity example" width="217" height="165">
+</div>
+</div>
+<div class="paragraph">
+<p>In contrast to a value object, entities have the notion of a unique identifier. This means that two <code>Transaction</code> entities having the same underlying values, but having a different identifier (<code>id</code>) value, will be considered different. On the other hand, two entity instances having the same value for the identifier are considered equal. Furthermore, unlike value objects, entities are mutable. That is, their attributes can and will change over time.</p>
+</div>
+<div class="paragraph">
+<p>The concept of value objects and entities depends on the context within which they are used. In an order management system, the <code>Address</code> may be implemented as a value object in the <em>E-Commerce</em> bounded context, whereas it may be needed to be implemented as an entity in the <em>Order Fulfillment</em> bounded context.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is common to collectively refer to entities and value objects as <em>domain objects</em>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_aggregates"><a class="anchor" href="#_aggregates"></a>Aggregates</h4>
 <div class="paragraph">
-<p>When entities and objects with similar logic are grouped together, they are called as aggregates.</p>
+<p>As seen above, entities are hierarchical, in that they can be composed of one more children. Fundamentally, an aggregate:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Is an entity usually composed of other child entities and value objects.</p>
+</li>
+<li>
+<p>Encapsulates access to child entities by exposing behavior (usually referred to as <em>commands</em>).</p>
+</li>
+<li>
+<p>Is a boundary that is used to enforce business invariants (rules) in a consistent manner.</p>
+</li>
+<li>
+<p>Is an entry point to get things done within a bounded context.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Consider the example of a <code>CheckingAccount</code> aggregate:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/aggregate-example.png" alt="aggregate example" width="338" height="216">
+</div>
+</div>
+<div class="paragraph">
+<p>Note how the <code>CheckingAccount</code> is composed using the <code>AccountHolder</code> and Transaction` entities among other things. In this example, let&#8217;s assume that the overdraft feature (ability to hold a negative account balance) is only available for high net-worth individuals (HNI). Any attempt to change the <code>currentBalance</code> needs to occur in the form of a unique <code>Transaction</code> for audit purposes&#8201;&#8212;&#8201;irrespective of its outcome. For this reason, the <code>CheckingAccount</code> aggregate makes use of the <code>Transaction</code> entity. Although the <code>Transaction</code> has <code>approve</code> and <code>reject</code> methods as part of its interface, only the aggregate has access to these methods. In this way, the aggregate enforces the business invariant while maintaining high levels of encapsulation. A potential implementation of the <code>tryWithdraw</code> method is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CheckingAccount</span> {
+    <span style="color:#088;font-weight:bold">private</span> AccountHolder primaryHolder;                            <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Transaction&gt; transactions;                       <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> MonetaryAmount currentBalance;                          <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#777">// Other code omitted for brevity</span>
+
+    <span style="color:#339;font-weight:bold">void</span> tryWithdraw(MonetaryAmount amount) {                       <i class="conum" data-value="2"></i><b>(2)</b>
+        MonetaryAmount newBalance = <span style="color:#950">this</span>.currentBalance.subtract(amount);
+        Transaction transaction = add(Transaction.withdrawal(<span style="color:#950">this</span>.id, amount));
+        <span style="color:#080;font-weight:bold">if</span> (primaryHolder.isNotHNI() &amp;&amp; newBalance.isOverdrawn()) { <i class="conum" data-value="3"></i><b>(3)</b>
+        transaction.rejected();
+        } <span style="color:#080;font-weight:bold">else</span> {
+            transaction.approved();
+            currentBalance = newBalance;
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>CheckingAccount</code> aggregate is composed of child entities and value objects.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>tryWithdraw</code> method acts as a consistency boundary for the operation. Irrespective of the outcome (approved or rejected), the system will remain in a consistent state. In other words, the <code>currentBalance</code> can change only within the confines of the <code>CheckingAccount</code> aggregate.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The aggregate enforces the appropriate business invariant (rule) to allow overdrafts only for HNIs.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Aggregates are also referred to as <strong>aggregate roots</strong>. That is, the object that is at the root of the entity hierarchy. We use these terms synonymously in this book.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="repositories"><a class="anchor" href="#repositories"></a>Repositories</h4>
+<div class="paragraph">
+<p>Most businesses require durability of data. For this reason, aggregate state needs to be persisted and retrieved when needed. Repositories are objects that enable persisting and  loading <em>aggregate</em> instances. This is well documented in Martin Fowler&#8217;s <em>Patterns of Enterprise Application Architecture</em> book as part of the <a href="https://martinfowler.com/eaaCatalog/repository.html">repository</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> pattern. It is pertinent to note that we are referring to aggregate repositories here, not just any entity repository. The singular purpose of this repository is to load a <strong>single instance</strong> of an aggregate using its identifier. A simple interface for this purpose is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">Repository</span>&lt;AggregateType, IdentifierType&gt; {
+    AggregateType load(IdentifierType aggregateIdentifier);
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is important to note that this repository does not support finding aggregate instances using any other means. This is because, business operations happen as part of manipulating a single instance of the aggregate within its bounded context.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="factories"><a class="anchor" href="#factories"></a>Factories</h4>
+<div class="paragraph">
+<p>In order to work with aggregates and value objects, instances of these need to be constructed. In simple cases, it might suffice to use a constructor to do so. However, aggregate and value object instances can become quite complex depending on amount the state they encapsulate. In such cases, it may be prudent to consider delegating object construction responsibilities to a <em>factory</em> external to the aggregate/value object. We make use of the static factory method, builder, and dependency injection quite commonly in our day-to-day. Joshua Bloch discusses several variations of this pattern in <em>Chapter 2: Creating and destroying objects</em> in his <em>Effective Java</em> book.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="services"><a class="anchor" href="#services"></a>Services</h4>
 <div class="paragraph">
 <p>Business rules within the domain are encapsulated within domain services.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="repositories"><a class="anchor" href="#repositories"></a>Repositories</h4>
-<div class="paragraph">
-<p>Repositories are objects that provide persistence while retrieving domain objects.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="factories"><a class="anchor" href="#factories"></a>Factories</h4>
-<div class="paragraph">
-<p>Factories are methods used to create complex objects or aggregates.</p>
 </div>
 </div>
 </div>
@@ -1013,10 +1215,19 @@ These tools are not really tied to DDD in any way and can be practiced regardles
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <a href="https://wiki.c2.com/?PrimitiveObsession" class="bare">https://wiki.c2.com/?PrimitiveObsession</a>
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-02 15:46:54 UTC
+Last updated 2022-01-05 16:20:38 UTC
 </div>
 </div>
 </body>
