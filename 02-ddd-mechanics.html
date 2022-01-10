@@ -471,6 +471,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#value-objects">Value objects</a></li>
 <li><a href="#_entities">Entities</a></li>
 <li><a href="#_aggregates">Aggregates</a></li>
+<li><a href="#domain-events">Domain events</a></li>
 <li><a href="#repositories">Repositories</a></li>
 <li><a href="#factories">Factories</a></li>
 <li><a href="#services">Services</a></li>
@@ -478,13 +479,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#tactical-design-tools">Tactical design tools</a>
 <ul class="sectlevel3">
-<li><a href="#behavior-driven-development">Behavior-driven development</a></li>
-<li><a href="#test-driven-development">Test-driven development</a></li>
+<li><a href="#bdd-and-tdd">BDD and TDD</a></li>
 <li><a href="#contract-testing">Contract testing</a></li>
-<li><a href="#refactoring">Refactoring</a></li>
-<li><a href="#quality-storming">Quality storming</a></li>
 </ul>
 </li>
+<li><a href="#bridging-strategic-and-tactical-design">Bridging strategic and tactical design</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#questions">Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -832,6 +833,18 @@ Anemic domain models
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Conway&#8217;s Law asserts that organizations are constrained to produce application designs which are copies of their communication structures. Your current organizational structures may not be optimally aligned to your desired solution approach. The <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> may be applied to achieve isomorphism with the business architecture.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Whatever be the method used to decompose a problem into a set of bounded contexts, care should be taken to make sure that the coupling between them is kept as low as possible.</p>
 </div>
@@ -969,8 +982,11 @@ A variation of the business model canvas is the <em>lean canvas</em>, which is a
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>TODO: Example</p>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/impact-mapping-example.png" alt="impact mapping example">
+</div>
+<div class="title">Figure 13. A simple impact map for a retail bank</div>
 </div>
 <div class="paragraph">
 <p>Impact mapping provides an easy to understand visual representation of the relationship between the goals, the users and the impacts to the deliverables.</p>
@@ -1002,10 +1018,10 @@ A variation of the business model canvas is the <em>lean canvas</em>, which is a
 <div class="content">
 <img src="./images/entity-example.png" alt="entity example" width="158" height="132">
 </div>
-<div class="title">Figure 13. A simple <code>MonetaryAmount</code> value object</div>
+<div class="title">Figure 14. A simple <code>MonetaryAmount</code> value object</div>
 </div>
 <div class="paragraph">
-<p>The effective use of value objects helps protect from the <a href="https://wiki.c2.com/?PrimitiveObsession">primitive obsession</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> antipattern, while increasing clarity. It also allows composing higher level abstractions using one or more value objects. It is important to note that value objects do not have the notion of identity. That is, two value having the same value are treated equal. So two <code>MonetaryAmount</code> objects having the same <code>amount</code> and <code>currency code</code> will be considered equal. Also, it is important to make value objects immutable. That is, a need to change any of the attributes should result in the creation of a new attribute.</p>
+<p>The effective use of value objects helps protect from the <a href="https://wiki.c2.com/?PrimitiveObsession">primitive obsession</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> antipattern, while increasing clarity. It also allows composing higher level abstractions using one or more value objects. It is important to note that value objects do not have the notion of identity. That is, two value having the same value are treated equal. So two <code>MonetaryAmount</code> objects having the same <code>amount</code> and <code>currency code</code> will be considered equal. Also, it is important to make value objects immutable. That is, a need to change any of the attributes should result in the creation of a new attribute.</p>
 </div>
 <div class="paragraph">
 <p>It is easy to dismiss the use of value objects as a mere engineering technique, but the consequences of (not) using them can be far-reaching. In the <code>MonetaryAmount</code> example above, it is possible for the <code>amount</code> and <code>currency code</code> to exist as independent attributes. However, the use of the <code>MonetaryAmount</code> enforces the notion of the <em>ubiquitous language</em>. Hence, we recommend the use of value objects as a default instead of using primitives.</p>
@@ -1155,25 +1171,18 @@ Aggregates are also referred to as <strong>aggregate roots</strong>. That is, th
 </div>
 </div>
 <div class="sect3">
+<h4 id="domain-events"><a class="anchor" href="#domain-events"></a>Domain events</h4>
+<div class="paragraph">
+<p>As mentioned above, aggregates dictate how and when state changes occur. Other parts of the system may be interested in knowing about the occurrence of changes that are significant to the business. For example, an order being placed or a payment being received, etc. <em>Domain events</em> are the means to convey that something business significant has occurred. It is important to differentiate between system events and domain events. For example, in the context of a retail bank, a <em>row was saved</em> in the database, or a <em>server ran out of disk space</em>, etc. may classify as system events, whereas a <em>deposit was made</em> to a checking account, <em>fraudulent activity was detected</em> on a transaction, etc. In other words, domain events are things that <strong>domain experts care about</strong>.</p>
+</div>
+<div class="paragraph">
+<p>It may be prudent to make use of domain events to reduce the amount of coupling between bounded contexts, making it a critical building block of domain-driven design.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="repositories"><a class="anchor" href="#repositories"></a>Repositories</h4>
 <div class="paragraph">
-<p>Most businesses require durability of data. For this reason, aggregate state needs to be persisted and retrieved when needed. Repositories are objects that enable persisting and  loading <em>aggregate</em> instances. This is well documented in Martin Fowler&#8217;s <em>Patterns of Enterprise Application Architecture</em> book as part of the <a href="https://martinfowler.com/eaaCatalog/repository.html">repository</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> pattern. It is pertinent to note that we are referring to aggregate repositories here, not just any entity repository. The singular purpose of this repository is to load a <strong>single instance</strong> of an aggregate using its identifier. A simple interface for this purpose is shown here:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-</pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">Repository</span>&lt;AggregateType, IdentifierType&gt; {
-    AggregateType load(IdentifierType aggregateIdentifier);
-}</pre></td>
-</tr></table></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It is important to note that this repository does not support finding aggregate instances using any other means. This is because, business operations happen as part of manipulating a single instance of the aggregate within its bounded context.</p>
+<p>Most businesses require durability of data. For this reason, aggregate state needs to be persisted and retrieved when needed. Repositories are objects that enable persisting and  loading <em>aggregate</em> instances. This is well documented in Martin Fowler&#8217;s <em>Patterns of Enterprise Application Architecture</em> book as part of the <a href="https://martinfowler.com/eaaCatalog/repository.html">repository</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> pattern. It is pertinent to note that we are referring to aggregate repositories here, not just any entity repository. The singular purpose of this repository is to load a <strong>single instance</strong> of an aggregate using its identifier. It is important to note that this repository does not support finding aggregate instances using any other means. This is because, business operations happen as part of manipulating a single instance of the aggregate within its bounded context.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1185,31 +1194,169 @@ Aggregates are also referred to as <strong>aggregate roots</strong>. That is, th
 <div class="sect3">
 <h4 id="services"><a class="anchor" href="#services"></a>Services</h4>
 <div class="paragraph">
-<p>Business rules within the domain are encapsulated within domain services.</p>
+<p>When working within the confines of a single bounded context, the public interface (commands) of the aggregate provides a natural API. However, more complex business operations may require interacting with multiple bounded contexts and aggregates. In other words, we may find ourselves in situations where certain business operations do not fit naturally with any single aggregate. Even if interactions are limited to a single bounded context, there may be a need to expose that functionality in an implementation-neutral manner. In such cases, one may consider the use of objects termed as <em>services</em>. Services come in at least 3 flavors:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Domain services</strong>: To enable coordinating operations among more than one aggregate. For example, transferring money between two checking accounts at a retail bank.</p>
+</li>
+<li>
+<p><strong>Infrastructure services</strong>: To enable interactions with a utility that is not core to the business. For example, logging, sending emails, etc. at the retail bank.</p>
+</li>
+<li>
+<p><strong>Application services</strong>: Enable coordination between domain services, infrastructure services and other application services. For example, sending email notifications after a successful inter-account money transfer.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Services can also be stateful or stateless. It is best to allow aggregates to manage state making use of repositories, while allowing services to coordinate and/or orchestrate business flows. In complex cases, there may be a need to manage the state of the flow itself. We will look at more concrete examples in part 2 of this book.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+It may become tempting to implement business logic almost exclusively using services&#8201;&#8212;&#8201;inadvertently leading to the <a href="https://martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> anti-pattern. It is worthwhile striving to encapsulate business logic within the confines of aggregates as a default.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="tactical-design-tools"><a class="anchor" href="#tactical-design-tools"></a>Tactical design tools</h3>
-<div class="sect3">
-<h4 id="behavior-driven-development"><a class="anchor" href="#behavior-driven-development"></a>Behavior-driven development</h4>
-
+<div class="paragraph">
+<p>As we have mentioned a few times, DDD is about making sure that we build the right thing and then build it right.</p>
 </div>
 <div class="sect3">
-<h4 id="test-driven-development"><a class="anchor" href="#test-driven-development"></a>Test-driven development</h4>
+<h4 id="bdd-and-tdd"><a class="anchor" href="#bdd-and-tdd"></a>BDD and TDD</h4>
+<div class="paragraph">
+<p>Test-Driven Development (TDD) was conceived by Kent Beck as a means to encourage simple designs and inspire confidence by writing a <strong>test before writing the production code</strong> required to satisfy that requirement. The intent behind this was to arrive at an optimal design iteratively, guided by a set of executable test cases. Unfortunately, it got misconstrued as a unit-testing technique as opposed to a design technique, leading to it being employed in a manner where teams were unable to derive the benefits of the practice. Behavior-Driven Development (BDD) was conceived by Chris Matts and Dan North as a means to practice TDD the right way by using better terminology (for example, using <em>specifications</em> instead of <em>test suites</em>, <em>scenarios</em> instead of <em>tests</em>, <em>confirming behavior</em> instead of <em>testing code</em>, etc). Consider the example of the overdraft facility for premium customers. A potential test for this feature using <strong>JUnit</strong> may look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CheckingAccountOverdraftTests</span> {
 
+    <span style="color:#007">@Test</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> shouldAllowOverdraftForPremiumCustomers() {
+        Account account = Account.checking(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ABC123</span><span style="color:#710">&quot;</span></span>)
+                            .withCustomer(premiumCustomer())
+                            .withBalance(Money.usd(<span style="color:#00D">100</span>));
+
+        account.withdraw(Money.usd(<span style="color:#00D">150</span>));
+
+        assertThat(account.balance()).isEqualTo(Money.usd(-<span style="color:#00D">50</span>));
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The BDD specification for this same feature using <strong>Cucumber</strong> and <strong>Gherkin</strong> looks something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="gherkin"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td>
+  <td class="code"><pre>Feature: Overdraft capability for premium customers
+
+Scenario: Should allow overdraft facility for premium customers.
+
+Given I am a premium customer with account number &quot;ABC123&quot;
+  And I have 100 dollars in my account
+ When I attempt to withdraw 150 dollars
+ Then I should have a negative balance of 50 dollars</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conceptually, there is no difference between the two versions, although it is arguable that less technical domain experts will likely prefer the BDD specification over the TDD test case because it uses the language of the problem domain in an implementation-neutral manner. This has led to BDD being used for more coarse-grained acceptance testing, while TDD gets used for more fine-grained unit testing. In our experience, both these techniques complement each other in achieving better software design. Because BDD tools (like <a href="https://cucumber.io/docs/installation/java/">Cucumber</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>, <a href="https://jbehave.org/">JBehave</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>) allow the use of implementation-neutral specification languages like Gherkin, they tend to be more approachable for less technical stakeholders. However, a plethora of tools like <a href="https://easyb.io/">easyb</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>, <a href="https://site.mockito.org/">Mockito</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>, <a href="https://joel-costigliola.github.io/assertj/">AssertJ</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> etc. make it fairly natural to adopt the BDD style even in Java, proving that they are very complementary as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ddd-vs-tdd-vs-bdd.png" alt="ddd vs tdd vs bdd">
+</div>
+<div class="title">Figure 15. TDD and BDD are complementary concepts.</div>
+</div>
+<div class="paragraph">
+<p>Both BDD and TDD, when used in close conjunction with DDD&#8217;s ubiquitous language, can promote closer synergy between the problem and solution domain and in our experience is an indispensable tool when building software solutions.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="contract-testing"><a class="anchor" href="#contract-testing"></a>Contract testing</h4>
-
+<div class="paragraph">
+<p>When implementing a sound test strategy, one encounters two broad classes of tests: <strong>unit</strong> and <strong>end-to-end</strong> (and everything in between). Unit tests tend to be fairly fine-grained, especially when they mimic the behavior of collaborating components using mocks/stubs. This allows us to run a large suite of such tests while consuming very little time. In an ideal world, we would prefer restricting ourselves to running just unit tests. However, unit tests do have a limitation in that the assumptions made while mocking/stubbing collaborator behavior may become inaccurate when the owners of these components make changes to their respective solutions. This may lead to a situation where unit tests work just fine, but the solution as a whole does not work in a formal end-to-end environment, resulting in non-technical stakeholders losing faith in these tests.</p>
 </div>
-<div class="sect3">
-<h4 id="refactoring"><a class="anchor" href="#refactoring"></a>Refactoring</h4>
-
+<div class="paragraph">
+<p>To restore confidence, teams then resort to verifying functionality by mostly running time-consuming, error-prone manual end-to-end tests, occasionally throwing in some automation. In our experience, running a stable, non-trivial suite of automated end-to-end tests remains quite a challenge, due to the computational and cognitive expense involved in setup and ongoing upkeep. Because these tests require large portions of the real solution stack to be in place, they tend to often happen very close to the end, causing them to be rushed and coarse-grained.</p>
 </div>
-<div class="sect3">
-<h4 id="quality-storming"><a class="anchor" href="#quality-storming"></a>Quality storming</h4>
-
+<div class="paragraph">
+<p>What we need are tests that both run rapidly, are easy to maintain (like unit tests), and provide a high degree of confidence that the system is functionally correct when they pass (like end-to-end tests). Contract tests can act as the missing link between unit and end-to-end tests by affording a set of <em>blessed</em> mocks (those that are always compatible with the real implementation). We will cover contract testing in more detail in Chapter 10.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bridging-strategic-and-tactical-design"><a class="anchor" href="#bridging-strategic-and-tactical-design"></a>Bridging strategic and tactical design</h3>
+<div class="paragraph">
+<p>In addition to the tools and techniques discussed above, we would like to mention we would like to call out domain story telling and eventstorming as two valuable techniques that cover aspects of both strategic and tactical design. We cover both these techniques with more concrete examples in Chapter 4.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p>In this chapter we looked at the differences in perspective that arise due to problem domain and solution domain thinking.
+We examined how to arrive at a shared understanding of the problem domain using DDD&#8217;s strategic design elements. We introduced a few tools and techniques that can aid in accelerating the strategic design process.</p>
+</div>
+<div class="paragraph">
+<p>We also looked at how to build robust solutions using DDD&#8217;s tactical design elements along with tools and techniques that can enhance our journey of building solutions that can evolve durably.</p>
+</div>
+<div class="paragraph">
+<p>In the next chapter we will take a closer look at where DDD fits in the scheme of various architecture approaches, patterns and how it is applicable in a wide array of scenarios.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Can you draw a business model canvas for the current ecosystem you are working with? Did this exercise help in enhancing your understanding of the big picture?</p>
+</li>
+<li>
+<p>Are you able to identify the different subdomains in your problem domain? Do your solutions (bounded context) align with these subdomains?</p>
+</li>
+<li>
+<p>Are you able to draw a simple context map of your current ecosystem?</p>
+</li>
+<li>
+<p>Do your bounded contexts align along specific aggregate roots?</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1218,16 +1365,37 @@ Aggregates are also referred to as <strong>aggregate roots</strong>. That is, th
 <div id="footnotes">
 <hr>
 <div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. <a href="https://wiki.c2.com/?PrimitiveObsession" class="bare">https://wiki.c2.com/?PrimitiveObsession</a>
+<a href="#_footnoteref_1">1</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+<a href="#_footnoteref_2">2</a>. <a href="https://wiki.c2.com/?PrimitiveObsession" class="bare">https://wiki.c2.com/?PrimitiveObsession</a>
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+</div>
+<div class="footnote" id="_footnotedef_4">
+<a href="#_footnoteref_4">4</a>. <a href="https://martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://martinfowler.com/bliki/AnemicDomainModel.html</a>
+</div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://cucumber.io/docs/installation/java/" class="bare">https://cucumber.io/docs/installation/java/</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://jbehave.org/" class="bare">https://jbehave.org/</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://easyb.io/" class="bare">https://easyb.io/</a>
+</div>
+<div class="footnote" id="_footnotedef_8">
+<a href="#_footnoteref_8">8</a>. <a href="https://site.mockito.org" class="bare">https://site.mockito.org</a>
+</div>
+<div class="footnote" id="_footnotedef_9">
+<a href="#_footnoteref_9">9</a>. <a href="https://joel-costigliola.github.io/assertj/" class="bare">https://joel-costigliola.github.io/assertj/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-05 16:20:38 UTC
+Last updated 2022-01-10 00:47:15 UTC
 </div>
 </div>
 </body>
