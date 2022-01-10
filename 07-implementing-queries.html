@@ -994,7 +994,7 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this sub-domain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
+<p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this subdomain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
 </li>
 <li>
 <p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> to name a few) can be extremely beneficial.</p>
@@ -1256,7 +1256,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-10 01:12:48 UTC
+Last updated 2022-01-10 09:54:15 UTC
 </div>
 </div>
 </body>
