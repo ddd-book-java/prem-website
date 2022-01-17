@@ -446,7 +446,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_where_does_ddd_fit">Where and How Does DDD Fit? (15 pages)</a>
 <ul class="sectlevel2">
 <li><a href="#architecture-styles">Architecture Styles</a></li>
-<li><a href="#layered-architecture">Layered Architecture</a></li>
+<li><a href="#layered-architecture">Layered Architecture</a>
+<ul class="sectlevel3">
+<li><a href="#considerations">Considerations</a></li>
+</ul>
+</li>
 <li><a href="#onion-architecture">Onion Architecture</a></li>
 <li><a href="#hexagonal-architecture">Hexagonal Architecture</a></li>
 <li><a href="#service-oriented-architecture">Service Oriented Architecture</a></li>
@@ -465,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="_where_does_ddd_fit"><a class="anchor" href="#_where_does_ddd_fit"></a>Where and How Does DDD Fit? (15 pages)</h2>
 <div class="sectionbody">
 <div class="quoteblock">
@@ -485,7 +489,55 @@ We won’t be distracted by comparison if we are captivated with purpose.
 </div>
 <div class="sect2">
 <h3 id="layered-architecture"><a class="anchor" href="#layered-architecture"></a>Layered Architecture</h3>
+<div class="paragraph">
+<p>The layered architecture is one of the most common architecture styles where the solution is typically organized into four broad categories: <strong>presentation</strong>, <strong>application</strong>, <strong>domain</strong> and <strong>persistence</strong>. Each of the layers provides a solution to a particular concern it represents as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/layered.png" alt="layered">
+</div>
+<div class="title">Figure 1. Essence of a layered architecture.</div>
+</div>
+<div class="paragraph">
+<p>The main idea behind the layered architecture is a separation of concerns&#8201;&#8212;&#8201;where the dependencies between layers are unidirectional (from the top to the bottom). For example, the domain layer can depend on the persistence layer, not the other way round. In addition, any given layer typically accesses the layer immediately beneath it without bypassing layers in between. For example, the presentation layer may access the domain layer only through the application layer.</p>
+</div>
+<div class="paragraph">
+<p>This structure enables looser coupling between layers and allows them to evolve independently of each other. The idea of the layered architecture fits very well with domain-driven design&#8217;s tactical design elements as depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/layered-vs-ddd.png" alt="layered vs ddd">
+</div>
+<div class="title">Figure 2. Layered architecture mapped to DDD&#8217;s tactical design elements.</div>
+</div>
+<div class="paragraph">
+<p>DDD actively promotes the use of a layered architecture, primarily because it makes it possible to focus on the domain layer in isolation of other concerns like how to information gets displayed, how end-to-end flows are managed, how data is stored and retrieved, etc. From that perspective, solutions that apply DDD tend to naturally be layered as well.</p>
+</div>
+<div class="paragraph">
+<p>However, any architecture approach we choose comes with its set of tradeoffs and limitations. We discuss some of these here.</p>
+</div>
+<div class="sect3">
+<h4 id="considerations"><a class="anchor" href="#considerations"></a>Considerations</h4>
+<div class="sect4">
+<h5 id="layer-cake-anti-pattern"><a class="anchor" href="#layer-cake-anti-pattern"></a>Layer cake anti-pattern</h5>
+<div class="paragraph">
+<p>Sticking to a fixed set of layers</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/layer-cake-anti-pattern.png" alt="layer cake anti pattern" width="548" height="665">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="inter-layer-translation"><a class="anchor" href="#inter-layer-translation"></a>Inter-layer translation:</h5>
 
+</div>
+<div class="sect4">
+<h5 id="layer-bypass"><a class="anchor" href="#layer-bypass"></a>Layer bypass</h5>
+
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="onion-architecture"><a class="anchor" href="#onion-architecture"></a>Onion Architecture</h3>
@@ -516,7 +568,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture">
 </div>
-<div class="title">Figure 1. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 3. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -570,7 +622,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-10 22:45:01 UTC
+Last updated 2022-01-17 14:27:39 UTC
 </div>
 </div>
 </body>
