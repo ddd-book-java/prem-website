@@ -453,7 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#onion-architecture">Onion Architecture</a></li>
 <li><a href="#hexagonal-architecture">Hexagonal Architecture</a></li>
-<li><a href="#service-oriented-architecture">Service Oriented Architecture</a></li>
+<li><a href="#service-oriented-architecture-soa">Service Oriented Architecture (SOA)</a></li>
 <li><a href="#microservice-architecture">Microservice Architecture</a></li>
 <li><a href="#event-driven-architecture-eda">Event-Driven Architecture (EDA)</a></li>
 <li><a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a>
@@ -521,21 +521,86 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="sect4">
 <h5 id="layer-cake-anti-pattern"><a class="anchor" href="#layer-cake-anti-pattern"></a>Layer cake anti-pattern</h5>
 <div class="paragraph">
-<p>Sticking to a fixed set of layers</p>
+<p>Sticking to a fixed set of layers provides a level of isolation, but in simpler cases, it may prove overkill without adding any perceptible benefit other than adherence to an agreed on architectural guidelines. In the layer cake anti-pattern, each layer merely proxies the call to the layer beneath it without adding any value. The example below illustrates this scenario that is fairly common:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/layer-cake-anti-pattern.png" alt="layer cake anti pattern" width="548" height="665">
 </div>
+<div class="title">Figure 3. Example of the <strong>layer cake</strong> anti-pattern to find an entity representation by ID</div>
+</div>
+<div class="paragraph">
+<p>Here the <code>findById</code> method is replicated in every layer and simply calls the method with the same name in the layer below with no additional logic. This introduces a level of accidental complexity to the solution. Some amount of redundancy in the layering may be unavoidable for the purposes of standardization. It may be best to re-examine the layering guidelines if the <em>layer cake</em> occurs prominently in the codebase.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="inter-layer-translation"><a class="anchor" href="#inter-layer-translation"></a>Inter-layer translation:</h5>
-
+<h5 id="anemic-translation"><a class="anchor" href="#anemic-translation"></a>Anemic translation</h5>
+<div class="paragraph">
+<p>Another variation of the layer cake we see commonly is one where layers refuse to share input and output types in the name of higher isolation and looser coupling. This makes it necessary to perform translations at the boundary of each layer. If the objects being translated are more or less structurally identical, we have an <em>anemic translation</em>. Let&#8217;s look at a variation of the <code>findById</code> example we discussed above.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/layer-cake-anti-pattern.png" alt="layer cake anti pattern" width="694" height="675">
+</div>
+<div class="title">Figure 4. Example of the <strong>anemic translation</strong> anti-pattern to find an entity representation by ID</div>
+</div>
+<div class="paragraph">
+<p>In this case, each layer defines a <code>Entity</code> type of its own, requiring a translation between types at each layer. To make matters worse, the structure of the <code>Entity</code> type may have seemingly minor variations (for example, <code>lastName</code> being referred to as <code>surname</code>). While such translations may be necessary across bounded contexts, teams should strive to avoid the need for variations in names and structures of the same concept within a single bounded context. The intentional use of the <strong>ubiquitous language</strong> helps avoid such scenarios.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="layer-bypass"><a class="anchor" href="#layer-bypass"></a>Layer bypass</h5>
+<div class="paragraph">
+<p>When working with a layered architecture, it is reasonable to start by being strict about layers only interacting with the layer immediately beneath it. As we have seen above, such rigid enforcements may lead to an intolerable degree of accidental complexity, especially when applied generically to a large number of use-cases. In such scenarios, it may be worth considering consciously allowing one or more layers to be bypassed. For example, the <code>controller</code> layer may be allowed to work directly with the <code>repository</code> without using the <code>service</code> layer.</p>
+</div>
+<div class="paragraph">
+<p>This can be a slippery slope. To continue maintaining a level of sanity, teams should consider the use of a lightweight architecture governance tool like <a href="https://www.archunit.org/"><strong>ArchUnit</strong></a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> to make agreements explicit and afford quick feedback. A simple example of how to use ArchUnit for this purpose is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LayeredArchitectureTests</span> {
+    <span style="color:#007">@ArchTest</span>
+    <span style="color:#088;font-weight:bold">static</span> <span style="color:#088;font-weight:bold">final</span> ArchRule layer_dependencies_are_respected_with_exception = layeredArchitecture()
 
+            .layer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Controllers</span><span style="color:#710">&quot;</span></span>).definedBy(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">..controller..</span><span style="color:#710">&quot;</span></span>)
+            .layer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Services</span><span style="color:#710">&quot;</span></span>).definedBy(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">..service..</span><span style="color:#710">&quot;</span></span>)
+            .layer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Domain</span><span style="color:#710">&quot;</span></span>).definedBy(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">..domain..</span><span style="color:#710">&quot;</span></span>)
+            .layer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Repository</span><span style="color:#710">&quot;</span></span>).definedBy(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">..repository..</span><span style="color:#710">&quot;</span></span>)
+
+            .whereLayer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Controllers</span><span style="color:#710">&quot;</span></span>).mayNotBeAccessedByAnyLayer()
+            .whereLayer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Services</span><span style="color:#710">&quot;</span></span>).mayOnlyBeAccessedByLayers(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Controllers</span><span style="color:#710">&quot;</span></span>)
+            .whereLayer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Domain</span><span style="color:#710">&quot;</span></span>).mayOnlyBeAccessedByLayers(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Services</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Repository</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Controllers</span><span style="color:#710">&quot;</span></span>)
+            .whereLayer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Repository</span><span style="color:#710">&quot;</span></span>)
+                .mayOnlyBeAccessedByLayers(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Services</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Controllers</span><span style="color:#710">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Repository layer can be accessed by both the Services and Controllers layers&#8201;&#8212;&#8201;effectively allowing Controllers to bypass the use of the Services layer.</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -548,8 +613,19 @@ We won’t be distracted by comparison if we are captivated with purpose.
 
 </div>
 <div class="sect2">
-<h3 id="service-oriented-architecture"><a class="anchor" href="#service-oriented-architecture"></a>Service Oriented Architecture</h3>
-
+<h3 id="service-oriented-architecture-soa"><a class="anchor" href="#service-oriented-architecture-soa"></a>Service Oriented Architecture (SOA)</h3>
+<div class="paragraph">
+<p>Service Oriented Architecture (SOA) is an architectural style where software components expose (potentially) reusable functionality over standardized interfaces. The use of standardized interfaces (such as SOAP, REST, gRPC, etc. to name a few) enables easier interoperability when integrating heterogeneous solutions. Previously, the use of non-standard, proprietary interfaces made this kind of integration a lot more challenging. For example, a retail bank may expose inter-account transfer functionality in the form of RESTful web services.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/architecture-styles-soa.png" alt="architecture styles soa">
+</div>
+<div class="title">Figure 5. SOA: Expose reusable functionality over standard interfaces.</div>
+</div>
+<div class="paragraph">
+<p>While SOA prescribes exposing functionality over standardized interfaces, the focus is more on integrating heterogeneous applications than on implementing them. At one of the banks I worked at, we exposed a set of over 500 service interfaces over SOAP. Under the covers, we implemented these using EJB 2.0 which largely delegated most if not all the logic to a set of underlying stored procedures within a single monolithic Oracle database! Indeed, we advertised this implementation as an example of SOA and it would be hard to argue that it was not. However, our implementation of SOA</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="microservice-architecture"><a class="anchor" href="#microservice-architecture"></a>Microservice Architecture</h3>
@@ -568,7 +644,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture">
 </div>
-<div class="title">Figure 3. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 6. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -619,10 +695,16 @@ We depict multiple query models above because it is possible (but not necessary)
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <a href="https://www.archunit.org/" class="bare">https://www.archunit.org/</a>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-17 14:27:39 UTC
+Last updated 2022-01-20 21:12:15 UTC
 </div>
 </div>
 </body>

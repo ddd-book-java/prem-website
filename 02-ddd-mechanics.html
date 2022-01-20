@@ -559,7 +559,7 @@ In this chapter, we look at a set of tenets and techniques to arrive at a collec
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above,</p>
+<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above, the business may want to focus on providing an enriched experience to place online orders. This will make the <em>online orders</em> and <em>shopping cart</em> part of the core domain.</p>
 </li>
 <li>
 <p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence, it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
@@ -591,7 +591,7 @@ It is important to note that the notion of core vs. supporting vs. generic subdo
 <div class="title">Figure 4. Importance of subdomains</div>
 </div>
 <div class="paragraph">
-<p>Over a period of time, it is only natural that competitors will attempt to emulate your successes. Newer, more efficient methods will arise, reducing the complexity involved, disrupting your core. This may cause the notion of what is currently core, to shift and become a supporting or generic capability.</p>
+<p>Over a period of time, it is only natural that competitors will attempt to emulate your successes. Newer, more efficient methods will arise, reducing the complexity involved, disrupting your core. This may cause the notion of what is currently core, to shift and become a supporting or generic capability as depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -682,6 +682,9 @@ The problem domain expressed in the form of why, what and how is shown here:</p>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Now that we have defined the problem and the motivations surrounding it, let&#8217;s examine how it can inform the solution.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="solution-domain"><a class="anchor" href="#solution-domain"></a>Solution domain</h4>
@@ -776,18 +779,6 @@ The illustration above is to depict the existence of multiple models. There may 
 </div>
 <div class="paragraph">
 <p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Anemic domain models
-</td>
-</tr>
-</table>
 </div>
 </div>
 <div class="sect3">
@@ -1004,6 +995,7 @@ A variation of the business model canvas is the <em>lean canvas</em>, which is a
 <div class="content">
 <img src="./images/ddd-tactical-design.png" alt="ddd tactical design">
 </div>
+<div class="title">Figure 14. The elements of DDD&#8217;s tactical design</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s look at the definitions of these elements.</p>
@@ -1011,13 +1003,13 @@ A variation of the business model canvas is the <em>lean canvas</em>, which is a
 <div class="sect3">
 <h4 id="value-objects"><a class="anchor" href="#value-objects"></a>Value objects</h4>
 <div class="paragraph">
-<p>Value objects are immutable objects that encapsulate the data and behavior of one or more related attributes. It may be convenient to think of value objects as named primitives. For example, consider a <code>MonetaryAmount</code> value object. A simple implementation can contain two attributes&#8201;&#8212;&#8201;an <em>amount</em> and a <em>currency code</em>. This allows encapsulation of behavior such as adding two <code>MonetaryAmount</code> objects safely.</p>
+<p>Value objects are immutable objects that encapsulate the data and behavior of one or more related attributes. It may be convenient to think of value objects as named primitives. For example, consider a <code>MonetaryAmount</code> value object. A simple implementation can contain two attributes&#8201;&#8212;&#8201;an <em>amount</em> and a <em>currency code</em>. This allows encapsulation of behavior such as adding two <code>MonetaryAmount</code> objects safely as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/entity-example.png" alt="entity example" width="158" height="132">
 </div>
-<div class="title">Figure 14. A simple <code>MonetaryAmount</code> value object</div>
+<div class="title">Figure 15. A simple <code>MonetaryAmount</code> value object</div>
 </div>
 <div class="paragraph">
 <p>The effective use of value objects helps protect from the <a href="https://wiki.c2.com/?PrimitiveObsession">primitive obsession</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> antipattern, while increasing clarity. It also allows composing higher level abstractions using one or more value objects. It is important to note that value objects do not have the notion of identity. That is, two value having the same value are treated equal. So two <code>MonetaryAmount</code> objects having the same <code>amount</code> and <code>currency code</code> will be considered equal. Also, it is important to make value objects immutable. That is, a need to change any of the attributes should result in the creation of a new attribute.</p>
@@ -1047,6 +1039,7 @@ Critics may be quick to point out problems such as class explosion and performan
 <div class="content">
 <img src="./images/entity-example.png" alt="entity example" width="217" height="165">
 </div>
+<div class="title">Figure 16. A simple depiction of <code>Transaction</code> entity</div>
 </div>
 <div class="paragraph">
 <p>In contrast to a value object, entities have the notion of a unique identifier. This means that two <code>Transaction</code> entities having the same underlying values, but having a different identifier (<code>id</code>) value, will be considered different. On the other hand, two entity instances having the same value for the identifier are considered equal. Furthermore, unlike value objects, entities are mutable. That is, their attributes can and will change over time.</p>
@@ -1095,6 +1088,7 @@ It is common to collectively refer to entities and value objects as <em>domain o
 <div class="content">
 <img src="./images/aggregate-example.png" alt="aggregate example" width="338" height="216">
 </div>
+<div class="title">Figure 17. A simple depiction of a <code>CheckingAccount</code> aggregate</div>
 </div>
 <div class="paragraph">
 <p>Note how the <code>CheckingAccount</code> is composed using the <code>AccountHolder</code> and Transaction` entities among other things. In this example, let&#8217;s assume that the overdraft feature (ability to hold a negative account balance) is only available for high net-worth individuals (HNI). Any attempt to change the <code>currentBalance</code> needs to occur in the form of a unique <code>Transaction</code> for audit purposes&#8201;&#8212;&#8201;irrespective of its outcome. For this reason, the <code>CheckingAccount</code> aggregate makes use of the <code>Transaction</code> entity. Although the <code>Transaction</code> has <code>approve</code> and <code>reject</code> methods as part of its interface, only the aggregate has access to these methods. In this way, the aggregate enforces the business invariant while maintaining high levels of encapsulation. A potential implementation of the <code>tryWithdraw</code> method is shown here:</p>
@@ -1301,7 +1295,7 @@ Given I am a premium customer with account number &quot;ABC123&quot;
 <div class="content">
 <img src="./images/ddd-vs-tdd-vs-bdd.png" alt="ddd vs tdd vs bdd">
 </div>
-<div class="title">Figure 15. TDD and BDD are complementary concepts.</div>
+<div class="title">Figure 18. TDD and BDD are complementary concepts.</div>
 </div>
 <div class="paragraph">
 <p>Both BDD and TDD, when used in close conjunction with DDD&#8217;s ubiquitous language, can promote closer synergy between the problem and solution domain and in our experience is an indispensable tool when building software solutions.</p>
@@ -1397,7 +1391,7 @@ We examined how to arrive at a shared understanding of the problem domain using 
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-17 14:27:39 UTC
+Last updated 2022-01-20 21:12:15 UTC
 </div>
 </div>
 </body>
