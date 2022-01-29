@@ -461,6 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_when_to_use_cqrs">When to use CQRS?</a></li>
 </ul>
 </li>
+<li><a href="#event-sourcing">Event sourcing</a></li>
 <li><a href="#serverless-architecture">Serverless architecture</a></li>
 <li><a href="#_big_ball_of_mud">Big ball of mud</a></li>
 </ul>
@@ -643,7 +644,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/architecture-styles/microservices.png" alt="microservices">
+<img src="./images/architecture-styles/microservices.png" alt="microservices" width="50%">
 </div>
 <div class="title">Figure 6. A microservices ecosystem</div>
 </div>
@@ -656,7 +657,34 @@ We won’t be distracted by comparison if we are captivated with purpose.
 </div>
 <div class="sect2">
 <h3 id="event-driven-architecture-eda"><a class="anchor" href="#event-driven-architecture-eda"></a>Event-Driven Architecture (EDA)</h3>
-
+<div class="paragraph">
+<p>Irrespective of the granularity of components (monolith or microservices or something in between), most non-trivial solutions have a boundary, beyond which there may be a need to communicate with external system(s). This communication usually happens through the exchange of messages between systems, causing them to become coupled with each other. Coupling comes in two broad flavors: <em>afferent</em>&#8201;&#8212;&#8201;who depends on you and <em>efferent</em>&#8201;&#8212;&#8201;who you depend on. Excessive amounts of efferent coupling can make systems very brittle and hard to work with.</p>
+</div>
+<div class="paragraph">
+<p>Event-driven systems enable authoring solutions that have a relatively low amount of efferent coupling by emitting events when they attain a certain state without caring about who consumes those events. In this regard, it is important to differentiate between message-driven and event-driven systems as mentioned in the <em>Reactive Manifesto</em>:</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Message-driven versus Event-driven</div>
+<div class="quoteblock">
+<blockquote>
+A message is an item of data that is sent to a specific destination. An event is a signal emitted by a component upon reaching a given state. In a message-driven system addressable recipients await the arrival of messages and react to them, otherwise lying dormant. In an event-driven system notification listeners are attached to the sources of events such that they are invoked when the event is emitted. This means that an event-driven system focuses on addressable event sources while a message-driven system concentrates on addressable recipients.
+</blockquote>
+<div class="attribution">
+&#8212; Reactive Manifesto
+</div>
+</div>
+<div class="paragraph">
+<p>In simpler terms, event-driven systems do not care who the downstream consumers are, whereas in a message-driven system that may not necessarily be true. When we say event-driven in the context of this book, we mean the former.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Typically, event-driven systems eliminate the need for point-to-point messaging with the ultimate consumers by making use of an intermediary infrastructure component usually known as a message broker, event bus, etc. This effectively reduces the efferent coupling from <em>n</em> consumers to 1. There are a few variations on how event-driven systems can be implemented. In the context of publishing events, Martin Fowler talks about two broad styles (among other things)&#8201;&#8212;&#8201;event notifications and event-carried state transfer in his <a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by "event-driven"?</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> article. One of the main trade-offs when building an event-driven system is to decide the amount of state (payload) that should be embedded in each event. It may be prudent to consider embedding just enough state indicating changes that occurred as a result of the emitted event to keep the various opposing forces such as producer scaling, encapsulation, consumer complexity, resiliency, etc. We will discuss the related implications in more detail when we cover <a href="#_implementing_the_event">implementing events</a> in Chapter 5.</p>
+</div>
+<div class="paragraph">
+<p>Domain-driven design is all about keeping complexity in check by creating these independent bounded contexts. However, independent does not mean isolated. Bounded contexts may still need to communicate with each other. One way to do that is through the use of a fundamental DDD building block&#8201;&#8212;&#8201;domain events. Event-driven architecture and DDD are thus complementary. It is typical to make use of an event-driven architecture to allow bounded contexts to communicate while continuing to loosely coupled with each other.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_cqrs_pattern"><a class="anchor" href="#_cqrs_pattern"></a>Command Query Responsibility Segregation (CQRS)</h3>
@@ -708,6 +736,10 @@ We depict multiple query models above because it is possible (but not necessary)
 </div>
 </div>
 <div class="sect2">
+<h3 id="event-sourcing"><a class="anchor" href="#event-sourcing"></a>Event sourcing</h3>
+
+</div>
+<div class="sect2">
 <h3 id="serverless-architecture"><a class="anchor" href="#serverless-architecture"></a>Serverless architecture</h3>
 
 </div>
@@ -732,11 +764,14 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="footnote" id="_footnotedef_4">
 <a href="#_footnoteref_4">4</a>. <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/" class="bare">https://www.infoq.com/news/2016/02/services-distributed-monolith/</a>
 </div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-01-29 15:24:10 UTC
+Last updated 2022-01-29 15:26:46 UTC
 </div>
 </div>
 </body>
