@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Feb 01 2022 07:24 PM UTC</span>
+<span id="revdate">Feb 05 2022 03:37 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -557,9 +557,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_when_to_use_cqrs">3.8.1. When to use CQRS?</a></li>
 </ul>
 </li>
-<li><a href="#event-sourcing">3.9. Event sourcing</a></li>
-<li><a href="#serverless-architecture">3.10. Serverless architecture</a></li>
-<li><a href="#_big_ball_of_mud">3.11. Big ball of mud</a></li>
+<li><a href="#serverless-architecture">3.9. Serverless Architecture</a></li>
+<li><a href="#_big_ball_of_mud">3.10. Big ball of mud</a></li>
 </ul>
 </li>
 </ul>
@@ -2440,19 +2439,48 @@ We depict multiple query models above because it is possible (but not necessary)
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When working with a CQRS based architecture, choosing the persistence mechanism for the command side is a key decision. When working in conjunction with an event-driven architecture, one could choose to persist aggregates as a series of events (ordered in the sequence of their occurrence). This style of persistence is known as event sourcing. We will cover this in more detail in Chapter 5 in the section on <a href="#_event_sourced_aggregates">event-sourced aggregates</a>.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="event-sourcing"><a class="anchor" href="#event-sourcing"></a><a class="link" href="#event-sourcing">3.9. Event sourcing</a></h3>
-
+<h3 id="serverless-architecture"><a class="anchor" href="#serverless-architecture"></a><a class="link" href="#serverless-architecture">3.9. Serverless Architecture</a></h3>
+<div class="paragraph">
+<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched. While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
+</div>
+<div class="paragraph">
+<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within th confines of a single process. With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
+</div>
+<div class="paragraph">
+<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore? While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="serverless-architecture"><a class="anchor" href="#serverless-architecture"></a><a class="link" href="#serverless-architecture">3.10. Serverless architecture</a></h3>
-
+<h3 id="_big_ball_of_mud"><a class="anchor" href="#_big_ball_of_mud"></a><a class="link" href="#_big_ball_of_mud">3.10. Big ball of mud</a></h3>
+<div class="paragraph">
+<p>Thus far, we have examined a catalog of named architecture styles along with their pitfalls and how applying DDD can help alleviate them. On the other extreme, we may encounter solutions that lack a perceivable architecture, infamously termed as the <em>big ball of mud</em>.</p>
 </div>
-<div class="sect2">
-<h3 id="_big_ball_of_mud"><a class="anchor" href="#_big_ball_of_mud"></a><a class="link" href="#_big_ball_of_mud">3.11. Big ball of mud</a></h3>
-
+<div class="quoteblock">
+<blockquote>
+A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and bailing wire, spaghetti code jungle. We’ve all seen them. These systems show unmistakable signs of unregulated growth, and repeated, expedient repair. Information is shared promiscuously among distant elements of the system, often to the point where nearly all the important information becomes global or duplicated. The overall structure of the system may never have been well-defined. If it was, it may have eroded beyond recognition. Programmers with a shred of architectural sensibility shun these quagmires. Only those who are unconcerned about architecture, and, perhaps, are comfortable with the inertia of the day-to-day chore of patching the holes in these failing dikes, are content to work on such systems.
+</blockquote>
+<div class="attribution">
+&#8212; Brian Foote and Joseph Yoder
+</div>
+</div>
+<div class="paragraph">
+<p>Although Foote and Yoder advise avoiding this style of architecture at all costs, software systems that resemble the big ball of mud continue to be a day-to-day inevitability for a lot of us. DDD provides a set of techniques to help deal with and recover from these near-hopeless situations in a pragmatic manner without potentially having to adopt a big bang approach. Indeed, the focus of this book is to apply these principles to prevent or at least delay further devolution towards the big ball of mud.</p>
+</div>
 </div>
 </div>
 </div>
@@ -10005,7 +10033,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-01 19:24:14 UTC
+Last updated 2022-02-05 15:37:05 UTC
 </div>
 </div>
 </body>
