@@ -613,9 +613,15 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="sect3">
 <h4 id="layered-architecture-variations"><a class="anchor" href="#layered-architecture-variations"></a>Layered architecture variations</h4>
 <div class="sect4">
-<h5 id="ports-and-adapters-hexagonal-architecture"><a class="anchor" href="#ports-and-adapters-hexagonal-architecture"></a>Ports and adapters (Hexagonal) architecture</h5>
+<h5 id="hexagonal-and-onion-architecture"><a class="anchor" href="#hexagonal-and-onion-architecture"></a>Hexagonal and onion architecture</h5>
 <div class="paragraph">
-<p>A variation of the layered architecture was invented by Alistair Cockburn, which he originally called the <em>Hexagonal architecture</em> (alternatively called the ports and adapters architecture). The idea behind this style was to avoid inadvertent dependencies between layers, specifically between the core of the system and the peripheral layers. The main idea here is to make use of interfaces (<em>ports</em>) exclusively within the core to enable modern drivers such as testing and looser coupling. This allows the core to  be developed and evolved independently of the non-core parts and the external dependencies. Integration with real-world components such as a database, file systems, web services, etc. is achieved through concrete implementations of the <em>ports</em> termed as <em>adapters</em>. A visual representation of this architecture style is shown here:</p>
+<p>A variation of the layered architecture was invented by Alistair Cockburn, which he originally called the <a href="https://alistair.cockburn.us/hexagonal-architecture/"><em>hexagonal architecture</em></a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> (alternatively called the ports and adapters architecture). The idea behind this style was to avoid inadvertent dependencies between layers (as could occur in the layered architecture), specifically between the core of the system and the peripheral layers. The main idea here is to make use of interfaces (<em>ports</em>) exclusively within the core to enable modern drivers such as testing and looser coupling. This allows the core to  be developed and evolved independently of the non-core parts and the external dependencies. Integration with real-world components such as a database, file systems, web services, etc. is achieved through concrete implementations of the <em>ports</em> termed as <em>adapters</em>. The use of interfaces within the core enables much easier testing of the core in isolation of the rest of the system using mocks and stubs. It is also common to use dependency injection frameworks to dynamically swap out implementations of these interfaces when working with the real system in an end-to-end environment. A visual representation of the hexagonal architecture is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/hexagonal.png" alt="hexagonal" width="75%">
+</div>
+<div class="title">Figure 5. Hexagonal architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -629,20 +635,11 @@ It turns out that the use of the term hexagon in this context was purely for vis
 </tr>
 </table>
 </div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/architecture-styles/hexagonal.png" alt="hexagonal" width="75%">
-</div>
-<div class="title">Figure 5. Ports and adapters (hexagonal architecture)</div>
+<div class="paragraph">
+<p>Similar to the hexagonal architecture, the <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/">onion architecture</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>, conceived by Jeffrey Palermo is based on creating an application based on an independent object model within the core that can be compiled and run separately from the outer layers. This is done by defining interfaces (called ports in the hexagonal architecture) in the core and implementing (called adapters in the hexagonal architecture) them in the outer layers. From our perspective, the hexagonal and onion architecture styles have no perceptible differences that we could identify.</p>
 </div>
 <div class="paragraph">
-<p>This is synergistic to DDD&#8217;s idea of context maps where the integration between bounded contexts is through the use of clearly defined interfaces. We will cover this in more detail when we talk about integration with external systems in chapter 9.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="onion-architecture"><a class="anchor" href="#onion-architecture"></a>Onion architecture</h5>
-<div class="paragraph">
-<p>Yet another variation of the layered architecture was coined by Jeffrey Palermo and called the <em>onion architecture</em>. Similar to an onion, the core is in the center, with other enabling capabilities being added on as additional layers.</p>
+<p>A visual representation of the onion architecture is shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -650,10 +647,18 @@ It turns out that the use of the term hexagon in this context was purely for vis
 </div>
 <div class="title">Figure 6. Onion architecture</div>
 </div>
+<div class="paragraph">
+<p>Both architecture styles are synergistic with DDD&#8217;s idea of developing the domain model for the core subdomain (and by extension its bounded context) independently of the rest of the system.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="clean-architecture"><a class="anchor" href="#clean-architecture"></a>Clean architecture</h5>
-
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/clean.png" alt="clean" width="50%">
+</div>
+<div class="title">Figure 7. Clean architecture</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="vertical-slice-architecture"><a class="anchor" href="#vertical-slice-architecture"></a>Vertical slice architecture</h5>
@@ -669,7 +674,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="content">
 <img src="./images/architecture-styles/soa.png" alt="soa">
 </div>
-<div class="title">Figure 7. SOA: Expose reusable functionality over standard interfaces.</div>
+<div class="title">Figure 8. SOA: Expose reusable functionality over standard interfaces.</div>
 </div>
 <div class="paragraph">
 <p>Previously, the use of non-standard, proprietary interfaces made this kind of integration a lot more challenging. For example, a retail bank may expose inter-account transfer functionality in the form of SOAP web services. While SOA prescribes exposing functionality over standardized interfaces, the focus is more on integrating heterogeneous applications than on implementing them.</p>
@@ -683,7 +688,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <p>This suite of services had evolved organically over the years with no explicit boundaries, concepts from various parts of the organization and generations of people mixed in, each adding their own interpretation of how business functionality needed to be implemented. In essence, the implementation resembled the dreaded big ball of mud which was extremely hard to enhance and maintain.</p>
 </div>
 <div class="paragraph">
-<p>The intentions behind SOA are noble. However, the promises of reuse, loose coupling are hard to achieve in practice given the lack of concrete implementation guidance on component granularity. It is also true that SOA <a href="https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html">means many things</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> to different people. This ambiguity leads to most SOA implementations becoming complex, unmaintainable monoliths, centered around technology components like a service bus or the persistence store or both. This is where using DDD to solve a complex problem by breaking it down into subdomains and bounded contexts can be invaluable.</p>
+<p>The intentions behind SOA are noble. However, the promises of reuse, loose coupling are hard to achieve in practice given the lack of concrete implementation guidance on component granularity. It is also true that SOA <a href="https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html">means many things</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> to different people. This ambiguity leads to most SOA implementations becoming complex, unmaintainable monoliths, centered around technology components like a service bus or the persistence store or both. This is where using DDD to solve a complex problem by breaking it down into subdomains and bounded contexts can be invaluable.</p>
 </div>
 </div>
 </div>
@@ -696,7 +701,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="content">
 <img src="./images/architecture-styles/microservices.png" alt="microservices" width="50%">
 </div>
-<div class="title">Figure 8. A microservices ecosystem</div>
+<div class="title">Figure 9. A microservices ecosystem</div>
 </div>
 <div class="paragraph">
 <p>As we can see, SOA and microservices are very similar from the perspective of the consumers in that they access functionality through a set of standardized interfaces. The microservices approach is an evolution of SOA in that the focus now is on building smaller, self-sufficient, independently deployable components with the intent of avoiding single points of failure (like an enterprise database or service bus), which was fairly common with a number of SOA-based implementations.</p>
@@ -704,7 +709,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="sect4">
 <h5 id="considerations-3"><a class="anchor" href="#considerations-3"></a>Considerations</h5>
 <div class="paragraph">
-<p>While microservices have definitely helped, there still exists quite a lot of ambiguity when it comes to answering how <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice">big or small</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> a microservice should be. Indeed, a lot of teams seem to struggle to get this balance right resulting in a <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/">distributed monolith</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>&#8201;&#8212;&#8201;which in a lot of ways can be much worse than even the single process monolith from the SOA days. Again, applying the strategic design concepts of DDD can help create independent, loosely coupled components, making it an ideal companion for the microservices style of architecture.</p>
+<p>While microservices have definitely helped, there still exists quite a lot of ambiguity when it comes to answering how <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice">big or small</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> a microservice should be. Indeed, a lot of teams seem to struggle to get this balance right resulting in a <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/">distributed monolith</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>&#8201;&#8212;&#8201;which in a lot of ways can be much worse than even the single process monolith from the SOA days. Again, applying the strategic design concepts of DDD can help create independent, loosely coupled components, making it an ideal companion for the microservices style of architecture.</p>
 </div>
 </div>
 </div>
@@ -733,7 +738,7 @@ A message is an item of data that is sent to a specific destination. An event is
 </div>
 </div>
 <div class="paragraph">
-<p>Typically, event-driven systems eliminate the need for point-to-point messaging with the ultimate consumers by making use of an intermediary infrastructure component usually known as a message broker, event bus, etc. This effectively reduces the efferent coupling from <em>n</em> consumers to 1. There are a few variations on how event-driven systems can be implemented. In the context of publishing events, Martin Fowler talks about two broad styles (among other things)&#8201;&#8212;&#8201;event notifications and event-carried state transfer in his <a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by "event-driven"?</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> article.</p>
+<p>Typically, event-driven systems eliminate the need for point-to-point messaging with the ultimate consumers by making use of an intermediary infrastructure component usually known as a message broker, event bus, etc. This effectively reduces the efferent coupling from <em>n</em> consumers to 1. There are a few variations on how event-driven systems can be implemented. In the context of publishing events, Martin Fowler talks about two broad styles (among other things)&#8201;&#8212;&#8201;event notifications and event-carried state transfer in his <a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by "event-driven"?</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> article.</p>
 </div>
 <div class="sect4">
 <h5 id="considerations-4"><a class="anchor" href="#considerations-4"></a>Considerations</h5>
@@ -754,7 +759,7 @@ A message is an item of data that is sent to a specific destination. An event is
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture" width="75%">
 </div>
-<div class="title">Figure 9. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 10. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -872,22 +877,28 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <a href="#_footnoteref_1">1</a>. <a href="https://www.archunit.org/" class="bare">https://www.archunit.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <a href="https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html" class="bare">https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html</a>
+<a href="#_footnoteref_2">2</a>. <a href="https://alistair.cockburn.us/hexagonal-architecture/" class="bare">https://alistair.cockburn.us/hexagonal-architecture/</a>
 </div>
 <div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice" class="bare">https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice</a>
+<a href="#_footnoteref_3">3</a>. <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/" class="bare">https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/" class="bare">https://www.infoq.com/news/2016/02/services-distributed-monolith/</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html" class="bare">https://martinfowler.com/bliki/ServiceOrientedAmbiguity.html</a>
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
+<a href="#_footnoteref_5">5</a>. <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice" class="bare">https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/" class="bare">https://www.infoq.com/news/2016/02/services-distributed-monolith/</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-07 15:27:10 UTC
+Last updated 2022-02-08 22:07:27 UTC
 </div>
 </div>
 </body>
