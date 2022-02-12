@@ -448,12 +448,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#architecture-styles">Architecture Styles</a>
 <ul class="sectlevel3">
 <li><a href="#layered-architecture">Layered Architecture</a></li>
-<li><a href="#layered-architecture-variations">Layered architecture variations</a></li>
+<li><a href="#vertical-slice-architecture">Vertical slice architecture</a></li>
 <li><a href="#service-oriented-architecture-soa">Service Oriented Architecture (SOA)</a></li>
 <li><a href="#microservices-architecture">Microservices architecture</a></li>
 <li><a href="#event-driven-architecture-eda">Event-Driven Architecture (EDA)</a></li>
 <li><a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a></li>
-<li><a href="#serverless-architecture">Serverless Architecture</a></li>
+<li><a href="#_serverless_architecture">Serverless Architecture</a></li>
 <li><a href="#_big_ball_of_mud">Big ball of mud</a></li>
 </ul>
 </li>
@@ -519,8 +519,59 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="paragraph">
 <p>DDD actively promotes the use of a layered architecture, primarily because it makes it possible to focus on the domain layer in isolation of other concerns like how to information gets displayed, how end-to-end flows are managed, how data is stored and retrieved, etc. From that perspective, solutions that apply DDD tend to naturally be layered as well.</p>
 </div>
+<div class="sect4">
+<h5 id="notable-variations"><a class="anchor" href="#notable-variations"></a>Notable variations</h5>
+<div class="paragraph">
+<p>A variation of the layered architecture was invented by Alistair Cockburn, which he originally called the <a href="https://alistair.cockburn.us/hexagonal-architecture/"><em>hexagonal architecture</em></a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> (alternatively called the ports and adapters architecture). The idea behind this style was to avoid inadvertent dependencies between layers (as could occur in the layered architecture), specifically between the core of the system and the peripheral layers. The main idea here is to make use of interfaces (<em>ports</em>) exclusively within the core to enable modern drivers such as testing and looser coupling. This allows the core to  be developed and evolved independently of the non-core parts and the external dependencies. Integration with real-world components such as a database, file systems, web services, etc. is achieved through concrete implementations of the <em>ports</em> termed as <em>adapters</em>. The use of interfaces within the core enables much easier testing of the core in isolation of the rest of the system using mocks and stubs. It is also common to use dependency injection frameworks to dynamically swap out implementations of these interfaces when working with the real system in an end-to-end environment. A visual representation of the hexagonal architecture is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/hexagonal.png" alt="hexagonal" width="75%">
+</div>
+<div class="title">Figure 3. Hexagonal architecture</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It turns out that the use of the term hexagon in this context was purely for visual purposes&#8201;&#8212;&#8201;not to limit the system to exactly six types of ports.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Similar to the hexagonal architecture, the <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/">onion architecture</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>, conceived by Jeffrey Palermo is based on creating an application based on an independent object model within the core that can be compiled and run separately from the outer layers. This is done by defining interfaces (called ports in the hexagonal architecture) in the core and implementing (called adapters in the hexagonal architecture) them in the outer layers. From our perspective, the hexagonal and onion architecture styles have no perceptible differences that we could identify.</p>
+</div>
+<div class="paragraph">
+<p>A visual representation of the onion architecture is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/onion.png" alt="onion" width="75%">
+</div>
+<div class="title">Figure 4. Onion architecture</div>
+</div>
+<div class="paragraph">
+<p>Yet another variation of the layered architecture, popularized by Robert C. Martin (known endearingly as Uncle Bob) is the clean architecture. This is based on adhering to the <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html">SOLID principles</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> also perpetrated by him. The fundamental message here (just like in the case of hexagonal and onion architecture) is to avoid dependencies between the core&#8201;&#8212;&#8201;the one that houses business logic and other layers that tend to be volatile (like frameworks, third-party libraries, UIs, databases, etc).</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/clean.png" alt="clean" width="75%">
+</div>
+<div class="title">Figure 5. Clean architecture</div>
+</div>
+<div class="paragraph">
+<p>All these architecture styles are synergistic with DDD&#8217;s idea of developing the domain model for the core subdomain (and by extension its bounded context) independently of the rest of the system.</p>
+</div>
+<div class="paragraph">
+<p>While each of these architecture styles provide additional guidance in terms of how to structure a layered architecture, you will need to be cognizant of the same considerations we described above as part of the conversation on the layered architecture.</p>
+</div>
 <div class="paragraph">
 <p>However, any architecture approach we choose comes with its set of tradeoffs and limitations. We discuss some of these here.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="considerations"><a class="anchor" href="#considerations"></a>Considerations</h5>
@@ -533,7 +584,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="content">
 <img src="./images/layer-cake-anti-pattern.png" alt="layer cake anti pattern" width="50%" height="665">
 </div>
-<div class="title">Figure 3. Example of the <strong>layer cake</strong> anti-pattern to find an entity representation by ID</div>
+<div class="title">Figure 6. Example of the <strong>layer cake</strong> anti-pattern to find an entity representation by ID</div>
 </div>
 <div class="paragraph">
 <p>Here the <code>findById</code> method is replicated in every layer and simply calls the method with the same name in the layer below with no additional logic. This introduces a level of accidental complexity to the solution. Some amount of redundancy in the layering may be unavoidable for the purposes of standardization. It may be best to re-examine the layering guidelines if the <em>layer cake</em> occurs prominently in the codebase.</p>
@@ -548,7 +599,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <div class="content">
 <img src="./images/layer-cake-anti-pattern.png" alt="layer cake anti pattern" width="50%" height="675">
 </div>
-<div class="title">Figure 4. Example of the <strong>anemic translation</strong> anti-pattern to find an entity representation by ID</div>
+<div class="title">Figure 7. Example of the <strong>anemic translation</strong> anti-pattern to find an entity representation by ID</div>
 </div>
 <div class="paragraph">
 <p>In this case, each layer defines a <code>Entity</code> type of its own, requiring a translation between types at each layer. To make matters worse, the structure of the <code>Entity</code> type may have seemingly minor variations (for example, <code>lastName</code> being referred to as <code>surname</code>). While such translations may be necessary across bounded contexts, teams should strive to avoid the need for variations in names and structures of the same concept within a single bounded context. The intentional use of the <strong>ubiquitous language</strong> helps avoid such scenarios.</p>
@@ -560,7 +611,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 <p>When working with a layered architecture, it is reasonable to start by being strict about layers only interacting with the layer immediately beneath it. As we have seen above, such rigid enforcements may lead to an intolerable degree of accidental complexity, especially when applied generically to a large number of use-cases. In such scenarios, it may be worth considering consciously allowing one or more layers to be bypassed. For example, the <code>controller</code> layer may be allowed to work directly with the <code>repository</code> without using the <code>service</code> layer. For example, we have found it useful to use a separate set of rules for <a href="#_cqrs_pattern"><em>commands</em> versus <em>queries</em></a>.</p>
 </div>
 <div class="paragraph">
-<p>This can be a slippery slope. To continue maintaining a level of sanity, teams should consider the use of a lightweight architecture governance tool like <a href="https://www.archunit.org/"><strong>ArchUnit</strong></a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> to make agreements explicit and afford quick feedback. A simple example of how to use ArchUnit for this purpose is shown here:</p>
+<p>This can be a slippery slope. To continue maintaining a level of sanity, teams should consider the use of a lightweight architecture governance tool like <a href="https://www.archunit.org/"><strong>ArchUnit</strong></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> to make agreements explicit and afford quick feedback. A simple example of how to use ArchUnit for this purpose is shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -611,60 +662,7 @@ We won’t be distracted by comparison if we are captivated with purpose.
 </div>
 </div>
 <div class="sect3">
-<h4 id="layered-architecture-variations"><a class="anchor" href="#layered-architecture-variations"></a>Layered architecture variations</h4>
-<div class="sect4">
-<h5 id="hexagonal-onion-and-clean-architectures"><a class="anchor" href="#hexagonal-onion-and-clean-architectures"></a>Hexagonal, onion and clean architectures</h5>
-<div class="paragraph">
-<p>A variation of the layered architecture was invented by Alistair Cockburn, which he originally called the <a href="https://alistair.cockburn.us/hexagonal-architecture/"><em>hexagonal architecture</em></a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> (alternatively called the ports and adapters architecture). The idea behind this style was to avoid inadvertent dependencies between layers (as could occur in the layered architecture), specifically between the core of the system and the peripheral layers. The main idea here is to make use of interfaces (<em>ports</em>) exclusively within the core to enable modern drivers such as testing and looser coupling. This allows the core to  be developed and evolved independently of the non-core parts and the external dependencies. Integration with real-world components such as a database, file systems, web services, etc. is achieved through concrete implementations of the <em>ports</em> termed as <em>adapters</em>. The use of interfaces within the core enables much easier testing of the core in isolation of the rest of the system using mocks and stubs. It is also common to use dependency injection frameworks to dynamically swap out implementations of these interfaces when working with the real system in an end-to-end environment. A visual representation of the hexagonal architecture is shown here:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/architecture-styles/hexagonal.png" alt="hexagonal" width="75%">
-</div>
-<div class="title">Figure 5. Hexagonal architecture</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-It turns out that the use of the term hexagon in this context was purely for visual purposes&#8201;&#8212;&#8201;not to limit the system to exactly six types of ports.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Similar to the hexagonal architecture, the <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/">onion architecture</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>, conceived by Jeffrey Palermo is based on creating an application based on an independent object model within the core that can be compiled and run separately from the outer layers. This is done by defining interfaces (called ports in the hexagonal architecture) in the core and implementing (called adapters in the hexagonal architecture) them in the outer layers. From our perspective, the hexagonal and onion architecture styles have no perceptible differences that we could identify.</p>
-</div>
-<div class="paragraph">
-<p>A visual representation of the onion architecture is shown here:</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/architecture-styles/onion.png" alt="onion" width="75%">
-</div>
-<div class="title">Figure 6. Onion architecture</div>
-</div>
-<div class="paragraph">
-<p>Yet another variation of the layered architecture, popularized by Robert C. Martin (known endearingly as Uncle Bob) is the clean architecture. This is based on adhering to the <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html">SOLID principles</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> also perpetrated by him. The fundamental message here (just like in the case of hexagonal and onion architecture) is to avoid dependencies between the core&#8201;&#8212;&#8201;the one that houses business logic and other layers that tend to be volatile (like frameworks, third-party libraries, UIs, databases, etc).</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/architecture-styles/clean.png" alt="clean" width="75%">
-</div>
-<div class="title">Figure 7. Clean architecture</div>
-</div>
-<div class="paragraph">
-<p>All these architecture styles are synergistic with DDD&#8217;s idea of developing the domain model for the core subdomain (and by extension its bounded context) independently of the rest of the system.</p>
-</div>
-<div class="paragraph">
-<p>While each of these architecture styles provide additional guidance in terms of how to structure a layered architecture, you will need to be cognizant of the same considerations we described above as part of the conversation on the layered architecture.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="vertical-slice-architecture"><a class="anchor" href="#vertical-slice-architecture"></a>Vertical slice architecture</h5>
+<h4 id="vertical-slice-architecture"><a class="anchor" href="#vertical-slice-architecture"></a>Vertical slice architecture</h4>
 <div class="paragraph">
 <p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation. Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected. Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
 </div>
@@ -675,10 +673,24 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="title">Figure 8. Vertical slice architecture</div>
 </div>
 <div class="paragraph">
-<p>In the example above, <em>place order</em> might require us to apply complex business invariants and operate within the purview of an ACID transaction. However, <em>search orders</em> may require us to simply fetch existing data from a query optimized view. As shown here, this style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns we may encounter when implementing a plain vanilla layered architecture.</p>
+<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case. However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view. This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
+</div>
+<div class="sect4">
+<h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a>Considerations</h5>
+<div class="paragraph">
+<p>The vertical slice architecture affords a lot of flexibility when implementing a solution&#8201;&#8212;&#8201;taking into consideration the specific needs of the use-case being implemented. However, without some level of governance, this may quickly devolve to the big ball of mud with layering decisions being made seemingly arbitrarily based on personal preferences and experiences (or lack thereof). As a sensible default, you may want to consider using a distinct layering strategy for <a href="#_cqrs_pattern">commands and queries</a>. Beyond that, non-functional requirements may dictate how you may need to deviate from here. For example, you may need to bypass layers to meet performance SLAs for certain use cases.</p>
 </div>
 <div class="paragraph">
-<p>For example, a very simple classification might be to segregate requests into two broad categories: commands (operations that require state mutations) and queries (operations that merely present information without mutating it). We cover this style of architecture in more detail in the <a href="#_cqrs_pattern">CQRS</a> section of this chapter.</p>
+<p>When used pragmatically, the vertical slice architecture does enable applying DDD very effectively within each or a group of related vertical slices&#8201;&#8212;&#8201;allowing them to be treated as  bounded contexts. We show two possibilities using the <em>place order</em> and <em>cancel order</em> examples here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/architecture-styles/vertical-slice-example.png" alt="vertical slice example" width="75%">
+</div>
+<div class="title">Figure 9. Vertical slices used to evolve bounded contexts</div>
+</div>
+<div class="paragraph">
+<p>In example (i) above, <em>place order</em> and <em>cancel order</em>, each use a distinct domain model, whereas in example (ii), both use cases share a common domain model and by extension become part of the same bounded context. This does pave the way to slice functionality when looking to adopt the <a href="#_serverless_architecture">serverless architecture</a> along use case boundaries.</p>
 </div>
 </div>
 </div>
@@ -691,13 +703,13 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="content">
 <img src="./images/architecture-styles/soa.png" alt="soa">
 </div>
-<div class="title">Figure 9. SOA: Expose reusable functionality over standard interfaces.</div>
+<div class="title">Figure 10. SOA: Expose reusable functionality over standard interfaces.</div>
 </div>
 <div class="paragraph">
 <p>Previously, the use of non-standard, proprietary interfaces made this kind of integration a lot more challenging. For example, a retail bank may expose inter-account transfer functionality in the form of SOAP web services. While SOA prescribes exposing functionality over standardized interfaces, the focus is more on integrating heterogeneous applications than on implementing them.</p>
 </div>
 <div class="sect4">
-<h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a>Considerations</h5>
+<h5 id="considerations-3"><a class="anchor" href="#considerations-3"></a>Considerations</h5>
 <div class="paragraph">
 <p>At one of the banks we worked at, we exposed a set of over 500 service interfaces over SOAP. Under the covers, we implemented these services using EJB 2.x (a combination of stateless session beans and message-driven beans) hosted on a commercial J2EE application server which also did double duty as an enterprise service bus (ESB). These services largely delegated most if not all the logic to a set of underlying stored procedures within a single monolithic Oracle database using a canonical data model for the entire enterprise! To the outside world, these services were <em>location transparent</em>, stateless, <em>composable</em> and <em>discoverable</em>. Indeed, we advertised this implementation as an example of SOA, and it would be hard to argue that it was not.</p>
 </div>
@@ -718,15 +730,15 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="content">
 <img src="./images/architecture-styles/microservices.png" alt="microservices" width="50%">
 </div>
-<div class="title">Figure 10. A microservices ecosystem</div>
+<div class="title">Figure 11. A microservices ecosystem</div>
 </div>
 <div class="paragraph">
 <p>As we can see, SOA and microservices are very similar from the perspective of the consumers in that they access functionality through a set of standardized interfaces. The microservices approach is an evolution of SOA in that the focus now is on building smaller, self-sufficient, independently deployable components with the intent of avoiding single points of failure (like an enterprise database or service bus), which was fairly common with a number of SOA-based implementations.</p>
 </div>
 <div class="sect4">
-<h5 id="considerations-3"><a class="anchor" href="#considerations-3"></a>Considerations</h5>
+<h5 id="considerations-4"><a class="anchor" href="#considerations-4"></a>Considerations</h5>
 <div class="paragraph">
-<p>While microservices have definitely helped, there still exists quite a lot of ambiguity when it comes to answering how <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice">big or small</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> a microservice should be. Indeed, a lot of teams seem to struggle to get this balance right resulting in a <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/">distributed monolith</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>&#8201;&#8212;&#8201;which in a lot of ways can be much worse than even the single process monolith from the SOA days. Again, applying the strategic design concepts of DDD can help create independent, loosely coupled components, making it an ideal companion for the microservices style of architecture.</p>
+<p>While microservices have definitely helped, there still exists quite a lot of ambiguity when it comes to answering how <a href="https://martinfowler.com/articles/microservices.html#HowBigIsAMicroservice">big or small</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> a microservice should be. Indeed, a lot of teams seem to struggle to get this balance right, resulting in a <a href="https://www.infoq.com/news/2016/02/services-distributed-monolith/">distributed monolith</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>&#8201;&#8212;&#8201;which in a lot of ways can be much worse than even the single process monolith from the SOA days. Again, applying the strategic design concepts of DDD can help create independent, loosely coupled components, making it an ideal companion for the microservices style of architecture.</p>
 </div>
 </div>
 </div>
@@ -758,7 +770,7 @@ A message is an item of data that is sent to a specific destination. An event is
 <p>Typically, event-driven systems eliminate the need for point-to-point messaging with the ultimate consumers by making use of an intermediary infrastructure component usually known as a message broker, event bus, etc. This effectively reduces the efferent coupling from <em>n</em> consumers to 1. There are a few variations on how event-driven systems can be implemented. In the context of publishing events, Martin Fowler talks about two broad styles (among other things)&#8201;&#8212;&#8201;event notifications and event-carried state transfer in his <a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by "event-driven"?</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> article.</p>
 </div>
 <div class="sect4">
-<h5 id="considerations-4"><a class="anchor" href="#considerations-4"></a>Considerations</h5>
+<h5 id="considerations-5"><a class="anchor" href="#considerations-5"></a>Considerations</h5>
 <div class="paragraph">
 <p>One of the main trade-offs when building an event-driven system is to decide the amount of state (payload) that should be embedded in each event. It may be prudent to consider embedding just enough state indicating changes that occurred as a result of the emitted event to keep the various opposing forces such as producer scaling, encapsulation, consumer complexity, resiliency, etc. We will discuss the related implications in more detail when we cover <a href="#_implementing_the_event">implementing events</a> in Chapter 5.</p>
 </div>
@@ -776,7 +788,7 @@ A message is an item of data that is sent to a specific destination. An event is
 <div class="content">
 <img src="./images/cqrs/traditional-vs-cqrs-architecture.png" alt="traditional vs cqrs architecture" width="75%">
 </div>
-<div class="title">Figure 11. Traditional versus CQRS Architecture</div>
+<div class="title">Figure 12. Traditional versus CQRS Architecture</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -807,19 +819,19 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect5">
 <h6 id="need-for-multiple-read-representations"><a class="anchor" href="#need-for-multiple-read-representations"></a>Need for multiple read representations</h6>
 <div class="paragraph">
-<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view. While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system. Several times, it is not possible to predict ahead of time, the nature of these requirements. By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements. Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
+<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data.For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view.While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system.Several times, it is not possible to predict ahead of time, the nature of these requirements.By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements.Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="different-security-requirements"><a class="anchor" href="#different-security-requirements"></a>Different security requirements</h6>
 <div class="paragraph">
-<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
+<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome.For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries.Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="more-uniform-distribution-of-complexity"><a class="anchor" href="#more-uniform-distribution-of-complexity"></a>More uniform distribution of complexity</h6>
 <div class="paragraph">
-<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
+<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -828,7 +840,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-When working with a CQRS based architecture, choosing the persistence mechanism for the command side is a key decision. When working in conjunction with an event-driven architecture, one could choose to persist aggregates as a series of events (ordered in the sequence of their occurrence). This style of persistence is known as event sourcing. We will cover this in more detail in Chapter 5 in the section on <a href="#_event_sourced_aggregates">event-sourced aggregates</a>.
+When working with a CQRS based architecture, choosing the persistence mechanism for the command side is a key decision.When working in conjunction with an event-driven architecture, one could choose to persist aggregates as a series of events (ordered in the sequence of their occurrence).This style of persistence is known as event sourcing.We will cover this in more detail in Chapter 5 in the section on <a href="#_event_sourced_aggregates">event-sourced aggregates</a>.
 </td>
 </tr>
 </table>
@@ -837,21 +849,21 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 </div>
 </div>
 <div class="sect3">
-<h4 id="serverless-architecture"><a class="anchor" href="#serverless-architecture"></a>Serverless Architecture</h4>
+<h4 id="_serverless_architecture"><a class="anchor" href="#_serverless_architecture"></a>Serverless Architecture</h4>
 <div class="paragraph">
-<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched. While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
+<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure.The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
 </div>
 <div class="paragraph">
-<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within th confines of a single process. With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
+<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within th confines of a single process.With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components.This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
 </div>
 <div class="paragraph">
-<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore? While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
+<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply.We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_big_ball_of_mud"><a class="anchor" href="#_big_ball_of_mud"></a>Big ball of mud</h4>
 <div class="paragraph">
-<p>Thus far, we have examined a catalog of named architecture styles along with their pitfalls and how applying DDD can help alleviate them. On the other extreme, we may encounter solutions that lack a perceivable architecture, infamously termed as the <em>big ball of mud</em>.</p>
+<p>Thus far, we have examined a catalog of named architecture styles along with their pitfalls and how applying DDD can help alleviate them.On the other extreme, we may encounter solutions that lack a perceivable architecture, infamously termed as the <em>big ball of mud</em>.</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -891,16 +903,16 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footnotes">
 <hr>
 <div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. <a href="https://www.archunit.org/" class="bare">https://www.archunit.org/</a>
+<a href="#_footnoteref_1">1</a>. <a href="https://alistair.cockburn.us/hexagonal-architecture/" class="bare">https://alistair.cockburn.us/hexagonal-architecture/</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <a href="https://alistair.cockburn.us/hexagonal-architecture/" class="bare">https://alistair.cockburn.us/hexagonal-architecture/</a>
+<a href="#_footnoteref_2">2</a>. <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/" class="bare">https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/</a>
 </div>
 <div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. <a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/" class="bare">https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/</a>
+<a href="#_footnoteref_3">3</a>. <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html" class="bare">https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html" class="bare">https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://www.archunit.org/" class="bare">https://www.archunit.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_5">
 <a href="#_footnoteref_5">5</a>. <a href="https://jimmybogard.com/vertical-slice-architecture/" class="bare">https://jimmybogard.com/vertical-slice-architecture/</a>
@@ -921,7 +933,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-12 13:57:09 UTC
+Last updated 2022-02-12 15:13:58 UTC
 </div>
 </div>
 </body>
