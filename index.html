@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Feb 13 2022 01:06 PM UTC</span>
+<span id="revdate">Feb 22 2022 11:16 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -557,10 +557,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#object-oriented-programming">3.2.1. Object-oriented programming</a></li>
 <li><a href="#functional-programming">3.2.2. Functional programming</a></li>
-<li><a href="#functional-reactive-programming">3.2.3. Functional reactive programming</a></li>
-<li><a href="#procedural-programming">3.2.4. Procedural programming</a></li>
+<li><a href="#which-paradigm-should-you-choose">3.2.3. Which paradigm should you choose?</a></li>
 </ul>
 </li>
+<li><a href="#summary-3">3.3. Summary</a></li>
 </ul>
 </li>
 </ul>
@@ -591,7 +591,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#using-eventstorming-for-the-lc-issuance-application">4.6.2. Using eventStorming for the LC issuance application</a></li>
 </ul>
 </li>
-<li><a href="#summary-3">4.7. Summary</a></li>
+<li><a href="#summary-4">4.7. Summary</a></li>
 <li><a href="#questions-3">4.8. Questions</a></li>
 <li><a href="#further-reading-2">4.9. Further reading</a></li>
 <li><a href="#answers">4.10. Answers</a></li>
@@ -629,7 +629,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#business-rule-enforcements">5.5.2. Business rule enforcements</a></li>
 </ul>
 </li>
-<li><a href="#summary-4">5.6. Summary</a></li>
+<li><a href="#summary-5">5.6. Summary</a></li>
 <li><a href="#questions-4">5.7. Questions</a></li>
 <li><a href="#further-reading-3">5.8. Further reading</a></li>
 <li><a href="#answers-2">5.9. Answers</a></li>
@@ -652,7 +652,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#creating-a-new-lc">6.4.2. Creating a new LC</a></li>
 </ul>
 </li>
-<li><a href="#summary-5">6.5. Summary</a></li>
+<li><a href="#summary-6">6.5. Summary</a></li>
 <li><a href="#questions-5">6.6. Questions</a></li>
 <li><a href="#further-reading-4">6.7. Further reading</a></li>
 </ul>
@@ -679,7 +679,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#event-handlers-with-side-effects">7.4.4. Event handlers with side effects</a></li>
 </ul>
 </li>
-<li><a href="#summary-6">7.5. Summary</a></li>
+<li><a href="#summary-7">7.5. Summary</a></li>
 <li><a href="#questions-6">7.6. Questions</a></li>
 </ul>
 </li>
@@ -694,7 +694,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#handling-deadlines">8.4. Handling deadlines</a></li>
-<li><a href="#summary-7">8.5. Summary</a></li>
+<li><a href="#summary-8">8.5. Summary</a></li>
 <li><a href="#questions-7">8.6. Questions</a></li>
 <li><a href="#further-reading-5">8.7. Further reading</a></li>
 </ul>
@@ -715,7 +715,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ipc-based">9.3.3. IPC-based</a></li>
 </ul>
 </li>
-<li><a href="#summary-8">9.4. Summary</a></li>
+<li><a href="#summary-9">9.4. Summary</a></li>
 <li><a href="#questions-8">9.5. Questions</a></li>
 <li><a href="#further-reading-6">9.6. Further reading</a></li>
 </ul>
@@ -2583,26 +2583,248 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div class="paragraph">
 <p>Although Foote and Yoder advise avoiding this style of architecture at all costs, software systems that resemble the big ball of mud continue to be a day-to-day inevitability for a lot of us. The strategic and tactical design elements of DDD provide a set of techniques to help deal with and recover from these near-hopeless situations in a pragmatic manner without potentially having to adopt a big bang approach. Indeed, the focus of this book is to apply these principles to prevent or at least delay further devolution towards the big ball of mud.</p>
 </div>
+<div class="paragraph">
+<p>In this section, we have examined popular architecture styles and how we can amplify their effectiveness when used in conjunction with DDD. Now let&#8217;s look at how DDD can complement the use of existing programming paradigms.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="programming-paradigms"><a class="anchor" href="#programming-paradigms"></a><a class="link" href="#programming-paradigms">3.2. Programming paradigms</a></h3>
+<div class="paragraph">
+<p>The tactical elements of DDD introduce a specific vocabulary (aggregates, entities, value objects, repositories, services, factories, domain events, etc.) when arriving at a solution. At the end of the day, we need to translate these concepts into running software. Over the years, we have employed a variety of programming paradigms including procedural, object-oriented, functional, aspect-oriented, etc. Is it possible to apply DDD in conjunction with one or more of these paradigms? In this section, we will explore how some common programming paradigms and techniques help us express the tactical design elements in code.</p>
+</div>
 <div class="sect3">
 <h4 id="object-oriented-programming"><a class="anchor" href="#object-oriented-programming"></a><a class="link" href="#object-oriented-programming">3.2.1. Object-oriented programming</a></h4>
+<div class="paragraph">
+<p>On the surface of it, DDD seems to simply replicate a set of OO terms and call them using different names. For example, the central concepts of tactical DDD such as <code>aggregates</code>, <code>entities</code> and <code>value objects</code> could simply be referred to as objects in OO terms. Others like <code>services</code> may not have a direct OO analog. So how does one apply DDD in an object-oriented world? Let&#8217;s look at a simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre>
+<span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">PasswordService</span> {
+    <span style="color:#0a8;font-weight:bold">String</span> generateStrongPassword();
+    <span style="color:#339;font-weight:bold">boolean</span> isStrong(<span style="color:#0a8;font-weight:bold">String</span> password);
+    <span style="color:#339;font-weight:bold">boolean</span> isWeak(<span style="color:#0a8;font-weight:bold">String</span> password);
+}
 
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PasswordClient</span> {
+    <span style="color:#088;font-weight:bold">private</span> PasswordService service;
+
+    <span style="color:#339;font-weight:bold">void</span> register(<span style="color:#0a8;font-weight:bold">String</span> userEnteredPassword) {
+        <span style="color:#080;font-weight:bold">if</span> (service.isStrong(userEnteredPassword)) {
+            <span style="color:#777">//...</span>
+        }
+    }
+}
+</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OO purists will be quick to point out that the <code>PasswordService</code> is procedural and that a <code>Password</code> class might be needed to encapsulate related behaviours. Similarly, DDD enthusiasts might point out that this is an anemic domain model implementation. An arguably better object-oriented version might look something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Password</span> {
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">String</span> password;
+
+    <span style="color:#088;font-weight:bold">private</span> Password(<span style="color:#0a8;font-weight:bold">String</span> password) {
+        <span style="color:#950">this</span>.password = password;
+    }
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">boolean</span> isStrong() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">boolean</span> isWeak() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Password generateStrongPassword() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Password passwordFrom(<span style="color:#0a8;font-weight:bold">String</span> password) { ... }
+
+}
+
+<span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">PasswordService</span> {
+    Password generateStrongPassword();
+    Password createPasswordFrom(<span style="color:#0a8;font-weight:bold">String</span> userEntered);
+}
+
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PasswordClient</span> {
+    <span style="color:#088;font-weight:bold">private</span> PasswordService service;
+
+    <span style="color:#339;font-weight:bold">void</span> register(<span style="color:#0a8;font-weight:bold">String</span> userEnteredPassword) {
+        Password password = service.createPasswordFrom(userEnteredPassword);
+        <span style="color:#080;font-weight:bold">if</span> (password.isStrong()) {
+            <span style="color:#777">// ...</span>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, the <code>Password</code> class stops exposing its internals and exposes the idea of a strong or weak password in the form of behavior (the <code>isStrong</code> and <code>isWeak</code> methods). From an OO perspective, the second implementation is arguably superior. If so, shouldn&#8217;t we be using the object-oriented version at all times? As it turns out, the answer is nuanced and depends on what the consumers desire and the ubiquitous language used in that context. If the concept of the <code>Password</code> is in common usage within the domain, it perhaps warrants introducing such a concept in the implementation as well. If not, the first solution might suffice even though it seems to violate OO principles of encapsulation.</p>
+</div>
+<div class="paragraph">
+<p>Our default position is to apply good OO practices as a starting point. However, it is more important to mirror the language of the domain as opposed to applying OO in a dogmatic manner. So we will be willing to compromise on OO purity if it appears unnatural to do so in that context. But when we do make such compromises, it is important to do so <strong>intentionally</strong> and make it unambiguously clear why we are making such a decision (preferably using some lightweight mechanism such as <a href="https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records">ADR</a>s<sup class="footnote">[<a id="_footnoteref_21" class="footnote" href="#_footnotedef_21" title="View footnote.">21</a>]</sup>). This is important because it may become hard to justify this to others and even ourselves when we look at it in the future.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="functional-programming"><a class="anchor" href="#functional-programming"></a><a class="link" href="#functional-programming">3.2.2. Functional programming</a></h4>
+<div class="paragraph">
+<p>Functions are a fundamental building block to code organization that exist in all higher order programming languages. Functional programming is a programming paradigm where programs are constructed by applying and composing functions. This is in contrast to imperative programming that uses statements to change a program&#8217;s state. The most significant differences stem from the fact that functional programming avoids side effects, which are used in imperative programming. Pure functional programming completely prevents side effects and forces immutability. Embracing a functional style when designing a domain model to be more declarative and express intent a lot more clearly while remaining terse. It also allows us to keep complexity in check by enabling us to compose more complex concepts by using simpler ones.The functional implementation allows us to use a language closer to the problem domain, while having the added benefit of also being terse. Consider a simple example where we need to find the item with the least inventory across all our warehouses using a functional style as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Functional example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Functional</span> {
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Optional&lt;Item&gt; scarcestItem(Warehouse... warehouses) {
+        <span style="color:#080;font-weight:bold">return</span> Stream.of(warehouses)
+                .flatMap(Warehouse::items)
+                .collect(groupingBy(Item::name, summingInt(Item::quantity)))
+                .entrySet().stream()
+                .map(Item::<span style="color:#080;font-weight:bold">new</span>)
+                .min(comparing(Item::quantity));
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The imperative style shown here does get the job done, but is arguably a lot more verbose and harder to follow, sometimes even for technical team members!</p>
+</div>
+<div class="listingblock">
+<div class="title">Imperative example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Imperative</span> {
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Optional&lt;Item&gt; scarcestItem(Warehouse... warehouses) {
+        <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Item&gt; allItems = <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">ArrayList</span>&lt;&gt;();
+        <span style="color:#080;font-weight:bold">for</span> (Warehouse warehouse : warehouses) {
+            allItems.addAll(warehouse.getItems());
+        }
+        <span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>, <span style="color:#0a8;font-weight:bold">Integer</span>&gt; itemNamesByQuantity = <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">HashMap</span>&lt;&gt;();
+        <span style="color:#080;font-weight:bold">for</span> (Item item : allItems) {
+            <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">String</span> name = item.name();
+            <span style="color:#088;font-weight:bold">final</span> <span style="color:#339;font-weight:bold">int</span> quantity = item.quantity();
+            <span style="color:#080;font-weight:bold">if</span> (itemNamesByQuantity.containsKey(name)) {
+                itemNamesByQuantity.put(name, itemNamesByQuantity.get(name) + quantity);
+            } <span style="color:#080;font-weight:bold">else</span> {
+                itemNamesByQuantity.put(name, quantity);
+            }
+        }
+        <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">Map</span>.Entry&lt;<span style="color:#0a8;font-weight:bold">String</span>, <span style="color:#0a8;font-weight:bold">Integer</span>&gt; min =
+            <span style="color:#0a8;font-weight:bold">Collections</span>.min(itemNamesByQuantity.entrySet(), <span style="color:#0a8;font-weight:bold">Map</span>.Entry.comparingByValue());
+        <span style="color:#080;font-weight:bold">return</span> min != <span style="color:#069">null</span> ? Optional.of(<span style="color:#080;font-weight:bold">new</span> Item(min)) : Optional.empty();
 
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From a DDD perspective, this yields a few benefits:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Increase collaboration with domain experts</strong> because the declarative style allows placing a bigger focus on the what, rather than the how. This makes it a lot less intimidating to technical and non-technical stakeholders alike to work with on an ongoing basis.</p>
+</li>
+<li>
+<p><strong>Better testability</strong>: because the use of pure functions (those that are side effect free) makes it easier to create data-driven tests. This has also afforded us an additional benefit of less mocking/stubbing. These characteristics make tests that are a lot easier to maintain and reason about. This has the benefit of allowing even technical team members to visualize corner cases a lot earlier in the process.</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
-<h4 id="functional-reactive-programming"><a class="anchor" href="#functional-reactive-programming"></a><a class="link" href="#functional-reactive-programming">3.2.3. Functional reactive programming</a></h4>
-
+<h4 id="which-paradigm-should-you-choose"><a class="anchor" href="#which-paradigm-should-you-choose"></a><a class="link" href="#which-paradigm-should-you-choose">3.2.3. Which paradigm should you choose?</a></h4>
+<div class="paragraph">
+<p>DDD simply states that you should build your software around a domain model that represents the actual problem that the software is trying to solve. When encountered with complex real-life problems, often we will find it hard to conform to any single paradigm across the board. Looking to use a one-size-fits-all approach may work to one&#8217;s detriment. Our experience indicates that we will need to make use of a variety of techniques in order to solve the problem at hand elegantly. Java is inherently an object-oriented language. But with the advent of Java 8, it has started to embrace a variety of functional constructs as well. This allows us to make use of a multitude of techniques to create elegant solutions. The most important thing is to agree on the ubiquitous language and allow it to guide the approach taken. It also largely depends on the talent and experience one has at their disposal. Making use of a style that is foreign to a majority of the team will likely prove counter-productive. Although we haven&#8217;t covered the procedural paradigm here in this text, there may be occasions where it might be the best solution given the current situation. As long as we are intentional about areas where we deviate from the accepted norm for a particular programming paradigm, we should be in a reasonably good place.</p>
 </div>
-<div class="sect3">
-<h4 id="procedural-programming"><a class="anchor" href="#procedural-programming"></a><a class="link" href="#procedural-programming">3.2.4. Procedural programming</a></h4>
-
 </div>
+</div>
+<div class="sect2">
+<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">3.3. Summary</a></h3>
+
 </div>
 </div>
 </div>
@@ -3151,7 +3373,7 @@ The picture below is an attempt to clarify:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-3"><a class="anchor" href="#summary-3"></a><a class="link" href="#summary-3">4.7. Summary</a></h3>
+<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">4.7. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter we examined two ways to enhance our collective understanding of the problem domain using two lightweight modeling techniques&#8201;&#8212;&#8201;domain storytelling and eventstorming.</p>
 </div>
@@ -3396,7 +3618,7 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 <div class="sect3">
 <h4 id="tooling-choices"><a class="anchor" href="#tooling-choices"></a><a class="link" href="#tooling-choices">5.3.1. Tooling choices</a></h4>
 <div class="paragraph">
-<p>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</a><sup class="footnote">[<a id="_footnoteref_21" class="footnote" href="#_footnotedef_21" title="View footnote.">21</a>]</sup>, which is worth taking a look at. Using a <em>good</em> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <a href="http://axonframework.org/">Axon Framework</a><sup class="footnote">[<a id="_footnoteref_22" class="footnote" href="#_footnotedef_22" title="View footnote.">22</a>]</sup> to implement application functionality as we have real-world experience of having used it in large scale enterprise development with success. There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_23" class="footnote" href="#_footnotedef_23" title="View footnote.">23</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_24" class="footnote" href="#_footnotedef_24" title="View footnote.">24</a>]</sup> that are worth exploring as well.</p>
+<p>Implementing CQRS does not require the use of any framework. Greg Young, who is considered the father of the CQRS pattern, advises against rolling our own CQRS framework in this <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html">essay</a><sup class="footnote">[<a id="_footnoteref_22" class="footnote" href="#_footnotedef_22" title="View footnote.">22</a>]</sup>, which is worth taking a look at. Using a <em>good</em> framework can help enhance developer effectiveness and accelerate the delivery of business functionality, while abstracting the low-level plumbing and non-functional requirements without limiting flexibility. In this book we will make use of the <a href="http://axonframework.org/">Axon Framework</a><sup class="footnote">[<a id="_footnoteref_23" class="footnote" href="#_footnotedef_23" title="View footnote.">23</a>]</sup> to implement application functionality as we have real-world experience of having used it in large scale enterprise development with success. There are other frameworks that work comparably, like <a href="https://www.lagomframework.com/">Lagom Framework</a><sup class="footnote">[<a id="_footnoteref_24" class="footnote" href="#_footnotedef_24" title="View footnote.">24</a>]</sup> and <a href="https://eventuate.io/">Eventuate</a><sup class="footnote">[<a id="_footnoteref_25" class="footnote" href="#_footnotedef_25" title="View footnote.">25</a>]</sup> that are worth exploring as well.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4316,7 +4538,7 @@ Wheat bread</p></td>
 <div class="sect3">
 <h4 id="persistence-technology-choices"><a class="anchor" href="#persistence-technology-choices"></a><a class="link" href="#persistence-technology-choices">5.4.3. Persistence technology choices</a></h4>
 <div class="paragraph">
-<p>If you are using a state store to persist your aggregates, using your usual evaluation process for choosing your persistence technology should suffice. However, if you are looking at event-sourced aggregates, the decision can be a bit more nuanced. In our experience, even a simple relational database can do the trick. Indeed, we had made use of a relational database to act as an event store for a high volume transactional application with billions of events. This setup worked just fine for us. It is worth noting that we were only using the event store to insert new events and loading events for a given aggregate in sequential order. However, there are a multitude of specialized technologies that have been purpose built to act as an event store that support several other value-added features such as time travel, full event replay, event payload introspection, etc. If you have such requirements, it might be worth considering other options such as NoSql databases (document stores like MongoDB or column family stores like Cassandra) or purpose-built commercial offerings such as EventStoreDB<sup class="footnote">[<a id="_footnoteref_25" class="footnote" href="#_footnotedef_25" title="View footnote.">25</a>]</sup> and Axon Server<sup class="footnote">[<a id="_footnoteref_26" class="footnote" href="#_footnotedef_26" title="View footnote.">26</a>]</sup> to evaluate feasibility in your context.</p>
+<p>If you are using a state store to persist your aggregates, using your usual evaluation process for choosing your persistence technology should suffice. However, if you are looking at event-sourced aggregates, the decision can be a bit more nuanced. In our experience, even a simple relational database can do the trick. Indeed, we had made use of a relational database to act as an event store for a high volume transactional application with billions of events. This setup worked just fine for us. It is worth noting that we were only using the event store to insert new events and loading events for a given aggregate in sequential order. However, there are a multitude of specialized technologies that have been purpose built to act as an event store that support several other value-added features such as time travel, full event replay, event payload introspection, etc. If you have such requirements, it might be worth considering other options such as NoSql databases (document stores like MongoDB or column family stores like Cassandra) or purpose-built commercial offerings such as EventStoreDB<sup class="footnote">[<a id="_footnoteref_26" class="footnote" href="#_footnotedef_26" title="View footnote.">26</a>]</sup> and Axon Server<sup class="footnote">[<a id="_footnoteref_27" class="footnote" href="#_footnotedef_27" title="View footnote.">27</a>]</sup> to evaluate feasibility in your context.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4985,7 +5207,7 @@ Wheat bread</p></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_27" class="footnote" href="#_footnotedef_27" title="View footnote.">27</a>]</sup>.</td>
+<td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_28" class="footnote" href="#_footnotedef_28" title="View footnote.">28</a>]</sup>.</td>
 </tr>
 </table>
 </div>
@@ -5031,7 +5253,7 @@ Wheat bread</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-4"><a class="anchor" href="#summary-4"></a><a class="link" href="#summary-4">5.6. Summary</a></h3>
+<h3 id="summary-5"><a class="anchor" href="#summary-5"></a><a class="link" href="#summary-5">5.6. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we used the outputs of the eventstorming session and used it as a primary aid to create a domain model for our bounded context. We looked at how to implement this using the command query responsibility segregation (CQRS) architecture pattern. We looked at persistence options and the implications of using event sourced vs state stored aggregates. Finally, we rounded off by looking at a variety of ways in which to perform business validations. We looked at all this through a set of code examples using Spring boot and the Axon framework.</p>
 </div>
@@ -5134,7 +5356,7 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 </div>
 <div class="paragraph">
-<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_28" class="footnote" href="#_footnotedef_28" title="View footnote.">28</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
+<p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_29" class="footnote" href="#_footnotedef_29" title="View footnote.">29</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
 </div>
 <div class="paragraph">
 <p>In this chapter, we will implement the UI for LC Application and wire up the integration to the backend APIs.  The list of topics to be covered is as follows:</p>
@@ -5452,7 +5674,7 @@ To accomplish a difficult task, one must first make it easy.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="red"><span class="icon"><i class="fa fa-thumbs-down"></i></span></span></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="green"><span class="icon"><i class="fa fa-thumbs-up"></i></span></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_29" class="footnote" href="#_footnotedef_29" title="View footnote.">29</a>]</sup></em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For task-based interfaces, security is enhanced from the producer&#8217;s perspective by enabling application of the <em>principle of least privilege<sup class="footnote">[<a id="_footnoteref_30" class="footnote" href="#_footnotedef_30" title="View footnote.">30</a>]</sup></em>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Complexity</p></td>
@@ -5497,7 +5719,7 @@ To accomplish a difficult task, one must first make it easy.
 <p>Composite tier comprised of business capabilities that span more than one core service.</p>
 </li>
 <li>
-<p>Backend-for-frontend (<a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a><sup class="footnote">[<a id="_footnoteref_30" class="footnote" href="#_footnotedef_30" title="View footnote.">30</a>]</sup>) tier comprised of channel-specific APIs.</p>
+<p>Backend-for-frontend (<a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html">BFF</a><sup class="footnote">[<a id="_footnoteref_31" class="footnote" href="#_footnotedef_31" title="View footnote.">31</a>]</sup>) tier comprised of channel-specific APIs.</p>
 </li>
 </ol>
 </div>
@@ -6141,7 +6363,7 @@ Please refer to the ch06 directory of the accompanying source code repository fo
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_31" class="footnote" href="#_footnotedef_31" title="View footnote.">31</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_32" class="footnote" href="#_footnotedef_32" title="View footnote.">32</a>]</sup>.
+This may feel contrary to the notion of centralizing business validations on the back-end. While this may be a noble attempt at implementing the DRY (Don&#8217;t Repeat Yourself) principle, in reality, it poses a lot of practical problems. Distributed systems expert&#8201;&#8212;&#8201;Udi Dahan has a very interesting take on why this may not be such a virtuous thing to pursue<sup class="footnote">[<a id="_footnoteref_32" class="footnote" href="#_footnotedef_32" title="View footnote.">32</a>]</sup>. Ted Neward also talks about this in his blog titled <em>The Fallacies of Enterprise Computing</em><sup class="footnote">[<a id="_footnoteref_33" class="footnote" href="#_footnotedef_33" title="View footnote.">33</a>]</sup>.
 </td>
 </tr>
 </table>
@@ -6996,7 +7218,7 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-5"><a class="anchor" href="#summary-5"></a><a class="link" href="#summary-5">6.5. Summary</a></h3>
+<h3 id="summary-6"><a class="anchor" href="#summary-6"></a><a class="link" href="#summary-6">6.5. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we looked the nuances of API styles and clarified why it is very important to design APIs that capture the users' intent closely. We looked at the differences between CRUD-based and task-based APIs. Finally, we implemented the UI making use of the MVVM design pattern and demonstrated how it aids in test-driving frontend functionality.</p>
 </div>
@@ -7547,10 +7769,10 @@ In the above example, we have implemented the <code>QueryHandler</code> method w
 <div class="sect3">
 <h4 id="advanced-query-scenarios"><a class="anchor" href="#advanced-query-scenarios"></a><a class="link" href="#advanced-query-scenarios">7.3.6. Advanced query scenarios</a></h4>
 <div class="paragraph">
-<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_33" class="footnote" href="#_footnotedef_33" title="View footnote.">33</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
+<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_34" class="footnote" href="#_footnotedef_34" title="View footnote.">34</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
-<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_34" class="footnote" href="#_footnotedef_34" title="View footnote.">34</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
+<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_35" class="footnote" href="#_footnotedef_35" title="View footnote.">35</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
 </div>
 </div>
 </div>
@@ -7585,7 +7807,7 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <p><strong>Full event replay</strong> is one where we replay all the events in the event store. This can be used in a scenario where we need to support a completely new bounded context which is dependent on this subdomain. This can also be used in cases where we need to support a completely new query model or reconstruct an existing, erroneously built query model. Depending on the number of events in the event store, this can be a fairly long and complex process.</p>
 </li>
 <li>
-<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_35" class="footnote" href="#_footnotedef_35" title="View footnote.">35</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_36" class="footnote" href="#_footnotedef_36" title="View footnote.">36</a>]</sup> to name a few) can be extremely beneficial.</p>
+<p><strong>Partial/Adhoc event replay</strong> is one where we need to replay all the events on a subset of aggregate instances or a subset of events on all aggregate instances or a combination of both. When working with partial event replays, we will need to specify filtering criteria to select subsets of aggregate instances and events. This means that the event store needs to have the flexibility to support these use cases. Using specialized event store solutions (like <a href="https://axoniq.io/product-overview/axon">Axon Server</a><sup class="footnote">[<a id="_footnoteref_36" class="footnote" href="#_footnotedef_36" title="View footnote.">36</a>]</sup> and <a href="https://www.eventstore.com/eventstoredb">EventStoreDB</a><sup class="footnote">[<a id="_footnoteref_37" class="footnote" href="#_footnotedef_37" title="View footnote.">37</a>]</sup> to name a few) can be extremely beneficial.</p>
 </li>
 </ul>
 </div>
@@ -7665,7 +7887,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div class="sect3">
 <h4 id="event-design"><a class="anchor" href="#event-design"></a><a class="link" href="#event-design">7.4.3. Event design</a></h4>
 <div class="paragraph">
-<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_37" class="footnote" href="#_footnotedef_37" title="View footnote.">37</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
+<p>Event replays are required to reconstitute state from an event stream. In this article on what it means to be <a href="https://martinfowler.com/articles/201701-event-driven.html">event-driven</a><sup class="footnote">[<a id="_footnoteref_38" class="footnote" href="#_footnotedef_38" title="View footnote.">38</a>]</sup>, Martin Fowler talks about three different styles of events. If we employ the <em>event carried state transfer</em> approach (in Martin&#8217;s article) to reconstitute state, it might require us to only replay the latest event for a given aggregate, as opposed to replaying all the events for that aggregate in order of occurrence. While this may seem convenient, it also has its downsides:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -7705,7 +7927,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ol>
 </div>
 <div class="paragraph">
-<p>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that <a href="https://sre.google/sre-book/service-level-objectives/">SLOs</a><sup class="footnote">[<a id="_footnoteref_38" class="footnote" href="#_footnotedef_38" title="View footnote.">38</a>]</sup> (service level objectives) are continued to be met.</p>
+<p>Based on the above, while the replay is running (step 3 above), we may not be able to provide reliable answers to queries that are impacted by the replay. This obviously has an impact on application availability. When using event replays, care needs to be taken to ensure that <a href="https://sre.google/sre-book/service-level-objectives/">SLOs</a><sup class="footnote">[<a id="_footnoteref_39" class="footnote" href="#_footnotedef_39" title="View footnote.">39</a>]</sup> (service level objectives) are continued to be met.</p>
 </div>
 </div>
 </div>
@@ -7778,7 +8000,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </ul>
 </div>
 <div class="paragraph">
-<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_39" class="footnote" href="#_footnotedef_39" title="View footnote.">39</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
+<p>Which approach you choose really depends on your specific context and the maturity of the producer/consumer ecosystem. The axon framework makes provisions for a process they call <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting"><strong>event upcasting</strong></a><sup class="footnote">[<a id="_footnoteref_40" class="footnote" href="#_footnotedef_40" title="View footnote.">40</a>]</sup> that allows upgrading events just-in-time before they are consumed. Please refer to the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
 <p>In an event-driven system, events are your API. This means that you will need to apply the same rigor that one applies to APIs when making lifecycle management decisions (for example, versioning, deprecation, backwards compatibility, etc.).</p>
@@ -7787,7 +8009,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-6"><a class="anchor" href="#summary-6"></a><a class="link" href="#summary-6">7.5. Summary</a></h3>
+<h3 id="summary-7"><a class="anchor" href="#summary-7"></a><a class="link" href="#summary-7">7.5. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter we examined how to implement the query side of a CQRS-based system. We looked at how domain events can be consumed in real-time to construct materialized views that can be used to service query APIs. We looked at the different query types that can be used to efficiently access the underlying query models. We rounded off by looking at persistence options for the query side. Finally, we looked at historic event replays and how it can be used to correct errors or introduce new functionality in an event-driven system.</p>
 </div>
@@ -7929,7 +8151,7 @@ Please refer to the ch08 directory of the book&#8217;s accompanying source code 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_40" class="footnote" href="#_footnotedef_40" title="View footnote.">40</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
+In this context, we are using the term <strong><em>long-running</em></strong> to denote a complex business process that takes several steps to complete. As these steps occur, the process transitions from one state to another. In other words, we are referring to a <a href="https://en.wikipedia.org/wiki/state_machine"><strong>state machine</strong></a><sup class="footnote">[<a id="_footnoteref_41" class="footnote" href="#_footnotedef_41" title="View footnote.">41</a>]</sup>. This is not to be confused with a long-running software process (for example, a complex SQL query or an image processing routine) that is computationally intensive.
 </td>
 </tr>
 </table>
@@ -8593,7 +8815,7 @@ We will skip covering code examples for the choreography implementation because 
 </ul>
 </div>
 <div class="paragraph">
-<p>Sagas enable applications to maintain data and transactional consistency when more than one bounded context is required to complete the business functionality without having to resort to using <a href="https://en.wikipedia.org/wiki/Distributed_transaction"><em>distributed transactions</em></a><sup class="footnote">[<a id="_footnoteref_41" class="footnote" href="#_footnotedef_41" title="View footnote.">41</a>]</sup>. However, it does introduce a level of complexity to the programming model, especially when it comes to handling failures. We will look at exception handling in a lot more detail when we discuss working with distributed systems in upcoming chapters. Let&#8217;s look at how to progress flows when there are no explicit stimuli by looking at how deadlines work.</p>
+<p>Sagas enable applications to maintain data and transactional consistency when more than one bounded context is required to complete the business functionality without having to resort to using <a href="https://en.wikipedia.org/wiki/Distributed_transaction"><em>distributed transactions</em></a><sup class="footnote">[<a id="_footnoteref_42" class="footnote" href="#_footnotedef_42" title="View footnote.">42</a>]</sup>. However, it does introduce a level of complexity to the programming model, especially when it comes to handling failures. We will look at exception handling in a lot more detail when we discuss working with distributed systems in upcoming chapters. Let&#8217;s look at how to progress flows when there are no explicit stimuli by looking at how deadlines work.</p>
 </div>
 </div>
 </div>
@@ -8968,7 +9190,7 @@ We will skip covering code examples for the choreography implementation because 
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-7"><a class="anchor" href="#summary-7"></a><a class="link" href="#summary-7">8.5. Summary</a></h3>
+<h3 id="summary-8"><a class="anchor" href="#summary-8"></a><a class="link" href="#summary-8">8.5. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we examined how to work with long-running workflows using sagas and the different styles we can use to implement them. We also looked at the implications of using explicit orchestration versus implicit choreography. We finally looked at how we can handle deadlines when there are no user-initiated actions.</p>
 </div>
@@ -9527,7 +9749,7 @@ There are three broad categories that can be employed when integrating two bound
 <p>When sharing data, the schema (the structure of the database) acts as a means to enforce contracts, especially when using databases that require specifying a formal structure (for example, relational databases). When multiple parties are involved, managing the schema can become a challenge.</p>
 </div>
 <div class="paragraph">
-<p>To mitigate undesirable changes, teams sharing data may want to consider the use of a schema migration tool. Relational databases work well with tools like <a href="https://www.liquibase.org/">liquibase</a><sup class="footnote">[<a id="_footnoteref_42" class="footnote" href="#_footnotedef_42" title="View footnote.">42</a>]</sup> or <a href="https://flywaydb.org/">flyway</a><sup class="footnote">[<a id="_footnoteref_43" class="footnote" href="#_footnotedef_43" title="View footnote.">43</a>]</sup>. When working with databases that do not formally enforce a schema, it may be best to avoid employing this style of integration, especially when working in  symmetric relationships where ownership is unclear.</p>
+<p>To mitigate undesirable changes, teams sharing data may want to consider the use of a schema migration tool. Relational databases work well with tools like <a href="https://www.liquibase.org/">liquibase</a><sup class="footnote">[<a id="_footnoteref_43" class="footnote" href="#_footnotedef_43" title="View footnote.">43</a>]</sup> or <a href="https://flywaydb.org/">flyway</a><sup class="footnote">[<a id="_footnoteref_44" class="footnote" href="#_footnotedef_44" title="View footnote.">44</a>]</sup>. When working with databases that do not formally enforce a schema, it may be best to avoid employing this style of integration, especially when working in  symmetric relationships where ownership is unclear.</p>
 </div>
 <div class="paragraph">
 <p>In any case, if using one of the shared data styles of integration is unavoidable, teams may want to strongly consider employing one or more techniques mentioned in <a href="https://databaserefactoring.com/">refactoring databases</a> to make it more manageable.</p>
@@ -9578,7 +9800,7 @@ There are three broad categories that can be employed when integrating two bound
 <div class="sect5">
 <h6 id="when-to-use-10"><a class="anchor" href="#when-to-use-10"></a><a class="link" href="#when-to-use-10">When to use</a></h6>
 <div class="paragraph">
-<p>Sharing just binary artifacts may be necessary when the supplier is unable/unwilling to share source artifacts, possibly because they may be proprietary and/or part of the supplier&#8217;s intellectual property. Because the supplier takes ownership of the <em>build</em> process, it behooves the supplier to produce artifacts that are compatible with most potential consumers. Hence, this works well when the supplier is willing to do that. On the other hand, it requires that the customer place high levels of <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain">trust</a><sup class="footnote">[<a id="_footnoteref_44" class="footnote" href="#_footnotedef_44" title="View footnote.">44</a>]</sup> in the supplier&#8217;s <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide">software supply chain</a><sup class="footnote">[<a id="_footnoteref_45" class="footnote" href="#_footnotedef_45" title="View footnote.">45</a>]</sup> when producing these artifacts.</p>
+<p>Sharing just binary artifacts may be necessary when the supplier is unable/unwilling to share source artifacts, possibly because they may be proprietary and/or part of the supplier&#8217;s intellectual property. Because the supplier takes ownership of the <em>build</em> process, it behooves the supplier to produce artifacts that are compatible with most potential consumers. Hence, this works well when the supplier is willing to do that. On the other hand, it requires that the customer place high levels of <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain">trust</a><sup class="footnote">[<a id="_footnoteref_45" class="footnote" href="#_footnotedef_45" title="View footnote.">45</a>]</sup> in the supplier&#8217;s <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide">software supply chain</a><sup class="footnote">[<a id="_footnoteref_46" class="footnote" href="#_footnotedef_46" title="View footnote.">46</a>]</sup> when producing these artifacts.</p>
 </div>
 </div>
 <div class="sect5">
@@ -9651,7 +9873,7 @@ Please take a look at the HTTP APIs for the commands used during LC application 
 <div class="sect5">
 <h6 id="when-to-use-11"><a class="anchor" href="#when-to-use-11"></a><a class="link" href="#when-to-use-11">When to use</a></h6>
 <div class="paragraph">
-<p>This form of integration is used when the customer is interested in the supplier&#8217;s response to the request. The response is then used to determine whether the request was successful or not. Given that the customer needs to wait for the response, it is advisable to use this style of messaging for low latency operations. This form of integration is popular when exposing public APIs over the internet (for example, <a href="https://docs.github.com/en/rest">Github&#8217;s REST API</a><sup class="footnote">[<a id="_footnoteref_46" class="footnote" href="#_footnotedef_46" title="View footnote.">46</a>]</sup>).</p>
+<p>This form of integration is used when the customer is interested in the supplier&#8217;s response to the request. The response is then used to determine whether the request was successful or not. Given that the customer needs to wait for the response, it is advisable to use this style of messaging for low latency operations. This form of integration is popular when exposing public APIs over the internet (for example, <a href="https://docs.github.com/en/rest">Github&#8217;s REST API</a><sup class="footnote">[<a id="_footnoteref_47" class="footnote" href="#_footnotedef_47" title="View footnote.">47</a>]</sup>).</p>
 </div>
 </div>
 <div class="sect5">
@@ -9739,10 +9961,10 @@ The operative word here is <strong>lightweight</strong>. It is pertinent to note
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p><strong>Self discovery</strong>: As outlined above, when working with a IPC-based integration mechanism, we should look to reduce the barrier to entry. When working with RESTful APIs, the use of <a href="https://restfulapi.net/hateoas">HATEOAS</a><sup class="footnote">[<a id="_footnoteref_47" class="footnote" href="#_footnotedef_47" title="View footnote.">47</a>]</sup>, although difficult for suppliers to implement, can make it easier for customers to understand and consume APIs. In addition, making use of a service registry and/or a schema registry can further reduce consumption friction.</p>
+<p><strong>Self discovery</strong>: As outlined above, when working with a IPC-based integration mechanism, we should look to reduce the barrier to entry. When working with RESTful APIs, the use of <a href="https://restfulapi.net/hateoas">HATEOAS</a><sup class="footnote">[<a id="_footnoteref_48" class="footnote" href="#_footnotedef_48" title="View footnote.">48</a>]</sup>, although difficult for suppliers to implement, can make it easier for customers to understand and consume APIs. In addition, making use of a service registry and/or a schema registry can further reduce consumption friction.</p>
 </li>
 <li>
-<p><strong>Contract tests</strong>: In the spirit of failing fast and shifting left, the practice of contract testing and <a href="https://martinfowler.com/articles/consumerDrivenContracts.html">consumer-driven contracts</a> can further increase the quality and speed of integration. Tools such as <a href="https://pact.io/">Pact</a><sup class="footnote">[<a id="_footnoteref_48" class="footnote" href="#_footnotedef_48" title="View footnote.">48</a>]</sup> and <a href="https://spring.io/projects/spring-cloud-contract">Spring Cloud Contract</a><sup class="footnote">[<a id="_footnoteref_49" class="footnote" href="#_footnotedef_49" title="View footnote.">49</a>]</sup> make the adoption of these practices relatively simple.</p>
+<p><strong>Contract tests</strong>: In the spirit of failing fast and shifting left, the practice of contract testing and <a href="https://martinfowler.com/articles/consumerDrivenContracts.html">consumer-driven contracts</a> can further increase the quality and speed of integration. Tools such as <a href="https://pact.io/">Pact</a><sup class="footnote">[<a id="_footnoteref_49" class="footnote" href="#_footnotedef_49" title="View footnote.">49</a>]</sup> and <a href="https://spring.io/projects/spring-cloud-contract">Spring Cloud Contract</a><sup class="footnote">[<a id="_footnoteref_50" class="footnote" href="#_footnotedef_50" title="View footnote.">50</a>]</sup> make the adoption of these practices relatively simple.</p>
 </li>
 </ol>
 </div>
@@ -9753,7 +9975,7 @@ The operative word here is <strong>lightweight</strong>. It is pertinent to note
 </div>
 </div>
 <div class="sect2">
-<h3 id="summary-8"><a class="anchor" href="#summary-8"></a><a class="link" href="#summary-8">9.4. Summary</a></h3>
+<h3 id="summary-9"><a class="anchor" href="#summary-9"></a><a class="link" href="#summary-9">9.4. Summary</a></h3>
 <div class="paragraph">
 <p>In this chapter, we looked at the different types of bounded context relationships. We also examined common integration patterns that can be used when implementing these bounded context relationships.</p>
 </div>
@@ -10077,97 +10299,100 @@ Sometimes I feel like I am being forgotten.
 <a href="#_footnoteref_20">20</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 <div class="footnote" id="_footnotedef_21">
-<a href="#_footnoteref_21">21</a>. <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html" class="bare">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</a>
+<a href="#_footnoteref_21">21</a>. <a href="https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records" class="bare">https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records</a>
 </div>
 <div class="footnote" id="_footnotedef_22">
-<a href="#_footnoteref_22">22</a>. <a href="http://axonframework.org/" class="bare">http://axonframework.org/</a>
+<a href="#_footnoteref_22">22</a>. <a href="https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html" class="bare">https://ordina-jworks.github.io/domain-driven%20design/2016/02/02/A-Decade-Of-DDD-CQRS-And-Event-Sourcing.html</a>
 </div>
 <div class="footnote" id="_footnotedef_23">
-<a href="#_footnoteref_23">23</a>. <a href="https://www.lagomframework.com/" class="bare">https://www.lagomframework.com/</a>
+<a href="#_footnoteref_23">23</a>. <a href="http://axonframework.org/" class="bare">http://axonframework.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_24">
-<a href="#_footnoteref_24">24</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
+<a href="#_footnoteref_24">24</a>. <a href="https://www.lagomframework.com/" class="bare">https://www.lagomframework.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_25">
-<a href="#_footnoteref_25">25</a>. <a href="https://www.eventstore.com/" class="bare">https://www.eventstore.com/</a>
+<a href="#_footnoteref_25">25</a>. <a href="https://eventuate.io/" class="bare">https://eventuate.io/</a>
 </div>
 <div class="footnote" id="_footnotedef_26">
-<a href="#_footnoteref_26">26</a>. <a href="https://axoniq.io/product-overview/axon-server" class="bare">https://axoniq.io/product-overview/axon-server</a>
+<a href="#_footnoteref_26">26</a>. <a href="https://www.eventstore.com/" class="bare">https://www.eventstore.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_27">
-<a href="#_footnoteref_27">27</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
+<a href="#_footnoteref_27">27</a>. <a href="https://axoniq.io/product-overview/axon-server" class="bare">https://axoniq.io/product-overview/axon-server</a>
 </div>
 <div class="footnote" id="_footnotedef_28">
-<a href="#_footnoteref_28">28</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
+<a href="#_footnoteref_28">28</a>. <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://www.martinfowler.com/bliki/AnemicDomainModel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_29">
-<a href="#_footnoteref_29">29</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
+<a href="#_footnoteref_29">29</a>. <a href="https://openjfx.com/" class="bare">https://openjfx.com/</a>
 </div>
 <div class="footnote" id="_footnotedef_30">
-<a href="#_footnoteref_30">30</a>. <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html" class="bare">https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html</a>
+<a href="#_footnoteref_30">30</a>. <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" class="bare">https://en.wikipedia.org/wiki/Principle_of_least_privilege</a>
 </div>
 <div class="footnote" id="_footnotedef_31">
-<a href="#_footnoteref_31">31</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
+<a href="#_footnoteref_31">31</a>. <a href="https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html" class="bare">https://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html</a>
 </div>
 <div class="footnote" id="_footnotedef_32">
-<a href="#_footnoteref_32">32</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
+<a href="#_footnoteref_32">32</a>. <a href="https://vimeo.com/131757759" class="bare">https://vimeo.com/131757759</a>
 </div>
 <div class="footnote" id="_footnotedef_33">
-<a href="#_footnoteref_33">33</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
+<a href="#_footnoteref_33">33</a>. <a href="http://blogs.tedneward.com/post/enterprise-computing-fallacies/" class="bare">http://blogs.tedneward.com/post/enterprise-computing-fallacies/</a>
 </div>
 <div class="footnote" id="_footnotedef_34">
-<a href="#_footnoteref_34">34</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
+<a href="#_footnoteref_34">34</a>. <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html" class="bare">https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html</a>
 </div>
 <div class="footnote" id="_footnotedef_35">
-<a href="#_footnoteref_35">35</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
+<a href="#_footnoteref_35">35</a>. <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html" class="bare">https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html</a>
 </div>
 <div class="footnote" id="_footnotedef_36">
-<a href="#_footnoteref_36">36</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
+<a href="#_footnoteref_36">36</a>. <a href="https://axoniq.io/product-overview/axon" class="bare">https://axoniq.io/product-overview/axon</a>
 </div>
 <div class="footnote" id="_footnotedef_37">
-<a href="#_footnoteref_37">37</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
+<a href="#_footnoteref_37">37</a>. <a href="https://www.eventstore.com/eventstoredb" class="bare">https://www.eventstore.com/eventstoredb</a>
 </div>
 <div class="footnote" id="_footnotedef_38">
-<a href="#_footnoteref_38">38</a>. <a href="https://sre.google/sre-book/service-level-objectives" class="bare">https://sre.google/sre-book/service-level-objectives</a>
+<a href="#_footnoteref_38">38</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
 <div class="footnote" id="_footnotedef_39">
-<a href="#_footnoteref_39">39</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
+<a href="#_footnoteref_39">39</a>. <a href="https://sre.google/sre-book/service-level-objectives" class="bare">https://sre.google/sre-book/service-level-objectives</a>
 </div>
 <div class="footnote" id="_footnotedef_40">
-<a href="#_footnoteref_40">40</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
+<a href="#_footnoteref_40">40</a>. <a href="https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting" class="bare">https://docs.axoniq.io/reference-guide/axon-framework/events/event-versioning#event-upcasting</a>
 </div>
 <div class="footnote" id="_footnotedef_41">
-<a href="#_footnoteref_41">41</a>. <a href="https://en.wikipedia.org/wiki/Distributed_transaction" class="bare">https://en.wikipedia.org/wiki/Distributed_transaction</a>
+<a href="#_footnoteref_41">41</a>. <a href="https://en.wikipedia.org/wiki/state_machine" class="bare">https://en.wikipedia.org/wiki/state_machine</a>
 </div>
 <div class="footnote" id="_footnotedef_42">
-<a href="#_footnoteref_42">42</a>. <a href="https://www.liquibase.org/" class="bare">https://www.liquibase.org/</a>
+<a href="#_footnoteref_42">42</a>. <a href="https://en.wikipedia.org/wiki/Distributed_transaction" class="bare">https://en.wikipedia.org/wiki/Distributed_transaction</a>
 </div>
 <div class="footnote" id="_footnotedef_43">
-<a href="#_footnoteref_43">43</a>. <a href="https://flywaydb.org/" class="bare">https://flywaydb.org/</a>
+<a href="#_footnoteref_43">43</a>. <a href="https://www.liquibase.org/" class="bare">https://www.liquibase.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_44">
-<a href="#_footnoteref_44">44</a>. <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain" class="bare">https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain</a>
+<a href="#_footnoteref_44">44</a>. <a href="https://flywaydb.org/" class="bare">https://flywaydb.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_45">
-<a href="#_footnoteref_45">45</a>. <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide" class="bare">https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide</a>
+<a href="#_footnoteref_45">45</a>. <a href="https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain" class="bare">https://www.thoughtworks.com/en-us/insights/podcasts/technology-podcasts/securing-software-supply-chain</a>
 </div>
 <div class="footnote" id="_footnotedef_46">
-<a href="#_footnoteref_46">46</a>. <a href="https://docs.github.com/en/rest" class="bare">https://docs.github.com/en/rest</a>
+<a href="#_footnoteref_46">46</a>. <a href="https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide" class="bare">https://blog.sonatype.com/software-supply-chain-a-definition-and-introductory-guide</a>
 </div>
 <div class="footnote" id="_footnotedef_47">
-<a href="#_footnoteref_47">47</a>. <a href="https://restfulapi.net/hateoas" class="bare">https://restfulapi.net/hateoas</a>
+<a href="#_footnoteref_47">47</a>. <a href="https://docs.github.com/en/rest" class="bare">https://docs.github.com/en/rest</a>
 </div>
 <div class="footnote" id="_footnotedef_48">
-<a href="#_footnoteref_48">48</a>. <a href="https://pact.io/" class="bare">https://pact.io/</a>
+<a href="#_footnoteref_48">48</a>. <a href="https://restfulapi.net/hateoas" class="bare">https://restfulapi.net/hateoas</a>
 </div>
 <div class="footnote" id="_footnotedef_49">
-<a href="#_footnoteref_49">49</a>. <a href="https://spring.io/projects/spring-cloud-contract" class="bare">https://spring.io/projects/spring-cloud-contract</a>
+<a href="#_footnoteref_49">49</a>. <a href="https://pact.io/" class="bare">https://pact.io/</a>
+</div>
+<div class="footnote" id="_footnotedef_50">
+<a href="#_footnoteref_50">50</a>. <a href="https://spring.io/projects/spring-cloud-contract" class="bare">https://spring.io/projects/spring-cloud-contract</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-13 13:06:10 UTC
+Last updated 2022-02-22 11:16:11 UTC
 </div>
 </div>
 </body>

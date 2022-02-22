@@ -461,10 +461,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#object-oriented-programming">Object-oriented programming</a></li>
 <li><a href="#functional-programming">Functional programming</a></li>
-<li><a href="#functional-reactive-programming">Functional reactive programming</a></li>
-<li><a href="#procedural-programming">Procedural programming</a></li>
+<li><a href="#which-paradigm-should-you-choose">Which paradigm should you choose?</a></li>
 </ul>
 </li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </li>
 </ul>
@@ -876,26 +876,248 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div class="paragraph">
 <p>Although Foote and Yoder advise avoiding this style of architecture at all costs, software systems that resemble the big ball of mud continue to be a day-to-day inevitability for a lot of us. The strategic and tactical design elements of DDD provide a set of techniques to help deal with and recover from these near-hopeless situations in a pragmatic manner without potentially having to adopt a big bang approach. Indeed, the focus of this book is to apply these principles to prevent or at least delay further devolution towards the big ball of mud.</p>
 </div>
+<div class="paragraph">
+<p>In this section, we have examined popular architecture styles and how we can amplify their effectiveness when used in conjunction with DDD. Now let&#8217;s look at how DDD can complement the use of existing programming paradigms.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="programming-paradigms"><a class="anchor" href="#programming-paradigms"></a>Programming paradigms</h3>
+<div class="paragraph">
+<p>The tactical elements of DDD introduce a specific vocabulary (aggregates, entities, value objects, repositories, services, factories, domain events, etc.) when arriving at a solution. At the end of the day, we need to translate these concepts into running software. Over the years, we have employed a variety of programming paradigms including procedural, object-oriented, functional, aspect-oriented, etc. Is it possible to apply DDD in conjunction with one or more of these paradigms? In this section, we will explore how some common programming paradigms and techniques help us express the tactical design elements in code.</p>
+</div>
 <div class="sect3">
 <h4 id="object-oriented-programming"><a class="anchor" href="#object-oriented-programming"></a>Object-oriented programming</h4>
+<div class="paragraph">
+<p>On the surface of it, DDD seems to simply replicate a set of OO terms and call them using different names. For example, the central concepts of tactical DDD such as <code>aggregates</code>, <code>entities</code> and <code>value objects</code> could simply be referred to as objects in OO terms. Others like <code>services</code> may not have a direct OO analog. So how does one apply DDD in an object-oriented world? Let&#8217;s look at a simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre>
+<span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">PasswordService</span> {
+    <span style="color:#0a8;font-weight:bold">String</span> generateStrongPassword();
+    <span style="color:#339;font-weight:bold">boolean</span> isStrong(<span style="color:#0a8;font-weight:bold">String</span> password);
+    <span style="color:#339;font-weight:bold">boolean</span> isWeak(<span style="color:#0a8;font-weight:bold">String</span> password);
+}
 
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PasswordClient</span> {
+    <span style="color:#088;font-weight:bold">private</span> PasswordService service;
+
+    <span style="color:#339;font-weight:bold">void</span> register(<span style="color:#0a8;font-weight:bold">String</span> userEnteredPassword) {
+        <span style="color:#080;font-weight:bold">if</span> (service.isStrong(userEnteredPassword)) {
+            <span style="color:#777">//...</span>
+        }
+    }
+}
+</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OO purists will be quick to point out that the <code>PasswordService</code> is procedural and that a <code>Password</code> class might be needed to encapsulate related behaviours. Similarly, DDD enthusiasts might point out that this is an anemic domain model implementation. An arguably better object-oriented version might look something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Password</span> {
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">String</span> password;
+
+    <span style="color:#088;font-weight:bold">private</span> Password(<span style="color:#0a8;font-weight:bold">String</span> password) {
+        <span style="color:#950">this</span>.password = password;
+    }
+
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">boolean</span> isStrong() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">boolean</span> isWeak() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Password generateStrongPassword() { ... }
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Password passwordFrom(<span style="color:#0a8;font-weight:bold">String</span> password) { ... }
+
+}
+
+<span style="color:#339;font-weight:bold">interface</span> <span style="color:#B06;font-weight:bold">PasswordService</span> {
+    Password generateStrongPassword();
+    Password createPasswordFrom(<span style="color:#0a8;font-weight:bold">String</span> userEntered);
+}
+
+<span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PasswordClient</span> {
+    <span style="color:#088;font-weight:bold">private</span> PasswordService service;
+
+    <span style="color:#339;font-weight:bold">void</span> register(<span style="color:#0a8;font-weight:bold">String</span> userEnteredPassword) {
+        Password password = service.createPasswordFrom(userEnteredPassword);
+        <span style="color:#080;font-weight:bold">if</span> (password.isStrong()) {
+            <span style="color:#777">// ...</span>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, the <code>Password</code> class stops exposing its internals and exposes the idea of a strong or weak password in the form of behavior (the <code>isStrong</code> and <code>isWeak</code> methods). From an OO perspective, the second implementation is arguably superior. If so, shouldn&#8217;t we be using the object-oriented version at all times? As it turns out, the answer is nuanced and depends on what the consumers desire and the ubiquitous language used in that context. If the concept of the <code>Password</code> is in common usage within the domain, it perhaps warrants introducing such a concept in the implementation as well. If not, the first solution might suffice even though it seems to violate OO principles of encapsulation.</p>
+</div>
+<div class="paragraph">
+<p>Our default position is to apply good OO practices as a starting point. However, it is more important to mirror the language of the domain as opposed to applying OO in a dogmatic manner. So we will be willing to compromise on OO purity if it appears unnatural to do so in that context. But when we do make such compromises, it is important to do so <strong>intentionally</strong> and make it unambiguously clear why we are making such a decision (preferably using some lightweight mechanism such as <a href="https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records">ADR</a>s<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>). This is important because it may become hard to justify this to others and even ourselves when we look at it in the future.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="functional-programming"><a class="anchor" href="#functional-programming"></a>Functional programming</h4>
+<div class="paragraph">
+<p>Functions are a fundamental building block to code organization that exist in all higher order programming languages. Functional programming is a programming paradigm where programs are constructed by applying and composing functions. This is in contrast to imperative programming that uses statements to change a program&#8217;s state. The most significant differences stem from the fact that functional programming avoids side effects, which are used in imperative programming. Pure functional programming completely prevents side effects and forces immutability. Embracing a functional style when designing a domain model to be more declarative and express intent a lot more clearly while remaining terse. It also allows us to keep complexity in check by enabling us to compose more complex concepts by using simpler ones.The functional implementation allows us to use a language closer to the problem domain, while having the added benefit of also being terse. Consider a simple example where we need to find the item with the least inventory across all our warehouses using a functional style as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Functional example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Functional</span> {
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Optional&lt;Item&gt; scarcestItem(Warehouse... warehouses) {
+        <span style="color:#080;font-weight:bold">return</span> Stream.of(warehouses)
+                .flatMap(Warehouse::items)
+                .collect(groupingBy(Item::name, summingInt(Item::quantity)))
+                .entrySet().stream()
+                .map(Item::<span style="color:#080;font-weight:bold">new</span>)
+                .min(comparing(Item::quantity));
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The imperative style shown here does get the job done, but is arguably a lot more verbose and harder to follow, sometimes even for technical team members!</p>
+</div>
+<div class="listingblock">
+<div class="title">Imperative example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Imperative</span> {
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#088;font-weight:bold">static</span> Optional&lt;Item&gt; scarcestItem(Warehouse... warehouses) {
+        <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Item&gt; allItems = <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">ArrayList</span>&lt;&gt;();
+        <span style="color:#080;font-weight:bold">for</span> (Warehouse warehouse : warehouses) {
+            allItems.addAll(warehouse.getItems());
+        }
+        <span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>, <span style="color:#0a8;font-weight:bold">Integer</span>&gt; itemNamesByQuantity = <span style="color:#080;font-weight:bold">new</span> <span style="color:#0a8;font-weight:bold">HashMap</span>&lt;&gt;();
+        <span style="color:#080;font-weight:bold">for</span> (Item item : allItems) {
+            <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">String</span> name = item.name();
+            <span style="color:#088;font-weight:bold">final</span> <span style="color:#339;font-weight:bold">int</span> quantity = item.quantity();
+            <span style="color:#080;font-weight:bold">if</span> (itemNamesByQuantity.containsKey(name)) {
+                itemNamesByQuantity.put(name, itemNamesByQuantity.get(name) + quantity);
+            } <span style="color:#080;font-weight:bold">else</span> {
+                itemNamesByQuantity.put(name, quantity);
+            }
+        }
+        <span style="color:#088;font-weight:bold">final</span> <span style="color:#0a8;font-weight:bold">Map</span>.Entry&lt;<span style="color:#0a8;font-weight:bold">String</span>, <span style="color:#0a8;font-weight:bold">Integer</span>&gt; min =
+            <span style="color:#0a8;font-weight:bold">Collections</span>.min(itemNamesByQuantity.entrySet(), <span style="color:#0a8;font-weight:bold">Map</span>.Entry.comparingByValue());
+        <span style="color:#080;font-weight:bold">return</span> min != <span style="color:#069">null</span> ? Optional.of(<span style="color:#080;font-weight:bold">new</span> Item(min)) : Optional.empty();
 
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From a DDD perspective, this yields a few benefits:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Increase collaboration with domain experts</strong> because the declarative style allows placing a bigger focus on the what, rather than the how. This makes it a lot less intimidating to technical and non-technical stakeholders alike to work with on an ongoing basis.</p>
+</li>
+<li>
+<p><strong>Better testability</strong>: because the use of pure functions (those that are side effect free) makes it easier to create data-driven tests. This has also afforded us an additional benefit of less mocking/stubbing. These characteristics make tests that are a lot easier to maintain and reason about. This has the benefit of allowing even technical team members to visualize corner cases a lot earlier in the process.</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
-<h4 id="functional-reactive-programming"><a class="anchor" href="#functional-reactive-programming"></a>Functional reactive programming</h4>
-
+<h4 id="which-paradigm-should-you-choose"><a class="anchor" href="#which-paradigm-should-you-choose"></a>Which paradigm should you choose?</h4>
+<div class="paragraph">
+<p>DDD simply states that you should build your software around a domain model that represents the actual problem that the software is trying to solve. When encountered with complex real-life problems, often we will find it hard to conform to any single paradigm across the board. Looking to use a one-size-fits-all approach may work to one&#8217;s detriment. Our experience indicates that we will need to make use of a variety of techniques in order to solve the problem at hand elegantly. Java is inherently an object-oriented language. But with the advent of Java 8, it has started to embrace a variety of functional constructs as well. This allows us to make use of a multitude of techniques to create elegant solutions. The most important thing is to agree on the ubiquitous language and allow it to guide the approach taken. It also largely depends on the talent and experience one has at their disposal. Making use of a style that is foreign to a majority of the team will likely prove counter-productive. Although we haven&#8217;t covered the procedural paradigm here in this text, there may be occasions where it might be the best solution given the current situation. As long as we are intentional about areas where we deviate from the accepted norm for a particular programming paradigm, we should be in a reasonably good place.</p>
 </div>
-<div class="sect3">
-<h4 id="procedural-programming"><a class="anchor" href="#procedural-programming"></a>Procedural programming</h4>
-
 </div>
+</div>
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+
 </div>
 </div>
 </div>
@@ -929,11 +1151,14 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div class="footnote" id="_footnotedef_9">
 <a href="#_footnoteref_9">9</a>. <a href="https://martinfowler.com/articles/201701-event-driven.html" class="bare">https://martinfowler.com/articles/201701-event-driven.html</a>
 </div>
+<div class="footnote" id="_footnotedef_10">
+<a href="#_footnoteref_10">10</a>. <a href="https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records" class="bare">https://www.thoughtworks.com/de-de/radar/techniques/lightweight-architecture-decision-records</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-13 13:06:10 UTC
+Last updated 2022-02-22 11:16:11 UTC
 </div>
 </div>
 </body>
