@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Feb 22 2022 09:09 PM UTC</span>
+<span id="revdate">Feb 26 2022 01:24 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1359,7 +1359,7 @@ In this chapter, we look at a set of tenets and techniques to arrive at a collec
 <div class="sect3">
 <h4 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a><a class="link" href="#what-is-a-subdomain">2.1.2. What is a subdomain?</a></h4>
 <div class="paragraph">
-<p>At its essence, Domain-driven design provides means to tackle complexity. Engineers do this by breaking down complex problems into more manageable ones. the domain of a business into multiple manageable parts called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
+<p>At its essence, Domain-driven design provides means to tackle complexity. Engineers do this by breaking down complex problems into more manageable ones called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1379,6 +1379,18 @@ In this chapter, we look at a set of tenets and techniques to arrive at a collec
 <div class="paragraph">
 <p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity. Domain decomposition is an important aspect of DDD. Let&#8217;s look at the types of subdomains to understand this better.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The terms domain and subdomains tend to get used interchangeably quite often. This can be confusing to the casual onlooker. Given that sub(domains) tend to be quite complex and hierarchical, a subdomain can be a domain in its own right.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a><a class="link" href="#types-of-subdomains">2.1.3. Types of subdomains</a></h4>
@@ -1388,7 +1400,7 @@ In this chapter, we look at a set of tenets and techniques to arrive at a collec
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above, the business may want to focus on providing an enriched experience to place online orders. This will make the <em>online orders</em> and <em>shopping cart</em> part of the core domain.</p>
+<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above, the business may want to focus on providing an enriched experience to place online orders. This will make the <em>online orders</em> and <em>shopping cart</em> part of the core subdomain.</p>
 </li>
 <li>
 <p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence, it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
@@ -1467,7 +1479,19 @@ It is important to note that the notion of core vs. supporting vs. generic subdo
 <div class="paragraph">
 <p>Every decision we take regarding the organization, be it requirements, architecture, code, etc. has business and user consequences.
 In order to conceive, architect, design, build and evolve software effectively, our decisions need to aid in creating the optimal business impact. As mentioned above, this can only be achieved if we have a clear understanding of the problem we intend to solve.
-This leads us to the realization that there exist two distinct domains when arriving at the solution for a problem:</p>
+This leads us to the realization that there exist two distinct <em>domains</em> when arriving at the solution for a problem:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The use of the word domain in this context is made in an abstract sense&#8201;&#8212;&#8201;not to be confused with the concept of the business domain introduced earlier.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1518,10 +1542,7 @@ The problem domain expressed in the form of why, what and how is shown here:</p>
 <div class="sect3">
 <h4 id="solution-domain"><a class="anchor" href="#solution-domain"></a><a class="link" href="#solution-domain">2.1.7. Solution domain</a></h4>
 <div class="paragraph">
-<p>A term used to describe the environment in which the solution is developed.
-In other words, the process of translating requirements into working software (this includes design, development, testing, deployment, etc).
-Here the emphasis is on the <em>how</em> of the problem being solved.
-However, it is very difficult to arrive at a solution without having an appreciation of the why and the what.</p>
+<p>A term used to describe the environment in which the solution is developed. In other words, the process of translating requirements into working software (this includes design, development, testing, deployment, etc). Here the emphasis is on the <em>how</em> of the problem being solved from a software implementation perspective. However, it is very difficult to arrive at a solution without having an appreciation of the why and the what.</p>
 </div>
 <div class="paragraph">
 <p>Building on the previous premium checking account example, the code-level solution for this problem may look something like this:</p>
@@ -1568,7 +1589,7 @@ However, it is very difficult to arrive at a solution without having an apprecia
 </div>
 </div>
 <div class="paragraph">
-<p>This likely appears like a significant leap from a problem domain description, and indeed it is. Before a solution like this can be arrived at, there may need to exist multiple levels of refinement of the problem. As mentioned in the <a href="#_inaccurate_requirements">previous chapter</a>, this process of refinement is usually messy and may lead to inaccuracies in the understanding of the problem, resulting in a solution that may be good, but not one that solves the problem at hand. Let&#8217;s look at how we can continuously refine our understanding by closing the gap between the problem and the solution domain.</p>
+<p>This likely appears like a significant leap from a problem domain description, and indeed it is. Before a solution like this can be arrived at, there may need to exist multiple levels of refinement of the problem. As mentioned in the <a href="#_inaccurate_requirements">previous chapter</a>, this process of refinement is usually messy and may lead to inaccuracies in the understanding of the problem, resulting in a solution that may be good (for example, one that is sound from an engineering, software architecture standpoint), but not one that solves the problem at hand. Let&#8217;s look at how we can continuously refine our understanding by closing the gap between the problem and the solution domain.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1696,7 +1717,7 @@ Conway&#8217;s Law asserts that organizations are constrained to produce applica
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-These tools are not really tied to DDD in any way and can be practiced regardless. The use of these should be considered to be complementary in your DDD journey.
+It is pertinent to note that these tools were conceived independently, but when practiced in conjunction with other DDD techniques can accentuate the effectiveness of the overall process and solution. The use of these should be considered to be complementary in your DDD journey.
 </td>
 </tr>
 </table>
@@ -1995,7 +2016,7 @@ Aggregates are also referred to as <strong>aggregate roots</strong>. That is, th
 <div class="sect3">
 <h4 id="domain-events"><a class="anchor" href="#domain-events"></a><a class="link" href="#domain-events">2.3.4. Domain events</a></h4>
 <div class="paragraph">
-<p>As mentioned above, aggregates dictate how and when state changes occur. Other parts of the system may be interested in knowing about the occurrence of changes that are significant to the business. For example, an order being placed or a payment being received, etc. <em>Domain events</em> are the means to convey that something business significant has occurred. It is important to differentiate between system events and domain events. For example, in the context of a retail bank, a <em>row was saved</em> in the database, or a <em>server ran out of disk space</em>, etc. may classify as system events, whereas a <em>deposit was made</em> to a checking account, <em>fraudulent activity was detected</em> on a transaction, etc. In other words, domain events are things that <strong>domain experts care about</strong>.</p>
+<p>As mentioned above, aggregates dictate how and when state changes occur. Other parts of the system may be interested in knowing about the occurrence of changes that are significant to the business. For example, an order being placed or a payment being received, etc. <em>Domain events</em> are the means to convey that something business significant has occurred. It is important to differentiate between system events and domain events. For example, in the context of a retail bank, a <em>row was saved</em> in the database, or a <em>server ran out of disk space</em>, etc. may classify as system events, whereas a <em>deposit was made</em> to a checking account, <em>fraudulent activity was detected</em> on a transaction, etc. could be classified as domain events. In other words, domain events are things that <strong>domain experts care about</strong>.</p>
 </div>
 <div class="paragraph">
 <p>It may be prudent to make use of domain events to reduce the amount of coupling between bounded contexts, making it a critical building block of domain-driven design.</p>
@@ -10427,7 +10448,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-22 21:08:46 UTC
+Last updated 2022-02-26 13:24:01 UTC
 </div>
 </div>
 </body>
