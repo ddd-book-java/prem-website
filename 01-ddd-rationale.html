@@ -463,7 +463,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#optimizing-the-feedback-loop">Optimizing the feedback loop</a></li>
 </ul>
 </li>
-<li><a href="#what-is-domain-driven-design">What is Domain-Driven Design?</a></li>
+<li><a href="#what-is-domain-driven-design">What is Domain-Driven Design?</a>
+<ul class="sectlevel3">
+<li><a href="#understanding-the-problem-using-strategic-design">Understanding the problem using strategic design</a></li>
+<li><a href="#implementing-the-solution-using-tactical-design">Implementing the solution using tactical design</a></li>
+</ul>
+</li>
 <li><a href="#why-is-ddd-relevant-why-now">Why is DDD Relevant? Why Now?</a>
 <ul class="sectlevel3">
 <li><a href="#rise-of-open-source">Rise of Open Source</a></li>
@@ -800,7 +805,618 @@ Life is really simple, but we insist on making it complicated.
 <div class="title">Figure 1- 9. Essence of DDD</div>
 </div>
 <div class="paragraph">
-<p>We appreciate that this is quite a whirlwind introduction to the subject of domain-driven design. In subsequent chapters we will reinforce all the concepts introduced here in a lot more detail. In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</p>
+<p>We appreciate that this is quite a whirlwind introduction to the subject of domain-driven design.</p>
+</div>
+<div class="sect3">
+<h4 id="understanding-the-problem-using-strategic-design"><a class="anchor" href="#understanding-the-problem-using-strategic-design"></a>Understanding the problem using strategic design</h4>
+<div class="paragraph">
+<p>In this section, let&#8217;s demystify some commonly used concepts and terms when working with domain-driven design. First and foremost, we need to understand what we mean by the first "D"&#8201;&#8212;&#8201;<strong>domain</strong>.</p>
+</div>
+<div class="sect4">
+<h5 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a>What is a domain?</h5>
+<div class="paragraph">
+<p>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <a href="https://en.wiktionary.org/wiki/domain">domain</a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://en.wiktionary.org/wiki/domain#Noun" target="_blank" rel="noopener"><img src="./images/domain-definition.png" alt="Domain"></a>
+</div>
+<div class="title">Figure 1- 10. <strong>Domain</strong>: Means many things depending on context</div>
+</div>
+<div class="paragraph">
+<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <strong><em>problem domain</em></strong>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others. The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. To cope with this complexity, it is usual to decompose these domains into more manageable pieces called subdomains. Let us understand subdomains in more detail next.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a>What is a subdomain?</h5>
+<div class="paragraph">
+<p>At its essence, Domain-driven design provides means to tackle complexity. Engineers do this by breaking down complex problems into more manageable ones called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/domains.png" alt="domains" width="603" height="412">
+</div>
+<div class="title">Figure 1- 11. Subdomains in the Retail domain</div>
+</div>
+<div class="paragraph">
+<p>In certain businesses, subdomains themselves may turn out to become very complex on their own and may require further decomposition. For instance, in the retail example above, it may be required to break the products subdomain into further constituent subdomains such as catalog, search, recommendations, reviews, etc. as shown below:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/subdomains.png" alt="subdomains" width="442" height="280">
+</div>
+<div class="title">Figure 1- 12. Subdomains in the Products subdomain</div>
+</div>
+<div class="paragraph">
+<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity. Domain decomposition is an important aspect of DDD. Let&#8217;s look at the types of subdomains to understand this better.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The terms domain and subdomains tend to get used interchangeably quite often. This can be confusing to the casual onlooker. Given that sub(domains) tend to be quite complex and hierarchical, a subdomain can be a domain in its own right.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a>Types of subdomains</h5>
+<div class="paragraph">
+<p>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above, the business may want to focus on providing an enriched experience to place online orders. This will make the <em>online orders</em> and <em>shopping cart</em> part of the core subdomain.</p>
+</li>
+<li>
+<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence, it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
+</li>
+<li>
+<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution. For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Given that the core subdomain establishes most of the business differentiation, it will be prudent to devote the most amount of energy towards maintaining that differentiation. This is illustrated in the core domain chart here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/core-domain-chart.png" alt="core domain chart">
+</div>
+<div class="title">Figure 1- 13. Importance of subdomains</div>
+</div>
+<div class="paragraph">
+<p>Over a period of time, it is only natural that competitors will attempt to emulate your successes. Newer, more efficient methods will arise, reducing the complexity involved, disrupting your core. This may cause the notion of what is currently core, to shift and become a supporting or generic capability as depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/core-domain-erosion.png" alt="core domain erosion">
+</div>
+<div class="title">Figure 1- 14. Core domain erosion</div>
+</div>
+<div class="paragraph">
+<p>To continue running a successful operation, it is required to constantly innovate in the core. For example, when AWS started the cloud computing business, it only provided simple infrastructure (IaaS) solutions. However, as competitors like Microsoft, Google and others started to catch up, AWS has had to provide several additional value-added services (for example, PaaS, SaaS, etc).</p>
+</div>
+<div class="paragraph">
+<p>As is evident, this is not just an engineering problem. It requires deep understanding of the underlying business. That&#8217;s where domain experts can play a significant role.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="domain-and-technical-experts"><a class="anchor" href="#domain-and-technical-experts"></a>Domain and technical experts</h5>
+<div class="paragraph">
+<p>Any modern software team requires expertise in at least two areas&#8201;&#8212;&#8201;the functionality of the domain and the art of translating it into high quality software. At most organizations, these exist as at least two distinct groups of people.</p>
+</div>
+<div class="paragraph">
+<p><strong>Domain experts</strong>&#8201;&#8212;&#8201;those who have a deep and intimate understanding of the domain. Domain experts are subject-matter experts (SMEs) who have a very strong grasp of the business. Domain experts may have varying degrees of expertise. Some SMEs may choose to specialize in specific subdomains, while others may have a broader understanding of how the overall business works.</p>
+</div>
+<div class="paragraph">
+<p><strong>Technical experts</strong> on the other hand, enjoy solving specific, quantifiable computer science problems. Often, technical experts do not feel it worth their while understanding the context of the business they work in. Rather, they seem overly eager to only enhance their technical skills that are a continuation of their learnings in academia.</p>
+</div>
+<div class="paragraph">
+<p>While the domain experts specify the <strong>why</strong> and the <strong><em>what</em></strong>, technical experts, (software engineers) largely help realize the <strong><em>how</em></strong>. Strong collaboration and synergy between both groups is absolutely essential to ensure sustained high performance and success.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="a-divide-originating-in-language"><a class="anchor" href="#a-divide-originating-in-language"></a>A divide originating in language</h5>
+<div class="paragraph">
+<p>While strong collaboration between these groups is necessary, it is important to appreciate that these groups of people seem to have distinct motivations and differences in thinking. Seemingly, this may appear to be restricted to simple things like differences in their day-to-day language. However, deeper analysis usually reveals a much larger divide in aspects such as goals, motivations etc. This is illustrated in the picture here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/linguistic-divide.png" alt="linguistic divide">
+</div>
+<div class="title">Figure 1- 15. Divide originating in language</div>
+</div>
+<div class="paragraph">
+<p>But this is a book primarily focused towards technical experts. Our point is that it is not possible to be successful by just working on technically challenging problems without gaining a sound understanding of the underlying business context.</p>
+</div>
+<div class="paragraph">
+<p>Every decision we take regarding the organization, be it requirements, architecture, code, etc. has business and user consequences.
+In order to conceive, architect, design, build and evolve software effectively, our decisions need to aid in creating the optimal business impact. As mentioned above, this can only be achieved if we have a clear understanding of the problem we intend to solve.
+This leads us to the realization that there exist two distinct <em>domains</em> when arriving at the solution for a problem:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The use of the word domain in this context is made in an abstract sense&#8201;&#8212;&#8201;not to be confused with the concept of the business domain introduced earlier.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="problem-domain"><a class="anchor" href="#problem-domain"></a>Problem domain</h5>
+<div class="paragraph">
+<p>A term that is used to capture information that simply defines the problem while consciously avoiding any details of the solution.
+It includes details like <strong>why</strong> we are trying to solve the problem, <strong>what</strong> we are trying to achieve and <strong>how</strong> it needs to be solved.
+It is important to note that the <em>why</em>, <em>what</em> and <em>how</em> are from the perspective of the customers/stakeholders, not from the perspective of the engineers providing software solutions to the problem.</p>
+</div>
+<div class="paragraph">
+<p>Consider the example of a retail bank which already provides a checking account capability for their customers.
+They want access to more liquid funds.
+To achieve that, they need to encourage customers to maintain higher account balances.
+To do that, they are looking to introduce a new product called the <em>premium checking account</em> with additional features like higher interest rates, overdraft protection, no-charge ATM access, etc.
+The problem domain expressed in the form of why, what and how is shown here:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content text-center">
+<caption class="title">Table 2. Problem domain: why, what and how</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Question</th>
+<th class="tableblock halign-left valign-top">Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Why</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bank needs access to more liquid funds</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>What</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Have customers maintain higher account balances</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>How</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By introducing a new product&#8201;&#8212;&#8201;the premium checking account with enhanced features</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Now that we have defined the problem and the motivations surrounding it, let&#8217;s examine how it can inform the solution.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="solution-domain"><a class="anchor" href="#solution-domain"></a>Solution domain</h5>
+<div class="paragraph">
+<p>A term used to describe the environment in which the solution is developed. In other words, the process of translating requirements into working software (this includes design, development, testing, deployment, etc). Here the emphasis is on the <em>how</em> of the problem being solved from a software implementation perspective. However, it is very difficult to arrive at a solution without having an appreciation of the why and the what.</p>
+</div>
+<div class="paragraph">
+<p>Building on the previous premium checking account example, the code-level solution for this problem may look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">PremiumCheckingAccountFactory</span> {
+
+    Account openPremiumCheckingAccount(Applicant applicant,
+                                       MonetaryAmount initialAmount) {
+
+        Salary salary = checkEmployed(applicant);
+
+        <span style="color:#080;font-weight:bold">if</span> (salary.isBelowThreshold()) {
+            <span style="color:#080;font-weight:bold">throw</span> <span style="color:#080;font-weight:bold">new</span> InsufficientIncomeException(applicant);
+        }
+
+        Account account = Account.createFor(applicant);
+        account.deposit(initialAmount);
+        account.activate();
+        <span style="color:#080;font-weight:bold">return</span> account;
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This likely appears like a significant leap from a problem domain description, and indeed it is. Before a solution like this can be arrived at, there may need to exist multiple levels of refinement of the problem. As mentioned in the <a href="#_inaccurate_requirements">previous chapter</a>, this process of refinement is usually messy and may lead to inaccuracies in the understanding of the problem, resulting in a solution that may be good (for example, one that is sound from an engineering, software architecture standpoint), but not one that solves the problem at hand. Let&#8217;s look at how we can continuously refine our understanding by closing the gap between the problem and the solution domain.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="promoting-a-shared-understanding-using-a-ubiquitous-language"><a class="anchor" href="#promoting-a-shared-understanding-using-a-ubiquitous-language"></a>Promoting a shared understanding using a ubiquitous language</h5>
+<div class="paragraph">
+<p>Previously, we saw how <a href="#_silo_mentality">organizational silos</a> can result in valuable information getting diluted. At a credit card company I used to work with, the words plastic, payment instrument, account, PAN (Primary Account Number), BIN (Bank Identification Number), card were all used by different team members to mean the exact same thing - the <strong><em>credit card</em></strong> when working in the same area of the application. On the other hand, a term like <strong><em>user</em></strong> would be used to sometimes mean a customer, a relationship manager, a technical customer support employee. To make matters worse, a lot of these muddled use of terms got implemented in code as well. While this might feel like a trivial thing, it had far-reaching consequences. Product experts, architects, developers, all came and went, each regressively contributing to more confusion, muddled designs, implementation and technical debt with every new enhancement&#8201;&#8212;&#8201;accelerating the journey towards the dreaded, unmaintainable, <a href="http://www.laputan.org/mud/">big ball of mud</a>.</p>
+</div>
+<div class="paragraph">
+<p>DDD advocates breaking down these artificial barriers, and putting the domain experts and the developers on the same level footing by working collaboratively towards creating what DDD calls a <strong><em>ubiquitous language</em></strong>&#8201;&#8212;&#8201;a shared vocabulary of terms, words, phrases to continuously enhance the collective understanding of the entire team. This phraseology is then used actively in every aspect of the solution: the everyday vocabulary, the designs, the code&#8201;&#8212;&#8201;in short by <strong>everyone</strong> and <strong>everywhere</strong>. Consistent use of the common ubiquitous language helps reinforce a shared understanding and  produce solutions that better reflect the mental model of the domain experts.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="evolving-a-domain-model-and-a-solution"><a class="anchor" href="#evolving-a-domain-model-and-a-solution"></a>Evolving a domain model and a solution</h5>
+<div class="paragraph">
+<p>The ubiquitous language helps establish a consistent albeit informal lingo among team members. To enhance understanding, this can be further refined into a formal set of abstractions&#8201;&#8212;&#8201;a <strong><em>domain model</em></strong> to represent the solution in software. When a problem is presented to us, we subconsciously attempt to form mental representations of potential solutions. Further, the type and nature of these representations (models) may differ wildly based on factors like our understanding of the problem, our backgrounds and experiences, etc. This implies that it is natural for these models to be different. For example, the same problem can be thought of differently by various team members as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/multiple-models.png" alt="multiple models">
+</div>
+<div class="title">Figure 1- 16. Multiple models to represent the solution to the problem using the ubiquitous language</div>
+</div>
+<div class="paragraph">
+<p>As illustrated here, the business expert may think of a process model, whereas the test engineer may think of exceptions and boundary conditions to arrive at a test strategy and so on.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The illustration above is to depict the existence of multiple models. There may be several other perspectives, for example, a customer experience model, an information security model, etc. which are not depicted.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Care should be taken to retain focus on solving the business problem at hand at all times. Teams will be better served if they expend the same amount of effort modeling business logic as the technical aspects of the solution. To keep accidental complexity in check, it will be best to isolate the infrastructure aspects of the solution from this model. These models can take several forms, including conversations, whiteboard sessions, documentation, diagrams, tests and other forms of architecture fitness functions. It is also important to note that this is <strong>not</strong> a one-time activity. As the business evolves, the domain model and the solution will need to keep up. This can only be achieved through close collaboration between the domain experts and the developers at all times.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="scope-of-domain-models-and-the-bounded-context"><a class="anchor" href="#scope-of-domain-models-and-the-bounded-context"></a>Scope of domain models and the bounded context</h5>
+<div class="paragraph">
+<p>When creating domain models, one of the dilemmas is in deciding how to restrict the scope of these models. One can attempt to create a single domain model that acts as a solution for the entire problem. On the other hand, we may go the route of creating extremely fine-grained models that cannot exist meaningfully without having a strong dependency on others. There are pros and cons in going each way. Whatever be the case, each solution has a scope&#8201;&#8212;&#8201;bounds to which it is confined to. This boundary is termed as a <strong>bounded context</strong>.</p>
+</div>
+<div class="paragraph">
+<p>There seems to exist a lot of confusion between the terms subdomains and bounded contexts. What is the difference? It turns out that subdomains are problem space concepts whereas bounded contexts are solution space concepts. This is best explained through the use of an example. Let&#8217;s consider the example of a fictitious Acme bank that provides two products: credit cards and retail bank. This may decompose to the following subdomains as depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/banking-subdomains.png" alt="banking subdomains">
+</div>
+<div class="title">Figure 1- 17. Banking subdomains at Acme bank</div>
+</div>
+<div class="paragraph">
+<p>When creating a solution for the problem, many possible solution options exist. We have depicted a few options here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/banking-bounded-contexts.png" alt="banking bounded contexts">
+</div>
+<div class="title">Figure 1- 18. Bounded contexts options at Acme bank</div>
+</div>
+<div class="paragraph">
+<p>These are just a few examples of decomposition patterns to create bounded contexts. The exact set of patterns one may choose to use may vary depending on currently prevailing realities like:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Current organizational structures</p>
+</li>
+<li>
+<p>Domain experts' responsibilities</p>
+</li>
+<li>
+<p>Key activities and pivotal events</p>
+</li>
+<li>
+<p>Existing applications</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Conway&#8217;s Law asserts that organizations are constrained to produce application designs which are copies of their communication structures. Your current organizational structures may not be optimally aligned to your desired solution approach. The <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> may be applied to achieve isomorphism with the business architecture.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Whatever be the method used to decompose a problem into a set of bounded contexts, care should be taken to make sure that the coupling between them is kept as low as possible.</p>
+</div>
+<div class="paragraph">
+<p>While bounded contexts ideally need to be as independent as possible,  they may still need to communicate with each other. When using domain-driven design, the system as a whole can be represented as a set of bounded contexts which have relationships with each other. These relationships define how these bounded contexts can integrate with each other and are called <strong><em>context maps</em></strong>. A sample context map is shown here.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/sample-context-map.png" alt="sample context map">
+</div>
+<div class="title">Figure 1- 19. Sample context map for Acme bank</div>
+</div>
+<div class="paragraph">
+<p>The context map shows the bounded contexts the relationship between them. These relationships can be a lot more nuanced than what is depicted here. We will discuss more details on context maps and communication patterns in <a href="#_integrating_with_external_systems">Chapter 9: Integrating with external systems</a>.</p>
+</div>
+<div class="paragraph">
+<p>We have now covered a catalog of concepts that are core to the strategic design tenets of domain-driven design. Let&#8217;s look at some tools that can help expedite this process.</p>
+</div>
+<div class="paragraph">
+<p>In subsequent chapters we will reinforce all the concepts introduced here in a lot more detail.</p>
+</div>
+<div class="paragraph">
+<p>In the next section, we will look at why the ideas of DDD, introduced all those years ago, are still very relevant. If anything, we will look at why they are becoming even more relevant now than ever.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="implementing-the-solution-using-tactical-design"><a class="anchor" href="#implementing-the-solution-using-tactical-design"></a>Implementing the solution using tactical design</h4>
+<div class="paragraph">
+<p>In the previous section, we have seen how we can arrive at a shared understanding of the problem using the strategic design tools. We need to use this understanding to create a solution. DDD&#8217;s tactical design aspects, tools and techniques help translate this understanding into working software. Let&#8217;s look at these aspects in detail. In part 2 of the book, we will apply these to solve a real-world problem.</p>
+</div>
+<div class="paragraph">
+<p>It is convenient to think of the tactical design aspects as depicted in this picture:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/ddd-tactical-design.png" alt="ddd tactical design">
+</div>
+<div class="title">Figure 1- 20. The elements of DDD&#8217;s tactical design</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at the definitions of these elements.</p>
+</div>
+<div class="sect4">
+<h5 id="value-objects"><a class="anchor" href="#value-objects"></a>Value objects</h5>
+<div class="paragraph">
+<p>Value objects are immutable objects that encapsulate the data and behavior of one or more related attributes. It may be convenient to think of value objects as named primitives. For example, consider a <code>MonetaryAmount</code> value object. A simple implementation can contain two attributes&#8201;&#8212;&#8201;an <em>amount</em> and a <em>currency code</em>. This allows encapsulation of behavior such as adding two <code>MonetaryAmount</code> objects safely as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/entity-example.png" alt="entity example" width="158" height="132">
+</div>
+<div class="title">Figure 1- 21. A simple <code>MonetaryAmount</code> value object</div>
+</div>
+<div class="paragraph">
+<p>The effective use of value objects helps protect from the <a href="https://wiki.c2.com/?PrimitiveObsession">primitive obsession</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> antipattern, while increasing clarity. It also allows composing higher level abstractions using one or more value objects. It is important to note that value objects do not have the notion of identity. That is, two value having the same value are treated equal. So two <code>MonetaryAmount</code> objects having the same <code>amount</code> and <code>currency code</code> will be considered equal. Also, it is important to make value objects immutable. That is, a need to change any of the attributes should result in the creation of a new attribute.</p>
+</div>
+<div class="paragraph">
+<p>It is easy to dismiss the use of value objects as a mere engineering technique, but the consequences of (not) using them can be far-reaching. In the <code>MonetaryAmount</code> example above, it is possible for the <code>amount</code> and <code>currency code</code> to exist as independent attributes. However, the use of the <code>MonetaryAmount</code> enforces the notion of the <em>ubiquitous language</em>. Hence, we recommend the use of value objects as a default instead of using primitives.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Critics may be quick to point out problems such as class explosion and performance issues. But in our experience, the benefits usually outweigh the costs. But it may be necessary to re-examine this approach if problems occur.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_entities"><a class="anchor" href="#_entities"></a>Entities</h5>
+<div class="paragraph">
+<p>An entity is an object with a <strong>unique identity</strong> and <strong>encapsulates</strong> the data and behaviour of its attributes. It may be convenient to view entities as a collection of other entities and value objects that need to be grouped together. A very simple example of an entity is shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/entity-example.png" alt="entity example" width="217" height="165">
+</div>
+<div class="title">Figure 1- 22. A simple depiction of <code>Transaction</code> entity</div>
+</div>
+<div class="paragraph">
+<p>In contrast to a value object, entities have the notion of a unique identifier. This means that two <code>Transaction</code> entities having the same underlying values, but having a different identifier (<code>id</code>) value, will be considered different. On the other hand, two entity instances having the same value for the identifier are considered equal. Furthermore, unlike value objects, entities are mutable. That is, their attributes can and will change over time.</p>
+</div>
+<div class="paragraph">
+<p>The concept of value objects and entities depends on the context within which they are used. In an order management system, the <code>Address</code> may be implemented as a value object in the <em>E-Commerce</em> bounded context, whereas it may be needed to be implemented as an entity in the <em>Order Fulfillment</em> bounded context.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is common to collectively refer to entities and value objects as <em>domain objects</em>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_aggregates"><a class="anchor" href="#_aggregates"></a>Aggregates</h5>
+<div class="paragraph">
+<p>As seen above, entities are hierarchical, in that they can be composed of one more children. Fundamentally, an aggregate:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Is an entity usually composed of other child entities and value objects.</p>
+</li>
+<li>
+<p>Encapsulates access to child entities by exposing behavior (usually referred to as <em>commands</em>).</p>
+</li>
+<li>
+<p>Is a boundary that is used to enforce business invariants (rules) in a consistent manner.</p>
+</li>
+<li>
+<p>Is an entry point to get things done within a bounded context.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Consider the example of a <code>CheckingAccount</code> aggregate:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/aggregate-example.png" alt="aggregate example" width="338" height="216">
+</div>
+<div class="title">Figure 1- 23. A simple depiction of a <code>CheckingAccount</code> aggregate</div>
+</div>
+<div class="paragraph">
+<p>Note how the <code>CheckingAccount</code> is composed using the <code>AccountHolder</code> and Transaction` entities among other things. In this example, let&#8217;s assume that the overdraft feature (ability to hold a negative account balance) is only available for high net-worth individuals (HNI). Any attempt to change the <code>currentBalance</code> needs to occur in the form of a unique <code>Transaction</code> for audit purposes&#8201;&#8212;&#8201;irrespective of its outcome. For this reason, the <code>CheckingAccount</code> aggregate makes use of the <code>Transaction</code> entity. Although the <code>Transaction</code> has <code>approve</code> and <code>reject</code> methods as part of its interface, only the aggregate has access to these methods. In this way, the aggregate enforces the business invariant while maintaining high levels of encapsulation. A potential implementation of the <code>tryWithdraw</code> method is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CheckingAccount</span> {
+    <span style="color:#088;font-weight:bold">private</span> AccountHolder primaryHolder;                            <i class="conum" data-value="1"></i><b>(1)</b>
+<span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Transaction&gt; transactions;                       <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> MonetaryAmount currentBalance;                          <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#777">// Other code omitted for brevity</span>
+
+    <span style="color:#339;font-weight:bold">void</span> tryWithdraw(MonetaryAmount amount) {                       <i class="conum" data-value="2"></i><b>(2)</b>
+        MonetaryAmount newBalance = <span style="color:#950">this</span>.currentBalance.subtract(amount);
+        Transaction transaction = add(Transaction.withdrawal(<span style="color:#950">this</span>.id, amount));
+        <span style="color:#080;font-weight:bold">if</span> (primaryHolder.isNotHNI() &amp;&amp; newBalance.isOverdrawn()) { <i class="conum" data-value="3"></i><b>(3)</b>
+        transaction.rejected();
+        } <span style="color:#080;font-weight:bold">else</span> {
+            transaction.approved();
+            currentBalance = newBalance;
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>CheckingAccount</code> aggregate is composed of child entities and value objects.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>tryWithdraw</code> method acts as a consistency boundary for the operation. Irrespective of the outcome (approved or rejected), the system will remain in a consistent state. In other words, the <code>currentBalance</code> can change only within the confines of the <code>CheckingAccount</code> aggregate.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The aggregate enforces the appropriate business invariant (rule) to allow overdrafts only for HNIs.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Aggregates are also referred to as <strong>aggregate roots</strong>. That is, the object that is at the root of the entity hierarchy. We use these terms synonymously in this book.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="domain-events"><a class="anchor" href="#domain-events"></a>Domain events</h5>
+<div class="paragraph">
+<p>As mentioned above, aggregates dictate how and when state changes occur. Other parts of the system may be interested in knowing about the occurrence of changes that are significant to the business. For example, an order being placed or a payment being received, etc. <em>Domain events</em> are the means to convey that something business significant has occurred. It is important to differentiate between system events and domain events. For example, in the context of a retail bank, a <em>row was saved</em> in the database, or a <em>server ran out of disk space</em>, etc. may classify as system events, whereas a <em>deposit was made</em> to a checking account, <em>fraudulent activity was detected</em> on a transaction, etc. could be classified as domain events. In other words, domain events are things that <strong>domain experts care about</strong>.</p>
+</div>
+<div class="paragraph">
+<p>It may be prudent to make use of domain events to reduce the amount of coupling between bounded contexts, making it a critical building block of domain-driven design.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="repositories"><a class="anchor" href="#repositories"></a>Repositories</h5>
+<div class="paragraph">
+<p>Most businesses require durability of data. For this reason, aggregate state needs to be persisted and retrieved when needed. Repositories are objects that enable persisting and  loading <em>aggregate</em> instances. This is well documented in Martin Fowler&#8217;s <em>Patterns of Enterprise Application Architecture</em> book as part of the <a href="https://martinfowler.com/eaaCatalog/repository.html">repository</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> pattern. It is pertinent to note that we are referring to aggregate repositories here, not just any entity repository. The singular purpose of this repository is to load a <strong>single instance</strong> of an aggregate using its identifier. It is important to note that this repository does not support finding aggregate instances using any other means. This is because, business operations happen as part of manipulating a single instance of the aggregate within its bounded context.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="factories"><a class="anchor" href="#factories"></a>Factories</h5>
+<div class="paragraph">
+<p>In order to work with aggregates and value objects, instances of these need to be constructed. In simple cases, it might suffice to use a constructor to do so. However, aggregate and value object instances can become quite complex depending on amount the state they encapsulate. In such cases, it may be prudent to consider delegating object construction responsibilities to a <em>factory</em> external to the aggregate/value object. We make use of the static factory method, builder, and dependency injection quite commonly in our day-to-day. Joshua Bloch discusses several variations of this pattern in <em>Chapter 2: Creating and destroying objects</em> in his <em>Effective Java</em> book.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="services"><a class="anchor" href="#services"></a>Services</h5>
+<div class="paragraph">
+<p>When working within the confines of a single bounded context, the public interface (commands) of the aggregate provides a natural API. However, more complex business operations may require interacting with multiple bounded contexts and aggregates. In other words, we may find ourselves in situations where certain business operations do not fit naturally with any single aggregate. Even if interactions are limited to a single bounded context, there may be a need to expose that functionality in an implementation-neutral manner. In such cases, one may consider the use of objects termed as <em>services</em>. Services come in at least 3 flavors:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Domain services</strong>: To enable coordinating operations among more than one aggregate. For example, transferring money between two checking accounts at a retail bank.</p>
+</li>
+<li>
+<p><strong>Infrastructure services</strong>: To enable interactions with a utility that is not core to the business. For example, logging, sending emails, etc. at the retail bank.</p>
+</li>
+<li>
+<p><strong>Application services</strong>: Enable coordination between domain services, infrastructure services and other application services. For example, sending email notifications after a successful inter-account money transfer.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Services can also be stateful or stateless. It is best to allow aggregates to manage state making use of repositories, while allowing services to coordinate and/or orchestrate business flows. In complex cases, there may be a need to manage the state of the flow itself. We will look at more concrete examples in part 2 of this book.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+It may become tempting to implement business logic almost exclusively using services&#8201;&#8212;&#8201;inadvertently leading to the <a href="https://martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> anti-pattern. It is worthwhile striving to encapsulate business logic within the confines of aggregates as a default.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -825,7 +1441,7 @@ He who has a why to live for can bear almost anyhow.
 <div class="content">
 <a class="image" href="https://mvnrepository.com/" target="_blank" rel="noopener"><img src="./images/oss-stats.png" alt="oss stats"></a>
 </div>
-<div class="title">Figure 1- 10. Open source Java over the years. Source: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></div>
+<div class="title">Figure 1- 24. Open source Java over the years. Source: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></div>
 </div>
 <div class="paragraph">
 <p>Java stalwarts like the <a href="https://spring.io/">spring framework</a> and more recent innovations like <a href="https://start.spring.io/">spring boot</a>, <a href="https://quarkus.io/">quarkus</a>, etc. make it a no-brainer to create production grade applications, literally in a matter of minutes. Furtheremore, frameworks like <a href="https://axoniq.io/product-overview/axon-framework">Axon</a>, <a href="https://www.lagomframework.com">Lagom</a>, etc. make it relatively simple to implement advanced architecture patterns such are CQRS, event sourcing, that are very complementary to implementing DDD-based solutions.</p>
@@ -849,7 +1465,7 @@ He who has a why to live for can bear almost anyhow.
 <div class="content">
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Hilbert_InfoGrowth.png" alt="Hilbert InfoGrowth">
 </div>
-<div class="title">Figure 1- 11. Global Information Storage Capacity</div>
+<div class="title">Figure 1- 25. Global Information Storage Capacity</div>
 </div>
 <div class="paragraph">
 <p>Domain-driven design with its emphasis on dealing with complexity by breaking unwieldy monoliths into more manageable units in the form of subdomains and bounded contexts, fits naturally to this style of programming. Hence, it is no surprise to see a renewed interest in adopting DDD principles and techniques when crafting modern solutions. To quote Eric Evans, it is no surprise that Domain-Driven Design is even more relevant now than when it was originally conceived!</p>
@@ -983,10 +1599,25 @@ He who has a why to live for can bear almost anyhow.
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <a href="https://wiki.c2.com/?PrimitiveObsession" class="bare">https://wiki.c2.com/?PrimitiveObsession</a>
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. <a href="https://martinfowler.com/eaaCatalog/repository.html" class="bare">https://martinfowler.com/eaaCatalog/repository.html</a>
+</div>
+<div class="footnote" id="_footnotedef_4">
+<a href="#_footnoteref_4">4</a>. <a href="https://martinfowler.com/bliki/AnemicDomainModel.html" class="bare">https://martinfowler.com/bliki/AnemicDomainModel.html</a>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-02-26 13:24:01 UTC
+Last updated 2022-02-28 19:28:00 UTC
 </div>
 </div>
 </body>
