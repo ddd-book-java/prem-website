@@ -815,7 +815,7 @@ Life is really simple, but we insist on making it complicated.
 <div class="sect4">
 <h5 id="what-is-a-domain"><a class="anchor" href="#what-is-a-domain"></a>What is a domain?</h5>
 <div class="paragraph">
-<p>The foundational concept when working with domain-driven design is the notion of a domain. But what exactly is a domain? The word <a href="https://en.wiktionary.org/wiki/domain">domain</a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word. Depending on who, when, where and how it is used, it can mean different things:</p>
+<p>The foundational concept when working with domain-driven design is the notion of a domain.But what exactly is a domain?The word <a href="https://en.wiktionary.org/wiki/domain">domain</a>, which has its <a href="https://www.etymonline.com/word/domain">origins</a> in the 1600s to the Old French word <em>domaine</em> (power), Latin word <em>dominium</em> (property, right of ownership) is a rather confusing word.Depending on who, when, where and how it is used, it can mean different things:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -824,13 +824,13 @@ Life is really simple, but we insist on making it complicated.
 <div class="title">Figure 1- 10. <strong>Domain</strong>: Means many things depending on context</div>
 </div>
 <div class="paragraph">
-<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers. This is also referred as the <strong><em>problem domain</em></strong>. For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food. Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others. The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts. To cope with this complexity, it is usual to decompose these domains into more manageable pieces called subdomains. Let us understand subdomains in more detail next.</p>
+<p>In the context of a business however, the word domain covers the overall scope of its primary activity&#8201;&#8212;&#8201;the service it provides to its customers.This is also referred as the <strong><em>problem domain</em></strong>.For example, Tesla operates in the domain of electric vehicles, Netflix provides online movies and shows, while McDonald&#8217;s provides fast food.Some companies like Amazon, provide services in more than one domain&#8201;&#8212;&#8201;online retail, cloud computing, among others.The domain of a business (at least the successful ones) almost always encompasses fairly complex and abstract concepts.To cope with this complexity, it is usual to decompose these domains into more manageable pieces called subdomains.Let us understand subdomains in more detail next.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="what-is-a-subdomain"><a class="anchor" href="#what-is-a-subdomain"></a>What is a subdomain?</h5>
 <div class="paragraph">
-<p>At its essence, Domain-driven design provides means to tackle complexity. Engineers do this by breaking down complex problems into more manageable ones called <strong>subdomains</strong>. This facilitates better understanding and makes it easier to arrive at a solution. For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
+<p>At its essence, Domain-driven design provides means to tackle complexity.Engineers do this by breaking down complex problems into more manageable ones called <strong>subdomains</strong>.This facilitates better understanding and makes it easier to arrive at a solution.For example, the online retail domain may be divided into subdomains such as product, inventory, rewards, shopping cart, order management, payments, shipping, etc. as shown below:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -848,7 +848,7 @@ Life is really simple, but we insist on making it complicated.
 <div class="title">Figure 1- 12. Subdomains in the Products subdomain</div>
 </div>
 <div class="paragraph">
-<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity. Domain decomposition is an important aspect of DDD. Let&#8217;s look at the types of subdomains to understand this better.</p>
+<p>Further breakdown of subdomains may be needed until we reach a level of manageable complexity.Domain decomposition is an important aspect of DDD.Let&#8217;s look at the types of subdomains to understand this better.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -857,27 +857,27 @@ Life is really simple, but we insist on making it complicated.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The terms domain and subdomains tend to get used interchangeably quite often. This can be confusing to the casual onlooker. Given that sub(domains) tend to be quite complex and hierarchical, a subdomain can be a domain in its own right.
+The terms domain and subdomains tend to get used interchangeably quite often.This can be confusing to the casual onlooker.Given that sub(domains) tend to be quite complex and hierarchical, a subdomain can be a domain in its own right.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="types-of-subdomains"><a class="anchor" href="#types-of-subdomains"></a>Types of subdomains</h5>
+<h5 id="_types_of_subdomains"><a class="anchor" href="#_types_of_subdomains"></a>Types of subdomains</h5>
 <div class="paragraph">
-<p>Breaking down a complex domain into more manageable subdomains is a great thing to do. However, not all subdomains are created equal. With any business, the following three types of subdomains are going to be encountered:</p>
+<p>Breaking down a complex domain into more manageable subdomains is a great thing to do.However, not all subdomains are created equal.With any business, the following three types of subdomains are going to be encountered:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Core</strong>: The main focus area for the business. This is what provides the biggest differentiation and value. It is therefore natural to want to place the most focus on the core subdomain. In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture. It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over. In the online retail example above, the business may want to focus on providing an enriched experience to place online orders. This will make the <em>online orders</em> and <em>shopping cart</em> part of the core subdomain.</p>
+<p><strong>Core</strong>: The main focus area for the business.This is what provides the biggest differentiation and value.It is therefore natural to want to place the most focus on the core subdomain.In the retail example above, shopping cart and orders might be the biggest differentiation&#8201;&#8212;&#8201;and hence may form the core subdomains for that business venture.It is prudent to implement core subdomains in-house given that it is something that businesses will desire to have the most control over.In the online retail example above, the business may want to focus on providing an enriched experience to place online orders.This will make the <em>online orders</em> and <em>shopping cart</em> part of the core subdomain.</p>
 </li>
 <li>
-<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains. Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business. These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage. Hence, it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks. For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
+<p><strong>Supporting</strong>: Like with every great movie, where it is not possible to create a masterpiece without a solid supporting cast, so it is with supporting or auxiliary subdomains.Supporting subdomains are usually very important and very much required, but may not be the primary focus to run the business.These supporting subdomains, while necessary to run the business, do not usually offer a significant competitive advantage.Hence, it might be even fine to completely outsource this work or use an off-the-shelf solution as is or with minor tweaks.For the retail example above, assuming that online ordering is the primary focus of this business, catalog management may be a supporting subdomain.</p>
 </li>
 <li>
-<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved. Consequently, it might suffice to just make use of an off-the-shelf solution. For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
+<p><strong>Generic</strong>: When working with business applications, one is required to provide a set of capabilities <strong>not</strong> directly related to the problem being solved.Consequently, it might suffice to just make use of an off-the-shelf solution.For the retail example above, the identity, auditing and activity tracking subdomains might fall in that category.</p>
 </li>
 </ul>
 </div>
@@ -888,7 +888,7 @@ The terms domain and subdomains tend to get used interchangeably quite often. Th
 <i class="fa icon-caution" title="Caution"></i>
 </td>
 <td class="content">
-It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific. What is core for one business may be supporting or generic for another. Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
+It is important to note that the notion of core vs. supporting vs. generic subdomains is very context specific.What is core for one business may be supporting or generic for another.Identifying and distilling the core domain requires deep understanding and experience of what problem is being attempted to be solved.
 </td>
 </tr>
 </table>
@@ -1617,7 +1617,7 @@ He who has a why to live for can bear almost anyhow.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-03-02 14:02:15 UTC
+Last updated 2022-03-05 15:29:43 UTC
 </div>
 </div>
 </body>
