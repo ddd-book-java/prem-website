@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Mar 05 2022 03:30 PM UTC</span>
+<span id="revdate">Mar 11 2022 09:01 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1983,10 +1983,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <p>All these architecture styles are synergistic with DDD&#8217;s idea of developing the domain model for the core subdomain (and by extension its bounded context) independently of the rest of the system.</p>
 </div>
 <div class="paragraph">
-<p>While each of these architecture styles provide additional guidance in terms of how to structure a layered architecture, you will need to be cognizant of the same considerations we described above as part of the conversation on the layered architecture.</p>
-</div>
-<div class="paragraph">
-<p>However, any architecture approach we choose comes with its set of tradeoffs and limitations. We discuss some of these here.</p>
+<p>While each of these architecture styles provide additional guidance in terms of how to structure a layered architecture, any architecture approach we choose,  comes with its set of tradeoffs and limitations you will need to be cognizant of. We discuss some of these considerations here.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2024,7 +2021,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="sect5">
 <h6 id="layer-bypass"><a class="anchor" href="#layer-bypass"></a><a class="link" href="#layer-bypass">Layer bypass</a></h6>
 <div class="paragraph">
-<p>When working with a layered architecture, it is reasonable to start by being strict about layers only interacting with the layer immediately beneath it. As we have seen above, such rigid enforcements may lead to an intolerable degree of accidental complexity, especially when applied generically to a large number of use-cases. In such scenarios, it may be worth considering consciously allowing one or more layers to be bypassed. For example, the <code>controller</code> layer may be allowed to work directly with the <code>repository</code> without using the <code>service</code> layer. For example, we have found it useful to use a separate set of rules for <a href="#_cqrs_pattern"><em>commands</em> versus <em>queries</em></a>.</p>
+<p>When working with a layered architecture, it is reasonable to start by being strict about layers only interacting with the layer immediately beneath it. As we have seen above, such rigid enforcements may lead to an intolerable degree of accidental complexity, especially when applied generically to a large number of use-cases. In such scenarios, it may be worth considering consciously allowing one or more layers to be bypassed. For example, the <code>controller</code> layer may be allowed to work directly with the <code>repository</code> without using the <code>service</code> layer. In many cases, we have found it useful to use a separate set of rules for <a href="#_cqrs_pattern"><em>commands</em> versus <em>queries</em></a> as a starting point.</p>
 </div>
 <div class="paragraph">
 <p>This can be a slippery slope. To continue maintaining a level of sanity, teams should consider the use of a lightweight architecture governance tool like <a href="https://www.archunit.org/"><strong>ArchUnit</strong></a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> to make agreements explicit and afford quick feedback. A simple example of how to use ArchUnit for this purpose is shown here:</p>
@@ -2241,13 +2238,13 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect5">
 <h6 id="different-security-requirements"><a class="anchor" href="#different-security-requirements"></a><a class="link" href="#different-security-requirements">Different security requirements</a></h6>
 <div class="paragraph">
-<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome.For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries.Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
+<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries.Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="more-uniform-distribution-of-complexity"><a class="anchor" href="#more-uniform-distribution-of-complexity"></a><a class="link" href="#more-uniform-distribution-of-complexity">More uniform distribution of complexity</a></h6>
 <div class="paragraph">
-<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model.This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
+<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2256,7 +2253,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-When working with a CQRS based architecture, choosing the persistence mechanism for the command side is a key decision.When working in conjunction with an event-driven architecture, one could choose to persist aggregates as a series of events (ordered in the sequence of their occurrence).This style of persistence is known as event sourcing.We will cover this in more detail in Chapter 5 in the section on <a href="#_event_sourced_aggregates">event-sourced aggregates</a>.
+When working with a CQRS based architecture, choosing the persistence mechanism for the command side is a key decision. When working in conjunction with an event-driven architecture, one could choose to persist aggregates as a series of events (ordered in the sequence of their occurrence). This style of persistence is known as event sourcing. We will cover this in more detail in Chapter 5 in the section on <a href="#_event_sourced_aggregates">event-sourced aggregates</a>.
 </td>
 </tr>
 </table>
@@ -2270,10 +2267,10 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 <p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure.The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
 </div>
 <div class="paragraph">
-<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within th confines of a single process.With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components.This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
+<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
 </div>
 <div class="paragraph">
-<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply.We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
+<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
 </div>
 </div>
 <div class="sect3">
@@ -10308,7 +10305,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-03-05 15:29:43 UTC
+Last updated 2022-03-11 21:01:23 UTC
 </div>
 </div>
 </body>
