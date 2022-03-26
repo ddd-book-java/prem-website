@@ -801,7 +801,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="content">
 <img src="./images/lc-application.png" alt="lc application" width="529" height="533">
 </div>
-<div class="title">Figure 6. Context map for the LC solution</div>
+<div class="title">Figure 6. Relationship between bounded contexts</div>
 </div>
 <div class="paragraph">
 <p>Notice how the <code>Customer</code> in the Customer Onboarding bounded context is called an <code>Applicant</code> in the LC Application Processing context. Similarly, Compliance works with a <code>Product</code> entity, whereas LC Application Processing calls it <code>Merchandise</code>. Within the LC Application Processing bounded context, we always work within the purview of an <code>LC Application</code>, not directly with either the <code>Applicant</code> or the <code>Merchandise</code>. This leads us to the conclusion (at least for now), that the <code>Applicant</code> and <code>Merchandise</code> entities are not aggregates within the LC Application Processing context. The <code>LC Application</code> entity acts as the <strong>aggregate</strong> for this bounded context. Furthermore, it is at the root of the aggregate hierarchy, hence it is termed as the <strong>aggregate root</strong>.</p>
@@ -2375,7 +2375,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-03-18 22:09:48 UTC
+Last updated 2022-03-26 13:55:51 UTC
 </div>
 </div>
 </body>
