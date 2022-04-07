@@ -896,7 +896,7 @@ Content-Type: application/prs.hal-forms+json
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The spring framework provides support for this style of behavior through the <code>TransactionSynchronization</code> interface. Please refer to the framework documentation for more details. Needless to say, this interface should not be used without careful consideration to business requirements.
+The spring framework provides support for this style of behavior through the <code>TransactionSynchronization</code> and the now deprecated <code>ChainedTransactionManager</code> interfaces. Please refer to the framework documentation for more details. Needless to say, this interface should not be used without careful consideration to business requirements.
 </td>
 </tr>
 </table>
@@ -907,7 +907,7 @@ The spring framework provides support for this style of behavior through the <co
 <p><strong>Distributed transactions</strong>: Another approach is to make use of distributed transactions and <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html">two-phase commit</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>. Typically, this functionality is implemented using pessimistic locking on the underlying resource managers (databases) and may present scaling challenges in highly concurrent environments.</p>
 </li>
 <li>
-<p><strong>Transactional outbox</strong>: All the above methods are not completely foolproof in the sense that there still exists a window of opportunity where the database and the event bus can become inconsistent (this is true even with two-phase commits). One way to circumvent this problem is by completely eliminating the dual-write problem. In this solution, the command processor writes to its database and the intended event to an <em>outbox</em> table in a local transaction. A separate poller component polls the outbox table and writes to the event bus. Polling can be computationally intensive and may again lead back to the dual write problem because the poller has to keep track of the last written event. This may be avoided by making event processing idempotent on the consumer so that processing duplicate events do not cause issues. In extremely high Another way to mitigate this issue is to use a change data capture tool (like <a href="https://debezium.io/">Debezium</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>). Most modern databases ship with tools to make this easier and may be worth exploring. Here is one way to implement this using the <em>transactional outbox pattern</em> as shown here:</p>
+<p><strong>Transactional outbox</strong>: All the above methods are not completely foolproof in the sense that there still exists a window of opportunity where the database and the event bus can become inconsistent (this is true even with two-phase commits). One way to circumvent this problem is by completely eliminating the dual-write problem. In this solution, the command processor writes to its database and the intended event to an <em>outbox</em> table in a local transaction. A separate poller component polls the outbox table and writes to the event bus. Polling can be computationally intensive and may again lead back to the dual write problem because the poller has to keep track of the last written event. This may be avoided by making event processing idempotent on the consumer so that processing duplicate events do not cause issues. In extremely high Another way to mitigate this issue is to use a change data capture (CDC) tool (like <a href="https://debezium.io/">Debezium</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>). Most modern databases ship with tools to make this easier and may be worth exploring. Here is one way to implement this using the <em>transactional outbox pattern</em> as shown here:</p>
 </li>
 </ol>
 </div>
@@ -924,7 +924,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect4">
 <h5 id="delivery-guarantees"><a class="anchor" href="#delivery-guarantees"></a>Delivery guarantees</h5>
 <div class="paragraph">
-<p>When it comes to message delivery semantics, there are three basic categories:</p>
+<p>Previously, because all of our components worked within a single process, delivery of events to the consumers was guaranteed at least as long as the process stayed alive. Even if event processing failed on the consumer side, it was fairly straightforward to detect the failure because exception handling was fairly straightforward. Furthermore, rollbacks were straightforward because the production and consumption of events happened as part of a single database transaction. With the LC processing application now becoming a remote component, event delivery becomes a lot more challenging. When it comes to message delivery semantics, there are three basic categories:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -940,35 +940,96 @@ The spring framework provides support for this style of behavior through the <co
 </ol>
 </div>
 <div class="paragraph">
-<p>For the purposes of domain event processing, we will obviously prefer to have exactly once processing semantics. However, given the practical difficulties guaranteeing <em>exactly once</em> semantics, it is not unusual to approach exactly once processing by having the consumers process events in an idempotent manner or designing events to make it easier to detect errors. For example, consider a <code>MonetaryAmountWithdrawn</code> event, which includes the <code>accountId</code> and the <code>withdrawalAmount</code>. This event may carry an additional <code>currentBalance</code> attribute so that the consumer may know if they are out of sync with the producer when processing the withdrawal. Another way to do this might be for the consumer to keep track of the last "n" events processed. When processing an event, the consumer can check if this event has already been processed. If so, they can detect it as a duplicate and simply discard it. All the above methods again add a level of complexity to the overall system. Despite all these safeguards, consumers may still find themselves out of sync with the system of record (the command side that produces the event). If so, as a last resort, it may be required to use a partial or full <a href="#_historic_event_replays">event replays</a> which was discussed in Chapter 7.</p>
+<p>For the purposes of domain event processing, most teams will obviously prefer to have exactly once processing semantics, given that they would not want to lose any of these events. However, given the practical difficulties guaranteeing <em>exactly once</em> semantics, it is not unusual to approach exactly once processing by having the consumers process events in an idempotent manner or designing events to make it easier to detect errors. For example, consider a <code>MonetaryAmountWithdrawn</code> event, which includes the <code>accountId</code> and the <code>withdrawalAmount</code>. This event may carry an additional <code>currentBalance</code> attribute so that the consumer may know if they are out of sync with the producer when processing the withdrawal. Another way to do this might be for the consumer to keep track of the last "n" events processed. When processing an event, the consumer can check if this event has already been processed. If so, they can detect it as a duplicate and simply discard it. All the above methods again add a level of complexity to the overall system. Despite all these safeguards, consumers may still find themselves out of sync with the system of record (the command side that produces the event). If so, as a last resort, it may be required to use a partial or full <a href="#_historic_event_replays">event replays</a> which was discussed in Chapter 7.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="ordering-guarantees"><a class="anchor" href="#ordering-guarantees"></a>Ordering guarantees</h5>
+<div class="paragraph">
+<p>In an event-driven system like the one we are building, it is desirable for consumers to receive events in a deterministic order. Not knowing the order or receiving it in the wrong order may result in inaccurate outcomes. Consider the example of an <code>LCApplicationAddressChangedEvent</code> occurring twice in <em>quick succession</em>. If these changes are processed in the wrong order, we may end up displaying the wrong address as their current one. This does not necessarily mean that events need to be ordered for all use cases. Consider another example where we receive an <code>LCApplicationSubmittedEvent</code> more than once erroneously when it is not possible to submit a given LC application more than once. All such notifications after the first may be ignored.</p>
+</div>
+<div class="paragraph">
+<p>As a consumer it is important to know if events will be ordered or not, so that we can make design considerations for out-of-order events. One default might be to accommodate for out-of-order events as a default. In our experience, this does tend to make the resulting design more complicated, especially in cases where the order does matter. We discuss three event ordering strategies and their implications for both the producer and the consumer here:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 26.6666%;">
+<col style="width: 26.6666%;">
+<col style="width: 26.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Strategy</th>
+<th class="tableblock halign-left valign-top">Producer</th>
+<th class="tableblock halign-left valign-top">Event Bus</th>
+<th class="tableblock halign-left valign-top">Consumer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>No ordering</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arguably the easiest to implement because there is no expectation from the producer to support ordering.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Without additional metadata, the event bus may only be able to guarantee ordering in the sequence of receipt (FIFO order).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the consumer depends on ordering, it may have to implement ordering through some form of special processing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Per aggregate ordering</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The producer needs to make sure that each event includes an identifier to enable grouping by aggregate.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The event bus needs to support the notion of grouping (in this case by the aggregate identifier). For events belonging to the same aggregate instance, messages are emitted in FIFO order.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To guarantee ordering, events originating from the same aggregate instance need to be processed by the same consumer instance.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Global ordering</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The producer needs to make sure that each event includes a sequence number.</p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Either the event bus or the consumer need to implement ordering logic.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="durability-and-persistence-guarantees"><a class="anchor" href="#durability-and-persistence-guarantees"></a>Durability and persistence guarantees</h5>
+<div class="paragraph">
+<p>When an event is published to the event bus, the happy path scenario is that the intended consumer(s) are able to process it successfully. However, there are scenarios that may cause message processing to be impacted adversely. Let&#8217;s examine each of these scenarios:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Slow consumer</strong>: The consumer is unable to process events as fast as the producers are publishing them.</p>
+</li>
+<li>
+<p><strong>Offline consumer</strong>: The consumer is unavailable (down) at the time of the events being published.</p>
+</li>
+<li>
+<p><strong>Failing consumer</strong>: The consumer is experiencing errors when trying to process events.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In each of these cases, there can develop a backlog of unprocessed events. Because these are domain events, we need to prevent the loss of these events until the consumer has been able to process them successfully. There are two communication characteristics that need to be true for this to work successfully:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/event-persistence-durability.png" alt="event persistence durability" width="50%">
+</div>
+<div class="title">Figure 7. Persistence versus durability</div>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>No order</p>
+<p><strong>Persistence</strong>: the communication style between the publisher and the event bus.</p>
 </li>
 <li>
-<p>Order per aggregate</p>
-</li>
-<li>
-<p>Global ordering</p>
+<p><strong>Durability</strong>: the communication style between the event bus and the consumer.</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>Firstly, messages need to be persistent (stored on disk) and secondly the message subscription (relationship between the consumer and the event bus) needs to be durable (persist across event bus restarts). It is important to note that events have to be made persistent by the producer for them to be consumed durably by the consumer.</p>
+</div>
 </div>
 <div class="sect4">
-<h5 id="durability-guarantees"><a class="anchor" href="#durability-guarantees"></a>Durability guarantees</h5>
-
-</div>
-<div class="sect4">
-<h5 id="failure-processing"><a class="anchor" href="#failure-processing"></a>Failure processing</h5>
-
-</div>
-<div class="sect4">
-<h5 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a>Scaling the event bus</h5>
+<h5 id="processing-guarantees"><a class="anchor" href="#processing-guarantees"></a>Processing guarantees</h5>
 <div class="paragraph">
 <p>Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
 </div>
@@ -976,7 +1037,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-3.png" alt="lc application monolith stage 3" width="75%">
 </div>
-<div class="title">Figure 7. LC Application processing deployed independently</div>
+<div class="title">Figure 8. LC Application processing deployed independently</div>
 </div>
 </div>
 </div>
@@ -995,7 +1056,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-4.png" alt="lc application monolith stage 4" width="75%">
 </div>
-<div class="title">Figure 8. Independent data persistence</div>
+<div class="title">Figure 9. Independent data persistence</div>
 </div>
 </div>
 </div>
@@ -1213,7 +1274,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-05 15:53:16 UTC
+Last updated 2022-04-07 16:07:50 UTC
 </div>
 </div>
 </body>
