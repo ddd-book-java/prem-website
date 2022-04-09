@@ -451,25 +451,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#changes-for-frontend-interactions">Changes for frontend interactions</a></li>
 <li><a href="#changes-for-event-interactions">Changes for event interactions</a></li>
 <li><a href="#changes-for-database-interactions">Changes for database interactions</a></li>
-<li><a href="#potential-next-steps">Potential next steps</a></li>
-<li><a href="#even-more-fine-grained-distribution">Even more fine-grained distribution</a></li>
-<li><a href="#customer-experiences-and-frontends">Customer experiences and frontends</a></li>
-<li><a href="#non-technical-implications-of-distribution">Non-technical implications of distribution</a></li>
-<li><a href="#technical-implications-of-distribution">Technical implications of distribution</a></li>
 </ul>
 </li>
-<li><a href="#not-yet-finalized">Not yet finalized</a>
-<ul class="sectlevel3">
-<li><a href="#transitional-architecture">Transitional architecture</a></li>
-</ul>
-</li>
-<li><a href="#understanding-the-costs-of-distribution">Understanding the costs of distribution</a>
-<ul class="sectlevel3">
-<li><a href="#handling-exceptions">Handling exceptions</a></li>
-<li><a href="#testing-the-overall-system">Testing the Overall System</a></li>
-<li><a href="#compatibility">Compatibility</a></li>
-</ul>
-</li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </li>
 </ul>
@@ -668,7 +652,7 @@ curl POST /lc-applications/start \
 <div class="sect4">
 <h5 id="rest-apis"><a class="anchor" href="#rest-apis"></a>REST APIs</h5>
 <div class="paragraph">
-<p>Leonard Richardson coined the notion of a maturity model for HTTP-based REST APIs with each level being more mature than the preceding one:</p>
+<p>We recognize that there are several options when exposing web-based APIs, claims of using a REST (Representation State Transfer) approach seem quite common these days. REST was coined by Roy Fielding as part of his doctoral dissertation. The idea of what constitutes REST has been a matter of debate and arguably remains ambiguous even today. Leonard Richardson introduced the notion of a maturity model for HTTP-based REST APIs that somewhat helped provide some clarity. The model describes broad conformance to REST in three levels, with each level being more mature than the preceding one:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -860,7 +844,7 @@ Content-Type: application/prs.hal-forms+json
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application-monolith-acid-transaction.png" alt="lc application monolith acid transaction" width="75%">
+<img src="./images/lc-application-monolith-acid-transaction.png" alt="lc application monolith acid transaction" width="60%">
 </div>
 <div class="title">Figure 4. ACID transaction processing within the monolith</div>
 </div>
@@ -872,7 +856,7 @@ Content-Type: application/prs.hal-forms+json
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application-monolith-distributed-transaction.png" alt="lc application monolith distributed transaction" width="50%">
+<img src="./images/lc-application-monolith-distributed-transaction.png" alt="lc application monolith distributed transaction" width="30%">
 </div>
 <div class="title">Figure 5. Command processing transaction semantics</div>
 </div>
@@ -1031,229 +1015,137 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect4">
 <h5 id="processing-guarantees"><a class="anchor" href="#processing-guarantees"></a>Processing guarantees</h5>
 <div class="paragraph">
-<p>Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
+<p>When an event is processed by the query side component as shown here, the following steps occur:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/event-processing-failure-points.png" alt="event processing failure points" width="30%">
+</div>
+<div class="title">Figure 8. Event processing failure scenarios</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The event is consumed (either through a push or a pull) from the event bus</p>
+</li>
+<li>
+<p>Transformation logic is applied on the payload o the event</p>
+</li>
+<li>
+<p>The transformed payload is saved in the query side store.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Each of these steps can encounter failures. Irrespective of the cause of failure, the event should be durable (as discussed above) so that it can be processed later when the issue is fixed. These errors can be broadly segregated into four categories:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Error Cause</th>
+<th class="tableblock halign-left valign-top">Example</th>
+<th class="tableblock halign-left valign-top">Remediation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Transient</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Network blip resulting in temporary connectivity issues to either the event bus or the query store.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A finite number of retries potentially with a backoff strategy before giving up with either a fatal error.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Event bus or database URL misconfiguration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manual intervention with updated configuration and/or restart.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Code Logic</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implementation bugs either in the transformation logic.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manual intervention with updated logic and redeployment</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Data</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unexpected or erroneous data in the event payload.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manual intervention that requires segregating spurious data (for example, by automatically moving problematic events to a <em>dead letter queue</em>) and/or fixing code logic.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus. Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-3.png" alt="lc application monolith stage 3" width="75%">
 </div>
-<div class="title">Figure 8. LC Application processing deployed independently</div>
+<div class="title">Figure 9. LC Application processing deployed independently</div>
+</div>
+<div class="paragraph">
+<p>However, we are continuing to use a common datastore for the LC application processing component. Let&#8217;s look at what is involved in segregating this into its own store.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="changes-for-database-interactions"><a class="anchor" href="#changes-for-database-interactions"></a>Changes for database interactions</h4>
 <div class="paragraph">
-<p>While we have extracted our component into its own unit, we continue to be coupled at the database tier.</p>
+<p>While we have extracted our application component into its own unit, we continue to be coupled at the database tier. If we are to achieve true independence from the monolith, we need to break this database dependency. Let&#8217;s look at the changes involved in making this happen.</p>
 </div>
 <div class="sect4">
-<h5 id="historic-data-migration"><a class="anchor" href="#historic-data-migration"></a>Historic data migration</h5>
-
+<h5 id="data-migration"><a class="anchor" href="#data-migration"></a>Data migration</h5>
+<div class="paragraph">
+<p>As a first step to start using a database of our own, we will need to start migrating data from the command side event store and the query store(s) as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-3.1.png" alt="lc application monolith stage 3.1" width="75%">
+</div>
+<div class="title">Figure 10. Data migration</div>
+</div>
+<div class="paragraph">
+<p>In our case, we have the command side event store and the query store(s) that will need to be migrated out. To minimize effort at the outset, it might be prudent to do a simple homogenous migration by keeping the source and target database technologies identical. In advance of the cut-overm, among other things, it will be essential to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Profile</strong> to make sure that latency numbers are within tolerable limits/</p>
+</li>
+<li>
+<p><strong>Test</strong> to make sure that the data has migrated correctly.</p>
+</li>
+<li>
+<p><strong>Minimize downtime</strong> by understanding and agreeing on <strong>SLAs</strong> such as RTO (Recovery Time Objective) and RPO (Recovery Point Objective).</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect4">
-<h5 id="cutover"><a class="anchor" href="#cutover"></a>Cutover</h5>
+<h5 id="cut-over"><a class="anchor" href="#cut-over"></a>Cut-over</h5>
+<div class="paragraph">
+<p>If we have made it thus far, we are now ready to complete the migration of the LC application processing from the rest of the monolith. The logical architecture of our solution now looks like the diagram shown here:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-4.png" alt="lc application monolith stage 4" width="75%">
 </div>
-<div class="title">Figure 9. Independent data persistence</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a>Potential next steps</h4>
-<div class="sect4">
-<h5 id="sagas-as-standalone-components"><a class="anchor" href="#sagas-as-standalone-components"></a>Sagas as standalone components</h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-5.png" alt="lc application monolith stage 5" width="75%">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="commands-and-queries-as-standalone-components"><a class="anchor" href="#commands-and-queries-as-standalone-components"></a>Commands and queries as standalone components</h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="distributing-individual-query-components"><a class="anchor" href="#distributing-individual-query-components"></a>Distributing individual query components</h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="even-more-fine-grained-distribution"><a class="anchor" href="#even-more-fine-grained-distribution"></a>Even more fine-grained distribution</h4>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a>Customer experiences and frontends</h4>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="non-technical-implications-of-distribution"><a class="anchor" href="#non-technical-implications-of-distribution"></a>Non-technical implications of distribution</h4>
-<div class="sect4">
-<h5 id="team-topologies"><a class="anchor" href="#team-topologies"></a>Team topologies</h5>
-
-</div>
-<div class="sect4">
-<h5 id="tech-stack"><a class="anchor" href="#tech-stack"></a>Tech stack</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="technical-implications-of-distribution"><a class="anchor" href="#technical-implications-of-distribution"></a>Technical implications of distribution</h4>
-<div class="sect4">
-<h5 id="performance"><a class="anchor" href="#performance"></a>Performance</h5>
-
-</div>
-<div class="sect4">
-<h5 id="resilience"><a class="anchor" href="#resilience"></a>Resilience</h5>
-
-</div>
-<div class="sect4">
-<h5 id="exception-handling"><a class="anchor" href="#exception-handling"></a>Exception handling</h5>
-<div class="quoteblock">
-<blockquote>
-Everything fails all the time.
-</blockquote>
-<div class="attribution">
-&#8212; Werner Vogels<br>
-<cite>CTO -- Amazon Web Services</cite>
-</div>
+<div class="title">Figure 11. Independent data persistence</div>
 </div>
 <div class="paragraph">
-<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
+<p>With this step, we have successfully completed the migration of our first component. There is still quite a lot of work to do,Arguably, our component was already well-structured and loosely coupled from the rest of the application. Despite that, moving from an in-process to an out-of-process model between bounded contexts is quite an involved process&#8201;&#8212;&#8201;as should be evident from the work we have done in this chapter.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
-    <span style="color:#777">//...</span>
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
-        <span style="color:#777">//..</span>
-        productLegalityValidated = <span style="color:#069">true</span>;
-        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
-               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
-        }
-    }
-}</pre></td>
-</tr></table></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
-</li>
-<li>
-<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
-</li>
-<li>
-<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
-</li>
-</ul>
-</div></td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
-</li>
-<li>
-<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
-</li>
-<li>
-<p>We can choose to only wait</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="recovery"><a class="anchor" href="#recovery"></a>Recovery</h5>
-<div class="sect5">
-<h6 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a>Automated recovery</h6>
-
-</div>
-<div class="sect5">
-<h6 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h6>
-
-</div>
-<div class="sect5">
-<h6 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a>Compensating actions</h6>
-
-</div>
-<div class="sect5">
-<h6 id="retries"><a class="anchor" href="#retries"></a>Retries</h6>
-
-</div>
-</div>
-<div class="sect4">
-<h5 id="integration-strategies"><a class="anchor" href="#integration-strategies"></a>Integration strategies</h5>
-
-</div>
-<div class="sect4">
-<h5 id="testing-strategies"><a class="anchor" href="#testing-strategies"></a>Testing strategies</h5>
-
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="not-yet-finalized"><a class="anchor" href="#not-yet-finalized"></a>Not yet finalized</h3>
-<div class="sect3">
-<h4 id="transitional-architecture"><a class="anchor" href="#transitional-architecture"></a>Transitional architecture</h4>
-
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p>In this chapter, we learnt how we can extract a bounded context from an existing monolith, although one could argue that this was from a reasonably well-structured one. You should have an understanding of what it takes to go from in-process event-driven application to a distributed one.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a>Understanding the costs of distribution</h3>
-<div class="sect3">
-<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a>Handling exceptions</h4>
-
-</div>
-<div class="sect3">
-<h4 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a>Testing the Overall System</h4>
-
-</div>
-<div class="sect3">
-<h4 id="compatibility"><a class="anchor" href="#compatibility"></a>Compatibility</h4>
-
+<div class="paragraph">
+<p>In the next chapter, we will look at how to extract pieces out of a monolith that may not be as well-structured, possibly very close to the dreaded big ball of mud.</p>
 </div>
 </div>
 </div>
@@ -1274,7 +1166,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-07 16:07:50 UTC
+Last updated 2022-04-09 15:55:27 UTC
 </div>
 </div>
 </body>
