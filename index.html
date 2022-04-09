@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Apr 09 2022 03:55 PM UTC</span>
+<span id="revdate">Apr 09 2022 10:04 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -702,7 +702,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#part-3-advanced-patterns">Part 3: Advanced Patterns</a>
 <ul class="sectlevel1">
-<li><a href="#distributing-into-microservices-15-pages">10. Distributing into Microservices (15 pages)</a>
+<li><a href="#distributing-into-remote-components">10. Distributing into remote components</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey-5">10.1. Continuing our design journey</a></li>
 <li><a href="#decomposing-our-monolith">10.2. Decomposing our monolith</a>
@@ -10087,7 +10087,7 @@ In Part 3, we will extend the application we built in Part 2 to utilize more mod
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="distributing-into-microservices-15-pages"><a class="anchor" href="#distributing-into-microservices-15-pages"></a><a class="link" href="#distributing-into-microservices-15-pages">10. Distributing into Microservices (15 pages)</a></h2>
+<h2 id="distributing-into-remote-components"><a class="anchor" href="#distributing-into-remote-components"></a><a class="link" href="#distributing-into-remote-components">10. Distributing into remote components</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -10732,12 +10732,12 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 1- 107. Data migration</div>
 </div>
 <div class="paragraph">
-<p>In our case, we have the command side event store and the query store(s) that will need to be migrated out. To minimize effort at the outset, it might be prudent to do a simple homogenous migration by keeping the source and target database technologies identical. In advance of the cut-overm, among other things, it will be essential to:</p>
+<p>In our case, we have the command side event store and the query store(s) that will need to be migrated out. To minimize effort at the outset, it might be prudent to do a simple homogenous migration by keeping the source and target database technologies identical. In advance of the cut-over, among other things, it will be essential to:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Profile</strong> to make sure that latency numbers are within tolerable limits/</p>
+<p><strong>Profile</strong> to make sure that latency numbers are within tolerable limits.</p>
 </li>
 <li>
 <p><strong>Test</strong> to make sure that the data has migrated correctly.</p>
@@ -10760,7 +10760,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 1- 108. Independent data persistence</div>
 </div>
 <div class="paragraph">
-<p>With this step, we have successfully completed the migration of our first component. There is still quite a lot of work to do,Arguably, our component was already well-structured and loosely coupled from the rest of the application. Despite that, moving from an in-process to an out-of-process model between bounded contexts is quite an involved process&#8201;&#8212;&#8201;as should be evident from the work we have done in this chapter.</p>
+<p>With this step, we have successfully completed the migration of our first component. There is still quite a lot of work to do. Arguably, our component was already well-structured and loosely coupled from the rest of the application. Despite that, moving from an in-process to an out-of-process model between bounded contexts is quite an involved process&#8201;&#8212;&#8201;as should be evident from the work we have done in this chapter.</p>
 </div>
 </div>
 </div>
@@ -11197,7 +11197,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-09 15:55:27 UTC
+Last updated 2022-04-09 22:03:58 UTC
 </div>
 </div>
 </body>
