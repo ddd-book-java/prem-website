@@ -850,13 +850,13 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 <div class="sect3">
 <h4 id="_serverless_architecture"><a class="anchor" href="#_serverless_architecture"></a>Serverless Architecture</h4>
 <div class="paragraph">
-<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure.The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
+<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
 </div>
 <div class="paragraph">
-<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
+<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is expected to be deployed as an independent unit of its own. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks or functions as opposed to a group of related tasks.</p>
 </div>
 <div class="paragraph">
-<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
+<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 11 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1190,7 +1190,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-20 02:33:28 UTC
+Last updated 2022-04-24 14:32:31 UTC
 </div>
 </div>
 </body>

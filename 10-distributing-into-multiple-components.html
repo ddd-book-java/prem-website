@@ -450,7 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#changes-for-frontend-interactions">Changes for frontend interactions</a></li>
 <li><a href="#changes-for-event-interactions">Changes for event interactions</a></li>
-<li><a href="#changes-for-database-interactions">Changes for database interactions</a></li>
+<li><a href="#_changes_for_database_interactions">Changes for database interactions</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -1072,7 +1072,7 @@ The spring framework provides support for this style of behavior through the <co
 </tbody>
 </table>
 <div class="paragraph">
-<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus. Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
+<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus.Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1081,14 +1081,14 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 9. LC Application processing deployed independently</div>
 </div>
 <div class="paragraph">
-<p>However, we are continuing to use a common datastore for the LC application processing component. Let&#8217;s look at what is involved in segregating this into its own store.</p>
+<p>However, we are continuing to use a common datastore for the LC application processing component.Let&#8217;s look at what is involved in segregating this into its own store.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="changes-for-database-interactions"><a class="anchor" href="#changes-for-database-interactions"></a>Changes for database interactions</h4>
+<h4 id="_changes_for_database_interactions"><a class="anchor" href="#_changes_for_database_interactions"></a>Changes for database interactions</h4>
 <div class="paragraph">
-<p>While we have extracted our application component into its own unit, we continue to be coupled at the database tier. If we are to achieve true independence from the monolith, we need to break this database dependency. Let&#8217;s look at the changes involved in making this happen.</p>
+<p>While we have extracted our application component into its own unit, we continue to be coupled at the database tier.If we are to achieve true independence from the monolith, we need to break this database dependency.Let&#8217;s look at the changes involved in making this happen.</p>
 </div>
 <div class="sect4">
 <h5 id="data-migration"><a class="anchor" href="#data-migration"></a>Data migration</h5>
@@ -1162,7 +1162,7 @@ The spring framework provides support for this style of behavior through the <co
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-20 02:33:28 UTC
+Last updated 2022-04-24 14:32:31 UTC
 </div>
 </div>
 </body>

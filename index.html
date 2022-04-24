@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Apr 20 2022 02:33 AM UTC</span>
+<span id="revdate">Apr 24 2022 02:32 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -709,7 +709,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#changes-for-frontend-interactions">10.2.1. Changes for frontend interactions</a></li>
 <li><a href="#changes-for-event-interactions">10.2.2. Changes for event interactions</a></li>
-<li><a href="#changes-for-database-interactions">10.2.3. Changes for database interactions</a></li>
+<li><a href="#_changes_for_database_interactions">10.2.3. Changes for database interactions</a></li>
 </ul>
 </li>
 <li><a href="#summary-10">10.3. Summary</a></li>
@@ -2289,13 +2289,13 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 <div class="sect3">
 <h4 id="_serverless_architecture"><a class="anchor" href="#_serverless_architecture"></a><a class="link" href="#_serverless_architecture">2.1.7. Serverless Architecture</a></h4>
 <div class="paragraph">
-<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure.The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
+<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
 </div>
 <div class="paragraph">
-<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is required to be deployed as an independent unit of its own as distributed components. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks as opposed to a group of related tasks.</p>
+<p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is expected to be deployed as an independent unit of its own. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks or functions as opposed to a group of related tasks.</p>
 </div>
 <div class="paragraph">
-<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 12 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
+<p>Does that mean that the principles of DDD to arrive at a solution do not apply anymore?While serverless introduces an additional dimension of having to treat finely-grained deployable units as first-class citizens in the modeling process, the overall process of applying DDD&#8217;s strategic and tactical design continue to apply. We will examine this in more detail in Chapter 11 when we refactor the solution we build throughout this book to employ a serverless approach.</p>
 </div>
 </div>
 <div class="sect3">
@@ -10698,7 +10698,7 @@ The spring framework provides support for this style of behavior through the <co
 </tbody>
 </table>
 <div class="paragraph">
-<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus. Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
+<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus.Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -10707,14 +10707,14 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 1- 106. LC Application processing deployed independently</div>
 </div>
 <div class="paragraph">
-<p>However, we are continuing to use a common datastore for the LC application processing component. Let&#8217;s look at what is involved in segregating this into its own store.</p>
+<p>However, we are continuing to use a common datastore for the LC application processing component.Let&#8217;s look at what is involved in segregating this into its own store.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="changes-for-database-interactions"><a class="anchor" href="#changes-for-database-interactions"></a><a class="link" href="#changes-for-database-interactions">10.2.3. Changes for database interactions</a></h4>
+<h4 id="_changes_for_database_interactions"><a class="anchor" href="#_changes_for_database_interactions"></a><a class="link" href="#_changes_for_database_interactions">10.2.3. Changes for database interactions</a></h4>
 <div class="paragraph">
-<p>While we have extracted our application component into its own unit, we continue to be coupled at the database tier. If we are to achieve true independence from the monolith, we need to break this database dependency. Let&#8217;s look at the changes involved in making this happen.</p>
+<p>While we have extracted our application component into its own unit, we continue to be coupled at the database tier.If we are to achieve true independence from the monolith, we need to break this database dependency.Let&#8217;s look at the changes involved in making this happen.</p>
 </div>
 <div class="sect4">
 <h5 id="data-migration"><a class="anchor" href="#data-migration"></a><a class="link" href="#data-migration">Data migration</a></h5>
@@ -10784,7 +10784,7 @@ Sometimes I feel like I am being forgotten.
 </div>
 </div>
 <div class="paragraph">
-<p>While the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
+<p>While the functional requirements of the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
 </div>
 <div class="sect2">
 <h3 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">11.1. Dealing With Eventual Consistency</a></h3>
@@ -11193,7 +11193,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-20 02:33:28 UTC
+Last updated 2022-04-24 14:32:32 UTC
 </div>
 </div>
 </body>
