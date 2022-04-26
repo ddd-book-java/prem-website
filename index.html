@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Apr 24 2022 02:32 PM UTC</span>
+<span id="revdate">Apr 26 2022 11:06 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -715,17 +715,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-10">10.3. Summary</a></li>
 </ul>
 </li>
-<li><a href="#non-functional-requirements-25-pages">11. Non-Functional Requirements (25 pages)</a>
+<li><a href="#distributing-into-finer-grained-components">11. Distributing into finer grained components</a>
 <ul class="sectlevel2">
-<li><a href="#dealing-with-eventual-consistency">11.1. Dealing With Eventual Consistency</a></li>
-<li><a href="#scaling-the-event-store-with-snapshots">11.2. Scaling the Event Store with Snapshots</a></li>
-<li><a href="#event-versioning-and-upcasting">11.3. Event Versioning and Upcasting</a></li>
-<li><a href="#monitoring-metrics-and-tracing">11.4. Monitoring, Metrics and Tracing</a></li>
-<li><a href="#enhancing-performance">11.5. Enhancing Performance</a>
+<li><a href="#potential-next-steps">11.1. Potential next steps</a>
 <ul class="sectlevel3">
-<li><a href="#scaling-the-event-bus">11.5.1. Scaling the event bus</a></li>
+<li><a href="#saga-as-standalone-components">11.1.1. Saga as standalone components</a></li>
+<li><a href="#commands-and-queries-as-standalone-components">11.1.2. Commands and queries as standalone components</a></li>
+<li><a href="#distributing-individual-query-components">11.1.3. Distributing individual query components</a></li>
 </ul>
 </li>
+<li><a href="#even-more-fine-grained-distribution">11.2. Even more fine-grained distribution</a>
+<ul class="sectlevel3">
+<li><a href="#effects-on-the-domain-model">11.2.1. Effects on the domain model</a></li>
+</ul>
+</li>
+<li><a href="#customer-experiences-and-frontends">11.3. Customer experiences and frontends</a></li>
+<li><a href="#where-to-draw-the-line">11.4. Where to draw the line?</a></li>
 </ul>
 </li>
 <li><a href="#migrating-to-serverless-15-pages">12. Migrating to Serverless (15 pages)</a>
@@ -739,9 +744,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#code-first">12.6.1. Code-first</a></li>
 <li><a href="#data-first">12.6.2. Data-first</a></li>
-<li><a href="#potential-next-steps">12.6.3. Potential next steps</a></li>
-<li><a href="#even-more-fine-grained-distribution">12.6.4. Even more fine-grained distribution</a></li>
-<li><a href="#customer-experiences-and-frontends">12.6.5. Customer experiences and frontends</a></li>
+<li><a href="#potential-next-steps-2">12.6.3. Potential next steps</a></li>
+<li><a href="#even-more-fine-grained-distribution-2">12.6.4. Even more fine-grained distribution</a></li>
+<li><a href="#customer-experiences-and-frontends-2">12.6.5. Customer experiences and frontends</a></li>
 <li><a href="#technical-implications-of-distribution">12.6.6. Technical implications of distribution</a></li>
 </ul>
 </li>
@@ -756,6 +761,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#testing-the-overall-system">12.8.2. Testing the Overall System</a></li>
 <li><a href="#compatibility">12.8.3. Compatibility</a></li>
 <li><a href="#non-technical-implications-of-distribution">12.8.4. Non-technical implications of distribution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#non-functional-requirements-25-pages">13. Non-Functional Requirements (25 pages)</a>
+<ul class="sectlevel2">
+<li><a href="#dealing-with-eventual-consistency">13.1. Dealing With Eventual Consistency</a></li>
+<li><a href="#scaling-the-event-store-with-snapshots">13.2. Scaling the Event Store with Snapshots</a></li>
+<li><a href="#event-versioning-and-upcasting">13.3. Event Versioning and Upcasting</a></li>
+<li><a href="#monitoring-metrics-and-tracing">13.4. Monitoring, Metrics and Tracing</a></li>
+<li><a href="#enhancing-performance">13.5. Enhancing Performance</a>
+<ul class="sectlevel3">
+<li><a href="#scaling-the-event-bus">13.5.1. Scaling the event bus</a></li>
 </ul>
 </li>
 </ul>
@@ -10772,42 +10790,136 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="non-functional-requirements-25-pages"><a class="anchor" href="#non-functional-requirements-25-pages"></a><a class="link" href="#non-functional-requirements-25-pages">11. Non-Functional Requirements (25 pages)</a></h2>
+<div class="sect1 text-justify">
+<h2 id="distributing-into-finer-grained-components"><a class="anchor" href="#distributing-into-finer-grained-components"></a><a class="link" href="#distributing-into-finer-grained-components">11. Distributing into finer grained components</a></h2>
 <div class="sectionbody">
-<div class="quoteblock">
-<blockquote>
-Sometimes I feel like I am being forgotten.
-</blockquote>
-<div class="attribution">
-&#8212; Anonymous
+<div class="paragraph">
+<p>In this chapter, we will migrate the components developed thus far to adopt a serverless style of architecture.</p>
+</div>
+<div class="sect2">
+<h3 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a><a class="link" href="#potential-next-steps">11.1. Potential next steps</a></h3>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-4.png" alt="lc application monolith stage 4" width="75%">
+</div>
+</div>
+<div class="sect3">
+<h4 id="saga-as-standalone-components"><a class="anchor" href="#saga-as-standalone-components"></a><a class="link" href="#saga-as-standalone-components">11.1.1. Saga as standalone components</a></h4>
+<div class="paragraph">
+<p>Currently, the <code>AutoApprovalSaga</code> component (discussed in detail in Chapter 8) works by listening to domain events as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/auto-approval-saga-dependencies.png" alt="auto approval saga dependencies" width="75%">
 </div>
 </div>
 <div class="paragraph">
-<p>While the functional requirements of the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
+<p>Given that these events are published by different bounded contexts onto the event bus, there is no need for <code>AutoApprovalSaga</code> to be embedded within the monolith. This means that it can be safely pulled out into its own deployable unit along with its private datastore. This means that our system now looks like the visual depicted here:</p>
 </div>
-<div class="sect2">
-<h3 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">11.1. Dealing With Eventual Consistency</a></h3>
-
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-5.png" alt="lc application monolith stage 5" width="75%">
 </div>
-<div class="sect2">
-<h3 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">11.2. Scaling the Event Store with Snapshots</a></h3>
-
 </div>
-<div class="sect2">
-<h3 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">11.3. Event Versioning and Upcasting</a></h3>
-
 </div>
-<div class="sect2">
-<h3 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">11.4. Monitoring, Metrics and Tracing</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="enhancing-performance"><a class="anchor" href="#enhancing-performance"></a><a class="link" href="#enhancing-performance">11.5. Enhancing Performance</a></h3>
 <div class="sect3">
-<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">11.5.1. Scaling the event bus</a></h4>
-
+<h4 id="commands-and-queries-as-standalone-components"><a class="anchor" href="#commands-and-queries-as-standalone-components"></a><a class="link" href="#commands-and-queries-as-standalone-components">11.1.2. Commands and queries as standalone components</a></h4>
+<div class="paragraph">
+<p>As we have seen in the section on the <a href="#_cqrs_pattern">CQRS pattern</a> in earlier chapters, the primary benefit that we derive is gaining the ability to evolve and scale these components independently of each other. This is important because commands and queries have completely different usage patterns and thus require the use of distinct domain models. This makes it fairly natural to further split our bounded contexts along these boundaries. Thus far, the segregation is logical. A physical separation will enable us to truly scale these components independently as shown here:</p>
 </div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>It is pertinent to note that the command processing component is now shown to have access to two distinct datastores:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <strong>aggregate store</strong>: which stores either an event-sourced or state-stored representation of aggregate state</p>
+</li>
+<li>
+<p>The <strong>lookup store</strong>: which can be used to store lookup data when performing business validations when processing commands. This is applicable when requiring to access data that is/cannot be stored as part of aggregate state.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The reason we bring this up is that we may have to continue making lookups for data that still remain in the monolith. To achieve full independence, this lookup data must also be migrated using techniques like a <a href="#_historic_event_replays">historic event replay</a> (discussed in Chapter 7) or other conventional <a href="#_changes_for_database_interactions">data migration</a> techniques (discussed in Chapter 10).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="distributing-individual-query-components"><a class="anchor" href="#distributing-individual-query-components"></a><a class="link" href="#distributing-individual-query-components">11.1.3. Distributing individual query components</a></h4>
+<div class="paragraph">
+<p>At this point, we have achieved segregation along command and query boundaries. But we do not need to stop here. Each of the queries we service need not necessarily remain a single component. Let&#8217;s consider an example where we need to implement a fuzzy LC search feature for the UI and a view of LC facts for analytical use cases. It is conceivable that these requirements may be implemented by a different set of teams, thereby necessitating the need for distinct components. Even if these are not distinct teams, the disparity in usage patterns may warrant the use of different persistence stores and APIs, again requiring us to look at implementing at least a subset of these as distinct components as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>Owning domains should strive to create query APIs that exhibit the characteristics of a good <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">domain data product</a><sup class="footnote">[<a id="_footnoteref_48" class="footnote" href="#_footnotedef_48" title="View footnote.">48</a>]</sup>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="even-more-fine-grained-distribution"><a class="anchor" href="#even-more-fine-grained-distribution"></a><a class="link" href="#even-more-fine-grained-distribution">11.2. Even more fine-grained distribution</a></h3>
+<div class="paragraph">
+<p>At this stage, is there any further decomposition that is required  and feasible? These days, whether rightfully or otherwise, the serverless architecture (specifically, <em>Functions-As-A-Service</em>) is arguably becoming quite the rage. As we pointed in Chapter 2, this means that we may be able to decompose our command side in a manner that each command becomes its own independently deployable unit (hence a bounded context). In other words, the <code>LCApplicationSubmitCommand</code> and the <code>LCApplicationCancelCommand</code> can be deployed independently.</p>
+</div>
+<div class="paragraph">
+<p>But just because this is technically possible, should we do it? While it is easy to dismiss this as a passing fad, there may be good reasons to split applications along command boundaries:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Risk profile</strong>: Certain pieces of functionality present a higher risk when changes are made. For example, submit an LC application may be deemed a lot more critical than the ability to cancel it. But that is not to say that <em>cancel</em> is unimportant. Being decoupled from <em>submit</em> allows <em>cancel</em> changes to be made with a lot less scrutiny. This may make it easier to innovate at pace for more experimental features with minimal fear of causing large disruptions.</p>
+</li>
+<li>
+<p><strong>Scalability needs</strong>: Scaling needs can differ wildly for various commands in the system. For example, <em>submit</em> may need to scale a lot more than <em>cancel</em>. But being coupled will force us to treat them as equals, which can be inefficient.</p>
+</li>
+<li>
+<p><strong>Cost attribution</strong>: Having fine-grained components allows us to more accurately measure the amount of effort and the resulting ROI dedicated to each individual command. This can make it easier to focus our efforts on the most critical functionality (the "core" of the core) and minimize waste.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="effects-on-the-domain-model"><a class="anchor" href="#effects-on-the-domain-model"></a><a class="link" href="#effects-on-the-domain-model">11.2.1. Effects on the domain model</a></h4>
+<div class="paragraph">
+<p>These finer grainer components are leading us to a point where it may appear that the deployment model is starting to have a big influence on the design. The fact that it is now feasible to deploy individual "tasks" independently, requires us to re-examine how we arrive at bounded contexts. For example, we started by working on the <em>LC Application Processing</em> bounded context. And our aggregate design was based on all functionality included in the scope of application processing. Now, our aggregate design can be a lot more fine-grained. This means that we can have an aggregate specifically for <em>submit</em> functionality and another for <em>cancel</em> as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/fine-grained-aggregate.png" alt="fine grained aggregate" width="75%">
+</div>
+<div class="title">Figure 1- 109. Fine-grained bounded contexts example</div>
+</div>
+<div class="paragraph">
+<p>The most fine-grained decomposition may lead us to a bounded context per command. But that does not necessarily mean that we have to decompose the system this way. In the above example, we have chosen to create a single bounded context for the <em>submit</em> and <em>approve</em> commands. However, <em>start</em> and <em>cancel</em> have their own bounded contexts. The actual decision that you make in your own ecosystems will depend on maintaining a balance among reuse, coupling and other considerations that we discussed earlier. It is important to note that the aggregate labeled as <code>LCApplication</code>, although named identically, is distinct from a domain model perspective in its respective bounded context. The only attribute they will need to share is a <strong>common identifier</strong>. This leads our overall solution to look like the visual shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>It is pertinent to note that the commands functions continue to share a single event store, although they may make use of their own individual lookup stores.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a><a class="link" href="#customer-experiences-and-frontends">11.3. Customer experiences and frontends</a></h3>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="where-to-draw-the-line"><a class="anchor" href="#where-to-draw-the-line"></a><a class="link" href="#where-to-draw-the-line">11.4. Where to draw the line?</a></h3>
+
 </div>
 </div>
 </div>
@@ -10848,7 +10960,7 @@ Sometimes I feel like I am being forgotten.
 
 </div>
 <div class="sect3">
-<h4 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a><a class="link" href="#potential-next-steps">12.6.3. Potential next steps</a></h4>
+<h4 id="potential-next-steps-2"><a class="anchor" href="#potential-next-steps-2"></a><a class="link" href="#potential-next-steps-2">12.6.3. Potential next steps</a></h4>
 <div class="sect4">
 <h5 id="sagas-as-standalone-components"><a class="anchor" href="#sagas-as-standalone-components"></a><a class="link" href="#sagas-as-standalone-components">Sagas as standalone components</a></h5>
 <div class="imageblock text-center">
@@ -10858,7 +10970,7 @@ Sometimes I feel like I am being forgotten.
 </div>
 </div>
 <div class="sect4">
-<h5 id="commands-and-queries-as-standalone-components"><a class="anchor" href="#commands-and-queries-as-standalone-components"></a><a class="link" href="#commands-and-queries-as-standalone-components">Commands and queries as standalone components</a></h5>
+<h5 id="commands-and-queries-as-standalone-components-2"><a class="anchor" href="#commands-and-queries-as-standalone-components-2"></a><a class="link" href="#commands-and-queries-as-standalone-components-2">Commands and queries as standalone components</a></h5>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
@@ -10866,7 +10978,7 @@ Sometimes I feel like I am being forgotten.
 </div>
 </div>
 <div class="sect4">
-<h5 id="distributing-individual-query-components"><a class="anchor" href="#distributing-individual-query-components"></a><a class="link" href="#distributing-individual-query-components">Distributing individual query components</a></h5>
+<h5 id="distributing-individual-query-components-2"><a class="anchor" href="#distributing-individual-query-components-2"></a><a class="link" href="#distributing-individual-query-components-2">Distributing individual query components</a></h5>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
@@ -10875,7 +10987,7 @@ Sometimes I feel like I am being forgotten.
 </div>
 </div>
 <div class="sect3">
-<h4 id="even-more-fine-grained-distribution"><a class="anchor" href="#even-more-fine-grained-distribution"></a><a class="link" href="#even-more-fine-grained-distribution">12.6.4. Even more fine-grained distribution</a></h4>
+<h4 id="even-more-fine-grained-distribution-2"><a class="anchor" href="#even-more-fine-grained-distribution-2"></a><a class="link" href="#even-more-fine-grained-distribution-2">12.6.4. Even more fine-grained distribution</a></h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
@@ -10883,7 +10995,7 @@ Sometimes I feel like I am being forgotten.
 </div>
 </div>
 <div class="sect3">
-<h4 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a><a class="link" href="#customer-experiences-and-frontends">12.6.5. Customer experiences and frontends</a></h4>
+<h4 id="customer-experiences-and-frontends-2"><a class="anchor" href="#customer-experiences-and-frontends-2"></a><a class="link" href="#customer-experiences-and-frontends-2">12.6.5. Customer experiences and frontends</a></h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
@@ -11045,6 +11157,45 @@ Everything fails all the time.
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="non-functional-requirements-25-pages"><a class="anchor" href="#non-functional-requirements-25-pages"></a><a class="link" href="#non-functional-requirements-25-pages">13. Non-Functional Requirements (25 pages)</a></h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+Sometimes I feel like I am being forgotten.
+</blockquote>
+<div class="attribution">
+&#8212; Anonymous
+</div>
+</div>
+<div class="paragraph">
+<p>While the functional requirements of the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
+</div>
+<div class="sect2">
+<h3 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">13.1. Dealing With Eventual Consistency</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">13.2. Scaling the Event Store with Snapshots</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">13.3. Event Versioning and Upcasting</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">13.4. Monitoring, Metrics and Tracing</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="enhancing-performance"><a class="anchor" href="#enhancing-performance"></a><a class="link" href="#enhancing-performance">13.5. Enhancing Performance</a></h3>
+<div class="sect3">
+<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">13.5.1. Scaling the event bus</a></h4>
+
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes">
 <hr>
@@ -11189,11 +11340,14 @@ Everything fails all the time.
 <div class="footnote" id="_footnotedef_47">
 <a href="#_footnoteref_47">47</a>. <a href="https://debezium.io/" class="bare">https://debezium.io/</a>
 </div>
+<div class="footnote" id="_footnotedef_48">
+<a href="#_footnoteref_48">48</a>. <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct" class="bare">https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-04-24 14:32:32 UTC
+Last updated 2022-04-26 23:06:10 UTC
 </div>
 </div>
 </body>
