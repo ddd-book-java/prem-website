@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 01 2022 06:48 PM UTC</span>
+<span id="revdate">May 02 2022 02:03 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -505,7 +505,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#architecture-styles">2.1. Architecture Styles</a>
 <ul class="sectlevel3">
 <li><a href="#layered-architecture">2.1.1. Layered Architecture</a></li>
-<li><a href="#vertical-slice-architecture">2.1.2. Vertical slice architecture</a></li>
+<li><a href="#_vertical_slice_architecture">2.1.2. Vertical slice architecture</a></li>
 <li><a href="#service-oriented-architecture-soa">2.1.3. Service Oriented Architecture (SOA)</a></li>
 <li><a href="#microservices-architecture">2.1.4. Microservices architecture</a></li>
 <li><a href="#event-driven-architecture-eda">2.1.5. Event-Driven Architecture (EDA)</a></li>
@@ -2118,9 +2118,9 @@ It turns out that the use of the term hexagon in this context was purely for vis
 </div>
 </div>
 <div class="sect3">
-<h4 id="vertical-slice-architecture"><a class="anchor" href="#vertical-slice-architecture"></a><a class="link" href="#vertical-slice-architecture">2.1.2. Vertical slice architecture</a></h4>
+<h4 id="_vertical_slice_architecture"><a class="anchor" href="#_vertical_slice_architecture"></a><a class="link" href="#_vertical_slice_architecture">2.1.2. Vertical slice architecture</a></h4>
 <div class="paragraph">
-<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation. Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected. Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> as shown here:</p>
+<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications.The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application.Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation.Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected.Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -2129,7 +2129,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="title">Figure 1- 33. Vertical slice architecture</div>
 </div>
 <div class="paragraph">
-<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case. However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view. This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
+<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction.Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case.However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view.This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
 </div>
 <div class="sect4">
 <h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a><a class="link" href="#considerations-2">Considerations</a></h5>
@@ -10888,7 +10888,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect3">
 <h4 id="effects-on-the-domain-model"><a class="anchor" href="#effects-on-the-domain-model"></a><a class="link" href="#effects-on-the-domain-model">11.2.1. Effects on the domain model</a></h4>
 <div class="paragraph">
-<p>These finer grainer components are leading us to a point where it may appear that the deployment model is starting to have a big influence on the design. The fact that it is now feasible to deploy individual "tasks" independently, requires us to re-examine how we arrive at bounded contexts. For example, we started by working on the <em>LC Application Processing</em> bounded context. And our aggregate design was based on all functionality included in the scope of application processing. Now, our aggregate design can be a lot more fine-grained. This means that we can have an aggregate specifically for <em>submit</em> functionality and another for <em>cancel</em> as shown here:</p>
+<p>These finer grainer components are leading us to a point where it may appear that the deployment model is starting to have a big influence on the design. The fact that it is now feasible to deploy individual "tasks" independently, requires us to re-examine how we arrive at bounded contexts. For example, we started by working on the <em>LC Application Processing</em> bounded context. And our aggregate design was based on all functionality included in the scope of application processing. Now, our aggregate design can be a lot more fine-grained. This means that we can have an aggregate specifically for <em>start</em> functionality and another for <em>cancel</em> as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -10897,22 +10897,32 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 1- 109. Fine-grained bounded contexts example</div>
 </div>
 <div class="paragraph">
-<p>The most fine-grained decomposition may lead us to a bounded context per command. But that does not necessarily mean that we have to decompose the system this way. In the above example, we have chosen to create a single bounded context for the <em>submit</em> and <em>approve</em> commands. However, <em>start</em> and <em>cancel</em> have their own bounded contexts. The actual decision that you make in your own ecosystems will depend on maintaining a balance among reuse, coupling and other considerations that we discussed earlier. It is important to note that the aggregate labeled as <code>LCApplication</code>, although named identically, is distinct from a domain model perspective in its respective bounded context. The only attribute they will need to share is a <strong>common identifier</strong>. This leads our overall solution to look like the visual shown here:</p>
+<p>The most fine-grained decomposition may lead us to a bounded context per command. But that does not necessarily mean that we have to decompose the system this way. In the above example, we have chosen to create a single bounded context for the <em>submit</em> and <em>approve</em> commands. However, <em>start</em> and <em>cancel</em> have their own bounded contexts. The actual decision that you make in your own ecosystems will depend on maintaining a balance among reuse, coupling, transactional consistency and other considerations that we discussed earlier. It is important to note that the aggregate labeled as <code>LCApplication</code>, although named identically, is distinct from a domain model perspective in its respective bounded context. The only attribute they will need to share is a <strong>common identifier</strong>. If we choose to decompose the system into a bounded context per command, our overall solution will look like the visual shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
 </div>
+<div class="title">Figure 1- 110. Decomposition per command</div>
 </div>
 <div class="paragraph">
-<p>It is pertinent to note that the <em>commands</em> functions continue to share a single event store, although they may make use of their own individual lookup stores.</p>
+<p>It is pertinent to note that the <em>command</em> functions continue to share a single event store, although they may make use of their own individual lookup stores. We understand that this decomposition likely feels unnecessary and forced. However, this does allow us to focus our energies on the <em><strong>core</strong> of the core</em>. For example, LC application processing may be our business differentiator. But an even more careful examination may reveal that it is our ability to <em>decision</em> LCs near real-time that is our real business differentiator. This means that it may be prudent to isolate that functionality from the rest of the system. In fact, doing so may enable us to optimize our business process without adding additional risk to the overall solution. While it is not strictly necessary to decompose the system in this way to arrive at such insights, the fine-grained decomposition may enable us to refine the idea of what is most important to our business. Having to share a persistent store can be a wrinkle to achieve complete independence. So a final decomposition may look something like what we show here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-8.1.png" alt="lc application monolith stage 8.1" width="75%">
+</div>
+<div class="title">Figure 1- 111. Command components with individual event stores.</div>
+</div>
+<div class="paragraph">
+<p>Obviously, there is no free lunch! This fine-grained decomposition may require additional coordination and duplication of data among these components&#8201;&#8212;&#8201;to a point where it may not be attractive anymore. But we felt that it is important to illustrate the art of the possible.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a><a class="link" href="#customer-experiences-and-frontends">11.3. Customer experiences and frontends</a></h3>
 <div class="paragraph">
-<p>Thus far, we focussed on decomposing and distributing the backend components while keeping the frontend untouched as part of the existing monolith system.  It is worth considering breaking down the frontend based on bounded context boundaries.  Patterns like <a href="https://micro-frontends.org/">micro-frontend</a><sup class="footnote">[<a id="_footnoteref_49" class="footnote" href="#_footnotedef_49" title="View footnote.">49</a>]</sup><sup class="footnote">[<a id="_footnoteref_50" class="footnote" href="#_footnotedef_50" title="View footnote.">50</a>]</sup> extends the concepts of microservices to the frontend. Micro-frontends promote team structures to support end-to-end ownership of a set of features.  It is conceivable that a cross-functional, polyglot team owns both the experience(frontend) and the business logic(backend) functions eliminating communication overheads drastically. This approach still has many merits even if the frontend and backend are owned by two different teams, such as :</p>
+<p>Thus far, we have focussed on decomposing and distributing the backend components while keeping the frontend untouched as part of the existing monolithic system. It is worth considering breaking down the frontend to align more closely along functional boundaries. Patterns like <a href="https://micro-frontends.org/">micro-frontends</a><sup class="footnote">[<a id="_footnoteref_49" class="footnote" href="#_footnotedef_49" title="View footnote.">49</a>]</sup><sup class="footnote">[<a id="_footnoteref_50" class="footnote" href="#_footnotedef_50" title="View footnote.">50</a>]</sup> extend the concepts of microservices to the frontend. Micro-frontends promote team structures to support end-to-end ownership of a set of features.  It is conceivable that a cross-functional, polyglot team owns both the experience (frontend) and the business logic (backend) functions eliminating communication overheads drastically (along the lines of the <a href="#_vertical_slice_architecture">vertical slice architecture</a> conversation in Chapter 2). Even if such a team organization where the frontend and backend being one team is not feasible in your current ecosystem, this approach still has many merits such as:</p>
 </div>
 <div class="paragraph">
 <p><strong>Increased Customer focus?</strong></p>
@@ -10921,10 +10931,10 @@ The spring framework provides support for this style of behavior through the <co
 <p><strong>Autonomy/Technology agnostic</strong></p>
 </div>
 <div class="paragraph">
-<p><strong>Decoupled codebases allow for parallelization</strong></p>
+<p><strong>Decoupled code-bases allow for parallelization</strong></p>
 </div>
 <div class="paragraph">
-<p><strong>Independant Deployment?</strong></p>
+<p><strong>Independent Deployment?</strong></p>
 </div>
 <div class="paragraph">
 <p>While there are many advantages in considering the micro-frontend approach, it does bring some challenges :</p>
@@ -10952,7 +10962,31 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 <div class="sect2">
 <h3 id="where-to-draw-the-line"><a class="anchor" href="#where-to-draw-the-line"></a><a class="link" href="#where-to-draw-the-line">11.4. Where to draw the line?</a></h3>
-
+<div class="paragraph">
+<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity. Does that mean we should decompose our system into as fine-grained a granularity as possible? On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity. Hence, decomposing a system into collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science. There is no right or wrong answer here. In general, if things feel and become painful, you most likely got it more wrong than right. Here are some non-technical heuristics that might help guide this process:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Existing organization boundaries</strong>: Look to align along current org structures. Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
+</li>
+<li>
+<p><strong>Domain expert roles and responsibilities</strong>: What work do your domain expert carry out? What enables them to do their work with the least friction possible?</p>
+</li>
+<li>
+<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms. Does someone call something that is/feels the same in the physical world by different names? For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context.</p>
+</li>
+<li>
+<p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically? How are they segregated physically? This might provide some inspiration.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved. It is not uncommon to get domain boundaries wrong. Come up with an initial breakdown that seems to make more sense and apply a series of <em>what if</em> questions to assess suitability. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might have your answer. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, you have applied the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_51" class="footnote" href="#_footnotedef_51" title="View footnote.">51</a>]</sup>).</p>
+</div>
+<div class="paragraph">
+<p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_52" class="footnote" href="#_footnotedef_52" title="View footnote.">52</a>]</sup> has some great advice on how to do precisely that.</p>
+</div>
 </div>
 </div>
 </div>
@@ -11382,11 +11416,17 @@ Sometimes I feel like I am being forgotten.
 <div class="footnote" id="_footnotedef_50">
 <a href="#_footnoteref_50">50</a>. <a href="https://martinfowler.com/articles/micro-frontends.html" class="bare">https://martinfowler.com/articles/micro-frontends.html</a>
 </div>
+<div class="footnote" id="_footnotedef_51">
+<a href="#_footnoteref_51">51</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
+</div>
+<div class="footnote" id="_footnotedef_52">
+<a href="#_footnoteref_52">52</a>. <a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-01 18:48:20 UTC
+Last updated 2022-05-02 14:02:59 UTC
 </div>
 </div>
 </body>

@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#architecture-styles">Architecture Styles</a>
 <ul class="sectlevel3">
 <li><a href="#layered-architecture">Layered Architecture</a></li>
-<li><a href="#vertical-slice-architecture">Vertical slice architecture</a></li>
+<li><a href="#_vertical_slice_architecture">Vertical slice architecture</a></li>
 <li><a href="#service-oriented-architecture-soa">Service Oriented Architecture (SOA)</a></li>
 <li><a href="#microservices-architecture">Microservices architecture</a></li>
 <li><a href="#event-driven-architecture-eda">Event-Driven Architecture (EDA)</a></li>
@@ -661,9 +661,9 @@ It turns out that the use of the term hexagon in this context was purely for vis
 </div>
 </div>
 <div class="sect3">
-<h4 id="vertical-slice-architecture"><a class="anchor" href="#vertical-slice-architecture"></a>Vertical slice architecture</h4>
+<h4 id="_vertical_slice_architecture"><a class="anchor" href="#_vertical_slice_architecture"></a>Vertical slice architecture</h4>
 <div class="paragraph">
-<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation. Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected. Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
+<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications.The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application.Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation.Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected.Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -672,7 +672,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="title">Figure 8. Vertical slice architecture</div>
 </div>
 <div class="paragraph">
-<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case. However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view. This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
+<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction.Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case.However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view.This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
 </div>
 <div class="sect4">
 <h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a>Considerations</h5>
@@ -1190,7 +1190,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-01 18:48:20 UTC
+Last updated 2022-05-02 14:02:59 UTC
 </div>
 </div>
 </body>
