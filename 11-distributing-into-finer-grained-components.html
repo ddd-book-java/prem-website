@@ -457,7 +457,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#effects-on-the-domain-model">Effects on the domain model</a></li>
 </ul>
 </li>
-<li><a href="#customer-experiences-and-frontends">Customer experiences and frontends</a></li>
+<li><a href="#decomposing-the-frontend">Decomposing the frontend</a></li>
 <li><a href="#where-to-draw-the-line">Where to draw the line?</a></li>
 </ul>
 </li>
@@ -595,61 +595,82 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a>Customer experiences and frontends</h3>
+<h3 id="decomposing-the-frontend"><a class="anchor" href="#decomposing-the-frontend"></a>Decomposing the frontend</h3>
 <div class="paragraph">
 <p>Thus far, we have focussed on decomposing and distributing the backend components while keeping the frontend untouched as part of the existing monolithic system. It is worth considering breaking down the frontend to align more closely along functional boundaries. Patterns like <a href="https://micro-frontends.org/">micro-frontends</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup> extend the concepts of microservices to the frontend. Micro-frontends promote team structures to support end-to-end ownership of a set of features.  It is conceivable that a cross-functional, polyglot team owns both the experience (frontend) and the business logic (backend) functions eliminating communication overheads drastically (along the lines of the <a href="#_vertical_slice_architecture">vertical slice architecture</a> conversation in Chapter 2). Even if such a team organization where the frontend and backend being one team is not feasible in your current ecosystem, this approach still has many merits such as:</p>
 </div>
-<div class="paragraph">
-<p><strong>Increased Customer focus?</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Increased end-to-end collaboration</strong>: Creating solutions that work end-to-end is what ultimately provides value. Having a set of backend services isolated from their respective customer experiences will only cause us to accumulate unused inventory. To reduce the possibility of failure, the closer the collaboration between the backend capability and frontend experience teams, the higher our chances of reducing waste due to misaligned requirements. Including the customer experiences to become part of the vertical slice allows us to apply the ubiquitous language through the entire stack.</p>
+</li>
+<li>
+<p><strong>Uniform omnichannel experiences</strong>: These days it is very common to surface the same functionality across more than one experience channel. Having an inconsistent experience across channels can lead to customer dissatisfaction and/or adverse business consequences. Aligning teams closely along functional boundaries (within the same <em>swim lane</em>) can promote high levels of collaboration and consistency when exposing business functionality. Consider the example shown here. Within a vertical slice, the allegiance is to the functionality being developed, although there may be a need to use disparate technologies to build each channel (iOS, Android, web, etc.). Within a vertical slice, each box depicted in the diagram may operate as a team of its own, while maintaining strong cohesion with the functional team within the same swim lane as shown here:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/lc-application-monolith-stage-8.2.png" alt="lc application monolith stage 8.2" width="50%">
+</div>
+<div class="title">Figure 4. Teams aligned along functional boundaries.</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This style of team organization can be quite complex. Please refer to a method popularized by the people at <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">Spotify</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> to organize teams for more details on how to be successful with this style of team organization. It may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> by Sriram Narayan. <strong>TODO</strong>: add blurb on Team Topologies.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p><strong>Autonomy/Technology agnostic</strong></p>
+<p>While there are many advantages in employing this approach, like everything else, it does come with a few gotchas that you may need to be mindful of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>End-to-end testing complexity</strong>: While this is true for a lot of distributed architectures, this problem is exacerbated in the case of user experiences because of it being a visual medium. Especially if real components come together close to the end of the cycle, it may become harder to visualize the end-to-end flow until almost all the visual elements are in place.</p>
+</li>
+<li>
+<p><strong>Deployment complexity</strong>: In the example above, we have split the application along functional boundaries. However, they have to come together as a single artifact at the time of deployment (this is especially true in the case of mobile applications). This can add quite a bit of deployment complexity when the complete application is assembled. It is important to be cognizant of the relationship patterns between teams (covered in chapter 9) to work through kinks.</p>
+</li>
+<li>
+<p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome. This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance. For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser. In addition to being wasteful, this may also result in unpredictable, hard  to diagnose errors and eventually, poor customer experience.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p><strong>Decoupled code-bases allow for parallelization</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>Independent Deployment?</strong></p>
-</div>
-<div class="paragraph">
-<p>While there are many advantages in considering the micro-frontend approach, it does bring some challenges :</p>
-</div>
-<div class="paragraph">
-<p><strong>Deployment complexity</strong> - TODO: Mobile Apps?  Single SPA</p>
-</div>
-<div class="paragraph">
-<p><strong>Build time integration</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>Duplication</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>Runtime Inefficiency (more code downloaded to browser)</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>Consistency (UI &amp; User Experience, different framework versions)</strong></p>
+<p>If we proceed to continue decomposing our application as suggested above, our application will end up looking like the visual shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
 </div>
+<div class="title">Figure 5. TODO: Replace this image</div>
+</div>
+<div class="paragraph">
+<p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components. Just because it is possible to do it, doesn&#8217;t mean that we should. Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="where-to-draw-the-line"><a class="anchor" href="#where-to-draw-the-line"></a>Where to draw the line?</h3>
 <div class="paragraph">
-<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity. Does that mean we should decompose our system into as fine-grained a granularity as possible? On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity. Hence, decomposing a system into collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science. There is no right or wrong answer here. In general, if things feel and become painful, you most likely got it more wrong than right. Here are some non-technical heuristics that might help guide this process:</p>
+<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity. Does that mean we should decompose our systems into as fine-grained a granularity as possible? On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity. Hence, decomposing a system into well-factored, collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science. There is no right or wrong answer here. In general, if things feel and become painful, you most likely got it more wrong than right. Here are some non-technical heuristics that might help guide this process:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Existing organization boundaries</strong>: Look to align along current org structures. Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
+<p><strong>Existing organization boundaries</strong>: Look to align along current organization structures. Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
 </li>
 <li>
-<p><strong>Domain expert roles and responsibilities</strong>: What work do your domain expert carry out? What enables them to do their work with the least friction possible?</p>
+<p><strong>End-user roles and responsibilities</strong>: What work do your end users carry out? What enables them to do their work with the least friction possible? If too many people need to get involved to get a piece of work done, that may be a sign that the current decomposition may be suboptimal. On the other hand, if it is hard to assign a said task to a specific user, it may again be a sign of incorrect decomposition.</p>
 </li>
 <li>
-<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms. Does someone call something that is/feels the same in the physical world by different names? For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context.</p>
+<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms (the <em>ubiquitous language</em>). Does someone call something that is/feels the same in the physical world by different names? For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context. The point at which the vernacular changes may be a potential candidate to split functionality.</p>
 </li>
 <li>
 <p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically? How are they segregated physically? This might provide some inspiration.</p>
@@ -657,10 +678,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved. It is not uncommon to get domain boundaries wrong. Come up with an initial breakdown that seems to make more sense and apply a series of <em>what if</em> questions to assess suitability. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might have your answer. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, you have applied the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>).</p>
+<p>All of the above techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
 </div>
 <div class="paragraph">
-<p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> has some great advice on how to do precisely that.</p>
+<p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, you have applied the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>).</p>
+</div>
+<div class="paragraph">
+<p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> has some great advice on how to do precisely that.</p>
+</div>
+<div class="paragraph">
+<p>In order to attain a reasonable level of success, there will be a need to maintain a fine balance between</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/maintianing-balance.png" alt="maintianing balance" width="50%">
+</div>
+<div class="title">Figure 6. Maintaining a balance</div>
+</div>
+<div class="paragraph">
+<p>As a general guideline, it helps to start with a coarse-grained decomposition at the outset when requirements and/or our understanding are likely still unclear, leaving finer-grained decomposition to a time when our understanding improves.</p>
 </div>
 </div>
 </div>
@@ -678,16 +714,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <a href="#_footnoteref_3">3</a>. <a href="https://martinfowler.com/articles/micro-frontends.html" class="bare">https://martinfowler.com/articles/micro-frontends.html</a>
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
+<a href="#_footnoteref_4">4</a>. <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf" class="bare">https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf</a>
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. <a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a>
+<a href="#_footnoteref_5">5</a>. <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY" class="bare">https://www.youtube.com/watch?v=4GK1NDTWbkY</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354" class="bare">https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
+</div>
+<div class="footnote" id="_footnotedef_8">
+<a href="#_footnoteref_8">8</a>. <a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-02 21:32:08 UTC
+Last updated 2022-05-09 20:26:57 UTC
 </div>
 </div>
 </body>
