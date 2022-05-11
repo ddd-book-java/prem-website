@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 09 2022 11:20 PM UTC</span>
+<span id="revdate">May 11 2022 10:13 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -716,11 +716,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-10">10.3. Summary</a></li>
 </ul>
 </li>
-<li><a href="#distributing-into-finer-grained-components">11. Distributing into finer grained components</a>
+<li><a href="#decomposing-into-finer-grained-components">11. Decomposing into finer grained components</a>
 <ul class="sectlevel2">
-<li><a href="#potential-next-steps">11.1. Potential next steps</a>
+<li><a href="#continuing-our-design-journey-6">11.1. Continuing our design journey</a>
 <ul class="sectlevel3">
-<li><a href="#saga-as-standalone-components">11.1.1. Saga as standalone components</a></li>
+<li><a href="#saga-as-standalone-component">11.1.1. Saga as standalone component</a></li>
 <li><a href="#commands-and-queries-as-standalone-components">11.1.2. Commands and queries as standalone components</a></li>
 <li><a href="#distributing-individual-query-components">11.1.3. Distributing individual query components</a></li>
 </ul>
@@ -732,6 +732,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#decomposing-the-frontend">11.3. Decomposing the frontend</a></li>
 <li><a href="#where-to-draw-the-line">11.4. Where to draw the line?</a></li>
+<li><a href="#summary-11">11.5. Summary</a></li>
+<li><a href="#further-reading-8">11.6. Further reading</a></li>
 </ul>
 </li>
 <li><a href="#migrating-to-serverless-15-pages">12. Migrating to Serverless (15 pages)</a>
@@ -745,7 +747,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#code-first">12.6.1. Code-first</a></li>
 <li><a href="#data-first">12.6.2. Data-first</a></li>
-<li><a href="#potential-next-steps-2">12.6.3. Potential next steps</a></li>
+<li><a href="#potential-next-steps">12.6.3. Potential next steps</a></li>
 <li><a href="#even-more-fine-grained-distribution-2">12.6.4. Even more fine-grained distribution</a></li>
 <li><a href="#customer-experiences-and-frontends">12.6.5. Customer experiences and frontends</a></li>
 <li><a href="#technical-implications-of-distribution">12.6.6. Technical implications of distribution</a></li>
@@ -10798,20 +10800,29 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="distributing-into-finer-grained-components"><a class="anchor" href="#distributing-into-finer-grained-components"></a><a class="link" href="#distributing-into-finer-grained-components">11. Distributing into finer grained components</a></h2>
+<h2 id="decomposing-into-finer-grained-components"><a class="anchor" href="#decomposing-into-finer-grained-components"></a><a class="link" href="#decomposing-into-finer-grained-components">11. Decomposing into finer grained components</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this chapter, we will migrate the components developed thus far to adopt a serverless style of architecture.</p>
+<p>In the previous chapter, we decomposed the <em>LC Application Processing</em> functionality out of the monolith. In this chapter, we will further decompose these components into even more fine-grained components. In addition, we will examine if and when such a decomposition is justified.</p>
+</div>
+<div class="paragraph">
+<p>At the end of this chapter, you will be able to appreciate both technical and non-technical factors that play towards where we should draw the line on decomposing these components.</p>
 </div>
 <div class="sect2">
-<h3 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a><a class="link" href="#potential-next-steps">11.1. Potential next steps</a></h3>
+<h3 id="continuing-our-design-journey-6"><a class="anchor" href="#continuing-our-design-journey-6"></a><a class="link" href="#continuing-our-design-journey-6">11.1. Continuing our design journey</a></h3>
+<div class="paragraph">
+<p>Currently, our application looks close to the visual depicted here:</p>
+</div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-4.png" alt="lc application monolith stage 4" width="75%">
 </div>
 </div>
+<div class="paragraph">
+<p>The <em>LC Application Processing</em> functionality lives as its own independent component from the rest of the application. It communicates with the monolith through the exchange of domain events using the event bus. It makes use of its own persistence store and exposes HTTP-based APIs that the frontend consumes. Let&#8217;s examine if it is possible to further decompose the application into finer grained components. The <code>AutoApprovalSaga</code> component currently lives within the confines of the monolith. But this is mostly an artifact of our previous design as opposed to an intentional design choice. Let&#8217;s look at how we can extract this out into its own component next.</p>
+</div>
 <div class="sect3">
-<h4 id="saga-as-standalone-components"><a class="anchor" href="#saga-as-standalone-components"></a><a class="link" href="#saga-as-standalone-components">11.1.1. Saga as standalone components</a></h4>
+<h4 id="saga-as-standalone-component"><a class="anchor" href="#saga-as-standalone-component"></a><a class="link" href="#saga-as-standalone-component">11.1.1. Saga as standalone component</a></h4>
 <div class="paragraph">
 <p>Currently, the <code>AutoApprovalSaga</code> component (discussed in detail in Chapter 8) works by listening to domain events as shown here:</p>
 </div>
@@ -10819,6 +10830,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/auto-approval-saga-dependencies.png" alt="auto approval saga dependencies" width="75%">
 </div>
+<div class="title">Figure 1- 109. <code>AutoApprovalSaga</code> functionality dissected.</div>
 </div>
 <div class="paragraph">
 <p>Given that these events are published by different bounded contexts onto the event bus, there is no need for <code>AutoApprovalSaga</code> to be embedded within the monolith. This means that it can be safely pulled out into its own deployable unit along with its private datastore. This means that our system now looks like the visual depicted here:</p>
@@ -10827,6 +10839,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-5.png" alt="lc application monolith stage 5" width="75%">
 </div>
+<div class="title">Figure 1- 110. <code>AutoApprovalSaga</code> extracted into an independent component.</div>
 </div>
 </div>
 <div class="sect3">
@@ -10838,6 +10851,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
 </div>
+<div class="title">Figure 1- 111. Commands and queries as independent components.</div>
 </div>
 <div class="paragraph">
 <p>It is pertinent to note that the command processing component is now shown to have access to two distinct datastores:</p>
@@ -10865,6 +10879,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
 </div>
+<div class="title">Figure 1- 112. Queries split into individual components.</div>
 </div>
 <div class="paragraph">
 <p>Owning domains should strive to create query APIs that exhibit the characteristics of a good <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">domain data product</a><sup class="footnote">[<a id="_footnoteref_48" class="footnote" href="#_footnotedef_48" title="View footnote.">48</a>]</sup>.</p>
@@ -10901,7 +10916,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/fine-grained-aggregate.png" alt="fine grained aggregate" width="75%">
 </div>
-<div class="title">Figure 1- 109. Fine-grained bounded contexts example</div>
+<div class="title">Figure 1- 113. Fine-grained bounded contexts example.</div>
 </div>
 <div class="paragraph">
 <p>The most fine-grained decomposition may lead us to a bounded context per command. But that does not necessarily mean that we have to decompose the system this way. In the above example, we have chosen to create a single bounded context for the <em>submit</em> and <em>approve</em> commands. However, <em>start</em> and <em>cancel</em> have their own bounded contexts. The actual decision that you make in your own ecosystems will depend on maintaining a balance among reuse, coupling, transactional consistency and other considerations that we discussed earlier. It is important to note that the aggregate labeled as <code>LCApplication</code>, although named identically, is distinct from a domain model perspective in its respective bounded context. The only attribute they will need to share is a <strong>common identifier</strong>. If we choose to decompose the system into a bounded context per command, our overall solution will look like the visual shown here:</p>
@@ -10910,7 +10925,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
 </div>
-<div class="title">Figure 1- 110. Decomposition per command</div>
+<div class="title">Figure 1- 114. Decomposition per command.</div>
 </div>
 <div class="paragraph">
 <p>It is pertinent to note that the <em>command</em> functions continue to share a single event store, although they may make use of their own individual lookup stores. We understand that this decomposition likely feels unnecessary and forced. However, this does allow us to focus our energies on the <em><strong>core</strong> of the core</em>. For example, LC application processing may be our business differentiator. But an even more careful examination may reveal that it is our ability to <em>decision</em> LCs near real-time that is our real business differentiator. This means that it may be prudent to isolate that functionality from the rest of the system. In fact, doing so may enable us to optimize our business process without adding additional risk to the overall solution. While it is not strictly necessary to decompose the system in this way to arrive at such insights, the fine-grained decomposition may enable us to refine the idea of what is most important to our business. Having to share a persistent store can be a wrinkle to achieve complete independence. So a final decomposition may look something like what we show here:</p>
@@ -10919,7 +10934,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.1.png" alt="lc application monolith stage 8.1" width="75%">
 </div>
-<div class="title">Figure 1- 111. Command components with individual event stores.</div>
+<div class="title">Figure 1- 115. Command components with individual event stores.</div>
 </div>
 <div class="paragraph">
 <p>Obviously, there is no free lunch! This fine-grained decomposition may require additional coordination and duplication of data among these components&#8201;&#8212;&#8201;to a point where it may not be attractive anymore. But we felt that it is important to illustrate the art of the possible.</p>
@@ -10945,19 +10960,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.2.png" alt="lc application monolith stage 8.2" width="50%">
 </div>
-<div class="title">Figure 1- 112. Teams aligned along functional boundaries.</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-This style of team organization can be quite complex. Please refer to a method popularized by the people at <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">Spotify</a><sup class="footnote">[<a id="_footnoteref_51" class="footnote" href="#_footnotedef_51" title="View footnote.">51</a>]</sup><sup class="footnote">[<a id="_footnoteref_52" class="footnote" href="#_footnotedef_52" title="View footnote.">52</a>]</sup> to organize teams for more details on how to be successful with this style of team organization. It may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_53" class="footnote" href="#_footnotedef_53" title="View footnote.">53</a>]</sup> by Sriram Narayan. <strong>TODO</strong>: add blurb on Team Topologies.
-</td>
-</tr>
-</table>
+<div class="title">Figure 1- 116. Teams aligned along functional boundaries.</div>
 </div>
 <div class="paragraph">
 <p>While there are many advantages in employing this approach, like everything else, it does come with a few gotchas that you may need to be mindful of:</p>
@@ -10982,7 +10985,7 @@ This style of team organization can be quite complex. Please refer to a method p
 <div class="content">
 <img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
 </div>
-<div class="title">Figure 1- 113. TODO: Replace this image</div>
+<div class="title">Figure 1- 117. Commands and query frontends decomposed into individual functions.</div>
 </div>
 <div class="paragraph">
 <p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components. Just because it is possible to do it, doesn&#8217;t mean that we should. Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
@@ -11013,23 +11016,116 @@ This style of team organization can be quite complex. Please refer to a method p
 <p>All of the above techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
 </div>
 <div class="paragraph">
-<p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, you have applied the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong>inverse Conway maneuver</strong></a><sup class="footnote">[<a id="_footnoteref_54" class="footnote" href="#_footnotedef_54" title="View footnote.">54</a>]</sup>).</p>
+<p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, apply what is called the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong><em>inverse Conway maneuver</em></strong></a><sup class="footnote">[<a id="_footnoteref_51" class="footnote" href="#_footnotedef_51" title="View footnote.">51</a>]</sup>).</p>
 </div>
 <div class="paragraph">
-<p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_55" class="footnote" href="#_footnotedef_55" title="View footnote.">55</a>]</sup> has some great advice on how to do precisely that.</p>
-</div>
-<div class="paragraph">
-<p>In order to attain a reasonable level of success, there will be a need to maintain a fine balance between</p>
+<p>This style of team organization can be quite complex. The people at Spotify popularized the idea of a multidisciplinary, mostly autonomous team structure aligning closely along functional boundaries (called <em>squads</em>) as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/maintianing-balance.png" alt="maintianing balance" width="50%">
+<img src="./images/spotify-model.png" alt="spotify model" width="50%">
 </div>
-<div class="title">Figure 1- 114. Maintaining a balance</div>
+<div class="title">Figure 1- 118. The "Spotify" model of team organization.</div>
+</div>
+<div class="paragraph">
+<p>The team structure has other components like chapters, tribes, guilds, etc. which enables better flow of change, clarifying team responsibilities, promoting better intra and inter-team collaboration, among others. You can find out more details about it in this <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">blog post</a><sup class="footnote">[<a id="_footnoteref_52" class="footnote" href="#_footnotedef_52" title="View footnote.">52</a>]</sup>  However, there is no one-size-fits-all, and you will need to account for your own organizational structures and realities before looking to adopt this style. To find out more about the <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY">limitations of the <em>Spotify model</em></a><sup class="footnote">[<a id="_footnoteref_53" class="footnote" href="#_footnotedef_53" title="View footnote.">53</a>]</sup> and how you can arrive at a team organization that better suits your own requirements, you may want to take a look at the work done by Matthew Skelton and Manuel Pais in their popular book <a href="https://teamtopologies.com/book"><em>Team Topologies</em></a><sup class="footnote">[<a id="_footnoteref_54" class="footnote" href="#_footnotedef_54" title="View footnote.">54</a>]</sup>. On a related note, it may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_55" class="footnote" href="#_footnotedef_55" title="View footnote.">55</a>]</sup> by Sriram Narayan where he talks about outcome-oriented versus activity-oriented teams.</p>
+</div>
+<div class="paragraph">
+<p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_56" class="footnote" href="#_footnotedef_56" title="View footnote.">56</a>]</sup> has some great advice on how to do precisely that.</p>
+</div>
+<div class="paragraph">
+<p>In order to attain a reasonable level of success, there will be a need to maintain a fine balance between how domains are modeled, what the team organizations are and how applications are architected. When all of these are in agreement, it is likely that you get pretty close to achieving high levels of success.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/maintaining-balance.png" alt="maintaining balance" width="40%">
+</div>
+<div class="title">Figure 1- 119. Forces influencing component decomposition.</div>
 </div>
 <div class="paragraph">
 <p>As a general guideline, it helps to start with a coarse-grained decomposition at the outset when requirements and/or our understanding are likely still unclear, leaving finer-grained decomposition to a time when our understanding improves.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="summary-11"><a class="anchor" href="#summary-11"></a><a class="link" href="#summary-11">11.5. Summary</a></h3>
+<div class="paragraph">
+<p>In this chapter, we learnt how an already fine-grained application can be further decomposed to the level of individual functions, each of which may be deployed as its own independent unit. We looked at how we stand to benefit from keeping end-to-end functionality (thin vertical slice) as a cohesive unit which includes components from the frontend experience, all the way to the backend.</p>
+</div>
+<div class="paragraph">
+<p>Further, we looked at how Conway&#8217;s law can play an important role in the evolution of our architecture. We also looked at how we may be able to course correct cumbersome organizational structures by applying the inverse Conway maneuver. Finally, we briefly touched on popular methods of team organization that you can take inspiration from when designing your own organization structures.</p>
+</div>
+<div class="paragraph">
+<p>In the next chapter, we will look at a variety of non-functional characteristics that play a significant role in how we decompose and distribute applications.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="further-reading-8"><a class="anchor" href="#further-reading-8"></a><a class="link" href="#further-reading-8">11.6. Further reading</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 9.0909%;">
+<col style="width: 54.5455%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Title</th>
+<th class="tableblock halign-left valign-top">Author</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">How to Move Beyond a Monolithic Data Lake to a Distributed Data Mesh</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zhamak Dehghani</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct" class="bare">https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Micro Frontends</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Michael Geers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://micro-frontends.org/" class="bare">https://micro-frontends.org/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Micro Frontends</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cam Jackson</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://martinfowler.com/articles/micro-frontends.html" class="bare">https://martinfowler.com/articles/micro-frontends.html</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inverse Conway Maneuver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thoughtworks Tech Radar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scaling Agile @ Spotify with Tribes, Squads, Chapters &amp; Guilds</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Henrik Kniberg &amp; Anders Ivarsson</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf" class="bare">https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spotify Engineering Culture - Part 1 of 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Henrik Kniberg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.youtube.com/watch?v=4GK1NDTWbkY" class="bare">https://www.youtube.com/watch?v=4GK1NDTWbkY</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spotify Engineering Culture - Part 2 of 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Henrik Kniberg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.youtube.com/watch?v=vOt4BbWLWQw" class="bare">https://www.youtube.com/watch?v=vOt4BbWLWQw</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Team Topologies</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matthew Skelton and Manuel Pais</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://teamtopologies.com/book" class="bare">https://teamtopologies.com/book</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Agile IT Organization Design</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sriram Narayan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354" class="bare">https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Building Evolutionary Architectures</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rebecca Parsons, Neal Ford and Pat Kua</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -11070,7 +11166,7 @@ This style of team organization can be quite complex. Please refer to a method p
 
 </div>
 <div class="sect3">
-<h4 id="potential-next-steps-2"><a class="anchor" href="#potential-next-steps-2"></a><a class="link" href="#potential-next-steps-2">12.6.3. Potential next steps</a></h4>
+<h4 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a><a class="link" href="#potential-next-steps">12.6.3. Potential next steps</a></h4>
 <div class="sect4">
 <h5 id="sagas-as-standalone-components"><a class="anchor" href="#sagas-as-standalone-components"></a><a class="link" href="#sagas-as-standalone-components">Sagas as standalone components</a></h5>
 <div class="imageblock text-center">
@@ -11460,25 +11556,28 @@ Sometimes I feel like I am being forgotten.
 <a href="#_footnoteref_50">50</a>. <a href="https://martinfowler.com/articles/micro-frontends.html" class="bare">https://martinfowler.com/articles/micro-frontends.html</a>
 </div>
 <div class="footnote" id="_footnotedef_51">
-<a href="#_footnoteref_51">51</a>. <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf" class="bare">https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf</a>
+<a href="#_footnoteref_51">51</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
 </div>
 <div class="footnote" id="_footnotedef_52">
-<a href="#_footnoteref_52">52</a>. <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY" class="bare">https://www.youtube.com/watch?v=4GK1NDTWbkY</a>
+<a href="#_footnoteref_52">52</a>. <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf" class="bare">https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf</a>
 </div>
 <div class="footnote" id="_footnotedef_53">
-<a href="#_footnoteref_53">53</a>. <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354" class="bare">https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354</a>
+<a href="#_footnoteref_53">53</a>. <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY" class="bare">https://www.youtube.com/watch?v=4GK1NDTWbkY</a>
 </div>
 <div class="footnote" id="_footnotedef_54">
-<a href="#_footnoteref_54">54</a>. <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver" class="bare">https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver</a>
+<a href="#_footnoteref_54">54</a>. <a href="https://teamtopologies.com/book" class="bare">https://teamtopologies.com/book</a>
 </div>
 <div class="footnote" id="_footnotedef_55">
-<a href="#_footnoteref_55">55</a>. <a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a>
+<a href="#_footnoteref_55">55</a>. <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354" class="bare">https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354</a>
+</div>
+<div class="footnote" id="_footnotedef_56">
+<a href="#_footnoteref_56">56</a>. <a href="https://evolutionaryarchitecture.com/" class="bare">https://evolutionaryarchitecture.com/</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-09 23:20:42 UTC
+Last updated 2022-05-11 22:13:11 UTC
 </div>
 </div>
 </body>
