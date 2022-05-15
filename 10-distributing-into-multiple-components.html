@@ -472,12 +472,18 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 </div>
 </div>
 <div class="paragraph">
-<p>Thus far, we have a working application for LC application processing, which is bundled along with other components as a single package. Although, we have discussed the idea of subdomains and bounded contexts, the separation between these components is logical, rather than physical. Furthermore, we have focused primarily on the <em>LC Application Processing</em> aspect of the overall solution. In this chapter, we will look at extracting the LC Application Processing bounded context into components that are physically disparate, and hence enable us to deploy them independently of the rest of the solution. We will discuss various options available to us, the rationale for choosing a given option, along with the implications that we will need to be cognizant of.</p>
+<p>Thus far, we have a working application for <em>LC Application Processing</em>, which is bundled along with other components as a single package. Although, we have discussed the idea of subdomains and bounded contexts, the separation between these components is logical, rather than physical. Furthermore, we have focused primarily on the <em>LC Application Processing</em> aspect of the overall solution.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter, we will look at extracting the <em>LC Application Processing</em> bounded context into components that are physically disparate, and hence enable us to deploy them independently of the rest of the solution. We will discuss various options available to us, the rationale for choosing a given option, along with the implications that we will need to be cognizant of.</p>
+</div>
+<div class="paragraph">
+<p>By the end of this chapter, you will have learned what it takes to design well-factored APIs&#8201;&#8212;&#8201;both remote procedure call and event-based. For event-based APIs, you will gain an understanding of the various guarantees that may be needed to create robust solutions. Finally, you will also learn how to manage consistency when distributing data stores.</p>
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
 <div class="paragraph">
-<p>From a logical perspective, our realization of the Letter of Credit application looks like the visual depicted here:</p>
+<p>In preceding chapters, we have created a solution for <em>LC Application Processing</em> that works as in-process component of the remainder of the overall application. From a logical perspective, our realization of the Letter of Credit application looks like the visual depicted here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -492,7 +498,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 <div class="sect2">
 <h3 id="decomposing-our-monolith"><a class="anchor" href="#decomposing-our-monolith"></a>Decomposing our monolith</h3>
 <div class="paragraph">
-<p>First and foremost, the LC Application Processing component exposes only in-process APIs when other components interact with it. This includes interactions with:</p>
+<p>First and foremost, the <em>LC Application Processing</em> component exposes only in-process APIs when other components interact with it. This includes interactions with:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -508,7 +514,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 </ol>
 </div>
 <div class="paragraph">
-<p>To extract LC application processing functionality out into its own independently deployable component, remotely invokable interfaces will have to be supported instead of the in-process ones we have currently. Let&#8217;s examine remote API options for each:</p>
+<p>To extract <em>LC Application Processing</em> functionality out into its own independently deployable component, remotely invokable interfaces will have to be supported instead of the in-process ones we have currently. Let&#8217;s examine remote API options for each.</p>
 </div>
 <div class="sect3">
 <h4 id="changes-for-frontend-interactions"><a class="anchor" href="#changes-for-frontend-interactions"></a>Changes for frontend interactions</h4>
@@ -582,12 +588,12 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 <div class="title">Figure 2. Remote interaction with the frontend introduced</div>
 </div>
 <div class="paragraph">
-<p>When working with in-process interactions, we are simply invoking methods on objects within the confines of the same process. However, when we switch to using out-of-process calls, we have quite a few considerations. These days when working with remote APIs, we have several popular choices in the form of JSON-based web services, GraphQL, gRPC, etc. While it is possible to make use of a completely custom format to facilitate the communication, DDD advocates the use of the <a href="#_open_host_service_ohs">open host service</a> pattern using a published language that we covered in chapter 9. Even with the open host service style of communication, there are a few considerations, some of which we discuss here:</p>
+<p>When working with in-process interactions, we are simply invoking methods on objects within the confines of the same process. However, when we switch to using out-of-process calls, we have quite a few considerations. These days when working with remote APIs, we have several popular choices in the form of JSON-based web services, GraphQL, gRPC, etc. While it is possible to make use of a completely custom format to facilitate the communication, DDD advocates the use of the <a href="#_open_host_service_ohs">open host service</a> pattern using a published language that we covered in Chapter 9. Even with the open host service style of communication, there are a few considerations, some of which we discuss in the following subsections:</p>
 </div>
 <div class="sect4">
 <h5 id="protocol-options"><a class="anchor" href="#protocol-options"></a>Protocol options</h5>
 <div class="paragraph">
-<p>There are several options available to us when exposing remote APIs. These days using a JSON-based API (often labeled as REST) seems to be quite popular. However, this isn&#8217;t the only option available to us. In a resource-based approach, the first step is to identify a resource (noun) and then map the interactions (verbs) associated with the resource as a next step. In an action-based approach, the focus is on the actions to be performed. Arguably, REST takes a resource-based approach, whereas graphQL, gRPC, SOAP, etc. seem to be action-based. Let&#8217;s take an example of an API where we want to submit an LC. In a RESTful world, this may look something like below:</p>
+<p>There are several options available to us when exposing remote APIs. These days using a JSON-based API (often labeled as REST) seems to be quite popular. However, this isn&#8217;t the only option available to us. In a resource-based approach, the first step is to identify a resource (noun) and then map the interactions (verbs) associated with the resource as a next step. In an action-based approach, the focus is on the actions to be performed. Arguably, REST takes a resource-based approach, whereas graphQL, gRPC, SOAP, etc. seem to be action-based. Let&#8217;s take an example of an API where we want to submit an LC. In a RESTful world, this may look something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -596,10 +602,12 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 2
 3
 4
+5
 </pre></td>
   <td class="code"><pre># Start a new LC application
 curl POST /lc-applications/start \
-        -d '{&quot;applicant-id&quot;: &quot;8ed2d2fe&quot;, &quot;clientReference&quot;: &quot;Test LC&quot;}' \
+        -d '{&quot;applicant-id&quot;: &quot;8ed2d2fe&quot;, \
+             &quot;clientReference&quot;: &quot;Test LC&quot;}' \
         -H 'content-type:application/vnd.lc-application.v2+json'</pre></td>
 </tr></table></code></pre>
 </div>
@@ -633,10 +641,10 @@ curl POST /lc-applications/start \
 <div class="sect4">
 <h5 id="transport-format"><a class="anchor" href="#transport-format"></a>Transport format</h5>
 <div class="paragraph">
-<p>Here we have two broad choices: text-based (for example, JSON or XML) versus binary (for example, protocol buffers or avro). If non-functional requirements (like performance) are met, our preference is to use text-based protocols as a starting point, because it can afford the flexibility of not needing any additional tools to visually interpret the data (when debugging).</p>
+<p>Here we have two broad choices: text-based (for example, JSON or XML) versus binary (for example, <a href="https://developers.google.com/protocol-buffers">protocol buffers</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> or <a href="https://avro.apache.org/">avro</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>). If non-functional requirements (such as performance, scalability, availability, etc.) are met, our preference is to use text-based protocols as a starting point, because it can afford the flexibility of not needing any additional tools to visually interpret the data (when debugging).</p>
 </div>
 <div class="paragraph">
-<p>When designing a remote API, we have the option of choosing a format that enforces a schema (for example, protocol buffers or avro) or something less formal like plain JSON. In such cases, in order to stay true to the ubiquitous language, the process may have to include additional governance in the form of more formal design and code reviews, documentation, etc.</p>
+<p>When designing a remote API, we have the option of choosing a format that enforces a schema (for example, protocol buffers or avro) or something less formal such as plain JSON. In such cases, in order to stay true to the ubiquitous language, the process may have to include additional governance in the form of more formal design and code reviews, documentation, and more.</p>
 </div>
 </div>
 <div class="sect4">
@@ -653,18 +661,21 @@ curl POST /lc-applications/start \
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Resources</strong>: TODO</p>
+<p><strong>Adhoc</strong>: Where APIs are designed without the use of any perceptible structure.</p>
 </li>
 <li>
-<p><strong>HTTP Verbs</strong>: TODO</p>
+<p><strong>Resources</strong>: Where APIs are designed around a <strong><em>thing</em></strong> that makes sense on its own (usually a noun). Here, a very small subset of verbs (either a GET or a POST) may be used to model all operations.</p>
 </li>
 <li>
-<p><strong>Hypermedia controls</strong>: TODO</p>
+<p><strong>HTTP Verbs</strong>: Where APIs are designed by making use of a standard set of operations that can be performed on a resource (for example, GET for reads, POST for creates, PUT for updates, DELETE for deletes, etc.)</p>
+</li>
+<li>
+<p><strong>HATEOAS</strong>: Where APIs include hypermedia links to help clients discover our API in a self-service manner.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Most web service based solutions that claim to be RESTful seem to stop at level 2. Roy Fielding, the inventor or REST seems to claim that <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">REST APIs must be hypertext-driven</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>. In our opinion, the use of hypertext controls in APIs allows them to become self-documenting and thereby promotes the use of the ubiquitous language more explicitly. More importantly, it also indicates what operations are applicable for a given resource at that time in its lifecycle. For example, let&#8217;s look at a sample response where all pending LC applications are listed:</p>
+<p>Most web service based solutions that claim to be RESTful seem to stop at level 2. Roy Fielding, the inventor or REST seems to claim that <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">REST APIs must be hypertext-driven</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>. In our opinion, the use of hypertext controls in APIs allows them to become self-documenting and thereby promotes the use of the ubiquitous language more explicitly. More importantly, it also indicates what operations are applicable for a given resource at that time in its lifecycle. For example, let&#8217;s look at a sample response where all pending LC applications are listed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -746,10 +757,10 @@ Content-Type: application/prs.hal-forms+json
 </div>
 </div>
 <div class="paragraph">
-<p>In the example above, the first LC application needs to be <strong>submit</strong>ted, whereas the second application needs to either be <strong>approved</strong> or <strong>rejected</strong> (presumably because it has already been submitted). Notice how the response also does not need to include a <code>status</code> attribute so that they can use this to deduce which operations are relevant for LC application at that time. While this may be a subtle nuance, we felt that it is valuable to point out in the context of our DDD journey.</p>
+<p>In the example above, there are two <code>lc-applications</code> listed. Based on the current status of the LC, the links provide a means to act on the LC appropriately. In addition to the <em>self</em> link, the first LC application shows a <em>submit</em> link denoting that it can be submitted, whereas the second application shows the <em>approve</em> and <em>reject</em> links, but not a submit link presumably because it has already been submitted. Notice how the response also does not need to include a <code>status</code> attribute so that they can use this to deduce which operations are relevant for LC application at that time (an example of the <a href="https://martinfowler.com/bliki/TellDontAsk.html"><em>tell don&#8217;t ask</em></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> principle). While this may be a subtle nuance, we felt that it is valuable to point out in the context of our DDD journey.</p>
 </div>
 <div class="paragraph">
-<p>We have looked at a few considerations when moving from an in-process out-of-process API. There are quite a few other considerations, specifically pertaining to non-functional requirements (such as performance, resilience, error handling, etc.) We will look at these in more detail in Chapter 11.</p>
+<p>We have looked at a few considerations when moving from an in-process to an out-of-process API. There are quite a few other considerations, specifically pertaining to non-functional requirements (such as performance, resilience, error handling, etc.) We will look at these in more detail in Chapter 11.</p>
 </div>
 <div class="paragraph">
 <p>Now that we have a handle on how we can work with APIs that interact with the front-end, let&#8217;s look at how we can handle event publication and consumption <strong>remotely</strong>.</p>
@@ -765,7 +776,6 @@ Content-Type: application/prs.hal-forms+json
 <p>We publish events when processing commands:</p>
 </div>
 <div class="listingblock">
-<div class="title">Event publishing when processing a command</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -778,6 +788,7 @@ Content-Type: application/prs.hal-forms+json
 8
 9
 10
+11
 </pre></td>
   <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplication</span> {
 
@@ -785,18 +796,26 @@ Content-Type: application/prs.hal-forms+json
     <span style="color:#007">@CommandHandler</span>
     <span style="color:#088;font-weight:bold">public</span> LCApplication(StartNewLCApplicationCommand command) {
         <span style="color:#777">//...</span>
-        AggregateLifecycle.apply(<span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(command.getId(),
+        AggregateLifecycle.apply( <i class="conum" data-value="1"></i><b>(1)</b>
+                <span style="color:#080;font-weight:bold">new</span> LCApplicationStartedEvent(command.getId(),
                 command.getApplicantId(), command.getClientReference(), LCState.DRAFT));
     }
 }</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Publishing an event when processing a command successfully.</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>and consume events to expose query APIs:</p>
 </div>
 <div class="listingblock">
-<div class="title">Event consumption to populate the query store</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -813,13 +832,21 @@ Content-Type: application/prs.hal-forms+json
 
     <span style="color:#777">// Boilerplate code omitted for brevity</span>
 
-    <span style="color:#007">@EventHandler</span>
+    <span style="color:#007">@EventHandler</span>  <i class="conum" data-value="1"></i><b>(1)</b>
     <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(LCApplicationStartedEvent event) {
         <span style="color:#777">//...</span>
     }
 }</pre></td>
 </tr></table></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Subscribing to an event using the Axon provided <code>@EventHandler</code> annotation.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>In order to process events remotely, we need to introduce an explicit infrastructure component in the form of an event bus. Common options include message brokers like ActiveMQ, RabbitMQ or a distributed event streaming platform like Apache Kafka. Application components can continue to publish and consume events as before&#8201;&#8212;&#8201;only now they will happen using an out-of-process invocation style. Logically, this causes our application to now look something like this:</p>
@@ -845,7 +872,7 @@ Content-Type: application/prs.hal-forms+json
 <div class="title">Figure 4. ACID transaction processing within the monolith</div>
 </div>
 <div class="paragraph">
-<p>Notice how all the highlighted operations in the diagram above happen as part of a single database transaction. This allowed the system to be strongly consistent end-to-end. When the event bus is distributed to work within its own process, atomicity cannot be guaranteed like it was previously. Each of the above numbered operations work as independent transactions. This means that they can fail independently, which can lead to data inconsistencies.</p>
+<p>Notice how all the highlighted operations in the preceding diagram happen as part of a single database transaction. This allowed the system to be strongly consistent end-to-end. When the event bus is distributed to work within its own process, atomicity cannot be guaranteed like it was previously. Each of the preceding numbered operations work as independent transactions. This means that they can fail independently, which can lead to data inconsistencies.</p>
 </div>
 <div class="paragraph">
 <p>To solve this problem, let&#8217;s look at each step in the process in more detail, starting with command processing as shown here:</p>
@@ -857,7 +884,7 @@ Content-Type: application/prs.hal-forms+json
 <div class="title">Figure 5. Command processing transaction semantics</div>
 </div>
 <div class="paragraph">
-<p>Consider the situation where we save to the database, but fail to publish the event. Consumers will remain oblivious of the event occurring and become inconsistent. On the flip side, if we publish the event but fail to save in the database, the command processing side itself becomes inconsistent. Not to mention that the query side now thinks that a domain event occurred, when in fact it did not. Again, this leads to inconsistency. This <strong>dual-write</strong> problem is fairly common in distributed event-driven applications. If command processing has to work in a foolproof manner, saving to the database and the publishing to the event bus have to happen atomically - both operations should succeed or fail in unison. Here are a few solutions that we have used to solve this issue (in increasing order of complexity):</p>
+<p>Consider the situation where we save to the database but fail to publish the event. Consumers will remain oblivious of the event occurring and become inconsistent. On the flip side, if we publish the event but fail to save in the database, the command processing side itself becomes inconsistent. Not to mention that the query side now thinks that a domain event occurred, when in fact it did not. Again, this leads to inconsistency. This <a href="https://developers.redhat.com/articles/2021/07/30/avoiding-dual-writes-event-driven-applications"><strong>dual write</strong></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> problem is fairly common in distributed event-driven applications. If command processing has to work in a foolproof manner, saving to the database and the publishing to the event bus have to happen atomically - both operations should succeed or fail in unison. Here are a few solutions that we have used to solve this issue (in increasing order of complexity):</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -884,10 +911,10 @@ The spring framework provides support for this style of behavior through the <co
 <div class="olist arabic">
 <ol class="arabic" start="3">
 <li>
-<p><strong>Distributed transactions</strong>: Another approach is to make use of distributed transactions and <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html">two-phase commit</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>. Typically, this functionality is implemented using pessimistic locking on the underlying resource managers (databases) and may present scaling challenges in highly concurrent environments.</p>
+<p><strong>Distributed transactions</strong>: Another approach is to make use of distributed transactions and <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html">two-phase commit</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>. Typically, this functionality is implemented using pessimistic locking on the underlying resource managers (databases) and may present scaling challenges in highly concurrent environments.</p>
 </li>
 <li>
-<p><strong>Transactional outbox</strong>: All the above methods are not completely foolproof in the sense that there still exists a window of opportunity where the database and the event bus can become inconsistent (this is true even with two-phase commits). One way to circumvent this problem is by completely eliminating the dual-write problem. In this solution, the command processor writes to its database and the intended event to an <em>outbox</em> table in a local transaction. A separate poller component polls the outbox table and writes to the event bus. Polling can be computationally intensive and may again lead back to the dual write problem because the poller has to keep track of the last written event. This may be avoided by making event processing idempotent on the consumer so that processing duplicate events do not cause issues. In extremely high Another way to mitigate this issue is to use a change data capture (CDC) tool (like <a href="https://debezium.io/">Debezium</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>). Most modern databases ship with tools to make this easier and may be worth exploring. Here is one way to implement this using the <em>transactional outbox pattern</em> as shown here:</p>
+<p><strong>Transactional outbox</strong>: All the preceding methods are not completely foolproof in the sense that there still exists a window of opportunity where the database and the event bus can become inconsistent (this is true even with two-phase commits). One way to circumvent this problem is by completely eliminating the dual write problem. In this solution, the command processor writes to its database and the intended event to an <em>outbox</em> table in a local transaction. A separate poller component polls the outbox table and writes to the event bus. Polling can be computationally intensive and may again lead back to the dual write problem because the poller has to keep track of the last written event. This may be avoided by making event processing idempotent on the consumer so that processing duplicate events do not cause issues, especially in extremely high concurrency and volume scenarios. Another way to mitigate this issue is to use a <a href="https://en.wikipedia.org/wiki/Change_data_capture">change data capture</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> (CDC) tool (such as <a href="https://debezium.io/">Debezium</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>) and <a href="https://en.wikipedia.org/wiki/Oracle_LogMiner">Oracle LogMiner</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>. Most modern databases ship with tools to make this easier and may be worth exploring. Here is one way to implement this using the <em>transactional outbox pattern</em> as shown here:</p>
 </li>
 </ol>
 </div>
@@ -909,18 +936,18 @@ The spring framework provides support for this style of behavior through the <co
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>At-most once</strong> delivery means that each message may be delivered once or not at all. This style of delivery is arguably the easiest to implement because the producer creates messages in a fire and forget fashion. This may be okay in environments where loss of some messages may be tolerated. For example, data from click-stream analytics or logging might fall in this category.</p>
+<p><strong>At-most once delivery</strong>: It means that each message may be delivered once or not at all. This style of delivery is arguably the easiest to implement because the producer creates messages in a fire and forget fashion. This may be okay in environments where loss of some messages may be tolerated. For example, data from click-stream analytics or logging might fall in this category.</p>
 </li>
 <li>
-<p><strong>At-least once</strong> delivery means that each message may be delivered more than once with no messages being lost. Undelivered messages are retried to be delivered&#8201;&#8212;&#8201;potentially infinitely. This style of delivery may be required when it is not feasible to lose messages, but where it may be tolerable to process the same message more than once. For example, analytical environments may tolerate duplicate message delivery or have duplicate detection logic to discard already processed messages.</p>
+<p><strong>At-least once delivery</strong>: It means that each message may be delivered more than once with no messages being lost. Undelivered messages are retried to be delivered&#8201;&#8212;&#8201;potentially infinitely. This style of delivery may be required when it is not feasible to lose messages, but where it may be tolerable to process the same message more than once. For example, analytical environments may tolerate duplicate message delivery or have duplicate detection logic to discard already processed messages.</p>
 </li>
 <li>
-<p><strong>Exactly once</strong> delivery means that each message is delivered exactly once without either being lost or duplicated. This style of message delivery is extremely hard to implement and a lot of solutions may approach exactly once semantics with some implementation help from the consumers where duplicate messages are detected and discarded with the producer sticking to at least once delivery semantics.</p>
+<p><strong>Exactly once delivery</strong>: It means that each message is delivered exactly once without either being lost or duplicated. This style of message delivery is extremely hard to implement and a lot of solutions may approach exactly once semantics with some implementation help from the consumers where duplicate messages are detected and discarded with the producer sticking to at least once delivery semantics.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>For the purposes of domain event processing, most teams will obviously prefer to have exactly once processing semantics, given that they would not want to lose any of these events. However, given the practical difficulties guaranteeing <em>exactly once</em> semantics, it is not unusual to approach exactly once processing by having the consumers process events in an idempotent manner or designing events to make it easier to detect errors. For example, consider a <code>MonetaryAmountWithdrawn</code> event, which includes the <code>accountId</code> and the <code>withdrawalAmount</code>. This event may carry an additional <code>currentBalance</code> attribute so that the consumer may know if they are out of sync with the producer when processing the withdrawal. Another way to do this might be for the consumer to keep track of the last "n" events processed. When processing an event, the consumer can check if this event has already been processed. If so, they can detect it as a duplicate and simply discard it. All the above methods again add a level of complexity to the overall system. Despite all these safeguards, consumers may still find themselves out of sync with the system of record (the command side that produces the event). If so, as a last resort, it may be required to use a partial or full <a href="#_historic_event_replays">event replays</a> which was discussed in Chapter 7.</p>
+<p>For the purposes of domain event processing, most teams will obviously prefer to have exactly once processing semantics, given that they would not want to lose any of these events. However, given the practical difficulties guaranteeing <em>exactly once</em> semantics, it is not unusual to approach exactly once processing by having the consumers process events in an idempotent manner or designing events to make it easier to detect errors. For example, consider a <code>MonetaryAmountWithdrawn</code> event, which includes the <code>accountId</code> and the <code>withdrawalAmount</code>. This event may carry an additional <code>currentBalance</code> attribute so that the consumer may know if they are out of sync with the producer when processing the withdrawal. Another way to do this might be for the consumer to keep track of the last "n" events processed. When processing an event, the consumer can check if this event has already been processed. If so, they can detect it as a duplicate and simply discard it. All the preceding methods again add a level of complexity to the overall system. Despite all these safeguards, consumers may still find themselves out of sync with the system of record (the command side that produces the event). If so, as a last resort, it may be required to use a partial or full <a href="#_historic_event_replays">event replays</a> which was discussed in Chapter 7.</p>
 </div>
 </div>
 <div class="sect4">
@@ -929,7 +956,7 @@ The spring framework provides support for this style of behavior through the <co
 <p>In an event-driven system like the one we are building, it is desirable for consumers to receive events in a deterministic order. Not knowing the order or receiving it in the wrong order may result in inaccurate outcomes. Consider the example of an <code>LCApplicationAddressChangedEvent</code> occurring twice in <em>quick succession</em>. If these changes are processed in the wrong order, we may end up displaying the wrong address as their current one. This does not necessarily mean that events need to be ordered for all use cases. Consider another example where we receive an <code>LCApplicationSubmittedEvent</code> more than once erroneously when it is not possible to submit a given LC application more than once. All such notifications after the first may be ignored.</p>
 </div>
 <div class="paragraph">
-<p>As a consumer it is important to know if events will be ordered or not, so that we can make design considerations for out-of-order events. One default might be to accommodate for out-of-order events as a default. In our experience, this does tend to make the resulting design more complicated, especially in cases where the order does matter. We discuss three event ordering strategies and their implications for both the producer and the consumer here:</p>
+<p>As a consumer it is important to know if events will be ordered or not, so that we can make design considerations for out-of-order events. A reasonable approach might be to accommodate for out-of-order events as a default. In our experience, this does tend to make the resulting design more complicated, especially in cases where the order does matter. We discuss three event ordering strategies and their implications for both the producer and the consumer here:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -961,11 +988,14 @@ The spring framework provides support for this style of behavior through the <co
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Global ordering</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The producer needs to make sure that each event includes a sequence number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The producer needs to make sure that each event includes the notion of a sequence.</p></td>
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Either the event bus or the consumer need to implement ordering logic.</p></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>In most applications, per aggregate ordering might be a good place to start and cater to most business scenarios.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="durability-and-persistence-guarantees"><a class="anchor" href="#durability-and-persistence-guarantees"></a>Durability and persistence guarantees</h5>
@@ -997,10 +1027,10 @@ The spring framework provides support for this style of behavior through the <co
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Persistence</strong>: the communication style between the publisher and the event bus.</p>
+<p><strong>Persistence</strong>: This is the communication style between the producer and the event bus.</p>
 </li>
 <li>
-<p><strong>Durability</strong>: the communication style between the event bus and the consumer.</p>
+<p><strong>Durability</strong>: This is the communication style between the event bus and the consumer.</p>
 </li>
 </ol>
 </div>
@@ -1033,7 +1063,7 @@ The spring framework provides support for this style of behavior through the <co
 </ol>
 </div>
 <div class="paragraph">
-<p>Each of these steps can encounter failures. Irrespective of the cause of failure, the event should be durable (as discussed above) so that it can be processed later when the issue is fixed. These errors can be broadly segregated into four categories:</p>
+<p>Each of these steps can encounter failures. Irrespective of the cause of failure, the event should be durable (as discussed earlier) so that it can be processed later when the issue is fixed. These errors can be broadly segregated into four categories:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1072,7 +1102,7 @@ The spring framework provides support for this style of behavior through the <co
 </tbody>
 </table>
 <div class="paragraph">
-<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus.Having done this allows us to actually extract the LC application processing component into its own independently deployable unit, which will look something like this:</p>
+<p>We have now looked at the changes that we need to make because of the introduction of an out-of-process event bus.Having done this allows us to actually extract the <em>LC Application Processing</em> component into its own independently deployable unit, which will look something like this:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1081,7 +1111,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 9. LC Application processing deployed independently</div>
 </div>
 <div class="paragraph">
-<p>However, we are continuing to use a common datastore for the LC application processing component.Let&#8217;s look at what is involved in segregating this into its own store.</p>
+<p>However, we are continuing to use a common datastore for the <em>LC Application Processing</em> component.Let&#8217;s look at what is involved in segregating this into its own store.</p>
 </div>
 </div>
 </div>
@@ -1121,7 +1151,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect4">
 <h5 id="cut-over"><a class="anchor" href="#cut-over"></a>Cut-over</h5>
 <div class="paragraph">
-<p>If we have made it thus far, we are now ready to complete the migration of the LC application processing from the rest of the monolith. The logical architecture of our solution now looks like the diagram shown here:</p>
+<p>If we have made it thus far, we are now ready to complete the migration of the <em>LC Application Processing</em> from the rest of the monolith. The logical architecture of our solution now looks like the diagram shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1138,7 +1168,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect2">
 <h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
 <div class="paragraph">
-<p>In this chapter, we learnt how we can extract a bounded context from an existing monolith, although one could argue that this was from a reasonably well-structured one. You should have an understanding of what it takes to go from in-process event-driven application to a distributed one.</p>
+<p>In this chapter, we learnt how we can extract a bounded context from an existing monolith, although one could argue that this was from a reasonably well-structured one. We looked at the challenges involved in decomposing the monolith from various interaction points such as the frontend, event exchanges and the database. You should have an understanding of what it takes to go from in-process event-driven application to a distributed one.</p>
 </div>
 <div class="paragraph">
 <p>In the next chapter, we will look at how to extract pieces out of a monolith that may not be as well-structured, possibly very close to the dreaded big ball of mud.</p>
@@ -1150,19 +1180,37 @@ The spring framework provides support for this style of behavior through the <co
 <div id="footnotes">
 <hr>
 <div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" class="bare">https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven</a>
+<a href="#_footnoteref_1">1</a>. <a href="https://developers.google.com/protocol-buffers" class="bare">https://developers.google.com/protocol-buffers</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html" class="bare">https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html</a>
+<a href="#_footnoteref_2">2</a>. <a href="https://avro.apache.org/" class="bare">https://avro.apache.org/</a>
 </div>
 <div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. <a href="https://debezium.io/" class="bare">https://debezium.io/</a>
+<a href="#_footnoteref_3">3</a>. <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" class="bare">https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven</a>
+</div>
+<div class="footnote" id="_footnotedef_4">
+<a href="#_footnoteref_4">4</a>. <a href="https://martinfowler.com/bliki/TellDontAsk.html" class="bare">https://martinfowler.com/bliki/TellDontAsk.html</a>
+</div>
+<div class="footnote" id="_footnotedef_5">
+<a href="#_footnoteref_5">5</a>. <a href="https://developers.redhat.com/articles/2021/07/30/avoiding-dual-writes-event-driven-applications" class="bare">https://developers.redhat.com/articles/2021/07/30/avoiding-dual-writes-event-driven-applications</a>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html" class="bare">https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html</a>
+</div>
+<div class="footnote" id="_footnotedef_7">
+<a href="#_footnoteref_7">7</a>. <a href="https://en.wikipedia.org/wiki/Change_data_capture" class="bare">https://en.wikipedia.org/wiki/Change_data_capture</a>
+</div>
+<div class="footnote" id="_footnotedef_8">
+<a href="#_footnoteref_8">8</a>. <a href="https://debezium.io/" class="bare">https://debezium.io/</a>
+</div>
+<div class="footnote" id="_footnotedef_9">
+<a href="#_footnoteref_9">9</a>. <a href="https://en.wikipedia.org/wiki/Oracle_LogMiner" class="bare">https://en.wikipedia.org/wiki/Oracle_LogMiner</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-12 00:44:33 UTC
+Last updated 2022-05-15 14:42:33 UTC
 </div>
 </div>
 </body>
