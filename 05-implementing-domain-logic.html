@@ -564,7 +564,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="title">Figure 1. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the  <a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>.</p>
+<p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the  <a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 2</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -605,7 +605,7 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 <p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
 </li>
 <li>
-<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
+<p>If business invariants (validations) are satisfied, one or more domain events are readied with the intention to be published.</p>
 </li>
 <li>
 <p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
@@ -762,7 +762,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="title">Figure 4. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
-<p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_mechanics_of_domain_driven_design">Chapter 2</a>
+<p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_the_rationale_for_domain_driven_design">Chapter 1</a>
 ).</p>
 </div>
 <div class="paragraph">
@@ -1992,7 +1992,7 @@ Wheat bread</p></td>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We are injecting the Axon <code>Repository</code> to allow us to load aggregates. This ws not required previously because the <code>@CommandHandler</code> annotation appeared on aggregate methods directly.</td>
+<td>We are injecting the Axon <code>Repository</code> to allow us to load aggregates. This was not required previously because the <code>@CommandHandler</code> annotation appeared on aggregate methods directly.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -2375,7 +2375,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-15 22:47:49 UTC
+Last updated 2022-05-15 23:03:53 UTC
 </div>
 </div>
 </body>

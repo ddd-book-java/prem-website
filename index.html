@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 15 2022 10:48 PM UTC</span>
+<span id="revdate">May 15 2022 11:04 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -462,7 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#part-1-foundations">Part 1: Foundations</a>
 <ul class="sectlevel1">
-<li><a href="#the-rationale-for-domain-driven-design">1. The Rationale for Domain-Driven Design</a>
+<li><a href="#_the_rationale_for_domain_driven_design">1. The Rationale for Domain-Driven Design</a>
 <ul class="sectlevel2">
 <li><a href="#introduction">1.1. Introduction</a></li>
 <li><a href="#why-do-software-projects-fail">1.2. Why do software projects fail?</a>
@@ -789,7 +789,7 @@ Write more here&#8230;&#8203; TODO.</p>
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="the-rationale-for-domain-driven-design"><a class="anchor" href="#the-rationale-for-domain-driven-design"></a><a class="link" href="#the-rationale-for-domain-driven-design">1. The Rationale for Domain-Driven Design</a></h2>
+<h2 id="_the_rationale_for_domain_driven_design"><a class="anchor" href="#_the_rationale_for_domain_driven_design"></a><a class="link" href="#_the_rationale_for_domain_driven_design">1. The Rationale for Domain-Driven Design</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -802,10 +802,10 @@ The being cannot be termed rational or virtuous, who obeys any authority, but th
 <div class="sect2">
 <h3 id="introduction"><a class="anchor" href="#introduction"></a><a class="link" href="#introduction">1.1. Introduction</a></h3>
 <div class="paragraph">
-<p>According to the Project Management Institute&#8217;s (PMI) <a href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908"><em>Pulse of the Profession</em></a> report published in February 2020, only <strong>77%</strong> of all projects meet their intended goals&#8201;&#8212;&#8201;and even this is true only in the most mature organizations. For less mature organizations, this number falls to just <strong>56%</strong> i.e. approximately one in every two projects does not meet its intended goals. Furthermore, approximately one in every five projects is declared an outright failure. At the same time, we also seem to be embarking on our most ambitious and complex projects.</p>
+<p>According to the Project Management Institute&#8217;s (PMI) <a href="https://www.pmi.org/learning/library/forging-future-focused-culture-11908"><em>Pulse of the Profession</em></a> report published in February 2020, only <strong>77%</strong> of all projects meet their intended goals&#8201;&#8212;&#8201;and even this is true only in the most mature organizations.For less mature organizations, this number falls to just <strong>56%</strong> i.e. approximately one in every two projects does not meet its intended goals.Furthermore, approximately one in every five projects is declared an outright failure.At the same time, we also seem to be embarking on our most ambitious and complex projects.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter, we will examine the main causes for project failure and look at how applying domain-driven design provides a set of guidelines and techniques to improve the odds of success in our favor. While Eric Evans wrote his classic book on the subject way back in 2003, we look at why that work is still extremely relevant in today&#8217;s times.</p>
+<p>In this chapter, we will examine the main causes for project failure and look at how applying domain-driven design provides a set of guidelines and techniques to improve the odds of success in our favor.While Eric Evans wrote his classic book on the subject way back in 2003, we look at why that work is still extremely relevant in today&#8217;s times.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3603,7 +3603,7 @@ To communicate effectively, the code must be based on the same language used to 
 <div class="title">Figure 1- 57. Recap of eventstorming session</div>
 </div>
 <div class="paragraph">
-<p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the  <a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 3</a>.</p>
+<p>As mentioned previously, the <strong>blue</strong> stickies in this diagram represent <strong>commands</strong>. We will be using the  <a href="#_cqrs_pattern">Command Query Responsibility Segregation (CQRS)</a> pattern as a high level architecture approach to implement the domain logic for our LC issuance application. Let&#8217;s examine the mechanics of using CQRS and how it can result in an elegant solution. For a recap of what CQRS is and when it is appropriate to apply this pattern, please refer to the "<a href="#_when_to_use_cqrs">When to use CQRS</a>" section in <a href="#_where_does_ddd_fit">Chapter 2</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3644,7 +3644,7 @@ CQRS is by no means a silver bullet. Although it is general-purpose enough to be
 <p>In an event-sourced system, the command model is constructed by replaying existing events that have occurred for that instance. In a state-stored system, we would simply restore state by reading state from the persistence store.</p>
 </li>
 <li>
-<p>If business invariants (validations) are satisfied, one or more domain events are published.</p>
+<p>If business invariants (validations) are satisfied, one or more domain events are readied with the intention to be published.</p>
 </li>
 <li>
 <p>In an event-sourced system, the domain event is persisted on the command side. In a state-stored system, we would update the state of the instance in the persistence store.</p>
@@ -3801,7 +3801,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 <div class="title">Figure 1- 60. First cut attempt at aggregate design</div>
 </div>
 <div class="paragraph">
-<p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_mechanics_of_domain_driven_design">Chapter 2</a>
+<p>Before we arrive at aggregates, the grouping above allows us to identify entities. Some or all of these entities may be aggregates (For a more detailed explanation on the difference between <a href="#_aggregates">aggregates</a> and <a href="#_entities">entities</a>, please refer to <a href="#_the_rationale_for_domain_driven_design">Chapter 1</a>
 ).</p>
 </div>
 <div class="paragraph">
@@ -5031,7 +5031,7 @@ Wheat bread</p></td>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We are injecting the Axon <code>Repository</code> to allow us to load aggregates. This ws not required previously because the <code>@CommandHandler</code> annotation appeared on aggregate methods directly.</td>
+<td>We are injecting the Axon <code>Repository</code> to allow us to load aggregates. This was not required previously because the <code>@CommandHandler</code> annotation appeared on aggregate methods directly.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -11359,7 +11359,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-15 22:47:49 UTC
+Last updated 2022-05-15 23:03:53 UTC
 </div>
 </div>
 </body>
