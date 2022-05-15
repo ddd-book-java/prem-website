@@ -1238,7 +1238,7 @@ A log is an extremely simple, append-only sequence of immutable records ordered 
 <div class="title">Figure 9. The log data structure</div>
 </div>
 <div class="paragraph">
-<p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above.Consider the example of an online order flow below:</p>
+<p>Writing to a log as compared to a more complex data structure like a table is a relatively simple and fast operation and can handle extremely high volumes of data while providing predictable performance. Indeed, a modern event streaming platform like Kafka makes use of this pattern to scale to support extremely high volumes. We do feel that this can be applied to act as a persistence store when processing commands in mainstream systems because this has benefits beyond the technical advantages listed above. Consider the example of an online order flow below:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1297,10 +1297,10 @@ E6: Order 123 confirmed</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>As you can see, in the event store, we continue to have full visibility of all user actions performed.This allows us to reason about these behaviors more holistically.In the traditional store, we lost the information that the user replaced white with wheat bread.While this does not impact the order itself, we lose the opportunity to gather insights from this user behavior.We recognize that this information can be captured in other ways using specialized analytical solutions, however, the event log mechanism provides a natural way to do this without requiring any additional effort. It also acts as an audit log providing full history of all events that have occurred thus far.This fits well with the essence of domain-driven design where we are constantly exploring ways in which to reduce complexity.</p>
+<p>As you can see, in the event store, we continue to have full visibility of all user actions performed. This allows us to reason about these behaviors more holistically. In the traditional store, we lost the information that the user replaced white with wheat bread. While this does not impact the order itself, we lose the opportunity to gather insights from this user behavior. We recognize that this information can be captured in other ways using specialized analytical solutions, however, the event log mechanism provides a natural way to do this without requiring any additional effort. It also acts as an audit log providing full history of all events that have occurred thus far. This fits well with the essence of domain-driven design where we are constantly exploring ways in which to reduce complexity.</p>
 </div>
 <div class="paragraph">
-<p>However, there are implications to persisting data in the form of a simple event log.Before processing any command, we will need to hydrate past events in exact order of occurrence and reconstruct aggregate state to allow us to perform validations.For example, when confirming checkout, just having the ordered set of elapsed events will not suffice.We still need to compute the exact items that are in the cart before allowing the order to be placed.This <em>event replay</em> to restore aggregate state (at least those attributes that are required to validate said command) is necessary before processing that command.For example, we need to know which items are in the cart currently before processing the <code>RemoveItemFromCartCommand</code>.This is illustrated in the following table:</p>
+<p>However, there are implications to persisting data in the form of a simple event log. Before processing any command, we will need to hydrate past events in exact order of occurrence and reconstruct aggregate state to allow us to perform validations. For example, when confirming checkout, just having the ordered set of elapsed events will not suffice. We still need to compute the exact items that are in the cart before allowing the order to be placed. This <em>event replay</em> to restore aggregate state (at least those attributes that are required to validate said command) is necessary before processing that command. For example, we need to know which items are in the cart currently before processing the <code>RemoveItemFromCartCommand</code>.This is illustrated in the following table:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1489,15 +1489,15 @@ Wheat bread</p></td>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Before processing any command, the aggregate loading process commences by first invoking the no-args constructor.For this reason, we need the no-args constructor to be <strong>empty</strong> i.e. it should <strong>not</strong> have any code that restores state.State restoration <strong>must</strong> happen only in those methods that trigger an event replay.In the case of the Axon framework, this translates to methods embellished with the <code>@EventSourcingHandler</code> annotation.</td>
+<td>Before processing any command, the aggregate loading process commences by first invoking the no-args constructor. For this reason, we need the no-args constructor to be <strong>empty</strong> i.e. it should <strong>not</strong> have any code that restores state. State restoration <strong>must</strong> happen only in those methods that trigger an event replay. In the case of the Axon framework, this translates to methods embellished with the <code>@EventSourcingHandler</code> annotation.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>It is important to note that it is possible (but not necessary) to emit <strong>more than one event</strong> after processing a command.This is illustrated in the first instance of the <code>AddItemCommand</code> in the previous code where we emit <code>CartCreatedEvent</code> and <code>ItemAddedEvent</code>.Command handlers do not mutate state of the aggregate.They only make use of existing aggregate state to enforce invariants (validations) and emit events if those invariants hold true.</td>
+<td>It is important to note that it is possible (but not necessary) to emit <strong>more than one event</strong> after processing a command. This is illustrated in the first instance of the <code>AddItemCommand</code> in the previous code where we emit <code>CartCreatedEvent</code> and <code>ItemAddedEvent</code>.Command handlers do not mutate state of the aggregate. They only make use of existing aggregate state to enforce invariants (validations) and emit events if those invariants hold true.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The loading process continues through the invocation of event sourcing handler methods in exactly the order of occurrence for that aggregate instance.Event sourcing handlers are only needed to hydrate aggregate state on the basis of past events.This means that they usually are devoid of any business (conditional) logic.It goes without saying that these methods do not emit any events.Event emission is restricted to happen within command handlers when invariants are successfully enforced.</td>
+<td>The loading process continues through the invocation of event sourcing handler methods in exactly the order of occurrence for that aggregate instance. Event sourcing handlers are only needed to hydrate aggregate state on the basis of past events. This means that they usually are devoid of any business (conditional) logic. It goes without saying that these methods do not emit any events. Event emission is restricted to happen within command handlers when invariants are successfully enforced.</td>
 </tr>
 </table>
 </div>
@@ -1535,7 +1535,7 @@ Wheat bread</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>If there are a large number of historic events to restore state, the aggregate loading process can become a time-consuming operation&#8201;&#8212;&#8201;directly proportional to the number of elapsed events for that aggregate.There are techniques (like snapshotting) we can employ to overcome this.We will cover this in more detail in Chapter 11 – Non-Functional Requirements.</p>
+<p>If there are a large number of historic events to restore state, the aggregate loading process can become a time-consuming operation&#8201;&#8212;&#8201;directly proportional to the number of elapsed events for that aggregate. There are techniques (like snapshotting) we can employ to overcome this. We will cover this in more detail in Chapter 11 – Non-Functional Requirements.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1605,7 +1605,7 @@ Wheat bread</p></td>
 </ul>
 </div>
 <div class="paragraph">
-<p>It may also be prudent to perform these validations in different layers of the system.And it is also common for some or all of these policy enforcements to be repeated in more than one layer of the system.However, the important thing to note is that before a command is successfully handled, all these policy enforcements are uniformly applied.Let&#8217;s look at some examples of these in the upcoming section.</p>
+<p>It may also be prudent to perform these validations in different layers of the system. And it is also common for some or all of these policy enforcements to be repeated in more than one layer of the system. However, the important thing to note is that before a command is successfully handled, all these policy enforcements are uniformly applied. Let&#8217;s look at some examples of these in the upcoming section.</p>
 </div>
 <div class="sect3">
 <h4 id="structural-validations"><a class="anchor" href="#structural-validations"></a>Structural validations</h4>
@@ -1717,10 +1717,10 @@ Wheat bread</p></td>
 <div class="sect3">
 <h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a>Business rule enforcements</h4>
 <div class="paragraph">
-<p>Structural validations can be accomplished using information that is already available in the command.However, there is another class of validations that requires information that is not present in the incoming command itself.This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</p>
+<p>Structural validations can be accomplished using information that is already available in the command. However, there is another class of validations that requires information that is not present in the incoming command itself. This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at an example of a validation that requires state present within the aggregate. Consider the example of submitting an LC.While we can make several edits to the LC when it is in draft state, no changes can be made after it is submitted.This means that we can only submit an LC once.This act of submitting the LC is achieved by issuing the <code>SubmitLCApplicationCommand</code> as shown in the artifact from the eventstorming session:</p>
+<p>Let&#8217;s look at an example of a validation that requires state present within the aggregate. Consider the example of submitting an LC. While we can make several edits to the LC when it is in draft state, no changes can be made after it is submitted. This means that we can only submit an LC once. This act of submitting the LC is achieved by issuing the <code>SubmitLCApplicationCommand</code> as shown in the artifact from the eventstorming session:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1931,7 +1931,7 @@ Wheat bread</p></td>
 </table>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s also look at an example where information needed to perform the validation is not part of either the command or the aggregate. Let&#8217;s consider the scenario where country regulations prohibit transacting with a set of so called <em>sanctioned</em> countries. Changes to this list of countries may be affected by external factors. Hence it does not make sense to pass this list of sanctioned countries as part of the command payload. Neither does it make sense to maintain it as part of every single aggregate&#8217;s state&#8201;&#8212;&#8201;given that it can change (albeit very infrequently). In such a case, we may want to consider making use of a command handler that is outside the confines of the aggregate class. Thus far, we have only seen examples of <code>@CommandHandler</code> methods within the aggregate. But the <code>@CommandHandler</code> annotation can appear on any other class external to the aggregate. However, in such a case, we need to load the aggregate ourselves. The Axon framework provides a <code>org.axonframework.modelling.command.Repository</code> interface to allow us to do that. It is important to note that this <code>Repository</code> is distinct from spring framework&#8217;s interface that is part of the spring data libraries. An example of how this works is shown below:</p>
+<p>Let&#8217;s also look at an example where information needed to perform the validation is not part of either the command or the aggregate. Let&#8217;s consider the scenario where country regulations prohibit transacting with a set of so called <em>sanctioned</em> countries. Changes to this list of countries may be affected by external factors. Hence it does not make sense to pass this list of sanctioned countries as part of the command payload. Neither does it make sense to maintain it as part of every single aggregate&#8217;s state&#8201;&#8212;&#8201;given that it can change (albeit very infrequently). In such a case, we may want to consider making use of a command handler that is outside the confines of the aggregate class. Thus far, we have only seen examples of <code>@CommandHandler</code> methods within the aggregate. But the <code>@CommandHandler</code> annotation can appear on any other class external to the aggregate. However, in such a case, we need to load the aggregate ourselves. The Axon framework provides a <code>org.axonframework.modelling.command. Repository</code> interface to allow us to do that. It is important to note that this <code>Repository</code> is distinct from spring framework&#8217;s interface that is part of the spring data libraries. An example of how this works is shown below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2375,7 +2375,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-15 14:43:17 UTC
+Last updated 2022-05-15 22:47:49 UTC
 </div>
 </div>
 </body>
