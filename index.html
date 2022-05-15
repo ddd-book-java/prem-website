@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 15 2022 02:42 PM UTC</span>
+<span id="revdate">May 15 2022 02:43 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -736,47 +736,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#further-reading-8">11.6. Further reading</a></li>
 </ul>
 </li>
-<li><a href="#migrating-to-serverless-15-pages">12. Migrating to Serverless (15 pages)</a>
+<li><a href="#non-functional-requirements-25-pages">12. Non-Functional Requirements (25 pages)</a>
 <ul class="sectlevel2">
-<li><a href="#serverless-primer">12.1. Serverless Primer</a></li>
-<li><a href="#services-as-functions">12.2. Services as Functions</a></li>
-<li><a href="#serverless-persistence">12.3. Serverless Persistence</a></li>
-<li><a href="#next-steps">12.4. Next Steps</a></li>
-<li><a href="#legacy-application-migration-patterns">12.5. Legacy Application Migration Patterns</a></li>
-<li><a href="#decomposing-and-distributing-big-balls-of-mud">12.6. Decomposing and distributing big balls of mud</a>
+<li><a href="#dealing-with-eventual-consistency">12.1. Dealing With Eventual Consistency</a></li>
+<li><a href="#scaling-the-event-store-with-snapshots">12.2. Scaling the Event Store with Snapshots</a></li>
+<li><a href="#event-versioning-and-upcasting">12.3. Event Versioning and Upcasting</a></li>
+<li><a href="#monitoring-metrics-and-tracing">12.4. Monitoring, Metrics and Tracing</a></li>
+<li><a href="#enhancing-performance">12.5. Enhancing Performance</a>
 <ul class="sectlevel3">
-<li><a href="#code-first">12.6.1. Code-first</a></li>
-<li><a href="#data-first">12.6.2. Data-first</a></li>
-<li><a href="#potential-next-steps">12.6.3. Potential next steps</a></li>
-<li><a href="#even-more-fine-grained-distribution-2">12.6.4. Even more fine-grained distribution</a></li>
-<li><a href="#customer-experiences-and-frontends">12.6.5. Customer experiences and frontends</a></li>
-<li><a href="#technical-implications-of-distribution">12.6.6. Technical implications of distribution</a></li>
-</ul>
-</li>
-<li><a href="#not-yet-finalized">12.7. Not yet finalized</a>
-<ul class="sectlevel3">
-<li><a href="#transitional-architecture">12.7.1. Transitional architecture</a></li>
-</ul>
-</li>
-<li><a href="#understanding-the-costs-of-distribution">12.8. Understanding the costs of distribution</a>
-<ul class="sectlevel3">
-<li><a href="#handling-exceptions">12.8.1. Handling exceptions</a></li>
-<li><a href="#testing-the-overall-system">12.8.2. Testing the Overall System</a></li>
-<li><a href="#compatibility">12.8.3. Compatibility</a></li>
-<li><a href="#non-technical-implications-of-distribution">12.8.4. Non-technical implications of distribution</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#non-functional-requirements-25-pages">13. Non-Functional Requirements (25 pages)</a>
-<ul class="sectlevel2">
-<li><a href="#dealing-with-eventual-consistency">13.1. Dealing With Eventual Consistency</a></li>
-<li><a href="#scaling-the-event-store-with-snapshots">13.2. Scaling the Event Store with Snapshots</a></li>
-<li><a href="#event-versioning-and-upcasting">13.3. Event Versioning and Upcasting</a></li>
-<li><a href="#monitoring-metrics-and-tracing">13.4. Monitoring, Metrics and Tracing</a></li>
-<li><a href="#enhancing-performance">13.5. Enhancing Performance</a>
-<ul class="sectlevel3">
-<li><a href="#scaling-the-event-bus">13.5.1. Scaling the event bus</a></li>
+<li><a href="#scaling-the-event-bus">12.5.1. Scaling the event bus</a></li>
 </ul>
 </li>
 </ul>
@@ -11160,241 +11128,7 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 </div>
 <div class="sect1">
-<h2 id="migrating-to-serverless-15-pages"><a class="anchor" href="#migrating-to-serverless-15-pages"></a><a class="link" href="#migrating-to-serverless-15-pages">12. Migrating to Serverless (15 pages)</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In this chapter, we will migrate the components developed thus far to adopt a serverless style of architecture.</p>
-</div>
-<div class="sect2">
-<h3 id="serverless-primer"><a class="anchor" href="#serverless-primer"></a><a class="link" href="#serverless-primer">12.1. Serverless Primer</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="services-as-functions"><a class="anchor" href="#services-as-functions"></a><a class="link" href="#services-as-functions">12.2. Services as Functions</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="serverless-persistence"><a class="anchor" href="#serverless-persistence"></a><a class="link" href="#serverless-persistence">12.3. Serverless Persistence</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="next-steps"><a class="anchor" href="#next-steps"></a><a class="link" href="#next-steps">12.4. Next Steps</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="legacy-application-migration-patterns"><a class="anchor" href="#legacy-application-migration-patterns"></a><a class="link" href="#legacy-application-migration-patterns">12.5. Legacy Application Migration Patterns</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="decomposing-and-distributing-big-balls-of-mud"><a class="anchor" href="#decomposing-and-distributing-big-balls-of-mud"></a><a class="link" href="#decomposing-and-distributing-big-balls-of-mud">12.6. Decomposing and distributing big balls of mud</a></h3>
-<div class="sect3">
-<h4 id="code-first"><a class="anchor" href="#code-first"></a><a class="link" href="#code-first">12.6.1. Code-first</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="data-first"><a class="anchor" href="#data-first"></a><a class="link" href="#data-first">12.6.2. Data-first</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="potential-next-steps"><a class="anchor" href="#potential-next-steps"></a><a class="link" href="#potential-next-steps">12.6.3. Potential next steps</a></h4>
-<div class="sect4">
-<h5 id="sagas-as-standalone-components"><a class="anchor" href="#sagas-as-standalone-components"></a><a class="link" href="#sagas-as-standalone-components">Sagas as standalone components</a></h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-5.png" alt="lc application monolith stage 5" width="75%">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="commands-and-queries-as-standalone-components-2"><a class="anchor" href="#commands-and-queries-as-standalone-components-2"></a><a class="link" href="#commands-and-queries-as-standalone-components-2">Commands and queries as standalone components</a></h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="distributing-individual-query-components-2"><a class="anchor" href="#distributing-individual-query-components-2"></a><a class="link" href="#distributing-individual-query-components-2">Distributing individual query components</a></h5>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="even-more-fine-grained-distribution-2"><a class="anchor" href="#even-more-fine-grained-distribution-2"></a><a class="link" href="#even-more-fine-grained-distribution-2">12.6.4. Even more fine-grained distribution</a></h4>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="customer-experiences-and-frontends"><a class="anchor" href="#customer-experiences-and-frontends"></a><a class="link" href="#customer-experiences-and-frontends">12.6.5. Customer experiences and frontends</a></h4>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="technical-implications-of-distribution"><a class="anchor" href="#technical-implications-of-distribution"></a><a class="link" href="#technical-implications-of-distribution">12.6.6. Technical implications of distribution</a></h4>
-<div class="sect4">
-<h5 id="performance"><a class="anchor" href="#performance"></a><a class="link" href="#performance">Performance</a></h5>
-
-</div>
-<div class="sect4">
-<h5 id="resilience"><a class="anchor" href="#resilience"></a><a class="link" href="#resilience">Resilience</a></h5>
-
-</div>
-<div class="sect4">
-<h5 id="exception-handling"><a class="anchor" href="#exception-handling"></a><a class="link" href="#exception-handling">Exception handling</a></h5>
-<div class="quoteblock">
-<blockquote>
-Everything fails all the time.
-</blockquote>
-<div class="attribution">
-&#8212; Werner Vogels<br>
-<cite>CTO -- Amazon Web Services</cite>
-</div>
-</div>
-<div class="paragraph">
-<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
-    <span style="color:#777">//...</span>
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
-        <span style="color:#777">//..</span>
-        productLegalityValidated = <span style="color:#069">true</span>;
-        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
-               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
-        }
-    }
-}</pre></td>
-</tr></table></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
-</li>
-<li>
-<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
-</li>
-<li>
-<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
-</li>
-</ul>
-</div></td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
-</li>
-<li>
-<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
-</li>
-<li>
-<p>We can choose to only wait</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="recovery"><a class="anchor" href="#recovery"></a><a class="link" href="#recovery">Recovery</a></h5>
-<div class="sect5">
-<h6 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a><a class="link" href="#automated-recovery">Automated recovery</a></h6>
-
-</div>
-<div class="sect5">
-<h6 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a><a class="link" href="#manual-recovery">Manual recovery</a></h6>
-
-</div>
-<div class="sect5">
-<h6 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a><a class="link" href="#compensating-actions">Compensating actions</a></h6>
-
-</div>
-<div class="sect5">
-<h6 id="retries"><a class="anchor" href="#retries"></a><a class="link" href="#retries">Retries</a></h6>
-
-</div>
-</div>
-<div class="sect4">
-<h5 id="integration-strategies"><a class="anchor" href="#integration-strategies"></a><a class="link" href="#integration-strategies">Integration strategies</a></h5>
-
-</div>
-<div class="sect4">
-<h5 id="testing-strategies"><a class="anchor" href="#testing-strategies"></a><a class="link" href="#testing-strategies">Testing strategies</a></h5>
-
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="not-yet-finalized"><a class="anchor" href="#not-yet-finalized"></a><a class="link" href="#not-yet-finalized">12.7. Not yet finalized</a></h3>
-<div class="sect3">
-<h4 id="transitional-architecture"><a class="anchor" href="#transitional-architecture"></a><a class="link" href="#transitional-architecture">12.7.1. Transitional architecture</a></h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a><a class="link" href="#understanding-the-costs-of-distribution">12.8. Understanding the costs of distribution</a></h3>
-<div class="sect3">
-<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a><a class="link" href="#handling-exceptions">12.8.1. Handling exceptions</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">12.8.2. Testing the Overall System</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="compatibility"><a class="anchor" href="#compatibility"></a><a class="link" href="#compatibility">12.8.3. Compatibility</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="non-technical-implications-of-distribution"><a class="anchor" href="#non-technical-implications-of-distribution"></a><a class="link" href="#non-technical-implications-of-distribution">12.8.4. Non-technical implications of distribution</a></h4>
-<div class="sect4">
-<h5 id="team-topologies"><a class="anchor" href="#team-topologies"></a><a class="link" href="#team-topologies">Team topologies</a></h5>
-
-</div>
-<div class="sect4">
-<h5 id="tech-stack"><a class="anchor" href="#tech-stack"></a><a class="link" href="#tech-stack">Tech stack</a></h5>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="non-functional-requirements-25-pages"><a class="anchor" href="#non-functional-requirements-25-pages"></a><a class="link" href="#non-functional-requirements-25-pages">13. Non-Functional Requirements (25 pages)</a></h2>
+<h2 id="non-functional-requirements-25-pages"><a class="anchor" href="#non-functional-requirements-25-pages"></a><a class="link" href="#non-functional-requirements-25-pages">12. Non-Functional Requirements (25 pages)</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -11408,25 +11142,25 @@ Sometimes I feel like I am being forgotten.
 <p>While the functional requirements of the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
 </div>
 <div class="sect2">
-<h3 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">13.1. Dealing With Eventual Consistency</a></h3>
+<h3 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">12.1. Dealing With Eventual Consistency</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">13.2. Scaling the Event Store with Snapshots</a></h3>
+<h3 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">12.2. Scaling the Event Store with Snapshots</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">13.3. Event Versioning and Upcasting</a></h3>
+<h3 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">12.3. Event Versioning and Upcasting</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">13.4. Monitoring, Metrics and Tracing</a></h3>
+<h3 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">12.4. Monitoring, Metrics and Tracing</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="enhancing-performance"><a class="anchor" href="#enhancing-performance"></a><a class="link" href="#enhancing-performance">13.5. Enhancing Performance</a></h3>
+<h3 id="enhancing-performance"><a class="anchor" href="#enhancing-performance"></a><a class="link" href="#enhancing-performance">12.5. Enhancing Performance</a></h3>
 <div class="sect3">
-<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">13.5.1. Scaling the event bus</a></h4>
+<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">12.5.1. Scaling the event bus</a></h4>
 
 </div>
 </div>
@@ -11625,7 +11359,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-15 14:42:34 UTC
+Last updated 2022-05-15 14:43:17 UTC
 </div>
 </div>
 </body>
