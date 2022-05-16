@@ -663,7 +663,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="sect3">
 <h4 id="_vertical_slice_architecture"><a class="anchor" href="#_vertical_slice_architecture"></a>Vertical slice architecture</h4>
 <div class="paragraph">
-<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation.Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected.Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
+<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation. Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected. Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -672,7 +672,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="title">Figure 8. Vertical slice architecture</div>
 </div>
 <div class="paragraph">
-<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case.However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view.This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
+<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case. However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view. This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
 </div>
 <div class="sect4">
 <h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a>Considerations</h5>
@@ -818,7 +818,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect5">
 <h6 id="need-for-multiple-read-representations"><a class="anchor" href="#need-for-multiple-read-representations"></a>Need for multiple read representations</h6>
 <div class="paragraph">
-<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view.While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system.Several times, it is not possible to predict ahead of time, the nature of these requirements.By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements.Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
+<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view. While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system. Several times, it is not possible to predict ahead of time, the nature of these requirements. By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements. Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
 </div>
 </div>
 <div class="sect5">
@@ -830,7 +830,7 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect5">
 <h6 id="more-uniform-distribution-of-complexity"><a class="anchor" href="#more-uniform-distribution-of-complexity"></a>More uniform distribution of complexity</h6>
 <div class="paragraph">
-<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
+<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases. It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1190,7 +1190,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-16 13:35:33 UTC
+Last updated 2022-05-16 14:03:15 UTC
 </div>
 </div>
 </body>
