@@ -944,7 +944,7 @@ In the above example, we have implemented the <code>QueryHandler</code> method w
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The Axon framework provides the <code>QueryGateway</code> convenience that allows us to invoke the query.For more details on how to use the <code>QueryGateway</code>, please refer to the Axon framework documentation.</td>
+<td>The Axon framework provides the <code>QueryGateway</code> convenience that allows us to invoke the query. For more details on how to use the <code>QueryGateway</code>, please refer to the Axon framework documentation.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -953,23 +953,23 @@ In the above example, we have implemented the <code>QueryHandler</code> method w
 </table>
 </div>
 <div class="paragraph">
-<p>What we looked at above, is an example of a very simple query implementation where we have a single <code>@QueryHandler</code> to service the query results.This implementation returns results as a one-time fetch.Let&#8217;s look at more complex query scenarios.</p>
+<p>What we looked at above, is an example of a very simple query implementation where we have a single <code>@QueryHandler</code> to service the query results. This implementation returns results as a one-time fetch. Let&#8217;s look at more complex query scenarios.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="advanced-query-scenarios"><a class="anchor" href="#advanced-query-scenarios"></a>Advanced query scenarios</h4>
 <div class="paragraph">
-<p>Our focus currently is on active LC applications.Maintaining issued LCs happens in a different bounded context of the system.Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs.In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> pattern.Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
+<p>Our focus currently is on active LC applications. Maintaining issued LCs happens in a different bounded context of the system. Consider a scenario where we need to provide a consolidated view of currently active LC applications and issued LCs. In such a scenario, it is necessary to obtain this information by querying two distinct sources (ideally in parallel)&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> pattern. Please refer to the section on scatter-gather queries in the Axon framework documentation for more details.</p>
 </div>
 <div class="paragraph">
-<p>In other cases, we may want to remain up to date on dynamically changing data.For example, consider a real-time stock ticker application tracking price changes.One way to implement this is by polling for price changes.A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> pattern.Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
+<p>In other cases, we may want to remain up to date on dynamically changing data. For example, consider a real-time stock ticker application tracking price changes. One way to implement this is by polling for price changes. A more efficient way to do this is to push price changes as and when they occur&#8201;&#8212;&#8201;commonly referred to as the <a href="https://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.html">publish-subscribe</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> pattern. Please refer to the section on subscription queries in the Axon framework documentation for more details.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_historic_event_replays"><a class="anchor" href="#_historic_event_replays"></a>Historic event replays</h3>
 <div class="paragraph">
-<p>The example we have looked at thus far allows us to listen to events as they occur.Consider a scenario where we need to build a new query from historic events to satisfy an unanticipated new requirement.This new requirement may necessitate the need to create a new query model or in a more extreme case, a completely new bounded context.Another scenario might be when we may need to correct a bug in the way we had built an existing query model and now need to recreate it from scratch.Given that we have a record of all events that have transpired in the event store, we can use replay events to enable us to construct both new and/or correct existing query models with relative ease.</p>
+<p>The example we have looked at thus far allows us to listen to events as they occur. Consider a scenario where we need to build a new query from historic events to satisfy an unanticipated new requirement. This new requirement may necessitate the need to create a new query model or in a more extreme case, a completely new bounded context. Another scenario might be when we may need to correct a bug in the way we had built an existing query model and now need to recreate it from scratch. Given that we have a record of all events that have transpired in the event store, we can use replay events to enable us to construct both new and/or correct existing query models with relative ease.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -978,7 +978,7 @@ In the above example, we have implemented the <code>QueryHandler</code> method w
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We have used the term <em>event replay</em> in the context of reconstituting state of event-sourced aggregate instances (discussed in <a href="#_event_sourced_aggregates">event-sourced aggregates</a> in <a href="#_implementing_domain_logic">Chapter 5</a>).The event replay mentioned here, although similar in concept, is still very different.In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance.In this case though, we will likely work with events that span more than one aggregate.
+We have used the term <em>event replay</em> in the context of reconstituting state of event-sourced aggregate instances (discussed in <a href="#_event_sourced_aggregates">event-sourced aggregates</a> in <a href="#_implementing_domain_logic">Chapter 5</a>).The event replay mentioned here, although similar in concept, is still very different. In the case of domain object event replay, we work with a single aggregate root instance and only load events for that one instance. In this case though, we will likely work with events that span more than one aggregate.
 </td>
 </tr>
 </table>
@@ -989,7 +989,7 @@ We have used the term <em>event replay</em> in the context of reconstituting sta
 <div class="sect3">
 <h4 id="types-of-replays"><a class="anchor" href="#types-of-replays"></a>Types of replays</h4>
 <div class="paragraph">
-<p>When replaying events, there are at least two types of replays depending on the requirements we need to meet.Let&#8217;s look at each type in turn:</p>
+<p>When replaying events, there are at least two types of replays depending on the requirements we need to meet. Let&#8217;s look at each type in turn:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1256,7 +1256,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-16 13:28:18 UTC
+Last updated 2022-05-16 13:30:49 UTC
 </div>
 </div>
 </body>
