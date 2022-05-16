@@ -663,7 +663,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="sect3">
 <h4 id="_vertical_slice_architecture"><a class="anchor" href="#_vertical_slice_architecture"></a>Vertical slice architecture</h4>
 <div class="paragraph">
-<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications.The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application.Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation.Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected.Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
+<p>The layered architecture and its variants described above, provide reasonably good guidance on how to structure complex applications. The vertical slice architecture championed by Jimmy Boggard recognizes that it may be too rigid to adopt a standard layering strategy for all use cases across the entire application. Furthermore, it is important to note that business value cannot be derived by implementing any of these horizontal layers in isolation.Doing so will only result in unusable inventory and lots of unnecessary context switching until all these layers are connected.Therefore, the vertical slice architecture proposes <a href="https://jimmybogard.com/vertical-slice-architecture/"><em>minimizing coupling between slices, and maximizing coupling in a slice</em></a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -672,7 +672,7 @@ It turns out that the use of the term hexagon in this context was purely for vis
 <div class="title">Figure 8. Vertical slice architecture</div>
 </div>
 <div class="paragraph">
-<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction.Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case.However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view.This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
+<p>In the example above, <em>place order</em> might require us to coordinate with other components through the application layer, apply complex business invariants while operating within the purview of an ACID transaction. Similarly, <em>cancel order</em> might require applying business invariants within an ACID transaction without any additional coordination&#8201;&#8212;&#8201;obviating the need for the application layer in this case.However, <em>search orders</em> might require us to simply fetch existing data from a query optimized view.This style makes use of a horses for courses approach to layering that may help alleviate some anti-patterns listed above when implementing a plain vanilla layered architecture.</p>
 </div>
 <div class="sect4">
 <h5 id="considerations-2"><a class="anchor" href="#considerations-2"></a>Considerations</h5>
@@ -818,19 +818,19 @@ We depict multiple query models above because it is possible (but not necessary)
 <div class="sect5">
 <h6 id="need-for-multiple-read-representations"><a class="anchor" href="#need-for-multiple-read-representations"></a>Need for multiple read representations</h6>
 <div class="paragraph">
-<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data.For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view.While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system.Several times, it is not possible to predict ahead of time, the nature of these requirements.By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements.Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
+<p>When working with relatively complex systems, it is not uncommon to require more than one representation of the same data. For example, when looking at personal health data, one may want to look at a daily, weekly, monthly view.While these views can be computed on the fly from the <em>raw</em> data, each transformation (aggregation, summarization, etc.) adds to the cognitive load on the system.Several times, it is not possible to predict ahead of time, the nature of these requirements.By extension, it is not feasible to design a single canonical model that can provide answers to all these requirements.Creating domain models specifically designed to meet a focused set of requirements can be much easier.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="different-security-requirements"><a class="anchor" href="#different-security-requirements"></a>Different security requirements</h6>
 <div class="paragraph">
-<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries.Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
+<p>Managing authorization and access requirements to data/APIs when working a single model can start to become cumbersome. For example, higher levels of security may be desirable for debit operations in comparison to balance enquiries. Having distinct models can considerably ease the complexity in designing fine-grained authorization controls.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="more-uniform-distribution-of-complexity"><a class="anchor" href="#more-uniform-distribution-of-complexity"></a>More uniform distribution of complexity</h6>
 <div class="paragraph">
-<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern.For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
+<p>Having a model dedicated to serve only command-side use cases means that they can now be focused towards solving a single concern. For query-side use cases, we create models as needed that are distinct from the command-side model. This helps spread complexity more uniformly over a larger surface area&#8201;&#8212;&#8201;as opposed to increasing the complexity on the single model that is used to serve all use cases.It is worth noting that the essence of domain-driven design is mainly to work effectively with complex software systems and CQRS fits well with this line of thinking.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -850,7 +850,7 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 <div class="sect3">
 <h4 id="_serverless_architecture"><a class="anchor" href="#_serverless_architecture"></a>Serverless Architecture</h4>
 <div class="paragraph">
-<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched.While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
+<p>Serverless architecture is an approach to software design that allows developers to build and run services without having to manage the underlying infrastructure. The advent of AWS Lambda service has popularized this style of architecture, although several other services (like S3 and DynamoDB for persistence, SNS for notifications, SQS for message queuing etc.) have existed long before Lambda was launched. While AWS Lambda provided a compute solution in the form of Functions-as-a-Service (FaaS), these other services are just as essential, if not more, in order to benefit from the serverless paradigm.</p>
 </div>
 <div class="paragraph">
 <p>In conventional DDD, bounded contexts are formed by grouping related operations around an aggregate, which then informs how the solution is deployed as a unit&#8201;&#8212;&#8201;usually within the confines of a single process. With the serverless paradigm, each operation (task) is expected to be deployed as an independent unit of its own. This requires that we look at how we model aggregates and bounded contexts differently&#8201;&#8212;&#8201;now centered around individual tasks or functions as opposed to a group of related tasks.</p>
@@ -862,7 +862,7 @@ When working with a CQRS based architecture, choosing the persistence mechanism 
 <div class="sect3">
 <h4 id="_big_ball_of_mud"><a class="anchor" href="#_big_ball_of_mud"></a>Big ball of mud</h4>
 <div class="paragraph">
-<p>Thus far, we have examined a catalog of named architecture styles along with their pitfalls and how applying DDD can help alleviate them.On the other extreme, we may encounter solutions that lack a perceivable architecture, infamously termed as the <em>big ball of mud</em>.</p>
+<p>Thus far, we have examined a catalog of named architecture styles along with their pitfalls and how applying DDD can help alleviate them. On the other extreme, we may encounter solutions that lack a perceivable architecture, infamously termed as the <em>big ball of mud</em>.</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1014,7 +1014,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div class="sect3">
 <h4 id="functional-programming"><a class="anchor" href="#functional-programming"></a>Functional programming</h4>
 <div class="paragraph">
-<p>Functions are a fundamental building block to code organization that exist in all higher order programming languages. Functional programming is a programming paradigm where programs are constructed by applying and composing functions. This is in contrast to imperative programming that uses statements to change a program&#8217;s state. The most significant differences stem from the fact that functional programming avoids side effects, which are used in imperative programming. Pure functional programming completely prevents side effects and forces immutability. Embracing a functional style when designing a domain model to be more declarative and express intent a lot more clearly while remaining terse. It also allows us to keep complexity in check by enabling us to compose more complex concepts by using simpler ones.The functional implementation allows us to use a language closer to the problem domain, while having the added benefit of also being terse. Consider a simple example where we need to find the item with the least inventory across all our warehouses using a functional style as shown here:</p>
+<p>Functions are a fundamental building block to code organization that exist in all higher order programming languages. Functional programming is a programming paradigm where programs are constructed by applying and composing functions. This is in contrast to imperative programming that uses statements to change a program&#8217;s state. The most significant differences stem from the fact that functional programming avoids side effects, which are used in imperative programming. Pure functional programming completely prevents side effects and forces immutability. Embracing a functional style when designing a domain model to be more declarative and express intent a lot more clearly while remaining terse. It also allows us to keep complexity in check by enabling us to compose more complex concepts by using simpler ones. The functional implementation allows us to use a language closer to the problem domain, while having the added benefit of also being terse. Consider a simple example where we need to find the item with the least inventory across all our warehouses using a functional style as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="title">Functional example</div>
@@ -1190,7 +1190,7 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-16 13:30:49 UTC
+Last updated 2022-05-16 13:35:33 UTC
 </div>
 </div>
 </body>
