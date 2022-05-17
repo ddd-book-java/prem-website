@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 17 2022 07:04 PM UTC</span>
+<span id="revdate">May 17 2022 09:07 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -745,6 +745,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#enhancing-performance">12.5. Enhancing Performance</a>
 <ul class="sectlevel3">
 <li><a href="#scaling-the-event-bus">12.5.1. Scaling the event bus</a></li>
+<li><a href="#technical-implications-of-distribution">12.5.2. Technical implications of distribution</a></li>
+<li><a href="#transitional-architecture">12.5.3. Transitional architecture</a></li>
+</ul>
+</li>
+<li><a href="#understanding-the-costs-of-distribution">12.6. Understanding the costs of distribution</a>
+<ul class="sectlevel3">
+<li><a href="#handling-exceptions">12.6.1. Handling exceptions</a></li>
+<li><a href="#testing-the-overall-system">12.6.2. Testing the Overall System</a></li>
+<li><a href="#compatibility">12.6.3. Compatibility</a></li>
+<li><a href="#non-technical-implications-of-distribution">12.6.4. Non-technical implications of distribution</a></li>
+</ul>
+</li>
+<li><a href="#decomposing-and-distributing-big-balls-of-mud">12.7. Decomposing and distributing big balls of mud</a>
+<ul class="sectlevel3">
+<li><a href="#code-first">12.7.1. Code-first</a></li>
+<li><a href="#data-first">12.7.2. Data-first</a></li>
 </ul>
 </li>
 </ul>
@@ -11167,6 +11183,166 @@ Sometimes I feel like I am being forgotten.
 <h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">12.5.1. Scaling the event bus</a></h4>
 
 </div>
+<div class="sect3">
+<h4 id="technical-implications-of-distribution"><a class="anchor" href="#technical-implications-of-distribution"></a><a class="link" href="#technical-implications-of-distribution">12.5.2. Technical implications of distribution</a></h4>
+<div class="sect4">
+<h5 id="performance"><a class="anchor" href="#performance"></a><a class="link" href="#performance">Performance</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="resilience"><a class="anchor" href="#resilience"></a><a class="link" href="#resilience">Resilience</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="exception-handling"><a class="anchor" href="#exception-handling"></a><a class="link" href="#exception-handling">Exception handling</a></h5>
+<div class="quoteblock">
+<blockquote>
+Everything fails all the time.
+</blockquote>
+<div class="attribution">
+&#8212; Werner Vogels<br>
+<cite>CTO -- Amazon Web Services</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
+    <span style="color:#777">//...</span>
+    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
+        <span style="color:#777">//..</span>
+        productLegalityValidated = <span style="color:#069">true</span>;
+        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
+               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
+        }
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
+</li>
+<li>
+<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
+</li>
+<li>
+<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
+</li>
+<li>
+<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
+</li>
+<li>
+<p>We can choose to only wait</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="recovery"><a class="anchor" href="#recovery"></a><a class="link" href="#recovery">Recovery</a></h5>
+<div class="sect5">
+<h6 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a><a class="link" href="#automated-recovery">Automated recovery</a></h6>
+
+</div>
+<div class="sect5">
+<h6 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a><a class="link" href="#manual-recovery">Manual recovery</a></h6>
+
+</div>
+<div class="sect5">
+<h6 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a><a class="link" href="#compensating-actions">Compensating actions</a></h6>
+
+</div>
+<div class="sect5">
+<h6 id="retries"><a class="anchor" href="#retries"></a><a class="link" href="#retries">Retries</a></h6>
+
+</div>
+</div>
+<div class="sect4">
+<h5 id="integration-strategies"><a class="anchor" href="#integration-strategies"></a><a class="link" href="#integration-strategies">Integration strategies</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="testing-strategies"><a class="anchor" href="#testing-strategies"></a><a class="link" href="#testing-strategies">Testing strategies</a></h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="transitional-architecture"><a class="anchor" href="#transitional-architecture"></a><a class="link" href="#transitional-architecture">12.5.3. Transitional architecture</a></h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a><a class="link" href="#understanding-the-costs-of-distribution">12.6. Understanding the costs of distribution</a></h3>
+<div class="sect3">
+<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a><a class="link" href="#handling-exceptions">12.6.1. Handling exceptions</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">12.6.2. Testing the Overall System</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="compatibility"><a class="anchor" href="#compatibility"></a><a class="link" href="#compatibility">12.6.3. Compatibility</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="non-technical-implications-of-distribution"><a class="anchor" href="#non-technical-implications-of-distribution"></a><a class="link" href="#non-technical-implications-of-distribution">12.6.4. Non-technical implications of distribution</a></h4>
+<div class="sect4">
+<h5 id="team-topologies"><a class="anchor" href="#team-topologies"></a><a class="link" href="#team-topologies">Team topologies</a></h5>
+
+</div>
+<div class="sect4">
+<h5 id="tech-stack"><a class="anchor" href="#tech-stack"></a><a class="link" href="#tech-stack">Tech stack</a></h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="decomposing-and-distributing-big-balls-of-mud"><a class="anchor" href="#decomposing-and-distributing-big-balls-of-mud"></a><a class="link" href="#decomposing-and-distributing-big-balls-of-mud">12.7. Decomposing and distributing big balls of mud</a></h3>
+<div class="sect3">
+<h4 id="code-first"><a class="anchor" href="#code-first"></a><a class="link" href="#code-first">12.7.1. Code-first</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="data-first"><a class="anchor" href="#data-first"></a><a class="link" href="#data-first">12.7.2. Data-first</a></h4>
+
+</div>
 </div>
 </div>
 </div>
@@ -11363,7 +11539,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-17 19:04:28 UTC
+Last updated 2022-05-17 21:07:25 UTC
 </div>
 </div>
 </body>
