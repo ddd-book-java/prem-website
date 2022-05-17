@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 16 2022 02:03 PM UTC</span>
+<span id="revdate">May 17 2022 07:04 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -716,7 +716,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-10">10.3. Summary</a></li>
 </ul>
 </li>
-<li><a href="#decomposing-into-finer-grained-components">11. Decomposing into finer grained components</a>
+<li><a href="#decomposing-into-finer-grained-components">11. Decomposing into Finer Grained Components</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey-6">11.1. Continuing our design journey</a>
 <ul class="sectlevel3">
@@ -10798,7 +10798,7 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="decomposing-into-finer-grained-components"><a class="anchor" href="#decomposing-into-finer-grained-components"></a><a class="link" href="#decomposing-into-finer-grained-components">11. Decomposing into finer grained components</a></h2>
+<h2 id="decomposing-into-finer-grained-components"><a class="anchor" href="#decomposing-into-finer-grained-components"></a><a class="link" href="#decomposing-into-finer-grained-components">11. Decomposing into Finer Grained Components</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the previous chapter, we decomposed the <em>LC Application Processing</em> functionality out of the monolith. In this chapter, we will further decompose these components into even more fine-grained components. In addition, we will examine if and when such a decomposition is justified.</p>
@@ -10815,6 +10815,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-4.png" alt="lc application monolith stage 4" width="75%">
 </div>
+<div class="title">Figure 1- 109. Independent data persistence</div>
 </div>
 <div class="paragraph">
 <p>The <em>LC Application Processing</em> functionality lives as its own independent component from the rest of the application. It communicates with the monolith through the exchange of domain events using the event bus. It makes use of its own persistence store and exposes HTTP-based APIs that the frontend consumes. Let&#8217;s examine if it is possible to further decompose the application into finer grained components. The <code>AutoApprovalSaga</code> component currently lives within the confines of the monolith. But this is mostly an artifact of our previous design as opposed to an intentional design choice. Let&#8217;s look at how we can extract this out into its own component next.</p>
@@ -10822,13 +10823,13 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect3">
 <h4 id="saga-as-standalone-component"><a class="anchor" href="#saga-as-standalone-component"></a><a class="link" href="#saga-as-standalone-component">11.1.1. Saga as standalone component</a></h4>
 <div class="paragraph">
-<p>Currently, the <code>AutoApprovalSaga</code> component (discussed in detail in Chapter 8) works by listening to domain events as shown here:</p>
+<p>Currently, the <code>AutoApprovalSaga</code> component (discussed in detail in <em>Chapter 8, Long-Running Workflows</em>) works by listening to domain events as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/auto-approval-saga-dependencies.png" alt="auto approval saga dependencies" width="75%">
 </div>
-<div class="title">Figure 1- 109. <code>AutoApprovalSaga</code> functionality dissected.</div>
+<div class="title">Figure 1- 110. <code>AutoApprovalSaga</code> functionality dissected.</div>
 </div>
 <div class="paragraph">
 <p>Given that these events are published by different bounded contexts onto the event bus, there is no need for <code>AutoApprovalSaga</code> to be embedded within the monolith. This means that it can be safely pulled out into its own deployable unit along with its private datastore. This means that our system now looks like the visual depicted here:</p>
@@ -10837,19 +10838,22 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-5.png" alt="lc application monolith stage 5" width="75%">
 </div>
-<div class="title">Figure 1- 110. <code>AutoApprovalSaga</code> extracted into an independent component.</div>
+<div class="title">Figure 1- 111. <code>AutoApprovalSaga</code> extracted into an independent component.</div>
+</div>
+<div class="paragraph">
+<p>As you can see, commands and queries within the <em>LC Application Processing</em> component  are continuing to use a common datastore. Let’s look at what is involved in segregating them into their own and further to use their own datastore.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="commands-and-queries-as-standalone-components"><a class="anchor" href="#commands-and-queries-as-standalone-components"></a><a class="link" href="#commands-and-queries-as-standalone-components">11.1.2. Commands and queries as standalone components</a></h4>
 <div class="paragraph">
-<p>As we have seen in the section on the <a href="#_cqrs_pattern">CQRS pattern</a> in earlier chapters, the primary benefit that we derive is gaining the ability to evolve and scale these components independently of each other. This is important because commands and queries have completely different usage patterns and thus require the use of distinct domain models. This makes it fairly natural to further split our bounded contexts along these boundaries. Thus far, the segregation is logical. A physical separation will enable us to truly scale these components independently as shown here:</p>
+<p>As we have seen in the section on the <a href="#_cqrs_pattern">CQRS pattern</a>(discussed in <em>Chapter2, Where and How Does DDD Fit?</em>), the primary benefit that we derive is gaining the ability to evolve and scale these components independently of each other. This is important because commands and queries have completely different usage patterns and thus require the use of distinct domain models. This makes it fairly natural to further split our bounded contexts along these boundaries. Thus far, the segregation is logical. A physical separation will enable us to truly scale these components independently as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/lc-application-monolith-stage-6.png" alt="lc application monolith stage 6" width="75%">
 </div>
-<div class="title">Figure 1- 111. Commands and queries as independent components.</div>
+<div class="title">Figure 1- 112. Commands and queries as independent components.</div>
 </div>
 <div class="paragraph">
 <p>It is pertinent to note that the command processing component is now shown to have access to two distinct datastores:</p>
@@ -10865,7 +10869,7 @@ The spring framework provides support for this style of behavior through the <co
 </ul>
 </div>
 <div class="paragraph">
-<p>The reason we bring this up is that we may have to continue making lookups for data that still remain in the monolith. To achieve full independence, this lookup data must also be migrated using techniques like a <a href="#_historic_event_replays">historic event replay</a> (discussed in Chapter 7) or other conventional <a href="#_changes_for_database_interactions">data migration</a> techniques (discussed in Chapter 10).</p>
+<p>The reason we bring this up is that we may have to continue making lookups for data that still remain in the monolith. To achieve full independence, this lookup data must also be migrated using techniques like a <a href="#_historic_event_replays">historic event replay</a> (discussed in <em>Chapter 7, Implementing Queries</em>) or other conventional <a href="#_changes_for_database_interactions">data migration</a> techniques (discussed in <em>Chapter 10, Distributing into remote components</em>).</p>
 </div>
 </div>
 <div class="sect3">
@@ -10877,7 +10881,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-7.png" alt="lc application monolith stage 7" width="75%">
 </div>
-<div class="title">Figure 1- 112. Queries split into individual components.</div>
+<div class="title">Figure 1- 113. Queries split into individual components.</div>
 </div>
 <div class="paragraph">
 <p>Owning domains should strive to create query APIs that exhibit the characteristics of a good <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">domain data product</a><sup class="footnote">[<a id="_footnoteref_54" class="footnote" href="#_footnotedef_54" title="View footnote.">54</a>]</sup>.</p>
@@ -10887,7 +10891,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect2">
 <h3 id="even-more-fine-grained-distribution"><a class="anchor" href="#even-more-fine-grained-distribution"></a><a class="link" href="#even-more-fine-grained-distribution">11.2. Even more fine-grained distribution</a></h3>
 <div class="paragraph">
-<p>At this stage, is there any further decomposition that is required  and feasible? These days, whether rightfully or otherwise, the serverless architecture (specifically, <em>Functions-As-A-Service</em>) is arguably becoming quite the rage. As we pointed in Chapter 2, this means that we may be able to decompose our command side in a manner that each command becomes its own independently deployable unit (hence a bounded context). In other words, the <code>LCApplicationSubmitCommand</code> and the <code>LCApplicationCancelCommand</code> can be deployed independently.</p>
+<p>At this stage, is there any further decomposition that is required  and feasible? These days, whether rightfully or otherwise, the serverless architecture (specifically, <em>Functions-As-A-Service</em>) is arguably becoming quite the rage. As we pointed in <em>Chapter 2, Where and How Does DDD Fit?</em>, this means that we may be able to decompose our command side in a manner that each command becomes its own independently deployable unit (hence a bounded context). In other words, the <code>LCApplicationSubmitCommand</code> and the <code>LCApplicationCancelCommand</code> can be deployed independently.</p>
 </div>
 <div class="paragraph">
 <p>But just because this is technically possible, should we do it? While it is easy to dismiss this as a passing fad, there may be good reasons to split applications along command boundaries:</p>
@@ -10914,7 +10918,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/fine-grained-aggregate.png" alt="fine grained aggregate" width="75%">
 </div>
-<div class="title">Figure 1- 113. Fine-grained bounded contexts example.</div>
+<div class="title">Figure 1- 114. Fine-grained bounded contexts example.</div>
 </div>
 <div class="paragraph">
 <p>The most fine-grained decomposition may lead us to a bounded context per command. But that does not necessarily mean that we have to decompose the system this way. In the above example, we have chosen to create a single bounded context for the <em>submit</em> and <em>approve</em> commands. However, <em>start</em> and <em>cancel</em> have their own bounded contexts. The actual decision that you make in your own ecosystems will depend on maintaining a balance among reuse, coupling, transactional consistency and other considerations that we discussed earlier. It is important to note that the aggregate labeled as <code>LCApplication</code>, although named identically, is distinct from a domain model perspective in its respective bounded context. The only attribute they will need to share is a <strong>common identifier</strong>. If we choose to decompose the system into a bounded context per command, our overall solution will look like the visual shown here:</p>
@@ -10923,7 +10927,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.png" alt="lc application monolith stage 8" width="75%">
 </div>
-<div class="title">Figure 1- 114. Decomposition per command.</div>
+<div class="title">Figure 1- 115. Decomposition per command.</div>
 </div>
 <div class="paragraph">
 <p>It is pertinent to note that the <em>command</em> functions continue to share a single event store, although they may make use of their own individual lookup stores. We understand that this decomposition likely feels unnecessary and forced. However, this does allow us to focus our energies on the <em><strong>core</strong> of the core</em>. For example, LC application processing may be our business differentiator. But an even more careful examination may reveal that it is our ability to <em>decision</em> LCs near real-time that is our real business differentiator. This means that it may be prudent to isolate that functionality from the rest of the system. In fact, doing so may enable us to optimize our business process without adding additional risk to the overall solution. While it is not strictly necessary to decompose the system in this way to arrive at such insights, the fine-grained decomposition may enable us to refine the idea of what is most important to our business. Having to share a persistent store can be a wrinkle to achieve complete independence. So a final decomposition may look something like what we show here:</p>
@@ -10932,7 +10936,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.1.png" alt="lc application monolith stage 8.1" width="75%">
 </div>
-<div class="title">Figure 1- 115. Command components with individual event stores.</div>
+<div class="title">Figure 1- 116. Command components with individual event stores.</div>
 </div>
 <div class="paragraph">
 <p>Obviously, there is no free lunch! This fine-grained decomposition may require additional coordination and duplication of data among these components&#8201;&#8212;&#8201;to a point where it may not be attractive anymore. But we felt that it is important to illustrate the art of the possible.</p>
@@ -10942,7 +10946,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect2">
 <h3 id="decomposing-the-frontend"><a class="anchor" href="#decomposing-the-frontend"></a><a class="link" href="#decomposing-the-frontend">11.3. Decomposing the frontend</a></h3>
 <div class="paragraph">
-<p>Thus far, we have focussed on decomposing and distributing the backend components while keeping the frontend untouched as part of the existing monolithic system. It is worth considering breaking down the frontend to align more closely along functional boundaries. Patterns like <a href="https://micro-frontends.org/">micro-frontends</a><sup class="footnote">[<a id="_footnoteref_55" class="footnote" href="#_footnotedef_55" title="View footnote.">55</a>]</sup><sup class="footnote">[<a id="_footnoteref_56" class="footnote" href="#_footnotedef_56" title="View footnote.">56</a>]</sup> extend the concepts of microservices to the frontend. Micro-frontends promote team structures to support end-to-end ownership of a set of features.  It is conceivable that a cross-functional, polyglot team owns both the experience (frontend) and the business logic (backend) functions eliminating communication overheads drastically (along the lines of the <a href="#_vertical_slice_architecture">vertical slice architecture</a> conversation in Chapter 2). Even if such a team organization where the frontend and backend being one team is not feasible in your current ecosystem, this approach still has many merits such as:</p>
+<p>Thus far, we have focussed on decomposing and distributing the backend components while keeping the frontend untouched as part of the existing monolithic system. It is worth considering breaking down the frontend to align more closely along functional boundaries. Patterns like <a href="https://micro-frontends.org/">micro-frontends</a><sup class="footnote">[<a id="_footnoteref_55" class="footnote" href="#_footnotedef_55" title="View footnote.">55</a>]</sup><sup class="footnote">[<a id="_footnoteref_56" class="footnote" href="#_footnotedef_56" title="View footnote.">56</a>]</sup> extend the concepts of microservices to the frontend. Micro-frontends promote team structures to support end-to-end ownership of a set of features.  It is conceivable that a cross-functional, polyglot team owns both the experience (frontend) and the business logic (backend) functions eliminating communication overheads drastically (along the lines of the <a href="#_vertical_slice_architecture">vertical slice architecture</a> conversation in <em>Chapter 2, Where and How Does DDD Fit?</em>). Even if such a team organization where the frontend and backend being one team is not feasible in your current ecosystem, this approach still has many merits such as:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -10950,7 +10954,7 @@ The spring framework provides support for this style of behavior through the <co
 <p><strong>Increased end-to-end collaboration</strong>: Creating solutions that work end-to-end is what ultimately provides value. Having a set of backend services isolated from their respective customer experiences will only cause us to accumulate unused inventory. To reduce the possibility of failure, the closer the collaboration between the backend capability and frontend experience teams, the higher our chances of reducing waste due to misaligned requirements. Including the customer experiences to become part of the vertical slice allows us to apply the ubiquitous language through the entire stack.</p>
 </li>
 <li>
-<p><strong>Uniform omnichannel experiences</strong>: These days it is very common to surface the same functionality across more than one experience channel. Having an inconsistent experience across channels can lead to customer dissatisfaction and/or adverse business consequences. Aligning teams closely along functional boundaries (within the same <em>swim lane</em>) can promote high levels of collaboration and consistency when exposing business functionality. Consider the example shown here. Within a vertical slice, the allegiance is to the functionality being developed, although there may be a need to use disparate technologies to build each channel (iOS, Android, web, etc.). Within a vertical slice, each box depicted in the diagram may operate as a team of its own, while maintaining strong cohesion with the functional team within the same swim lane as shown here:</p>
+<p><strong>Uniform omnichannel experiences</strong>: These days it is very common to surface the same functionality across more than one experience channel. Having an inconsistent experience across channels can lead to customer dissatisfaction and/or adverse business consequences. Aligning teams closely along functional boundaries (within the same <em>swim lane</em>) can promote high levels of collaboration and consistency when exposing business functionality. Consider the example shown here. Within a vertical slice, the allegiance is to the functionality being developed, although there may be a need to use disparate technologies to build each channel (iOS, Android, web, and so on). Within a vertical slice, each box depicted in the diagram may operate as a team of its own, while maintaining strong cohesion with the functional team within the same swim lane as shown here:</p>
 </li>
 </ul>
 </div>
@@ -10958,7 +10962,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-8.2.png" alt="lc application monolith stage 8.2" width="50%">
 </div>
-<div class="title">Figure 1- 116. Teams aligned along functional boundaries.</div>
+<div class="title">Figure 1- 117. Teams aligned along functional boundaries.</div>
 </div>
 <div class="paragraph">
 <p>While there are many advantages in employing this approach, like everything else, it does come with a few gotchas that you may need to be mindful of:</p>
@@ -10969,7 +10973,7 @@ The spring framework provides support for this style of behavior through the <co
 <p><strong>End-to-end testing complexity</strong>: While this is true for a lot of distributed architectures, this problem is exacerbated in the case of user experiences because of it being a visual medium. Especially if real components come together close to the end of the cycle, it may become harder to visualize the end-to-end flow until almost all the visual elements are in place.</p>
 </li>
 <li>
-<p><strong>Deployment complexity</strong>: In the example above, we have split the application along functional boundaries. However, they have to come together as a single artifact at the time of deployment (this is especially true in the case of mobile applications). This can add quite a bit of deployment complexity when the complete application is assembled. It is important to be cognizant of the relationship patterns between teams (covered in chapter 9) to work through kinks.</p>
+<p><strong>Deployment complexity</strong>: In the example above, we have split the application along functional boundaries. However, they have to come together as a single artifact at the time of deployment (this is especially true in the case of mobile applications). This can add quite a bit of deployment complexity when the complete application is assembled. It is important to be cognizant of the relationship patterns between teams (covered in <em>Chapter 9, Integrating with External Systems</em>) to work through kinks.</p>
 </li>
 <li>
 <p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome. This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance. For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser. In addition to being wasteful, this may also result in unpredictable, hard  to diagnose errors and eventually, poor customer experience.</p>
@@ -10983,7 +10987,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/lc-application-monolith-stage-9.png" alt="lc application monolith stage 9" width="75%">
 </div>
-<div class="title">Figure 1- 117. Commands and query frontends decomposed into individual functions.</div>
+<div class="title">Figure 1- 118. Commands and query frontends decomposed into individual functions.</div>
 </div>
 <div class="paragraph">
 <p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components. Just because it is possible to do it, doesn&#8217;t mean that we should. Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
@@ -11011,7 +11015,7 @@ The spring framework provides support for this style of behavior through the <co
 </ul>
 </div>
 <div class="paragraph">
-<p>All of the above techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
+<p>All of the preceeding techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
 </div>
 <div class="paragraph">
 <p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, apply what is called the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong><em>inverse Conway maneuver</em></strong></a><sup class="footnote">[<a id="_footnoteref_57" class="footnote" href="#_footnotedef_57" title="View footnote.">57</a>]</sup>).</p>
@@ -11023,7 +11027,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="content">
 <img src="./images/spotify-model.png" alt="spotify model" width="50%">
 </div>
-<div class="title">Figure 1- 118. The "Spotify" model of team organization.</div>
+<div class="title">Figure 1- 119. The "Spotify" model of team organization.</div>
 </div>
 <div class="paragraph">
 <p>The team structure has other components like chapters, tribes, guilds, etc. which enables better flow of change, clarifying team responsibilities, promoting better intra and inter-team collaboration, among others. You can find out more details about it in this <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">blog post</a><sup class="footnote">[<a id="_footnoteref_58" class="footnote" href="#_footnotedef_58" title="View footnote.">58</a>]</sup>  However, there is no one-size-fits-all, and you will need to account for your own organizational structures and realities before looking to adopt this style. To find out more about the <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY">limitations of the <em>Spotify model</em></a><sup class="footnote">[<a id="_footnoteref_59" class="footnote" href="#_footnotedef_59" title="View footnote.">59</a>]</sup> and how you can arrive at a team organization that better suits your own requirements, you may want to take a look at the work done by Matthew Skelton and Manuel Pais in their popular book <a href="https://teamtopologies.com/book"><em>Team Topologies</em></a><sup class="footnote">[<a id="_footnoteref_60" class="footnote" href="#_footnotedef_60" title="View footnote.">60</a>]</sup>. On a related note, it may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_61" class="footnote" href="#_footnotedef_61" title="View footnote.">61</a>]</sup> by Sriram Narayan where he talks about outcome-oriented versus activity-oriented teams.</p>
@@ -11032,13 +11036,13 @@ The spring framework provides support for this style of behavior through the <co
 <p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_62" class="footnote" href="#_footnotedef_62" title="View footnote.">62</a>]</sup> has some great advice on how to do precisely that.</p>
 </div>
 <div class="paragraph">
-<p>In order to attain a reasonable level of success, there will be a need to maintain a fine balance between how domains are modeled, what the team organizations are and how applications are architected. When all of these are in agreement, it is likely that you get pretty close to achieving high levels of success.</p>
+<p>In order to attain a reasonable level of success, there will be a need to maintain a fine balance between how domains are modeled, what the team organizations are and how applications are architected. When all of these are in agreement, it is likely that you get pretty close to achieving high levels of success as depicted in the following visual:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/maintaining-balance.png" alt="maintaining balance" width="40%">
 </div>
-<div class="title">Figure 1- 119. Forces influencing component decomposition.</div>
+<div class="title">Figure 1- 120. Forces influencing component decomposition.</div>
 </div>
 <div class="paragraph">
 <p>As a general guideline, it helps to start with a coarse-grained decomposition at the outset when requirements and/or our understanding are likely still unclear, leaving finer-grained decomposition to a time when our understanding improves.</p>
@@ -11359,7 +11363,7 @@ Sometimes I feel like I am being forgotten.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-16 14:03:16 UTC
+Last updated 2022-05-17 19:04:28 UTC
 </div>
 </div>
 </body>
