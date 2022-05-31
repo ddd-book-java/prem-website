@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">May 29 2022 02:46 PM UTC</span>
+<span id="revdate">May 31 2022 10:59 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -746,48 +746,49 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#distributed-tracing">12.1.4. Distributed tracing</a></li>
 </ul>
 </li>
-<li><a href="#security">12.2. Security</a></li>
-<li><a href="#exception-handling">12.3. Exception handling</a></li>
-<li><a href="#graceful-degradation">12.4. Graceful degradation</a></li>
-<li><a href="#deployment-style">12.5. Deployment style</a></li>
-<li><a href="#feature-flags">12.6. Feature flags</a></li>
-<li><a href="#eventual-consistency">12.7. Eventual consistency</a></li>
-<li><a href="#versioning">12.8. Versioning</a></li>
-<li><a href="#performance">12.9. Performance</a>
+<li><a href="#deployment-strategy">12.2. Deployment strategy</a></li>
+<li><a href="#tracking-progress-todo-finish-this">12.3. Tracking progress (TODO: finish this)</a></li>
+<li><a href="#security">12.4. Security</a></li>
+<li><a href="#exception-handling">12.5. Exception handling</a></li>
+<li><a href="#graceful-degradation">12.6. Graceful degradation</a></li>
+<li><a href="#feature-flags">12.7. Feature flags</a></li>
+<li><a href="#eventual-consistency">12.8. Eventual consistency</a></li>
+<li><a href="#versioning">12.9. Versioning</a></li>
+<li><a href="#performance">12.10. Performance</a>
 <ul class="sectlevel3">
-<li><a href="#diagnosing">12.9.1. Diagnosing</a></li>
-<li><a href="#fixing">12.9.2. Fixing</a></li>
+<li><a href="#diagnosing">12.10.1. Diagnosing</a></li>
+<li><a href="#fixing">12.10.2. Fixing</a></li>
 </ul>
 </li>
-<li><a href="#debugging">12.10. Debugging</a></li>
-<li><a href="#alerting">12.11. Alerting</a></li>
-<li><a href="#operational-tasks">12.12. Operational tasks</a></li>
-<li><a href="#testing-the-overall-system">12.13. Testing the Overall System</a></li>
-<li><a href="#chaos-engineering">12.14. Chaos engineering</a></li>
-<li><a href="#reliability">12.15. Reliability</a>
+<li><a href="#debugging">12.11. Debugging</a></li>
+<li><a href="#alerting">12.12. Alerting</a></li>
+<li><a href="#operational-tasks">12.13. Operational tasks</a></li>
+<li><a href="#testing-the-overall-system">12.14. Testing the Overall System</a></li>
+<li><a href="#chaos-engineering">12.15. Chaos engineering</a></li>
+<li><a href="#reliability">12.16. Reliability</a>
 <ul class="sectlevel3">
-<li><a href="#dealing-with-eventual-consistency">12.15.1. Dealing With Eventual Consistency</a></li>
-<li><a href="#event-versioning-and-upcasting">12.15.2. Event Versioning and Upcasting</a></li>
-<li><a href="#monitoring-metrics-and-tracing">12.15.3. Monitoring, Metrics and Tracing</a></li>
+<li><a href="#dealing-with-eventual-consistency">12.16.1. Dealing With Eventual Consistency</a></li>
+<li><a href="#event-versioning-and-upcasting">12.16.2. Event Versioning and Upcasting</a></li>
+<li><a href="#monitoring-metrics-and-tracing">12.16.3. Monitoring, Metrics and Tracing</a></li>
 </ul>
 </li>
-<li><a href="#scalability">12.16. Scalability</a>
+<li><a href="#scalability">12.17. Scalability</a>
 <ul class="sectlevel3">
-<li><a href="#scaling-the-event-store-with-snapshots">12.16.1. Scaling the Event Store with Snapshots</a></li>
-<li><a href="#scaling-the-event-bus">12.16.2. Scaling the event bus</a></li>
+<li><a href="#scaling-the-event-store-with-snapshots">12.17.1. Scaling the Event Store with Snapshots</a></li>
+<li><a href="#scaling-the-event-bus">12.17.2. Scaling the event bus</a></li>
 </ul>
 </li>
-<li><a href="#understanding-the-costs-of-distribution">12.17. Understanding the costs of distribution</a>
+<li><a href="#understanding-the-costs-of-distribution">12.18. Understanding the costs of distribution</a>
 <ul class="sectlevel3">
-<li><a href="#handling-exceptions">12.17.1. Handling exceptions</a></li>
-<li><a href="#testing-the-overall-system-2">12.17.2. Testing the Overall System</a></li>
-<li><a href="#compatibility">12.17.3. Compatibility</a></li>
+<li><a href="#handling-exceptions">12.18.1. Handling exceptions</a></li>
+<li><a href="#testing-the-overall-system-2">12.18.2. Testing the Overall System</a></li>
+<li><a href="#compatibility">12.18.3. Compatibility</a></li>
 </ul>
 </li>
-<li><a href="#decomposing-and-distributing-big-balls-of-mud">12.18. Decomposing and distributing big balls of mud</a>
+<li><a href="#decomposing-and-distributing-big-balls-of-mud">12.19. Decomposing and distributing big balls of mud</a>
 <ul class="sectlevel3">
-<li><a href="#code-first">12.18.1. Code-first</a></li>
-<li><a href="#data-first">12.18.2. Data-first</a></li>
+<li><a href="#code-first">12.19.1. Code-first</a></li>
+<li><a href="#data-first">12.19.2. Data-first</a></li>
 </ul>
 </li>
 </ul>
@@ -11301,7 +11302,7 @@ Sometimes I feel like I am being forgotten.
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">TimingAspect</span> {
 
     <span style="color:#007">@Around</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">@annotation(org.axonframework.commandhandling.CommandHandler)</span><span style="color:#710">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">Object</span> log(ProceedingJoinPoint point) <span style="color:#088;font-weight:bold">throws</span> <span style="color:#0a8;font-weight:bold">Throwable</span> {
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">Object</span> log(ProceedingJoinPoint point) {
 
         logEntry(point);
 
@@ -11428,7 +11429,7 @@ For more information on logging best practices, please refer to this logging che
 <div class="content">
 <img src="./images/lc-submit-sequence.png" alt="lc submit sequence" width="583" height="503">
 </div>
-<div class="title">Figure 1- 121. Submit LC application flow</div>
+<div class="title">Figure 1- 121. Submit LC application flow (TODO: Replace me)</div>
 </div>
 <div class="paragraph">
 <p>Even in this simple example, there are several components involved, each of which produce logs of their own. When an engineer is looking to diagnose an issue, there is a need to correlate log entries from multiple components. In order to accomplish this, there is a need to introduce a correlation identifier as close to the start of the interaction and propagate it across component boundaries. Furthermore, log entries in each component need to carry this correlation identifier as they produce logs. Doing this will allow us to view log entries spanning process boundaries using the correlation identifier as a unifying thread. In technical terms, the entire flow is called a <strong><em>trace</em></strong>, and each segment within the flow is called a <strong><em>span</em></strong>. This process of instrumenting log entries with such information is termed <em>distributed tracing</em>.</p>
@@ -11442,76 +11443,185 @@ For more information on logging best practices, please refer to this logging che
 </div>
 </div>
 <div class="sect2">
-<h3 id="security"><a class="anchor" href="#security"></a><a class="link" href="#security">12.2. Security</a></h3>
+<h3 id="deployment-strategy"><a class="anchor" href="#deployment-strategy"></a><a class="link" href="#deployment-strategy">12.2. Deployment strategy</a></h3>
+<div class="paragraph">
+<p>The intent of applying domain-driven design is to create an ecosystem of loosely coupled components&#8201;&#8212;&#8201;so that each of these components can evolve independently of each other. This includes how these components are deployed to production. At a high level, we have at least three styles of deployment:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Single process monolith</strong>: where large portions of the application are deployed as a single unit, with all components that are included in the deployment running in a single process.</p>
+</li>
+<li>
+<p><strong>Distributed monolith</strong>: where the application is split into multiple components with each running in its own process and/or host, but deployed as a single unit and/or requiring non-trivial amounts of coordination among component owners.</p>
+</li>
+<li>
+<p><strong>Independent components</strong>: where the application is split into multiple components with each running in its own process and/or host, deployed independently of each other and requiring minimal to no coordination among component owners.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We also have a number of deployment strategies that we can employ. We list some of the more popular ones in order of increasing complexity and richness:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime.</p>
+</li>
+<li>
+<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version. User traffic is switched to the newer version once testing activities are deemed to be successfully complete. It is pertinent to that live user traffic is directed only to one environment at any given time. In simple cases, rollback usually means redirecting traffic to the older version.</p>
+</li>
+<li>
+<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback usually means replacing the newer version instances with older ones.</p>
+</li>
+<li>
+<p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2%, 25%, 75%, 100% of users).</p>
+</li>
+<li>
+<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/deployment-strategy.png" alt="deployment strategy">
+</div>
+<div class="title">Figure 1- 122. Component deployment style and strategy.</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 30%;">
+<col style="width: 30%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Strategy/Style</th>
+<th class="tableblock halign-left valign-top">Monolith</th>
+<th class="tableblock halign-left valign-top">Distributed Monolith</th>
+<th class="tableblock halign-left valign-top">Small loosely coupled components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Basic</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Most common strategy</p></td>
+<td class="tableblock halign-left valign-top" rowspan="5"><p class="tableblock">In general, all deployment strategies become more complex because of the need to coordinate among more than one component that are tightly coupled to each other. Advanced deployment strategies although possible on paper, may be really to pull off and even counter-productive from an ROI perspective.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relatively straightforward and may be the deployment strategy of choice because more advanced deployment methods are not required to be supported.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Blue-green</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Another common strategy, but requires double the amount of capacity at least during the time of deployment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fairly common strategy if near zero downtime deployments are required to be supported.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Rolling</strong></p></td>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Can be prohibitively expensive and/or risky to the point of being infeasible.</p></td>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">A more complex deployment strategy that supports zero downtime, but requires strong backwards compatibility testing to be able to pull off.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Canary</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>A/B</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>As is evident from the previous table mapping deployment style to complexity, having smaller, more independently deployable components makes it relatively easier to support more complex advanced strategies. In today&#8217;s modern ecosystem where there is a tremendous amount of competition to deliver new features and innovate faster, we need to support more complex forms of deployment with the least amount of risk and disruption to business. If supporting flexible deployment strategies proves to be too hard, there is very likely a need to re-examine your context boundaries.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tracking-progress-todo-finish-this"><a class="anchor" href="#tracking-progress-todo-finish-this"></a><a class="link" href="#tracking-progress-todo-finish-this">12.3. Tracking progress (TODO: finish this)</a></h3>
+<div class="paragraph">
+<p>The DORA research foundation has published an online <a href="https://www.devops-research.com/quickcheck.html">quickcheck</a><sup class="footnote">[<a id="_footnoteref_70" class="footnote" href="#_footnotedef_70" title="View footnote.">70</a>]</sup> tool and <a href="https://www.devops-research.com/research.html">report</a><sup class="footnote">[<a id="_footnoteref_71" class="footnote" href="#_footnotedef_71" title="View footnote.">71</a>]</sup> to quickly provide information on how organizations compare with industry peers and how to make progress towards elite status. While discussing the full nuance of what it takes to establish a long term culture of continuous improvement is out of scope for this book, we reference the four key metrics highlighted in the research paper as indicators of software delivery performance:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Lead time</strong>: how long does it take to go from code committed to code successfully running in production</p>
+</li>
+<li>
+<p><strong>Deployment frequency</strong>: how often does your organization deploy code to production or release it to end users</p>
+</li>
+<li>
+<p><strong>Time to restore</strong>: how long does it generally take to restore service when a service incident or a defect that impacts users occurs</p>
+</li>
+<li>
+<p><strong>Change failure percentage</strong>: what percentage of changes to production or releases to users result in degraded service</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="security"><a class="anchor" href="#security"></a><a class="link" href="#security">12.4. Security</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="exception-handling"><a class="anchor" href="#exception-handling"></a><a class="link" href="#exception-handling">12.3. Exception handling</a></h3>
+<h3 id="exception-handling"><a class="anchor" href="#exception-handling"></a><a class="link" href="#exception-handling">12.5. Exception handling</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="graceful-degradation"><a class="anchor" href="#graceful-degradation"></a><a class="link" href="#graceful-degradation">12.4. Graceful degradation</a></h3>
+<h3 id="graceful-degradation"><a class="anchor" href="#graceful-degradation"></a><a class="link" href="#graceful-degradation">12.6. Graceful degradation</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="deployment-style"><a class="anchor" href="#deployment-style"></a><a class="link" href="#deployment-style">12.5. Deployment style</a></h3>
+<h3 id="feature-flags"><a class="anchor" href="#feature-flags"></a><a class="link" href="#feature-flags">12.7. Feature flags</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="feature-flags"><a class="anchor" href="#feature-flags"></a><a class="link" href="#feature-flags">12.6. Feature flags</a></h3>
+<h3 id="eventual-consistency"><a class="anchor" href="#eventual-consistency"></a><a class="link" href="#eventual-consistency">12.8. Eventual consistency</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="eventual-consistency"><a class="anchor" href="#eventual-consistency"></a><a class="link" href="#eventual-consistency">12.7. Eventual consistency</a></h3>
+<h3 id="versioning"><a class="anchor" href="#versioning"></a><a class="link" href="#versioning">12.9. Versioning</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="versioning"><a class="anchor" href="#versioning"></a><a class="link" href="#versioning">12.8. Versioning</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="performance"><a class="anchor" href="#performance"></a><a class="link" href="#performance">12.9. Performance</a></h3>
+<h3 id="performance"><a class="anchor" href="#performance"></a><a class="link" href="#performance">12.10. Performance</a></h3>
 <div class="sect3">
-<h4 id="diagnosing"><a class="anchor" href="#diagnosing"></a><a class="link" href="#diagnosing">12.9.1. Diagnosing</a></h4>
+<h4 id="diagnosing"><a class="anchor" href="#diagnosing"></a><a class="link" href="#diagnosing">12.10.1. Diagnosing</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="fixing"><a class="anchor" href="#fixing"></a><a class="link" href="#fixing">12.9.2. Fixing</a></h4>
+<h4 id="fixing"><a class="anchor" href="#fixing"></a><a class="link" href="#fixing">12.10.2. Fixing</a></h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="debugging"><a class="anchor" href="#debugging"></a><a class="link" href="#debugging">12.10. Debugging</a></h3>
+<h3 id="debugging"><a class="anchor" href="#debugging"></a><a class="link" href="#debugging">12.11. Debugging</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="alerting"><a class="anchor" href="#alerting"></a><a class="link" href="#alerting">12.11. Alerting</a></h3>
+<h3 id="alerting"><a class="anchor" href="#alerting"></a><a class="link" href="#alerting">12.12. Alerting</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="operational-tasks"><a class="anchor" href="#operational-tasks"></a><a class="link" href="#operational-tasks">12.12. Operational tasks</a></h3>
+<h3 id="operational-tasks"><a class="anchor" href="#operational-tasks"></a><a class="link" href="#operational-tasks">12.13. Operational tasks</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">12.13. Testing the Overall System</a></h3>
+<h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a><a class="link" href="#testing-the-overall-system">12.14. Testing the Overall System</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="chaos-engineering"><a class="anchor" href="#chaos-engineering"></a><a class="link" href="#chaos-engineering">12.14. Chaos engineering</a></h3>
+<h3 id="chaos-engineering"><a class="anchor" href="#chaos-engineering"></a><a class="link" href="#chaos-engineering">12.15. Chaos engineering</a></h3>
 
 </div>
 <div class="sect2">
-<h3 id="reliability"><a class="anchor" href="#reliability"></a><a class="link" href="#reliability">12.15. Reliability</a></h3>
+<h3 id="reliability"><a class="anchor" href="#reliability"></a><a class="link" href="#reliability">12.16. Reliability</a></h3>
 <div class="sect3">
-<h4 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">12.15.1. Dealing With Eventual Consistency</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">12.15.2. Event Versioning and Upcasting</a></h4>
+<h4 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a><a class="link" href="#dealing-with-eventual-consistency">12.16.1. Dealing With Eventual Consistency</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">12.15.3. Monitoring, Metrics and Tracing</a></h4>
+<h4 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a><a class="link" href="#event-versioning-and-upcasting">12.16.2. Event Versioning and Upcasting</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a><a class="link" href="#monitoring-metrics-and-tracing">12.16.3. Monitoring, Metrics and Tracing</a></h4>
 <div class="sect4">
 <h5 id="exception-handling-2"><a class="anchor" href="#exception-handling-2"></a><a class="link" href="#exception-handling-2">Exception handling</a></h5>
 <div class="quoteblock">
@@ -11596,13 +11706,13 @@ Everything fails all the time.
 </div>
 </div>
 <div class="sect2">
-<h3 id="scalability"><a class="anchor" href="#scalability"></a><a class="link" href="#scalability">12.16. Scalability</a></h3>
+<h3 id="scalability"><a class="anchor" href="#scalability"></a><a class="link" href="#scalability">12.17. Scalability</a></h3>
 <div class="sect3">
-<h4 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">12.16.1. Scaling the Event Store with Snapshots</a></h4>
+<h4 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a><a class="link" href="#scaling-the-event-store-with-snapshots">12.17.1. Scaling the Event Store with Snapshots</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">12.16.2. Scaling the event bus</a></h4>
+<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a><a class="link" href="#scaling-the-event-bus">12.17.2. Scaling the event bus</a></h4>
 <div class="sect4">
 <h5 id="recovery"><a class="anchor" href="#recovery"></a><a class="link" href="#recovery">Recovery</a></h5>
 <div class="sect5">
@@ -11633,28 +11743,28 @@ Everything fails all the time.
 </div>
 </div>
 <div class="sect2">
-<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a><a class="link" href="#understanding-the-costs-of-distribution">12.17. Understanding the costs of distribution</a></h3>
+<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a><a class="link" href="#understanding-the-costs-of-distribution">12.18. Understanding the costs of distribution</a></h3>
 <div class="sect3">
-<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a><a class="link" href="#handling-exceptions">12.17.1. Handling exceptions</a></h4>
+<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a><a class="link" href="#handling-exceptions">12.18.1. Handling exceptions</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="testing-the-overall-system-2"><a class="anchor" href="#testing-the-overall-system-2"></a><a class="link" href="#testing-the-overall-system-2">12.17.2. Testing the Overall System</a></h4>
+<h4 id="testing-the-overall-system-2"><a class="anchor" href="#testing-the-overall-system-2"></a><a class="link" href="#testing-the-overall-system-2">12.18.2. Testing the Overall System</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="compatibility"><a class="anchor" href="#compatibility"></a><a class="link" href="#compatibility">12.17.3. Compatibility</a></h4>
+<h4 id="compatibility"><a class="anchor" href="#compatibility"></a><a class="link" href="#compatibility">12.18.3. Compatibility</a></h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="decomposing-and-distributing-big-balls-of-mud"><a class="anchor" href="#decomposing-and-distributing-big-balls-of-mud"></a><a class="link" href="#decomposing-and-distributing-big-balls-of-mud">12.18. Decomposing and distributing big balls of mud</a></h3>
+<h3 id="decomposing-and-distributing-big-balls-of-mud"><a class="anchor" href="#decomposing-and-distributing-big-balls-of-mud"></a><a class="link" href="#decomposing-and-distributing-big-balls-of-mud">12.19. Decomposing and distributing big balls of mud</a></h3>
 <div class="sect3">
-<h4 id="code-first"><a class="anchor" href="#code-first"></a><a class="link" href="#code-first">12.18.1. Code-first</a></h4>
+<h4 id="code-first"><a class="anchor" href="#code-first"></a><a class="link" href="#code-first">12.19.1. Code-first</a></h4>
 
 </div>
 <div class="sect3">
-<h4 id="data-first"><a class="anchor" href="#data-first"></a><a class="link" href="#data-first">12.18.2. Data-first</a></h4>
+<h4 id="data-first"><a class="anchor" href="#data-first"></a><a class="link" href="#data-first">12.19.2. Data-first</a></h4>
 
 </div>
 </div>
@@ -11870,11 +11980,17 @@ Everything fails all the time.
 <div class="footnote" id="_footnotedef_69">
 <a href="#_footnoteref_69">69</a>. <a href="https://www.codeproject.com/Articles/42354/The-Art-of-Logging" class="bare">https://www.codeproject.com/Articles/42354/The-Art-of-Logging</a>
 </div>
+<div class="footnote" id="_footnotedef_70">
+<a href="#_footnoteref_70">70</a>. <a href="https://www.devops-research.com/quickcheck.html" class="bare">https://www.devops-research.com/quickcheck.html</a>
+</div>
+<div class="footnote" id="_footnotedef_71">
+<a href="#_footnoteref_71">71</a>. <a href="https://www.devops-research.com/research.html" class="bare">https://www.devops-research.com/research.html</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-29 14:46:00 UTC
+Last updated 2022-05-31 22:59:08 UTC
 </div>
 </div>
 </body>
