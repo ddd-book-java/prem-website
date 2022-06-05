@@ -445,57 +445,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#non-functional-requirements">Non-Functional Requirements</a>
 <ul class="sectlevel2">
-<li><a href="#troubleshooting">Troubleshooting</a>
+<li><a href="#reactive-measures">Reactive measures</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring">Monitoring</a></li>
-<li><a href="#code-comments">Code comments</a></li>
 <li><a href="#logging">Logging</a></li>
-<li><a href="#distributed-tracing">Distributed tracing</a></li>
-</ul>
-</li>
-<li><a href="#deployment-strategy">Deployment strategy</a></li>
-<li><a href="#tracking-progress-todo-finish-this">Tracking progress (TODO: finish this)</a></li>
-<li><a href="#security">Security</a></li>
-<li><a href="#exception-handling">Exception handling</a></li>
-<li><a href="#graceful-degradation">Graceful degradation</a></li>
-<li><a href="#feature-flags">Feature flags</a></li>
-<li><a href="#eventual-consistency">Eventual consistency</a></li>
-<li><a href="#versioning">Versioning</a></li>
-<li><a href="#performance">Performance</a>
-<ul class="sectlevel3">
-<li><a href="#diagnosing">Diagnosing</a></li>
-<li><a href="#fixing">Fixing</a></li>
-</ul>
-</li>
-<li><a href="#debugging">Debugging</a></li>
+<li><a href="#tracing">Tracing</a></li>
+<li><a href="#monitoring">Monitoring</a></li>
 <li><a href="#alerting">Alerting</a></li>
-<li><a href="#operational-tasks">Operational tasks</a></li>
-<li><a href="#testing-the-overall-system">Testing the Overall System</a></li>
-<li><a href="#chaos-engineering">Chaos engineering</a></li>
-<li><a href="#reliability">Reliability</a>
-<ul class="sectlevel3">
-<li><a href="#dealing-with-eventual-consistency">Dealing With Eventual Consistency</a></li>
-<li><a href="#event-versioning-and-upcasting">Event Versioning and Upcasting</a></li>
-<li><a href="#monitoring-metrics-and-tracing">Monitoring, Metrics and Tracing</a></li>
+<li><a href="#manual-recovery">Manual recovery</a></li>
 </ul>
 </li>
-<li><a href="#scalability">Scalability</a>
+<li><a href="#proactive-measures">Proactive measures</a>
 <ul class="sectlevel3">
-<li><a href="#scaling-the-event-store-with-snapshots">Scaling the Event Store with Snapshots</a></li>
-<li><a href="#scaling-the-event-bus">Scaling the event bus</a></li>
-</ul>
-</li>
-<li><a href="#understanding-the-costs-of-distribution">Understanding the costs of distribution</a>
-<ul class="sectlevel3">
-<li><a href="#handling-exceptions">Handling exceptions</a></li>
-<li><a href="#testing-the-overall-system-2">Testing the Overall System</a></li>
-<li><a href="#compatibility">Compatibility</a></li>
-</ul>
-</li>
-<li><a href="#decomposing-and-distributing-big-balls-of-mud">Decomposing and distributing big balls of mud</a>
-<ul class="sectlevel3">
-<li><a href="#code-first">Code-first</a></li>
-<li><a href="#data-first">Data-first</a></li>
+<li><a href="#strategic-measures">Strategic measures</a></li>
+<li><a href="#tactical-measures">Tactical measures</a></li>
 </ul>
 </li>
 </ul>
@@ -519,21 +481,54 @@ Sometimes I feel like I am being forgotten.
 <p>While the functional requirements of the core of the system may be met adequately, it is just as important to place focus on the operational characteristics of the system. In this chapter, we will look at common pitfalls and how to get past them.</p>
 </div>
 <div class="paragraph">
-<p>We have launched the new version of our <em>LC Application Processing</em> module. You are encountering a performance issue when submitting LC applications. Users are complaining that response times on the UI are excruciatingly high. It feels like our application is up, but a majority of requests are resulting in timeout errors. When they go to the LC application status page, it still shows that the LC application is in a draft state. So they go back and try to submit the LC application again&#8201;&#8212;&#8201;but still no change. Our Quality Assurance team tells us that they are unable to replicate these same issues in the staging environment and that the application behaves predictably.</p>
+<p>We have launched the new version of our <em>LC Application Processing</em> module. All seems well at first. But as more users start submitting LC applications, we are starting to see problems. Users are complaining that despite submitting LC applications successfully, when they go to the LC application status page, it still shows that the LC application is in a draft state. So they go back and try to submit the LC application again&#8201;&#8212;&#8201;but still no change on the UI. On the other hand, LC application approvers are not seeing a lot of work. Neither are we seeing many LC applications getting auto-approved. Our production support staff is not seeing any errors anywhere either. Finally, our development team tells us that they are unable to replicate these issues in the staging environment and that the application behaves predictably.</p>
 </div>
 <div class="paragraph">
-<p>How do we diagnose what is going on? Why can&#8217;t we replicate these same errors in our test environment? How do we fix this quickly? Could we have prevented this? Where should we start?</p>
+<p>It feels like there is a problem with the logic in the <code>submit</code> flow. Currently, the entry point for the <code>submit</code> API looks fairly innocuous:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre><span style="color:#007">@RestController</span>
+<span style="color:#007">@RequestMapping</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/lc-applications</span><span style="color:#710">&quot;</span></span>)
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">LCApplicationController</span> {
+
+    <span style="color:#007">@ResponseStatus</span>(HttpStatus.OK)
+    <span style="color:#007">@PostMapping</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/submit/{id}</span><span style="color:#710">&quot;</span></span>)
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> submit(<span style="color:#007">@PathVariable</span> LCApplicationId id) {
+        gateway.send(<span style="color:#080;font-weight:bold">new</span> SubmitLCApplicationCommand(id)); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When dispatching commands, we are using a <em>fire and forget</em> style of interaction when working with the command processing sub-system. It turns out that the <code>CommandGateway#send</code> variation used above returns immediately without waiting for the outcome of the command.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To make matters worse, this style of code is used all throughout our application. How big a problem do we really have? How do we diagnose what is going on? Why can&#8217;t we replicate these same errors in our test environment? How do we fix this quickly? Could we have prevented this? Where should we start?</p>
+</div>
+<div class="paragraph">
+<p>In this chapter, we will look at various aspects of how to diagnose issues in a distributed system, create a robust solution from a cross-functional perspective and the changes that may be needed to make our solution performant, scalable and resilient to failure. Furthermore, we will also examine the implications of making these changes and the potential impacts this may have on our bounded contexts and their boundaries.</p>
 </div>
 <div class="sect2">
-<h3 id="troubleshooting"><a class="anchor" href="#troubleshooting"></a>Troubleshooting</h3>
-<div class="sect3">
-<h4 id="monitoring"><a class="anchor" href="#monitoring"></a>Monitoring</h4>
-
-</div>
-<div class="sect3">
-<h4 id="code-comments"><a class="anchor" href="#code-comments"></a>Code comments</h4>
-
-</div>
+<h3 id="reactive-measures"><a class="anchor" href="#reactive-measures"></a>Reactive measures</h3>
 <div class="sect3">
 <h4 id="logging"><a class="anchor" href="#logging"></a>Logging</h4>
 <div class="paragraph">
@@ -750,7 +745,7 @@ For more information on logging best practices, please refer to this logging che
 </div>
 </div>
 <div class="sect3">
-<h4 id="distributed-tracing"><a class="anchor" href="#distributed-tracing"></a>Distributed tracing</h4>
+<h4 id="tracing"><a class="anchor" href="#tracing"></a>Tracing</h4>
 <div class="paragraph">
 <p>Imagine a situation where an applicant submitted an LC application through the UI. When all goes well, within a few milliseconds, the applicant should get a notification of successful submission as shown here:</p>
 </div>
@@ -770,100 +765,24 @@ For more information on logging best practices, please refer to this logging che
 <p>Fundamentally, distributed tracing visualizations can aid in diagnosing performance bottlenecks and chattiness between components. But what may not be obvious is the insights it can provide in gaining a richer understanding of how components interact in an end-to-end user journey. In a lot of ways, this can be thought of a near real-time context map visualization of your system, and how components are coupled with each other. From a DDD perspective, this can provide greater insights into re-evaluating bounded context boundaries if necessary. For this reason, we strongly recommend making it easy to set up and configure distributed tracing apparatus painlessly right from the outset.</p>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="deployment-strategy"><a class="anchor" href="#deployment-strategy"></a>Deployment strategy</h3>
+<div class="sect3">
+<h4 id="monitoring"><a class="anchor" href="#monitoring"></a>Monitoring</h4>
 <div class="paragraph">
-<p>The intent of applying domain-driven design is to create an ecosystem of loosely coupled components&#8201;&#8212;&#8201;so that each of these components can evolve independently of each other. This includes how these components are deployed to production. At a high level, we have at least three styles of deployment:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Single process monolith</strong>: where large portions of the application are deployed as a single unit, with all components that are included in the deployment running in a single process.</p>
-</li>
-<li>
-<p><strong>Distributed monolith</strong>: where the application is split into multiple components with each running in its own process and/or host, but deployed as a single unit and/or requiring non-trivial amounts of coordination among component owners.</p>
-</li>
-<li>
-<p><strong>Independent components</strong>: where the application is split into multiple components with each running in its own process and/or host, deployed independently of each other and requiring minimal to no coordination among component owners.</p>
-</li>
-</ul>
+<p>In previous chapters, we have seen how it is possible break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
 </div>
 <div class="paragraph">
-<p>We also have a number of deployment strategies that we can employ. We list some of the more popular ones in order of increasing complexity and richness:</p>
+<p>In addition to the obvious technology metrics that one associates with components (like CPU utilization, queue depths, etc.), it is important to be able to associate a set of business relevant metrics (like the number of LC applications submitted in the last hour, the number of LC applications rejected, etc.). An inability to monitor business key performance indicators (KPIs) with a component may be an indicator of the component being too fine-grained. On the flip side, if there are too many business KPIs associated with a single component that is of interest to a multitude of business stakeholder groups, it may be indicator that a more fine-grained decomposition may be justified.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime.</p>
-</li>
-<li>
-<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version. User traffic is switched to the newer version once testing activities are deemed to be successfully complete. It is pertinent to that live user traffic is directed only to one environment at any given time. In simple cases, rollback usually means redirecting traffic to the older version.</p>
-</li>
-<li>
-<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback usually means replacing the newer version instances with older ones.</p>
-</li>
-<li>
-<p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2%, 25%, 75%, 100% of users).</p>
-</li>
-<li>
-<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users.</p>
-</li>
-</ol>
+<div class="sect4">
+<h5 id="engineering-metrics"><a class="anchor" href="#engineering-metrics"></a>Engineering metrics</h5>
+
 </div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/deployment-strategy.png" alt="deployment strategy">
+<div class="sect4">
+<h5 id="business-metrics"><a class="anchor" href="#business-metrics"></a>Business metrics</h5>
+
 </div>
-<div class="title">Figure 2. Component deployment style and strategy.</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 10%;">
-<col style="width: 30%;">
-<col style="width: 30%;">
-<col style="width: 30%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Strategy/Style</th>
-<th class="tableblock halign-left valign-top">Monolith</th>
-<th class="tableblock halign-left valign-top">Distributed Monolith</th>
-<th class="tableblock halign-left valign-top">Small loosely coupled components</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Basic</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Most common strategy</p></td>
-<td class="tableblock halign-left valign-top" rowspan="5"><p class="tableblock">In general, all deployment strategies become more complex because of the need to coordinate among more than one component that are tightly coupled to each other. Advanced deployment strategies although possible on paper, may be really to pull off and even counter-productive from an ROI perspective.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Relatively straightforward and may be the deployment strategy of choice because more advanced deployment methods are not required to be supported.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Blue-green</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Another common strategy, but requires double the amount of capacity at least during the time of deployment.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fairly common strategy if near zero downtime deployments are required to be supported.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Rolling</strong></p></td>
-<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Can be prohibitively expensive and/or risky to the point of being infeasible.</p></td>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">A more complex deployment strategy that supports zero downtime, but requires strong backwards compatibility testing to be able to pull off.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Canary</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>A/B</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>As is evident from the previous table mapping deployment style to complexity, having smaller, more independently deployable components makes it relatively easier to support more complex advanced strategies. In today&#8217;s modern ecosystem where there is a tremendous amount of competition to deliver new features and innovate faster, we need to support more complex forms of deployment with the least amount of risk and disruption to business. If supporting flexible deployment strategies proves to be too hard, there is very likely a need to re-examine your context boundaries.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="tracking-progress-todo-finish-this"><a class="anchor" href="#tracking-progress-todo-finish-this"></a>Tracking progress (TODO: finish this)</h3>
+<div class="sect4">
+<h5 id="value-stream-metrics"><a class="anchor" href="#value-stream-metrics"></a>Value stream metrics</h5>
 <div class="paragraph">
 <p>The DORA research foundation has published an online <a href="https://www.devops-research.com/quickcheck.html">quickcheck</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> tool and <a href="https://www.devops-research.com/research.html">report</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> to quickly provide information on how organizations compare with industry peers and how to make progress towards elite status. While discussing the full nuance of what it takes to establish a long term culture of continuous improvement is out of scope for this book, we reference the four key metrics highlighted in the research paper as indicators of software delivery performance:</p>
 </div>
@@ -884,75 +803,270 @@ For more information on logging best practices, please refer to this logging che
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="security"><a class="anchor" href="#security"></a>Security</h3>
-
 </div>
-<div class="sect2">
-<h3 id="exception-handling"><a class="anchor" href="#exception-handling"></a>Exception handling</h3>
-
-</div>
-<div class="sect2">
-<h3 id="graceful-degradation"><a class="anchor" href="#graceful-degradation"></a>Graceful degradation</h3>
-
-</div>
-<div class="sect2">
-<h3 id="feature-flags"><a class="anchor" href="#feature-flags"></a>Feature flags</h3>
-
-</div>
-<div class="sect2">
-<h3 id="eventual-consistency"><a class="anchor" href="#eventual-consistency"></a>Eventual consistency</h3>
-
-</div>
-<div class="sect2">
-<h3 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h3>
-
-</div>
-<div class="sect2">
-<h3 id="performance"><a class="anchor" href="#performance"></a>Performance</h3>
 <div class="sect3">
-<h4 id="diagnosing"><a class="anchor" href="#diagnosing"></a>Diagnosing</h4>
+<h4 id="alerting"><a class="anchor" href="#alerting"></a>Alerting</h4>
 
 </div>
 <div class="sect3">
-<h4 id="fixing"><a class="anchor" href="#fixing"></a>Fixing</h4>
+<h4 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="debugging"><a class="anchor" href="#debugging"></a>Debugging</h3>
-
-</div>
-<div class="sect2">
-<h3 id="alerting"><a class="anchor" href="#alerting"></a>Alerting</h3>
-
-</div>
-<div class="sect2">
-<h3 id="operational-tasks"><a class="anchor" href="#operational-tasks"></a>Operational tasks</h3>
-
-</div>
-<div class="sect2">
-<h3 id="testing-the-overall-system"><a class="anchor" href="#testing-the-overall-system"></a>Testing the Overall System</h3>
-
-</div>
-<div class="sect2">
-<h3 id="chaos-engineering"><a class="anchor" href="#chaos-engineering"></a>Chaos engineering</h3>
-
-</div>
-<div class="sect2">
-<h3 id="reliability"><a class="anchor" href="#reliability"></a>Reliability</h3>
+<h3 id="proactive-measures"><a class="anchor" href="#proactive-measures"></a>Proactive measures</h3>
 <div class="sect3">
-<h4 id="dealing-with-eventual-consistency"><a class="anchor" href="#dealing-with-eventual-consistency"></a>Dealing With Eventual Consistency</h4>
-
-</div>
-<div class="sect3">
-<h4 id="event-versioning-and-upcasting"><a class="anchor" href="#event-versioning-and-upcasting"></a>Event Versioning and Upcasting</h4>
-
-</div>
-<div class="sect3">
-<h4 id="monitoring-metrics-and-tracing"><a class="anchor" href="#monitoring-metrics-and-tracing"></a>Monitoring, Metrics and Tracing</h4>
+<h4 id="strategic-measures"><a class="anchor" href="#strategic-measures"></a>Strategic measures</h4>
 <div class="sect4">
-<h5 id="exception-handling-2"><a class="anchor" href="#exception-handling-2"></a>Exception handling</h5>
+<h5 id="consistency"><a class="anchor" href="#consistency"></a>Consistency</h5>
+
+</div>
+<div class="sect4">
+<h5 id="trunk-based-development"><a class="anchor" href="#trunk-based-development"></a>Trunk-based development</h5>
+
+</div>
+<div class="sect4">
+<h5 id="refactoring"><a class="anchor" href="#refactoring"></a>Refactoring</h5>
+
+</div>
+<div class="sect4">
+<h5 id="security"><a class="anchor" href="#security"></a>Security</h5>
+<div class="sect5">
+<h6 id="threat-modeling"><a class="anchor" href="#threat-modeling"></a>Threat modeling</h6>
+
+</div>
+</div>
+<div class="sect4">
+<h5 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h5>
+<div class="sect5">
+<h6 id="component"><a class="anchor" href="#component"></a>Component</h6>
+
+</div>
+<div class="sect5">
+<h6 id="api"><a class="anchor" href="#api"></a>API</h6>
+
+</div>
+<div class="sect5">
+<h6 id="data"><a class="anchor" href="#data"></a>Data</h6>
+
+</div>
+</div>
+<div class="sect4">
+<h5 id="testing"><a class="anchor" href="#testing"></a>Testing</h5>
+<div class="sect5">
+<h6 id="contract-testing"><a class="anchor" href="#contract-testing"></a>Contract testing</h6>
+
+</div>
+<div class="sect5">
+<h6 id="chaos-testing"><a class="anchor" href="#chaos-testing"></a>Chaos testing</h6>
+
+</div>
+</div>
+<div class="sect4">
+<h5 id="deployment"><a class="anchor" href="#deployment"></a>Deployment</h5>
+<div class="paragraph">
+<p>The intent of applying domain-driven design is to create an ecosystem of loosely coupled components&#8201;&#8212;&#8201;so that each of these components can evolve independently of each other. This includes how these components are deployed to production. At a high level, we have at least three styles of deployment:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Single process monolith</strong>: where large portions of the application are deployed as a single unit, with all components that are included in the deployment running in a single process.</p>
+</li>
+<li>
+<p><strong>Distributed monolith</strong>: where the application is split into multiple components with each running in its own process and/or host, but deployed as a single unit and/or requiring non-trivial amounts of coordination and tight coupling among components and their owners.</p>
+</li>
+<li>
+<p><strong>Independent components</strong>: where the application is split into multiple components with each running in its own process and/or host, deployed independently of each other and requiring minimal to no coordination among component owners.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We also have a number of deployment strategies that we can employ. We list some of the more popular ones in order of increasing complexity and richness:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime. This is a fairly common deployment strategy for those applications where a certain amount of downtime is acceptable. This may include non-business critical applications and/or third party packages where we do not have a say in how those applications manage their deployments. In the case of certain monoliths, this may be the only feasible option due to the overall complexity of the system as a whole.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pros</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fairly simple and well understood.</p>
+</li>
+<li>
+<p>May suffice for non-critical applications.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cons</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Requires deployment and release to happen in one single tightly coupled step.</p>
+</li>
+<li>
+<p>Requires some amount of downtime.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version without exposing it to end users. User traffic is switched to the newer version once testing activities are deemed to be successfully completed. It is pertinent to note that live user traffic is directed only to one environment at any given time.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pros</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enables deployment with (near) zero downtime.</p>
+</li>
+<li>
+<p>Allows decoupling the process of deployment and release.</p>
+</li>
+<li>
+<p>Rollbacks are easier because it simply means redirecting traffic to the older version.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cons</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Requires double the amount of capacity at least during the time of deployment. This may make it cost prohibitive for monolithic applications: both single process and distributed.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback typically means replacing the newer version instances with older ones.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pros</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enables zero downtime deployment.</p>
+</li>
+<li>
+<p>Allows side by side testing of old and new versions with real users.</p>
+</li>
+<li>
+<p>Can reduce the <em>blast radius</em> of a bad release.</p>
+</li>
+<li>
+<p>Can make rollbacks relatively easy by aborting instances of the new version and re-introducing the old version.</p>
+</li>
+<li>
+<p>Natively supported by modern infrastructure platforms such as kubernetes.</p>
+</li>
+<li>
+<p>Cheaper than a blue-green deployment.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cons</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Deployment and release cannot be decoupled. Deployment means that the system is released (at least for a subset of users).</p>
+</li>
+<li>
+<p>Users may experience inconsistencies until all instances are completely upgraded to the new version.</p>
+</li>
+<li>
+<p>Usually requires more mature observability apparatus to be in place because both old and new versions are running at the same time.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2%, 25%, 75%, 100% of users).</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pros</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allows more fine-grained control of the extent of the release as compared to rolling deployment.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cons</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Usually more complex to set up than a simple rolling deployment.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pros</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allows testing more than two combinations at the same time with real users.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cons</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>A lot more complex to set up, manage, test and verify.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When working with monolithic applications, teams are usually forced to restrict themselves to either basic or at the most blue-green deployments because the cost and complexity involved in adopting more sophisticated deployment strategies is a lot higher. On the other hand, distributed monoliths make this even more complicated because it now requires coordination among physically disparate components and teams. As long as we are able to maintain a balance between component granularity and coupling, we should be able to support a variety of advanced deployment strategies.</p>
+</div>
+<div class="paragraph">
+<p>In today&#8217;s modern ecosystem where there is a tremendous amount of competition to deliver new features and innovate faster, there is a need to support more complex forms of deployment with the least amount of risk and disruption to business. If supporting flexible deployment strategies proves to be too hard, there is very likely a need to re-examine your context boundaries.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tactical-measures"><a class="anchor" href="#tactical-measures"></a>Tactical measures</h4>
+<div class="sect4">
+<h5 id="exception-handling"><a class="anchor" href="#exception-handling"></a>Exception handling</h5>
 <div class="quoteblock">
 <blockquote>
 Everything fails all the time.
@@ -962,58 +1076,30 @@ Everything fails all the time.
 <cite>CTO -- Amazon Web Services</cite>
 </div>
 </div>
-<div class="paragraph">
-<p>Unexpected failures in software systems are bound to happen. Instead of expending all our energies trying to prevent them from occurring, it is prudent to embrace and design for failure as well. Let&#8217;s look at the scenario in the <code>AutoApprovalSaga</code> and identify things that can fail:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td>
-  <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">AutoApprovalSaga</span> {
-    <span style="color:#777">//...</span>
-    <span style="color:#007">@SagaEventHandler</span>(associationProperty = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">lcApplicationId</span><span style="color:#710">&quot;</span></span>)
-    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> on(ProductLegalityValidatedEvent event) {
-        <span style="color:#777">//..</span>
-        productLegalityValidated = <span style="color:#069">true</span>;
-        <span style="color:#080;font-weight:bold">if</span> (productValueValidated &amp;&amp; applicantValidated) {
-               gateway.send(<span style="color:#080;font-weight:bold">new</span> ApproveLCApplicationCommand(lcApplicationId)); <i class="conum" data-value="1"></i><b>(1)</b>
-        }
-    }
-}</pre></td>
-</tr></table></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>When dispatching commands, we have a few styles of interaction with the target system (in this case, the LC application bounded context):
+<div class="sect4">
+<h5 id="avoiding-cascading-failures"><a class="anchor" href="#avoiding-cascading-failures"></a>Avoiding cascading failures</h5>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Fire and forget</strong>: This is the style we have used currently. This style works best when system scalability is a prime concern. On the flip side, this approach may not be the most reliable because we do not have definitive knowledge of the outcome.</p>
+<p>Retries</p>
 </li>
 <li>
-<p><strong>Wait infinitely</strong>: We wait infinitely for the dispatch and handling of the <code>ApproveLCApplicationCommand</code>.</p>
+<p>Timeouts</p>
 </li>
 <li>
-<p><strong>Wait with timeout</strong>: We wait for a certain amount of time before concluding that the handling of the command has likely failed.</p>
+<p>Circuit breakers</p>
+</li>
+<li>
+<p>Bulkheads</p>
+</li>
+<li>
+<p>Rate limiters</p>
+</li>
+<li>
+<p>Graceful degradation</p>
 </li>
 </ul>
-</div></td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
@@ -1021,80 +1107,21 @@ Everything fails all the time.
 <div class="ulist">
 <ul>
 <li>
-<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this will happen because of technical reasons (like network blips, etc.)</p>
+<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this may happen because of technical reasons (like network blips, etc.)</p>
 </li>
 <li>
 <p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
 </li>
 <li>
-<p>We can choose to only wait</p>
+<p>We can choose to only wait for a certain amount of time using a variation of <code>CommandGateway#sendAndWait</code></p>
 </li>
 </ul>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="scalability"><a class="anchor" href="#scalability"></a>Scalability</h3>
-<div class="sect3">
-<h4 id="scaling-the-event-store-with-snapshots"><a class="anchor" href="#scaling-the-event-store-with-snapshots"></a>Scaling the Event Store with Snapshots</h4>
-
-</div>
-<div class="sect3">
-<h4 id="scaling-the-event-bus"><a class="anchor" href="#scaling-the-event-bus"></a>Scaling the event bus</h4>
 <div class="sect4">
-<h5 id="recovery"><a class="anchor" href="#recovery"></a>Recovery</h5>
-<div class="sect5">
-<h6 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a>Automated recovery</h6>
+<h5 id="automated-recovery"><a class="anchor" href="#automated-recovery"></a>Automated recovery</h5>
 
 </div>
-<div class="sect5">
-<h6 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h6>
-
-</div>
-<div class="sect5">
-<h6 id="compensating-actions"><a class="anchor" href="#compensating-actions"></a>Compensating actions</h6>
-
-</div>
-<div class="sect5">
-<h6 id="retries"><a class="anchor" href="#retries"></a>Retries</h6>
-
-</div>
-</div>
-<div class="sect4">
-<h5 id="integration-strategies"><a class="anchor" href="#integration-strategies"></a>Integration strategies</h5>
-
-</div>
-<div class="sect4">
-<h5 id="testing-strategies"><a class="anchor" href="#testing-strategies"></a>Testing strategies</h5>
-
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="understanding-the-costs-of-distribution"><a class="anchor" href="#understanding-the-costs-of-distribution"></a>Understanding the costs of distribution</h3>
-<div class="sect3">
-<h4 id="handling-exceptions"><a class="anchor" href="#handling-exceptions"></a>Handling exceptions</h4>
-
-</div>
-<div class="sect3">
-<h4 id="testing-the-overall-system-2"><a class="anchor" href="#testing-the-overall-system-2"></a>Testing the Overall System</h4>
-
-</div>
-<div class="sect3">
-<h4 id="compatibility"><a class="anchor" href="#compatibility"></a>Compatibility</h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="decomposing-and-distributing-big-balls-of-mud"><a class="anchor" href="#decomposing-and-distributing-big-balls-of-mud"></a>Decomposing and distributing big balls of mud</h3>
-<div class="sect3">
-<h4 id="code-first"><a class="anchor" href="#code-first"></a>Code-first</h4>
-
-</div>
-<div class="sect3">
-<h4 id="data-first"><a class="anchor" href="#data-first"></a>Data-first</h4>
-
 </div>
 </div>
 </div>
@@ -1133,7 +1160,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-05-31 22:58:49 UTC
+Last updated 2022-06-05 23:47:16 UTC
 </div>
 </div>
 </body>
