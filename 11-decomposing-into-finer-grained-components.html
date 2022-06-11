@@ -458,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#decomposing-the-frontend">Decomposing the frontend</a></li>
-<li><a href="#where-to-draw-the-line">Where to draw the line?</a></li>
+<li><a href="#_where_to_draw_the_line">Where to draw the line?</a></li>
 <li><a href="#summary">Summary</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
@@ -646,7 +646,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>Deployment complexity</strong>: In the example above, we have split the application along functional boundaries. However, they have to come together as a single artifact at the time of deployment (this is especially true in the case of mobile applications). This can add quite a bit of deployment complexity when the complete application is assembled. It is important to be cognizant of the relationship patterns between teams (covered in <em>Chapter 9, Integrating with External Systems</em>) to work through kinks.</p>
 </li>
 <li>
-<p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome. This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance. For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser. In addition to being wasteful, this may also result in unpredictable, hard  to diagnose errors and eventually, poor customer experience.</p>
+<p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome.This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance.For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser.In addition to being wasteful, this may also result in unpredictable, hard to diagnose errors and eventually, poor customer experience.</p>
 </li>
 </ul>
 </div>
@@ -660,32 +660,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Figure 10. Commands and query frontends decomposed into individual functions.</div>
 </div>
 <div class="paragraph">
-<p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components. Just because it is possible to do it, doesn&#8217;t mean that we should. Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
+<p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components.Just because it is possible to do it, doesn&#8217;t mean that we should.Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="where-to-draw-the-line"><a class="anchor" href="#where-to-draw-the-line"></a>Where to draw the line?</h3>
+<h3 id="_where_to_draw_the_line"><a class="anchor" href="#_where_to_draw_the_line"></a>Where to draw the line?</h3>
 <div class="paragraph">
-<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity. Does that mean we should decompose our systems into as fine-grained a granularity as possible? On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity. Hence, decomposing a system into well-factored, collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science. There is no right or wrong answer here. In general, if things feel and become painful, you most likely got it more wrong than right. Here are some non-technical heuristics that might help guide this process:</p>
+<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity.Does that mean we should decompose our systems into as fine-grained a granularity as possible?On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity.Hence, decomposing a system into well-factored, collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science.There is no right or wrong answer here.In general, if things feel and become painful, you most likely got it more wrong than right.Here are some non-technical heuristics that might help guide this process:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Existing organization boundaries</strong>: Look to align along current organization structures. Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
+<p><strong>Existing organization boundaries</strong>: Look to align along current organization structures.Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
 </li>
 <li>
-<p><strong>End-user roles and responsibilities</strong>: What work do your end users carry out? What enables them to do their work with the least friction possible? If too many people need to get involved to get a piece of work done, that may be a sign that the current decomposition may be suboptimal. On the other hand, if it is hard to assign a said task to a specific user, it may again be a sign of incorrect decomposition.</p>
+<p><strong>End-user roles and responsibilities</strong>: What work do your end users carry out?What enables them to do their work with the least friction possible?If too many people need to get involved to get a piece of work done, that may be a sign that the current decomposition may be suboptimal.On the other hand, if it is hard to assign a said task to a specific user, it may again be a sign of incorrect decomposition.</p>
 </li>
 <li>
-<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms (the <em>ubiquitous language</em>). Does someone call something that is/feels the same in the physical world by different names? For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context. The point at which the vernacular changes may be a potential candidate to split functionality.</p>
+<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms (the <em>ubiquitous language</em>).Does someone call something that is/feels the same in the physical world by different names?For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context.The point at which the vernacular changes may be a potential candidate to split functionality.</p>
 </li>
 <li>
-<p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically? How are they segregated physically? This might provide some inspiration.</p>
+<p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically?How are they segregated physically?This might provide some inspiration.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>All of the preceeding techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
+<p>All of the preceeding techniques draw inspiration from existing constructs.But what if one or more of the above are wrong/cumbersome/suboptimal?In such a case, our work as developers/architects is a bit more involved.</p>
 </div>
 <div class="paragraph">
 <p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, apply what is called the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong><em>inverse Conway maneuver</em></strong></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>).</p>
@@ -840,7 +840,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-05 23:47:16 UTC
+Last updated 2022-06-11 14:59:59 UTC
 </div>
 </div>
 </body>

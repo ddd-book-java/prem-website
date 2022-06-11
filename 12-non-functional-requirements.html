@@ -449,9 +449,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#logging">Logging</a></li>
 <li><a href="#tracing">Tracing</a></li>
-<li><a href="#monitoring">Monitoring</a></li>
+<li><a href="#monitoring-and-metrics">Monitoring and metrics</a></li>
 <li><a href="#alerting">Alerting</a></li>
 <li><a href="#manual-recovery">Manual recovery</a></li>
+<li><a href="#_invocation_style">Invocation style</a></li>
 </ul>
 </li>
 <li><a href="#proactive-measures">Proactive measures</a>
@@ -766,23 +767,43 @@ For more information on logging best practices, please refer to this logging che
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring"><a class="anchor" href="#monitoring"></a>Monitoring</h4>
+<h4 id="monitoring-and-metrics"><a class="anchor" href="#monitoring-and-metrics"></a>Monitoring and metrics</h4>
 <div class="paragraph">
-<p>In previous chapters, we have seen how it is possible break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
+<p>In previous chapters, we have seen how it is possible break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection and more importantly attribution to specific components through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
 </div>
 <div class="paragraph">
-<p>In addition to the obvious technology metrics that one associates with components (like CPU utilization, queue depths, etc.), it is important to be able to associate a set of business relevant metrics (like the number of LC applications submitted in the last hour, the number of LC applications rejected, etc.). An inability to monitor business key performance indicators (KPIs) with a component may be an indicator of the component being too fine-grained. On the flip side, if there are too many business KPIs associated with a single component that is of interest to a multitude of business stakeholder groups, it may be indicator that a more fine-grained decomposition may be justified.</p>
+<p>When it comes to monitoring, most teams seem to think of <strong>technology runtime metrics</strong> that one associates with components (like CPU utilization, memory consumed, queue depths, exception count, etc.).</p>
 </div>
 <div class="sect4">
-<h5 id="engineering-metrics"><a class="anchor" href="#engineering-metrics"></a>Engineering metrics</h5>
-
+<h5 id="technology-metrics"><a class="anchor" href="#technology-metrics"></a>Technology metrics</h5>
+<div class="paragraph">
+<p>To make it more formal, we use the terms SLO and SLI within an SLA to mean the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>SLO</strong>: An agreement between provider and customer about a specific measurable metric. For example, 99.99% uptime, 100ms response time for 1000 concurrent users for 99%ile requests, etc.</p>
+</li>
+<li>
+<p><strong>SLI</strong>: The actual numbers against an SLO. For example, your system might have an uptime SLI of 99.95%</p>
+</li>
+<li>
+<p><strong>SLA</strong>: A collection of SLOs.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, it is just as much if not more important to be able to associate a set of <strong>business</strong> relevant metrics (like the number of LC applications submitted in the last hour, the number of LC applications rejected, etc.) and <strong>devops</strong> metrics (like lead time, mean time to restore, etc.).</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="business-metrics"><a class="anchor" href="#business-metrics"></a>Business metrics</h5>
-
+<div class="paragraph">
+<p>An inability to associate and monitor business SLIs with a component may be an indicator of the component being too fine-grained. On the flip side, if there are too many business SLIs associated with a single component that is of interest to a multitude of business stakeholder groups, it may be indicator that a more fine-grained decomposition may be justified. At the end of the day, the monitoring apparatus we have in place should be able to tell us if we are violating/meeting/exceeding SLOs.</p>
+</div>
 </div>
 <div class="sect4">
-<h5 id="value-stream-metrics"><a class="anchor" href="#value-stream-metrics"></a>Value stream metrics</h5>
+<h5 id="devops-metrics"><a class="anchor" href="#devops-metrics"></a>Devops metrics</h5>
 <div class="paragraph">
 <p>The DORA research foundation has published an online <a href="https://www.devops-research.com/quickcheck.html">quickcheck</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> tool and <a href="https://www.devops-research.com/research.html">report</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> to quickly provide information on how organizations compare with industry peers and how to make progress towards elite status. While discussing the full nuance of what it takes to establish a long term culture of continuous improvement is out of scope for this book, we reference the four key metrics highlighted in the research paper as indicators of software delivery performance:</p>
 </div>
@@ -812,6 +833,10 @@ For more information on logging best practices, please refer to this logging che
 <h4 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h4>
 
 </div>
+<div class="sect3">
+<h4 id="_invocation_style"><a class="anchor" href="#_invocation_style"></a>Invocation style</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="proactive-measures"><a class="anchor" href="#proactive-measures"></a>Proactive measures</h3>
@@ -819,11 +844,70 @@ For more information on logging best practices, please refer to this logging che
 <h4 id="strategic-measures"><a class="anchor" href="#strategic-measures"></a>Strategic measures</h4>
 <div class="sect4">
 <h5 id="consistency"><a class="anchor" href="#consistency"></a>Consistency</h5>
-
+<div class="paragraph">
+<p>In the previous chapters, we have spent a lot of energy splitting our system into multiple, fine-grained independent components. For example, the LC application is submitted against the command side component, whereas the status of the LC application is serviced by the query side. Because these are distinct components, there will be a time lag during which the two systems are not consistent with each other. So, querying the status of an LC application immediately after submitting may produce a stale response until the time that the query side processes the submit event and updates its internal state. In other words, the command side and the query side are considered to be <em>eventual consistent</em>. This is one of the trade-offs that we need to embrace when working with distributed systems.</p>
+</div>
+<div class="paragraph">
+<p>Eric Brewer formalized the trade-offs involved in building distributed systems in what is called the <em>CAP theorem</em>. The theorem postulates that distributed systems can either be highly <strong>a</strong>vailable or <strong>c</strong>onsistent in the event of a network <strong>p</strong>artition, not both at the same time. Given that we have chosen to go down the distributed application path, tolerance to network failures (partitions) is a necessity. This means that distributed applications that are expected to be highly available will have to forsake strong consistency.</p>
+</div>
+<div class="paragraph">
+<p>This may make it appear that this is a deal-breaker, but in reality most real-world business problems are tolerant to being eventually consistent. For example, there may be a requirement where an order cannot be canceled after it has shipped. In an eventually consistent system there may exist a time window (albeit small) where we may allow a shipped order to be canceled. To deal with such scenarios, we may need to enhance the business process to account for these inconsistencies. For example, before issuing a refund for a canceled order, we may need to validate that the order has not physically shipped or has been returned. Even in the extreme case where we may have erroneously issued a refund for a shipped order, we can request the customer to return it before an expiry period to avoid getting charged. If the customer fails to return the order, we may charge the customer or write-off the amount as lost business. Obviously, all this adds a level of complexity to the solution because we may need to account for edge conditions through a series of compensating actions. If none of this complexity is acceptable and strong consistency is non-negotiable, then shipping and order cancellation functionality will have to part of the same bounded context.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="performance-and-scale"><a class="anchor" href="#performance-and-scale"></a>Performance and scale</h5>
+<div class="paragraph">
+<p>In previous chapters, we saw how it is possible and sometimes even necessary to functionality down into fine-grained components that are physically separated from each other&#8201;&#8212;&#8201;requiring a network to collaborate. Let&#8217;s assume that this collaboration is achieved in a loosely coupled manner&#8201;&#8212;&#8201;justifying the need for disparate bounded contexts from a logical perspective.</p>
+</div>
+<div class="paragraph">
+<p>Performance is a very important SLO that is typically associated with most applications. When it comes to performance, it is essential to understand the basic terms. This is best illustrated using an example as shown here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/performance.png" alt="performance" width="75%">
+</div>
+<div class="title">Figure 2. The elements of network performance.</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Latency</strong>: The delay introduced by the network (A + B).</p>
+</li>
+<li>
+<p><strong>Response Time</strong>: The total time taken by the system to respond to the user (A + B + C).</p>
+</li>
+<li>
+<p><strong>Bandwidth</strong>: The maximum capacity of the network.</p>
+</li>
+<li>
+<p><strong>Throughput</strong>: The amount of data processed in a given amount of time.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The introduction of a network between two components introduces constraints in the form of network latency and bandwidth. Even if processing time on the server is theoretically reduced to zero, latency and bandwidth constraints cannot be avoided. This problem can only get worse as the number of network hops increases. This means that it is impossible for networked applications to provide the same level of performance as their non-networked counterparts.</p>
+</div>
+<div class="paragraph">
+<p>The need to scale to support a larger number of requests can further complicate things. Given that <a href="#_complexity_is_inevitable">Moore&#8217;s Law</a> has slowed down considerably in the last decade or so, it is less feasible to continue scaling up by using more and more powerful machines. This means that beyond a point, scaling out by using multiple instances, and thereby (re-)introducing a reliance on the network is inevitable.</p>
+</div>
+<div class="paragraph">
+<p>This makes it evident that performance and scale requirements can have a significant impact on how we choose to distribute our components. Having a clear understanding of performance and scale SLOs is a necessary pre-requisite before attempting to distribute into distinct components. On the flip side, if you are in a situation where you already have distributed components that are not meeting performance and scale SLOs, one option is to aggregate them back together. If that is not feasible, it may be worth embracing alternative customer experiences along with a non-blocking, event-driven style of architecture to create a perception of better performance.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="trunk-based-development"><a class="anchor" href="#trunk-based-development"></a>Trunk-based development</h5>
-
+<div class="paragraph">
+<p>Eric Evans, the inventor of DDD, talks about how <strong>continuous integration</strong> (CI) helps preserve the sanctity of the domain model within a bounded context. When more than one person works on the same bounded context, it tends to fragment. Obviously, the bigger the team, the higher the likelihood of this problem occurring. Even a team as small as three or four people can encounter serious issues. We have also seen that beyond a point, there may be <a href="#_where_to_draw_the_line">diminishing returns</a> if we try to break the system into extremely fine-grained bounded contexts.</p>
+</div>
+<div class="paragraph">
+<p>This makes it very important to institute a process of merging/integrating all code and other implementation artifacts frequently, aided by <strong>automated tests</strong> to flag such fragmentation. In addition, this allows the team to apply the ubiquitous language relentlessly, each time refining the domain model to represent the problem more accurately. In other words, it is critical to practice continuous integration. Many teams make use of a CI server to run tests, but tend to postpone integration until very late making use of an excessive number of long-living branches (popularized by <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">gitflow</a><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup>) and merge requests&#8201;&#8212;&#8201;practicing an anti-pattern known as <a href="https://www.gocd.org/2017/05/16/its-not-CI-its-CI-theatre.html">CI theatre</a><sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup>.</p>
+</div>
+<div class="paragraph">
+<p>An alternative to branch-based development is <strong><em>trunk-based development</em></strong> where each developer works in incremental batches and merges that work into the main (also called trunk) branch at least once (and potentially several times) a day. The State of DevOps Research and Assessment (DORA) team have published <a href="https://services.google.com/fh/files/misc/state-of-devops-2021.pdf#page=27">research</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> that shows that elite performers practice trunk-based development to maximize the effectiveness of their CI practice and by extension their ability to continuously enhance their domain models and keep up with changing business needs.</p>
+</div>
+<div class="paragraph">
+<p>In an ideal world, every commit to trunk would constitute finished, production-ready work. But it is also fairly normal for certain pieces of work to take longer to complete. This may make it appear that there is a need to forsake trunk-based development and resort to branch-based development. However, there is no need to compromise the continuous integration flow to accommodate for such eventualities. <a href="https://paulhammant.com/">Paul Hammant</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> talks about this technique called <a href="https://trunkbaseddevelopment.com/branch-by-abstraction/">branch by abstraction</a> where the effects of an unfinished piece of work is hidden behind an abstraction layer. This abstraction layer is typically implemented by either making the new piece of functionality hidden from the end user or in more sophisticated cases, using <a href="https://martinfowler.com/articles/feature-toggles.html">feature flags</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="refactoring"><a class="anchor" href="#refactoring"></a>Refactoring</h5>
@@ -863,7 +947,7 @@ For more information on logging best practices, please refer to this logging che
 </div>
 </div>
 <div class="sect4">
-<h5 id="deployment"><a class="anchor" href="#deployment"></a>Deployment</h5>
+<h5 id="deployment-automation"><a class="anchor" href="#deployment-automation"></a>Deployment automation</h5>
 <div class="paragraph">
 <p>The intent of applying domain-driven design is to create an ecosystem of loosely coupled components&#8201;&#8212;&#8201;so that each of these components can evolve independently of each other. This includes how these components are deployed to production. At a high level, we have at least three styles of deployment:</p>
 </div>
@@ -1156,11 +1240,26 @@ Everything fails all the time.
 <div class="footnote" id="_footnotedef_9">
 <a href="#_footnoteref_9">9</a>. <a href="https://www.devops-research.com/research.html" class="bare">https://www.devops-research.com/research.html</a>
 </div>
+<div class="footnote" id="_footnotedef_10">
+<a href="#_footnoteref_10">10</a>. <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow" class="bare">https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow</a>
+</div>
+<div class="footnote" id="_footnotedef_11">
+<a href="#_footnoteref_11">11</a>. <a href="https://www.gocd.org/2017/05/16/its-not-CI-its-CI-theatre.html" class="bare">https://www.gocd.org/2017/05/16/its-not-CI-its-CI-theatre.html</a>
+</div>
+<div class="footnote" id="_footnotedef_12">
+<a href="#_footnoteref_12">12</a>. <a href="https://services.google.com/fh/files/misc/state-of-devops-2021.pdf#page=27" class="bare">https://services.google.com/fh/files/misc/state-of-devops-2021.pdf#page=27</a>
+</div>
+<div class="footnote" id="_footnotedef_13">
+<a href="#_footnoteref_13">13</a>. <a href="https://paulhammant.com/" class="bare">https://paulhammant.com/</a>
+</div>
+<div class="footnote" id="_footnotedef_14">
+<a href="#_footnoteref_14">14</a>. <a href="https://martinfowler.com/articles/feature-toggles.html" class="bare">https://martinfowler.com/articles/feature-toggles.html</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-05 23:47:16 UTC
+Last updated 2022-06-11 14:59:59 UTC
 </div>
 </div>
 </body>
