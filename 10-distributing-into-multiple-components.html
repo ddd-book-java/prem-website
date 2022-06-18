@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Distributing into remote components</title>
+<title>Decomposing the monolith: Part 1</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#distributing-into-remote-components">Distributing into remote components</a>
+<li><a href="#decomposing-the-monolith-part-1">Decomposing the monolith: Part 1</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a></li>
 <li><a href="#decomposing-our-monolith">Decomposing our monolith</a>
@@ -461,7 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1 text-justify">
-<h2 id="distributing-into-remote-components"><a class="anchor" href="#distributing-into-remote-components"></a>Distributing into remote components</h2>
+<h2 id="decomposing-the-monolith-part-1"><a class="anchor" href="#decomposing-the-monolith-part-1"></a>Decomposing the monolith: Part 1</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -475,10 +475,10 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 <p>Thus far, we have a working application for <em>LC Application Processing</em>, which is bundled along with other components as a single package. Although, we have discussed the idea of subdomains and bounded contexts, the separation between these components is logical, rather than physical. Furthermore, we have focused primarily on the <em>LC Application Processing</em> aspect of the overall solution.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter, we will look at extracting the <em>LC Application Processing</em> bounded context into components that are physically disparate, and hence enable us to deploy them independently of the rest of the solution. We will discuss various options available to us, the rationale for choosing a given option, along with the implications that we will need to be cognizant of.</p>
+<p>In this chapter, we will look at extracting the <em>LC Application Processing</em> bounded context into a component that is physically disparate, and hence enable us to deploy it independently of the rest of the solution. We will discuss various options available to us, the rationale for choosing a given option, along with the implications that we will need to be cognizant of.</p>
 </div>
 <div class="paragraph">
-<p>By the end of this chapter, you will have learned what it takes to design well-factored APIs&#8201;&#8212;&#8201;both remote procedure call and event-based. For event-based APIs, you will gain an understanding of the various guarantees that may be needed to create robust solutions. Finally, you will also learn how to manage consistency when distributing data stores.</p>
+<p>By the end of this chapter, you will have learned what it takes to design well-factored APIs&#8201;&#8212;&#8201;both remote procedure call and event-based. For event-based APIs, you will gain an understanding of the various guarantees that may be needed to create robust solutions. Finally, you will also learn how to manage consistency when using multiple data stores.</p>
 </div>
 <div class="sect2">
 <h3 id="continuing-our-design-journey"><a class="anchor" href="#continuing-our-design-journey"></a>Continuing our design journey</h3>
@@ -557,9 +557,9 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
     <span style="color:#088;font-weight:bold">private</span> <span style="color:#088;font-weight:bold">final</span> CommandGateway commandGateway;
 
     <span style="color:#088;font-weight:bold">public</span> BackendService(QueryGateway queryGateway,
-                          CommandGateway gateway) {
+                          CommandGateway commandGateway) {
         <span style="color:#950">this</span>.queryGateway = queryGateway;
-        <span style="color:#950">this</span>.commandGateway = gateway;
+        <span style="color:#950">this</span>.commandGateway = commandGateway;
     }
 
     <span style="color:#088;font-weight:bold">public</span> LCApplicationId startNewLC(ApplicantId applicantId, <span style="color:#0a8;font-weight:bold">String</span> clientReference) {
@@ -588,12 +588,12 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 <div class="title">Figure 2. Remote interaction with the frontend introduced</div>
 </div>
 <div class="paragraph">
-<p>When working with in-process interactions, we are simply invoking methods on objects within the confines of the same process. However, when we switch to using out-of-process calls, we have quite a few considerations. These days when working with remote APIs, we have several popular choices in the form of JSON-based web services, GraphQL, gRPC, etc. While it is possible to make use of a completely custom format to facilitate the communication, DDD advocates the use of the <a href="#_open_host_service_ohs">open host service</a> pattern using a published language that we covered in Chapter 9. Even with the open host service style of communication, there are a few considerations, some of which we discuss in the following subsections:</p>
+<p>When working with in-process interactions, we are simply invoking methods on objects within the confines of the same process. However, when we switch to using out-of-process calls, we have quite a few considerations. These days when working with remote APIs, we have several popular choices in the form of JSON-based web services, GraphQL, gRPC, etc. While it is possible to make use of a completely custom format to facilitate the communication, DDD advocates the use of the <a href="#_open_host_service_ohs">open host service</a> pattern using a published language that we covered in <em>Chapter 9, Integrating with external systems</em>. Even with the open host service style of communication, there are a few considerations, some of which we discuss in the following subsections:</p>
 </div>
 <div class="sect4">
 <h5 id="protocol-options"><a class="anchor" href="#protocol-options"></a>Protocol options</h5>
 <div class="paragraph">
-<p>There are several options available to us when exposing remote APIs. These days using a JSON-based API (often labeled as REST) seems to be quite popular. However, this isn&#8217;t the only option available to us. In a resource-based approach, the first step is to identify a resource (noun) and then map the interactions (verbs) associated with the resource as a next step. In an action-based approach, the focus is on the actions to be performed. Arguably, REST takes a resource-based approach, whereas graphQL, gRPC, SOAP, etc. seem to be action-based. Let&#8217;s take an example of an API where we want to submit an LC. In a RESTful world, this may look something like this:</p>
+<p>There are several options available to us when exposing remote APIs. These days using a JSON-based API (often labeled as REST) seems to be quite popular. However, this isn&#8217;t the only option available to us. In a resource-based approach, the first step is to identify a resource (noun) and then map the interactions (verbs) associated with the resource as a next step. In an action-based approach, the focus is on the actions to be performed. Arguably, REST takes a resource-based approach, whereas graphQL, gRPC, SOAP, etc. seem to be action-based. Let&#8217;s take an example of an API where we want to start a new LC application. In a RESTful world, this may look something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -605,7 +605,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 5
 </pre></td>
   <td class="code"><pre># Start a new LC application
-curl POST /lc-applications/start \
+curl POST /lc-applications/start-new \
         -d '{&quot;applicant-id&quot;: &quot;8ed2d2fe&quot;, \
              &quot;clientReference&quot;: &quot;Test LC&quot;}' \
         -H 'content-type:application/vnd.lc-application.v2+json'</pre></td>
@@ -635,7 +635,7 @@ curl POST /lc-applications/start \
 </div>
 </div>
 <div class="paragraph">
-<p>In our experience, designing APIs using REST does result in some form of dilution when attempting to mirror the language of the domain&#8201;&#8212;&#8201;because the focus is first and foremost on resources. Purists will be quick to point out that the example above is not RESTful because there is no resource named <code>start</code>. Our approach is to place more importance to remaining true to the ubiquitous language as opposed to being dogmatic about adherence to technical purity.</p>
+<p>In our experience, designing APIs using REST does result in some form of dilution when attempting to mirror the language of the domain&#8201;&#8212;&#8201;because the focus is first and foremost on resources. Purists will be quick to point out that the example above is not RESTful because there is no resource named <code>start-new</code> and to leave the URL to simply include the name of the resource (use <code>/lc-applications</code> instead of <code>/lc-applications/start-new</code>). Our approach is to place more importance to remaining true to the ubiquitous language as opposed to being dogmatic about adherence to technical purity.</p>
 </div>
 </div>
 <div class="sect4">
@@ -659,7 +659,7 @@ curl POST /lc-applications/start \
 <p>We recognize that there are several options when exposing web-based APIs, claims of using a REST (Representation State Transfer) approach seem quite common these days. REST was coined by Roy Fielding as part of his doctoral dissertation. The idea of what constitutes REST has been a matter of debate and arguably remains ambiguous even today. Leonard Richardson introduced the notion of a maturity model for HTTP-based REST APIs that somewhat helped provide some clarity. The model describes broad conformance to REST in three levels, with each level being more mature than the preceding one:</p>
 </div>
 <div class="olist arabic">
-<ol class="arabic">
+<ol class="arabic" start="0">
 <li>
 <p><strong>Adhoc</strong>: Where APIs are designed without the use of any perceptible structure.</p>
 </li>
@@ -675,7 +675,7 @@ curl POST /lc-applications/start \
 </ol>
 </div>
 <div class="paragraph">
-<p>Most web service based solutions that claim to be RESTful seem to stop at level 2. Roy Fielding, the inventor or REST seems to claim that <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">REST APIs must be hypertext-driven</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>. In our opinion, the use of hypertext controls in APIs allows them to become self-documenting and thereby promotes the use of the ubiquitous language more explicitly. More importantly, it also indicates what operations are applicable for a given resource at that time in its lifecycle. For example, let&#8217;s look at a sample response where all pending LC applications are listed:</p>
+<p>In our experience, most web service based solutions that claim to be RESTful seem to stop at level 2. Roy Fielding, the inventor or REST seems to claim that <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">REST APIs must be hypertext-driven</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>. In our opinion, the use of hypertext controls in APIs allows them to become self-documenting and thereby promotes the use of the ubiquitous language more explicitly. More importantly, it also indicates what operations are applicable for a given resource at that time in its lifecycle. For example, let&#8217;s look at a sample response where all pending LC applications are listed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -911,7 +911,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="olist arabic">
 <ol class="arabic" start="3">
 <li>
-<p><strong>Distributed transactions</strong>: Another approach is to make use of distributed transactions and <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html">two-phase commit</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>. Typically, this functionality is implemented using pessimistic locking on the underlying resource managers (databases) and may present scaling challenges in highly concurrent environments.</p>
+<p><strong>Distributed transactions</strong>: Another approach is to make use of distributed transactions. A distributed transaction is a set of operations on data that is performed across two or more resource managers (usually databases) using techniques like <a href="https://martinfowler.com/articles/patterns-of-distributed-systems/two-phase-commit.html">two-phase commit</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>. Typically, this functionality is implemented using pessimistic locking on the underlying resource managers (databases) and may present scaling challenges in highly concurrent environments.</p>
 </li>
 <li>
 <p><strong>Transactional outbox</strong>: All the preceding methods are not completely foolproof in the sense that there still exists a window of opportunity where the database and the event bus can become inconsistent (this is true even with two-phase commits). One way to circumvent this problem is by completely eliminating the dual write problem. In this solution, the command processor writes to its database and the intended event to an <em>outbox</em> table in a local transaction. A separate poller component polls the outbox table and writes to the event bus. Polling can be computationally intensive and may again lead back to the dual write problem because the poller has to keep track of the last written event. This may be avoided by making event processing idempotent on the consumer so that processing duplicate events do not cause issues, especially in extremely high concurrency and volume scenarios. Another way to mitigate this issue is to use a <a href="https://en.wikipedia.org/wiki/Change_data_capture">change data capture</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> (CDC) tool (such as <a href="https://debezium.io/">Debezium</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup>) and <a href="https://en.wikipedia.org/wiki/Oracle_LogMiner">Oracle LogMiner</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup>. Most modern databases ship with tools to make this easier and may be worth exploring. Here is one way to implement this using the <em>transactional outbox pattern</em> as shown here:</p>
@@ -1143,7 +1143,7 @@ The spring framework provides support for this style of behavior through the <co
 <p><strong>Test</strong> to make sure that the data has migrated correctly.</p>
 </li>
 <li>
-<p><strong>Minimize downtime</strong> by understanding and agreeing on <strong>SLAs</strong> such as RTO (Recovery Time Objective) and RPO (Recovery Point Objective).</p>
+<p><strong>Minimize downtime</strong> by understanding and agreeing on <strong>SLAs</strong> (Service Level Agreements) such as <strong>RTO</strong> (Recovery Time Objective) and <strong>RPO</strong> (Recovery Point Objective).</p>
 </li>
 </ul>
 </div>
@@ -1168,7 +1168,7 @@ The spring framework provides support for this style of behavior through the <co
 <div class="sect2">
 <h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
 <div class="paragraph">
-<p>In this chapter, we learnt how we can extract a bounded context from an existing monolith, although one could argue that this was from a reasonably well-structured one. We looked at the challenges involved in decomposing the monolith from various interaction points such as the frontend, event exchanges and the database. You should have an understanding of what it takes to go from in-process event-driven application to a distributed one.</p>
+<p>In this chapter, we learnt how we can extract a bounded context from an existing monolith, although one could argue that this was from a reasonably well-structured one. We looked at the challenges involved in decomposing the monolith from various interaction points such as the frontend, event exchanges and the database. You should have an understanding of what it takes to go from in-process event-driven application to an out-of-process one.</p>
 </div>
 <div class="paragraph">
 <p>In the next chapter, we will look at how to extract pieces out of a monolith that may not be as well-structured, possibly very close to the dreaded big ball of mud.</p>
@@ -1210,7 +1210,7 @@ The spring framework provides support for this style of behavior through the <co
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-18 10:46:47 UTC
+Last updated 2022-06-18 11:21:17 UTC
 </div>
 </div>
 </body>
