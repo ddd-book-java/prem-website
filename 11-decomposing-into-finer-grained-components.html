@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Decomposing into Finer Grained Components</title>
+<title>Decomposing the monolith: Part 2</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#decomposing-into-finer-grained-components">Decomposing into Finer Grained Components</a>
+<li><a href="#decomposing-the-monolith-part-2">Decomposing the monolith: Part 2</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey">Continuing our design journey</a>
 <ul class="sectlevel3">
@@ -452,13 +452,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#distributing-individual-query-components">Distributing individual query components</a></li>
 </ul>
 </li>
-<li><a href="#even-more-fine-grained-distribution">Even more fine-grained distribution</a>
+<li><a href="#even-more-fine-grained-decomposition">Even more fine-grained decomposition</a>
 <ul class="sectlevel3">
 <li><a href="#effects-on-the-domain-model">Effects on the domain model</a></li>
 </ul>
 </li>
 <li><a href="#decomposing-the-frontend">Decomposing the frontend</a></li>
 <li><a href="#_where_to_draw_the_line">Where to draw the line?</a></li>
+<li><a href="#team-organization">Team organization</a></li>
 <li><a href="#summary">Summary</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
@@ -468,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1 text-justify">
-<h2 id="decomposing-into-finer-grained-components"><a class="anchor" href="#decomposing-into-finer-grained-components"></a>Decomposing into Finer Grained Components</h2>
+<h2 id="decomposing-the-monolith-part-2"><a class="anchor" href="#decomposing-the-monolith-part-2"></a>Decomposing the monolith: Part 2</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the previous chapter, we decomposed the <em>LC Application Processing</em> functionality out of the monolith. In this chapter, we will further decompose these components into even more fine-grained components. In addition, we will examine if and when such a decomposition is justified.</p>
@@ -554,12 +555,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Figure 5. Queries split into individual components.</div>
 </div>
 <div class="paragraph">
-<p>Owning domains should strive to create query APIs that exhibit the characteristics of a good <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">domain data product</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>.</p>
+<p>Owning domains should strive to create query APIs that exhibit the characteristics of a good domain data product. Some of these characteristics include being discoverable, trustworthy, valuable on its own, self-describing, among others. For more information, please refer to this article on moving from monolithic data lake to a distributed data mesh. Specifically, the section on  <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">domain data as a product</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> is relevant in this context.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="even-more-fine-grained-distribution"><a class="anchor" href="#even-more-fine-grained-distribution"></a>Even more fine-grained distribution</h3>
+<h3 id="even-more-fine-grained-decomposition"><a class="anchor" href="#even-more-fine-grained-decomposition"></a>Even more fine-grained decomposition</h3>
 <div class="paragraph">
 <p>At this stage, is there any further decomposition that is required  and feasible? These days, whether rightfully or otherwise, the serverless architecture (specifically, <em>Functions-As-A-Service</em>) is arguably becoming quite the rage. As we pointed in <em>Chapter 2, Where and How Does DDD Fit?</em>, this means that we may be able to decompose our command side in a manner that each command becomes its own independently deployable unit (hence a bounded context). In other words, the <code>LCApplicationSubmitCommand</code> and the <code>LCApplicationCancelCommand</code> can be deployed independently.</p>
 </div>
@@ -575,7 +576,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>Scalability needs</strong>: Scaling needs can differ wildly for various commands in the system. For example, <em>submit</em> may need to scale a lot more than <em>cancel</em>. But being coupled will force us to treat them as equals, which can be inefficient.</p>
 </li>
 <li>
-<p><strong>Cost attribution</strong>: Having fine-grained components allows us to more accurately measure the amount of effort and the resulting ROI dedicated to each individual command. This can make it easier to focus our efforts on the most critical functionality (the "core" of the core) and minimize waste.</p>
+<p><strong>Cost attribution</strong>: Having fine-grained components allows us to more accurately measure the amount of effort and the resulting return on investment dedicated to each individual command. This can make it easier to focus our efforts on the most critical functionality (the "core" of the core) and minimize waste.</p>
 </li>
 </ul>
 </div>
@@ -640,13 +641,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>End-to-end testing complexity</strong>: While this is true for a lot of distributed architectures, this problem is exacerbated in the case of user experiences because of it being a visual medium. Especially if real components come together close to the end of the cycle, it may become harder to visualize the end-to-end flow until almost all the visual elements are in place.</p>
+<p><strong>End-to-end testing complexity</strong>: While this is true for a lot of distributed architectures, this problem is exacerbated in the case of user experiences because of it being a visual medium. Especially if real components come together close to the end of the cycle, it may become harder to visualize the end-to-end flow until almost all the visual elements are in place. This may also be in conflict with how end users interact with the system as a whole. This may make end-to-end testing complex because it needs components from multiple teams to come together possibly close to the end of the cycle.</p>
 </li>
 <li>
 <p><strong>Deployment complexity</strong>: In the example above, we have split the application along functional boundaries. However, they have to come together as a single artifact at the time of deployment (this is especially true in the case of mobile applications). This can add quite a bit of deployment complexity when the complete application is assembled. It is important to be cognizant of the relationship patterns between teams (covered in <em>Chapter 9, Integrating with External Systems</em>) to work through kinks.</p>
 </li>
 <li>
-<p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome.This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance.For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser.In addition to being wasteful, this may also result in unpredictable, hard to diagnose errors and eventually, poor customer experience.</p>
+<p><strong>Dependency management</strong>: Given that teams may need to ultimately deploy the application as a unit, managing dependencies between individual modules may become cumbersome.This may manifest itself in the form of conflicting dependency versions, leading to unpredictable and inefficient runtime behaviour and performance.For example, two teams may use the different versions of the same frontend library and that may add to the overall payload that gets downloaded to the browser. In addition to being wasteful, this may also result in unpredictable, hard to diagnose errors and eventually, poor customer experience.</p>
+</li>
+<li>
+<p><strong>Inconsistent user experiences</strong>: Although we may have split the application in a seemingly logical manner, if we don&#8217;t do it in a manner that is transparent to the end users, it may result in a confusing and likely frustrating experience. To mitigate this, there may be a need to build common assets, widgets, etc. which may further add to the overall complexity and coordination required when shipping out the end product.</p>
 </li>
 </ul>
 </div>
@@ -660,35 +664,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Figure 10. Commands and query frontends decomposed into individual functions.</div>
 </div>
 <div class="paragraph">
-<p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components.Just because it is possible to do it, doesn&#8217;t mean that we should.Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
+<p>As we have seen, there are multiple ways to approach decomposing an application into finer-grained components. Just because it is possible to do it, doesn&#8217;t mean that we should. Let&#8217;s look at when decomposition starts to become too expensive to sustain productivity.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_where_to_draw_the_line"><a class="anchor" href="#_where_to_draw_the_line"></a>Where to draw the line?</h3>
 <div class="paragraph">
-<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity.Does that mean we should decompose our systems into as fine-grained a granularity as possible?On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity.Hence, decomposing a system into well-factored, collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science.There is no right or wrong answer here.In general, if things feel and become painful, you most likely got it more wrong than right.Here are some non-technical heuristics that might help guide this process:</p>
+<p>In general, the smaller the size of our bounded contexts, the easier it becomes to manage complexity. Does that mean we should decompose our systems into as fine-grained a granularity as possible? On the other hand, having extremely fine-grained components can increase coupling among them to an extent where it becomes very hard to manage operational complexity. Hence, decomposing a system into well-factored, collaborating components can be a bit tricky, seeming to work more like an art, rather than an exact science. There is no right or wrong answer here. In general, if things feel and become painful, you most likely got it more wrong than right. Here are some non-technical heuristics that might help guide this process:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Existing organization boundaries</strong>: Look to align along current organization structures.Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
+<p><strong>Existing organization boundaries</strong>: Look to align along current organization structures. Identify which applications your business unit/department/team already owns and assign responsibilities in a manner that causes minimal disruption.</p>
 </li>
 <li>
-<p><strong>End-user roles and responsibilities</strong>: What work do your end users carry out?What enables them to do their work with the least friction possible?If too many people need to get involved to get a piece of work done, that may be a sign that the current decomposition may be suboptimal.On the other hand, if it is hard to assign a said task to a specific user, it may again be a sign of incorrect decomposition.</p>
+<p><strong>End-user roles and responsibilities</strong>: What work do your end users carry out? What enables them to do their work with the least friction possible? If too many people need to get involved to get a piece of work done, that may be a sign that the current decomposition may be suboptimal. On the other hand, if it is hard to assign a said task to a specific user, it may again be a sign of incorrect decomposition.</p>
 </li>
 <li>
-<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms (the <em>ubiquitous language</em>).Does someone call something that is/feels the same in the physical world by different names?For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context.The point at which the vernacular changes may be a potential candidate to split functionality.</p>
+<p><strong>Change in vernacular</strong>: Look for subtle changes in the usage of common terms (the <em>ubiquitous language</em>).Does someone call something that is/feels the same in the physical world by different names? For example, a credit card may be called "plastic", "payment instrument", "account" by different people or the same people in a different context. The point at which the vernacular changes may be a potential candidate to split functionality.</p>
 </li>
 <li>
-<p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically?How are they segregated physically?This might provide some inspiration.</p>
+<p><strong>Existing (modular/monolithic/distributed) applications</strong>: How are your current applications segregated logically? How are they segregated physically? This might provide some inspiration in terms of how to proceed when looking to either decompose or aggregate an existing suboptimal solution.</p>
 </li>
 </ul>
 </div>
+</div>
+<div class="sect2">
+<h3 id="team-organization"><a class="anchor" href="#team-organization"></a>Team organization</h3>
 <div class="paragraph">
-<p>All of the preceeding techniques draw inspiration from existing constructs.But what if one or more of the above are wrong/cumbersome/suboptimal?In such a case, our work as developers/architects is a bit more involved.</p>
+<p>All the preceding techniques draw inspiration from existing constructs. But what if one or more of the above are wrong/cumbersome/suboptimal? In such a case, our work as developers/architects is a bit more involved.</p>
 </div>
 <div class="paragraph">
-<p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction (in other words, apply what is called the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong><em>inverse Conway maneuver</em></strong></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>).</p>
+<p>It is also pertinent to note that it is not uncommon to get domain boundaries wrong. Coming up with an initial breakdown that seems to make more sense and applying a series of <em>what if</em> questions to assess suitability can help. If the reasoning is able to stand up to scrutiny by domain experts, architects and other stakeholders, you might be in a good place. If you do choose to go this route of breaking down applications, it may be prudent to adjust existing organization structures to match your proposed architecture. This will help reduce friction caused by Conway&#8217;s Law which states that organizations are constrained to produce designs that are copies of current organization structures. Adjusting the organization structure to match proposed architecture changes is called the <a href="https://www.thoughtworks.com/en-us/radar/techniques/inverse-conway-maneuver"><strong><em>inverse Conway maneuver</em></strong></a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.</p>
 </div>
 <div class="paragraph">
 <p>This style of team organization can be quite complex. The people at Spotify popularized the idea of a multidisciplinary, mostly autonomous team structure aligning closely along functional boundaries (called <em>squads</em>) as shown here:</p>
@@ -700,7 +707,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Figure 11. The "Spotify" model of team organization.</div>
 </div>
 <div class="paragraph">
-<p>The team structure has other components like chapters, tribes, guilds, etc. which enables better flow of change, clarifying team responsibilities, promoting better intra and inter-team collaboration, among others. You can find out more details about it in this <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">blog post</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>  However, there is no one-size-fits-all, and you will need to account for your own organizational structures and realities before looking to adopt this style. To find out more about the <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY">limitations of the <em>Spotify model</em></a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> and how you can arrive at a team organization that better suits your own requirements, you may want to take a look at the work done by Matthew Skelton and Manuel Pais in their popular book <a href="https://teamtopologies.com/book"><em>Team Topologies</em></a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>. On a related note, it may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> by Sriram Narayan where he talks about outcome-oriented versus activity-oriented teams.</p>
+<p>The team structure has additional constructs like chapters, tribes, guilds, etc. which enables better flow of change, clarifying team responsibilities, promoting better intra and inter-team collaboration, among others. You can find out more details about it in this <a href="https://blog.crisp.se/wp-content/uploads/2012/11/SpotifyScaling.pdf">blog post</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>  However, there is no one-size-fits-all, and you will need to account for your own organizational structures and realities before looking to adopt this style. To find out more about the <a href="https://www.youtube.com/watch?v=4GK1NDTWbkY">limitations of the <em>Spotify model</em></a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> and how you can arrive at a team organization that better suits your own requirements, you may want to take a look at the work done by Matthew Skelton and Manuel Pais in their popular book <a href="https://teamtopologies.com/book"><em>Team Topologies</em></a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>. On a related note, it may also be helpful to look at the chapter on Team Design from the book <a href="https://www.amazon.com/Agile-Organization-Design-Transformation-Continuous/dp/0133903354">Agile IT Organization Design</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> by Sriram Narayan where he talks about outcome-oriented versus activity-oriented teams.</p>
 </div>
 <div class="paragraph">
 <p>Despite all our due diligence and noble intentions, it is still possible to get these boundaries wrong. Or a change in business priorities or competitor offerings may render decisions that appeared perfectly valid at the time to become incorrect. Instead of looking to arrive at the perfect decomposition, it might be prudent to embrace change and invest in building designs that are flexible while being prepared to evolve and refactor the architecture iteratively. The book on <a href="https://evolutionaryarchitecture.com/">building evolutionary architectures</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> has some great advice on how to do precisely that.</p>
@@ -729,7 +736,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>In this chapter, we learnt how an already fine-grained application can be further decomposed to the level of individual functions, each of which may be deployed as its own independent unit. We looked at how we stand to benefit from keeping end-to-end functionality (thin vertical slice) as a cohesive unit which includes components from the frontend experience, all the way to the backend.</p>
 </div>
 <div class="paragraph">
-<p>Further, we looked at how Conway&#8217;s law can play an important role in the evolution of our architecture. We also looked at how we may be able to course correct cumbersome organizational structures by applying the inverse Conway maneuver. Finally, we briefly touched on popular methods of team organization that you can take inspiration from when designing your own organization structures.</p>
+<p>Further, we looked at how team organization can play an important role in the evolution of our architecture. We also looked at how we may be able to course correct cumbersome organizational structures by applying the inverse Conway maneuver. Finally, we briefly touched on popular methods of team organization that you can take inspiration from when designing your own organization structures.</p>
 </div>
 <div class="paragraph">
 <p>In the next chapter, we will look at a variety of non-functional characteristics that play a significant role in how we decompose and distribute applications.</p>
@@ -840,7 +847,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-18 11:21:17 UTC
+Last updated 2022-06-18 12:36:01 UTC
 </div>
 </div>
 </body>
