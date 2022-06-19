@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Jun 18 2022 12:36 PM UTC</span>
+<span id="revdate">Jun 19 2022 11:30 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -10849,6 +10849,9 @@ The spring framework provides support for this style of behavior through the <co
 <div class="title">Figure 1- 111. <code>AutoApprovalSaga</code> extracted into an independent component.</div>
 </div>
 <div class="paragraph">
+<p>Saga components can be characterized as a collection of stateful event listeners listening to events from more than one aggregate that may issue commands to more than aggregate. We have seen earlier that we form bounded contexts along aggregate boundaries. Given that sagas tend to require interacting with more than aggregate, they may not fall within the confines of those bounded contexts. In a lot of ways, sagas are components that can be viewed as their own bounded contexts. This makes it natural to have sagas work as standalone components that exist distinctly (both from a logical and physical perspective) from other parts of the solution.</p>
+</div>
+<div class="paragraph">
 <p>As you can see, commands and queries within the <em>LC Application Processing</em> component  are continuing to use a common datastore. Let’s look at what is involved in segregating them into their own and further to use their own datastore.</p>
 </div>
 </div>
@@ -12128,7 +12131,7 @@ Everything fails all the time.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-18 12:36:01 UTC
+Last updated 2022-06-19 11:29:58 UTC
 </div>
 </div>
 </body>
