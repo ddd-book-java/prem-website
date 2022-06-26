@@ -452,7 +452,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#monitoring-and-metrics">Monitoring and metrics</a></li>
 <li><a href="#alerting">Alerting</a></li>
 <li><a href="#manual-recovery">Manual recovery</a></li>
-<li><a href="#_invocation_style">Invocation style</a></li>
 </ul>
 </li>
 <li><a href="#proactive-measures">Proactive measures</a>
@@ -833,10 +832,6 @@ For more information on logging best practices, please refer to this logging che
 <h4 id="manual-recovery"><a class="anchor" href="#manual-recovery"></a>Manual recovery</h4>
 
 </div>
-<div class="sect3">
-<h4 id="_invocation_style"><a class="anchor" href="#_invocation_style"></a>Invocation style</h4>
-
-</div>
 </div>
 <div class="sect2">
 <h3 id="proactive-measures"><a class="anchor" href="#proactive-measures"></a>Proactive measures</h3>
@@ -906,19 +901,54 @@ For more information on logging best practices, please refer to this logging che
 <p>An alternative to branch-based development is <strong><em>trunk-based development</em></strong> where each developer works in incremental batches and merges that work into the main (also called trunk) branch at least once (and potentially several times) a day. The State of DevOps Research and Assessment (DORA) team have published <a href="https://services.google.com/fh/files/misc/state-of-devops-2021.pdf#page=27">research</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> that shows that elite performers practice trunk-based development to maximize the effectiveness of their CI practice and by extension their ability to continuously enhance their domain models and keep up with changing business needs.</p>
 </div>
 <div class="paragraph">
-<p>In an ideal world, every commit to trunk would constitute finished, production-ready work. But it is also fairly normal for certain pieces of work to take longer to complete. This may make it appear that there is a need to forsake trunk-based development and resort to branch-based development. However, there is no need to compromise the continuous integration flow to accommodate for such eventualities. <a href="https://paulhammant.com/">Paul Hammant</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> talks about this technique called <a href="https://trunkbaseddevelopment.com/branch-by-abstraction/">branch by abstraction</a> where the effects of an unfinished piece of work is hidden behind an abstraction layer. This abstraction layer is typically implemented by either making the new piece of functionality hidden from the end user or in more sophisticated cases, using <a href="https://martinfowler.com/articles/feature-toggles.html">feature flags</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup>.</p>
+<p>In an ideal world, every commit to trunk would constitute finished, production-ready work. But it is also fairly normal for certain pieces of work to take longer to complete. This may make it appear that there is a need to forsake trunk-based development and resort to branch-based development. However, there is no need to compromise the continuous integration flow to accommodate for such eventualities. <a href="https://paulhammant.com/">Paul Hammant</a><sup class="footnote">[<a id="_footnoteref_13" class="footnote" href="#_footnotedef_13" title="View footnote.">13</a>]</sup> talks about this technique called <a href="https://trunkbaseddevelopment.com/branch-by-abstraction/">branch by abstraction</a> where the effects of unfinished pieces of work are hidden behind an abstraction layer. This abstraction layer is typically implemented by either making the new piece of functionality hidden from the end user or in more sophisticated cases, using <a href="https://martinfowler.com/articles/feature-toggles.html">feature flags</a><sup class="footnote">[<a id="_footnoteref_14" class="footnote" href="#_footnotedef_14" title="View footnote.">14</a>]</sup>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="continuous-testing"><a class="anchor" href="#continuous-testing"></a>Continuous testing</h5>
+<div class="paragraph">
+<p>In an ideal world, continuous integration will enable us to adopt continuous testing, which  provides us with constant and early feedback. This is essential because our bounded contexts and the resulting domain models are in a constant state of evolution. Without the bedrock of a stable suite of tests, it can become very hard to sustain a reliable process. Approaches such as the test pyramid, testing trophy, honeycomb, etc. are acknowledged as reasonable ways to implement a sound continuous testing strategy. All of these approaches are based on the premise that a large number of cheap (computationally and cognitively) unit tests form the foundation of the strategy, with the number of tests in other categories (service, UI, manual, etc.) reducing as we move up the chain.</p>
+</div>
+<div class="paragraph">
+<p>However, we are in this new world of fine-grained components that work by communicating with each other. Hence, there is a bigger need to verify interactions at the periphery in a robust manner. Unit tests alone that rely mostly on mocks and stubs may not suffice because the behavior of collaborators may change inadvertently. This may lead to a situation where unit tests may run successfully, but the overall functionality may be broken. This then causes teams to lose faith in the unit testing practice as a whole and resort to using more end-to-end functional tests. However, these style of tests are <a href="https://www.youtube.com/watch?v=VDfX44fZoMc">extremely expensive</a><sup class="footnote">[<a id="_footnoteref_15" class="footnote" href="#_footnotedef_15" title="View footnote.">15</a>]</sup> to set up and maintain, especially when we are looking to automate them. Consequently, most teams ignore the results of a majority of automated testing methods and rely almost exclusively on manual testing to verify anything but the most trivial functionality.</p>
+</div>
+<div class="paragraph">
+<p>Any manual testing requires most if not all functionality to be ready before any meaningful testing can commence. Furthermore, It is time-consuming, error-prone and usually not repeatable. Consequently, almost all testing can be carried out only when it is very close to the end, rendering the idea of continuous testing to become a pipe dream. Despite all its limitations, teams continue to rely on manual testing because it seems to provide the most psychological safety in comparison to its automated counterparts.</p>
+</div>
+<div class="paragraph">
+<p>In an ideal world, what we need is the speed of unit tests and the confidence provided by manual testing. We will look at a few specific forms of testing that can help restore the balance.</p>
+</div>
+<div class="sect5">
+<h6 id="contract-testing"><a class="anchor" href="#contract-testing"></a>Contract testing</h6>
+<div class="paragraph">
+<p>The limitation of unit testing is that the assumptions made in mocks/stubs can be invalid or become stale as producers make changes to the contract. On the other hand, manual tests suffer from being slow and wasteful. Contract tests can provide a means to bridge the gap by providing a happy medium where the producer and consumer share an executable contract that both producer and consumer can rely on as functionality changes/evolves. At a high level this works in a manner depicted here:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/contract-testing.png" alt="contract testing" width="75%">
+</div>
+<div class="title">Figure 3. Contract testing: high level flow</div>
+</div>
+<div class="paragraph">
+<p>This allows the consumers and the producers to work collaboratively, and get feedback a lot earlier in the cycle. For the consumer, they get to participate in sharing their expectations with the producer and make use of versioned, producer approved stubs for their own testing without having to depend on the producer&#8217;s real system. Likewise, producers gain a deeper understanding of how their services are consumed, setting them free to make bolder changes as long as they remain compatible.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="mutation-testing"><a class="anchor" href="#mutation-testing"></a>Mutation testing</h6>
+
+</div>
+<div class="sect5">
+<h6 id="chaos-testing"><a class="anchor" href="#chaos-testing"></a>Chaos testing</h6>
+
+</div>
+<div class="sect5">
+<h6 id="test-driven-design"><a class="anchor" href="#test-driven-design"></a>Test-driven design</h6>
+
 </div>
 </div>
 <div class="sect4">
 <h5 id="refactoring"><a class="anchor" href="#refactoring"></a>Refactoring</h5>
 
-</div>
-<div class="sect4">
-<h5 id="security"><a class="anchor" href="#security"></a>Security</h5>
-<div class="sect5">
-<h6 id="threat-modeling"><a class="anchor" href="#threat-modeling"></a>Threat modeling</h6>
-
-</div>
 </div>
 <div class="sect4">
 <h5 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h5>
@@ -932,17 +962,6 @@ For more information on logging best practices, please refer to this logging che
 </div>
 <div class="sect5">
 <h6 id="data"><a class="anchor" href="#data"></a>Data</h6>
-
-</div>
-</div>
-<div class="sect4">
-<h5 id="testing"><a class="anchor" href="#testing"></a>Testing</h5>
-<div class="sect5">
-<h6 id="contract-testing"><a class="anchor" href="#contract-testing"></a>Contract testing</h6>
-
-</div>
-<div class="sect5">
-<h6 id="chaos-testing"><a class="anchor" href="#chaos-testing"></a>Chaos testing</h6>
 
 </div>
 </div>
@@ -970,172 +989,19 @@ For more information on logging best practices, please refer to this logging che
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime. This is a fairly common deployment strategy for those applications where a certain amount of downtime is acceptable. This may include non-business critical applications and/or third party packages where we do not have a say in how those applications manage their deployments. In the case of certain monoliths, this may be the only feasible option due to the overall complexity of the system as a whole.</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Pros</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Fairly simple and well understood.</p>
+<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime. This is a fairly common deployment strategy for those applications where a certain amount of downtime is acceptable. This may include non-business critical applications and/or third party packages where we do not have a say in how those applications manage their deployments. In the case of certain monoliths, this may be the only feasible option due to the overall complexity of the system as a whole. This style of deployment typically starts out being fairly simple and well understood and may suffice for non-critical applications. On the flip side, it requires deployment and release to happen in one single tightly coupled step and may involve some amount of downtime.</p>
 </li>
 <li>
-<p>May suffice for non-critical applications.</p>
-</li>
-</ul>
-</div>
+<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version without exposing it to end users. User traffic is switched to the newer version once testing activities are deemed to be successfully completed. It is pertinent to note that live user traffic is directed only to one environment at any given time. This style of deployment enables deployment with (near) zero downtime and also allows decoupling the process of deployment and release. Rollbacks are easier because it simply means redirecting traffic to the older version. On the other hand, it requires double the amount of capacity at least during the time of deployment. This may make it cost prohibitive for monolithic applications.</p>
 </li>
 <li>
-<p><strong>Cons</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Requires deployment and release to happen in one single tightly coupled step.</p>
+<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback typically means replacing the newer version instances with older ones. This style of deployment also enables zero downtime deployment, while also allowing side by side testing of old and new versions with real users. Rolling deployments can make rollbacks relatively easy by aborting the introduction of instances of the new version and re-introducing the old version and hence can reduce the <em>blast radius</em> of a bad release. Unlike the case with blue-green deployments, here deployment and release cannot be decoupled. Deployment means that the system is released (at least for a subset of users).</p>
 </li>
 <li>
-<p>Requires some amount of downtime.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2% &#8594; 25% &#8594; 75% &#8594; 100% of users). This deployment style enables more fine-grained control of the extent of the release as compared to rolling deployment.</p>
 </li>
 <li>
-<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version without exposing it to end users. User traffic is switched to the newer version once testing activities are deemed to be successfully completed. It is pertinent to note that live user traffic is directed only to one environment at any given time.</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Pros</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Enables deployment with (near) zero downtime.</p>
-</li>
-<li>
-<p>Allows decoupling the process of deployment and release.</p>
-</li>
-<li>
-<p>Rollbacks are easier because it simply means redirecting traffic to the older version.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Cons</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Requires double the amount of capacity at least during the time of deployment. This may make it cost prohibitive for monolithic applications: both single process and distributed.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback typically means replacing the newer version instances with older ones.</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Pros</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Enables zero downtime deployment.</p>
-</li>
-<li>
-<p>Allows side by side testing of old and new versions with real users.</p>
-</li>
-<li>
-<p>Can reduce the <em>blast radius</em> of a bad release.</p>
-</li>
-<li>
-<p>Can make rollbacks relatively easy by aborting instances of the new version and re-introducing the old version.</p>
-</li>
-<li>
-<p>Natively supported by modern infrastructure platforms such as kubernetes.</p>
-</li>
-<li>
-<p>Cheaper than a blue-green deployment.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Cons</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Deployment and release cannot be decoupled. Deployment means that the system is released (at least for a subset of users).</p>
-</li>
-<li>
-<p>Users may experience inconsistencies until all instances are completely upgraded to the new version.</p>
-</li>
-<li>
-<p>Usually requires more mature observability apparatus to be in place because both old and new versions are running at the same time.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2%, 25%, 75%, 100% of users).</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Pros</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Allows more fine-grained control of the extent of the release as compared to rolling deployment.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Cons</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Usually more complex to set up than a simple rolling deployment.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users.</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Pros</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Allows testing more than two combinations at the same time with real users.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Cons</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>A lot more complex to set up, manage, test and verify.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users. It allows testing more than two combinations at the same time with real users.</p>
 </li>
 </ul>
 </div>
@@ -1150,6 +1016,89 @@ For more information on logging best practices, please refer to this logging che
 <div class="sect3">
 <h4 id="tactical-measures"><a class="anchor" href="#tactical-measures"></a>Tactical measures</h4>
 <div class="sect4">
+<h5 id="_invocation_style"><a class="anchor" href="#_invocation_style"></a>Invocation style</h5>
+<div class="paragraph">
+<p>When integrating two bounded contexts that are running in distinct processes, there are two ways to consummate interactions: synchronous and asynchronous.</p>
+</div>
+<div class="sect5">
+<h6 id="synchronous-invocation"><a class="anchor" href="#synchronous-invocation"></a>Synchronous invocation</h6>
+<div class="paragraph">
+<p>The client blocks until the server provides a response. Optionally, implementations can choose to wait for an amount of time for the invoked operation to complete before timing out. An example of such an interaction is a blocking HTTP call made to start new LC application like so:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/asynchronous-invocation.png" alt="asynchronous invocation" width="222" height="278">
+</div>
+<div class="title">Figure 4. Synchronous invocation</div>
+</div>
+<div class="paragraph">
+<p>When the call returns successfully, the client is sure that their request to create a new LC application has worked. If the server is slow to respond, it can result in a performance bottleneck, especially in high scale scenarios. To cope with this, the client and the server may agree on a response time SLO for that interaction. The client can choose to wait for a response from the server for the agreed amount of time after which the client times out the request and considers it a failure. Given that the client blocks on a server response, it is not able to do anything else while it waits, even though it may have the resources to do other things. To deal with this, the client can employ an asynchronous invocation.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="asynchronous-invocation"><a class="anchor" href="#asynchronous-invocation"></a>Asynchronous invocation</h6>
+<div class="paragraph">
+<p>In an asynchronous style of invocation, the client interacts with the server in a manner that frees it to perform other activities. There are a few ways to do this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fire and forget</strong>: The client initiates a request with the server, but does not wait for a response from the server and also does not care about the outcome. Such a style of interaction may suffice for <em>low priority</em> activities such as logging to a remote server, push notifications, etc.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/fire-and-forget-invocation.png" alt="fire and forget invocation" width="229" height="310">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Deferred response</strong>: In some (many?) cases, the client may need to know the outcome of the request they had previously made. If the server supports it, the client can submit a request, just wait for a confirmation that the request was received along with an identifier of the resource to be tracked, and then poll the server to track the status of its original request as shown here:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/deferred-response-invocation.png" alt="deferred response invocation" width="238" height="415">
+</div>
+<div class="title">Figure 5. Deferred response using poll</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Request with callback</strong>: When the client polls for the response, the server may not be finished with processing the original request. This means that the client may need to poll the server more than once to understand the status of the request, which can be wasteful. An alternative is for the server to push a response back to the client when it has finished processing by invoking a callback that the client provided when making the request.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/request-callback-invocation.png" alt="request callback invocation" width="317" height="340">
+</div>
+<div class="title">Figure 6. Deferred response using callback</div>
+</div>
+<div class="paragraph">
+<p>Given that these interactions happen over a network that can be unreliable, clients and servers need to employ a variety of techniques to achieve some semblance of reliability. For example, clients may need to implement support for timeouts, retries, compensating transactions, client-side load balancing etc. Similarly, the server may need to protect itself from errant clients by making use of techniques such as rate limiters, circuit breakers, bulkheads, fallbacks, health endpoints, etc.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Elaborating on the specific techniques mentioned here is out of scope for this text. Books such as Release It and Mastering Non-Functional Requirements cover these patterns in a lot more depth.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In a lot of cases, there is usually a need to employ a combination of several of the above techniques to provide a resilient solution. Just like we discussed in the logging section, mixing these concerns with core business logic can obscure the original intent of the problem. In order to avoid this, it is advisable to apply these patterns in a manner that is peripheral to core business logic. It may also be prudent to consider the use of libraries such as <a href="https://resilience4j.readme.io/">resilience4j</a><sup class="footnote">[<a id="_footnoteref_16" class="footnote" href="#_footnotedef_16" title="View footnote.">16</a>]</sup> or <a href="https://github.com/alibaba/Sentinel">sentinel</a><sup class="footnote">[<a id="_footnoteref_17" class="footnote" href="#_footnotedef_17" title="View footnote.">17</a>]</sup>.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="exception-handling"><a class="anchor" href="#exception-handling"></a>Exception handling</h5>
 <div class="quoteblock">
 <blockquote>
@@ -1159,47 +1108,6 @@ Everything fails all the time.
 &#8212; Werner Vogels<br>
 <cite>CTO -- Amazon Web Services</cite>
 </div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="avoiding-cascading-failures"><a class="anchor" href="#avoiding-cascading-failures"></a>Avoiding cascading failures</h5>
-<div class="ulist">
-<ul>
-<li>
-<p>Retries</p>
-</li>
-<li>
-<p>Timeouts</p>
-</li>
-<li>
-<p>Circuit breakers</p>
-</li>
-<li>
-<p>Bulkheads</p>
-</li>
-<li>
-<p>Rate limiters</p>
-</li>
-<li>
-<p>Graceful degradation</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Which interaction style should we use? While this decision appears to be a simple one, it has quite a few, far-reaching consequences:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If command dispatching itself fails, the <code>CommandGateway#send</code> method will fail with an exception. Given that the CommandGateway is an infrastructure component, this may happen because of technical reasons (like network blips, etc.)</p>
-</li>
-<li>
-<p>If the command handling for the <code>ApproveLCApplicationCommand</code> fails, and we will not know about it because the <code>#send</code> method does not wait for handling to complete. One way to mitigate that problem is to wait for the command to be handled using the <code>CommandGateway#sendAndWait</code> method. However, this variation waits infinitely for the handler to complete&#8201;&#8212;&#8201;which can be a scalability concern.</p>
-</li>
-<li>
-<p>We can choose to only wait for a certain amount of time using a variation of <code>CommandGateway#sendAndWait</code></p>
-</li>
-</ul>
 </div>
 </div>
 <div class="sect4">
@@ -1255,11 +1163,20 @@ Everything fails all the time.
 <div class="footnote" id="_footnotedef_14">
 <a href="#_footnoteref_14">14</a>. <a href="https://martinfowler.com/articles/feature-toggles.html" class="bare">https://martinfowler.com/articles/feature-toggles.html</a>
 </div>
+<div class="footnote" id="_footnotedef_15">
+<a href="#_footnoteref_15">15</a>. <a href="https://www.youtube.com/watch?v=VDfX44fZoMc" class="bare">https://www.youtube.com/watch?v=VDfX44fZoMc</a>
+</div>
+<div class="footnote" id="_footnotedef_16">
+<a href="#_footnoteref_16">16</a>. <a href="https://resilience4j.readme.io/" class="bare">https://resilience4j.readme.io/</a>
+</div>
+<div class="footnote" id="_footnotedef_17">
+<a href="#_footnoteref_17">17</a>. <a href="https://github.com/alibaba/Sentinel" class="bare">https://github.com/alibaba/Sentinel</a>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-06-19 11:29:58 UTC
+Last updated 2022-06-26 13:14:41 UTC
 </div>
 </div>
 </body>
