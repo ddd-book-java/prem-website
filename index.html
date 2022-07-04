@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Jul 04 2022 01:02 PM UTC</span>
+<span id="revdate">Jul 04 2022 01:07 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -456,7 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#preface">Preface</a>
 <ul class="sectlevel2">
 <li><a href="#who-this-book-is-for">Who This Book Is For</a></li>
-<li><a href="#what-you-will-learn">What You Will Learn</a></li>
+<li><a href="#what-this-book-covers">What this book covers</a></li>
 <li><a href="#acknowledgements">Acknowledgements</a></li>
 </ul>
 </li>
@@ -835,9 +835,42 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="what-you-will-learn"><a class="anchor" href="#what-you-will-learn"></a><a class="link" href="#what-you-will-learn">What You Will Learn</a></h3>
+<h3 id="what-this-book-covers"><a class="anchor" href="#what-this-book-covers"></a><a class="link" href="#what-this-book-covers">What this book covers</a></h3>
 <div class="paragraph">
-<p>By the end of this book, you will be able to architect, design and implement robust, modern and loosely coupled distributed architectures employing domain-driven design.</p>
+<p><em><strong>Chapter 1, The rationale for domain-driven design</strong></em>, examines how the practice of Domain-Driven Design provides a set of guidelines and techniques to improve the odds of success in our favor. While Eric Evans wrote his classic book on the subject way back in 2003, we look at how that work is extremely relevant in today&#8217;s times.  We will also introduce the elements of strategic and tactical DDD.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>Chapter 2, Where and how does DDD fit?</strong></em>, examines how DDD compares with several of these architecture styles and how/where it fits in the overall scheme of things when crafting a software solution.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>Chapter 3, Understanding the domain</strong></em>, introduces the sample domain (Letter of Credit processing) at a fictitious KP bank. We also examine how we can get started with strategic design using techniques like business model canvas, impact maps, and Wardley maps.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>Chapter 4, Domain analysis and modeling</strong></em>, continues the analysis and modeling of the sample application by using techniques like domain storytelling and eventstorming to arrive at a shared understanding of the problem and brainstorm ideas to arrive at a solution. We will introduce the idea of</p>
+</div>
+<div class="paragraph">
+<p><em><strong>Chapter 5, Implementing domain logic</strong></em>, implements the command side API for the sample application. We look at how we can employ an event-driven architecture to build loosely coupled components. We will also look at how to implement structural and business validations and persistence options by contrasting between state-stored vs event-sourced aggregates.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 6, Implementing the user interface – task-based</em></strong>, designs the UI for the sample application. We will also express expectations of the user interface to the service implementation.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 7, Implementing queries</em></strong>, dives deeper into how we can construct read optimized representations of the data by listening to domain events. We will also look at persistence options for these read models.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 8, Long-running workflows</em></strong>, looks at implementing both long-running user operations (sagas) and deadlines. We will also look at how we can keep track of the overall flow using log aggregation and distributed tracing. We will round off by looking at when/whether to choose explicit orchestration components of implicit choreography.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 9, Integrating with external systems</em></strong>, looks at integrating with other systems and bounded contexts. We will present the various styles of integration and the implications of choosing each of these.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 10, Decomposing the monolith: Part 1</em></strong>, decomposes the command and the query side of the sample bounded context into distinct components. We will look at the tradeoffs involved when making these choices.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 11, Decomposing the monolith: Part 2</em></strong>, looks at finer-grained decomposition and the tradeoffs involved beyond the technical implications. We will decompose our application into distinct functions and discuss where it might be appropriate to draw the line.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Chapter 12, Beyond functional requirements</em></strong>, looks at factors beyond business requirements that can play a significant role in how applications are decomposed. Specifically, we will examine the effect that cross-functional requirements play when applying DDD.</p>
 </div>
 </div>
 <div class="sect2">
@@ -12222,7 +12255,7 @@ For more information on logging best practices, please refer to this logging che
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-04 13:02:38 UTC
+Last updated 2022-07-04 13:07:13 UTC
 </div>
 </div>
 </body>
