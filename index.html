@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Jul 04 2022 01:07 PM UTC</span>
+<span id="revdate">Jul 06 2022 10:48 AM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -528,7 +528,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the real world</a>
+<li><a href="#part-2-real-world-ddd">Part 2: Real world DDD</a>
 <ul class="sectlevel1">
 <li><a href="#understanding-the-domain">3. Understanding the domain</a>
 <ul class="sectlevel2">
@@ -662,7 +662,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#questions-6">7.6. Questions</a></li>
 </ul>
 </li>
-<li><a href="#long-running-workflows">8. Long-running workflows</a>
+<li><a href="#implementing-long-running-workflows">8. Implementing long-running workflows</a>
 <ul class="sectlevel2">
 <li><a href="#technical-requirements-5">8.1. Technical requirements</a></li>
 <li><a href="#continuing-our-design-journey-3">8.2. Continuing our design journey</a></li>
@@ -701,9 +701,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#part-3-advanced-patterns">Part 3: Advanced Patterns</a>
+<li><a href="#part-3-evolution-patterns">Part 3: Evolution patterns</a>
 <ul class="sectlevel1">
-<li><a href="#decomposing-the-monolith-part-1">10. Decomposing the monolith: Part 1</a>
+<li><a href="#beginning-the-decomposition-journey">10. Beginning the decomposition journey</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey-5">10.1. Continuing our design journey</a></li>
 <li><a href="#decomposing-our-monolith">10.2. Decomposing our monolith</a>
@@ -716,7 +716,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#summary-10">10.3. Summary</a></li>
 </ul>
 </li>
-<li><a href="#decomposing-the-monolith-part-2">11. Decomposing the monolith: Part 2</a>
+<li><a href="#decomposing-into-finer-grained-components">11. Decomposing into finer-grained components</a>
 <ul class="sectlevel2">
 <li><a href="#continuing-our-design-journey-6">11.1. Continuing our design journey</a>
 <ul class="sectlevel3">
@@ -884,7 +884,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1 id="part-1-foundations" class="sect0"><a class="anchor" href="#part-1-foundations"></a><a class="link" href="#part-1-foundations">Part 1: Foundations</a></h1>
 <div class="openblock partintro">
 <div class="content">
-    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practising Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will also do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age.
+    While the IT industry prides itself on being at the very bleeding edge of technology, it also oversees a relatively high proportion of projects that fail outright or do not meet their originally intended goals for one reason or another. In Part 1, we will look at reasons for software projects not achieving their intended objectives and how practicing Domain-Driven Design (DDD) can significantly help improve the odds of achieving success. We will do a quick tour of the main concepts that Eric Evans elaborated in his seminal book by the same name and examine why/how it is extremely relevant in today&#8217;s distributed systems age. We will also look at several popular architecture styles, programming paradigms and explore how DDD fits in the scheme of things.
 </div>
 </div>
 <div class="sect1 text-justify">
@@ -2680,10 +2680,10 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 </div>
 </div>
 </div>
-<h1 id="part-2-implementing-ddd-in-the-real-world" class="sect0"><a class="anchor" href="#part-2-implementing-ddd-in-the-real-world"></a><a class="link" href="#part-2-implementing-ddd-in-the-real-world">Part 2: Implementing DDD in the real world</a></h1>
+<h1 id="part-2-real-world-ddd" class="sect0"><a class="anchor" href="#part-2-real-world-ddd"></a><a class="link" href="#part-2-real-world-ddd">Part 2: Real world DDD</a></h1>
 <div class="openblock partintro">
 <div class="content">
-In the first section of this book, we looked at the mechanics of domain driven design and how it fits in the context of commonly used architecture styles and programming paradigms. In this section, we will implement a real-world application employing a bunch of techniques and practices that enable us to apply the tenets of DDD&#8217;s strategic and tactical design.
+In the first section of this book, we looked at the vocabulary of domain driven design and how it fits in the context of commonly used architecture styles and programming paradigms. In this section, we will implement a real-world application starting from business motivations and requirements, employing a bunch of techniques and practices that enable us to apply the tenets of DDD&#8217;s strategic and tactical design.
 </div>
 </div>
 <div class="sect1 text-justify">
@@ -8180,7 +8180,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="long-running-workflows"><a class="anchor" href="#long-running-workflows"></a><a class="link" href="#long-running-workflows">8. Long-running workflows</a></h2>
+<h2 id="implementing-long-running-workflows"><a class="anchor" href="#implementing-long-running-workflows"></a><a class="link" href="#implementing-long-running-workflows">8. Implementing long-running workflows</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -10174,14 +10174,15 @@ The operative word here is <strong>lightweight</strong>. It is pertinent to note
 </div>
 </div>
 </div>
-<h1 id="part-3-advanced-patterns" class="sect0"><a class="anchor" href="#part-3-advanced-patterns"></a><a class="link" href="#part-3-advanced-patterns">Part 3: Advanced Patterns</a></h1>
+<h1 id="part-3-evolution-patterns" class="sect0"><a class="anchor" href="#part-3-evolution-patterns"></a><a class="link" href="#part-3-evolution-patterns">Part 3: Evolution patterns</a></h1>
 <div class="openblock partintro">
 <div class="content">
-In Part 3, we will extend the application we built in Part 2 to utilize more modern, cloud native technologies. We will look at implementing an ecosystem of microservices and further extend these to be expressed to employ a serverless architecture.
+In the previous section, we built an application from scratch. However, we packaged all components in a single deployable as a monolith.
+In this part, we will extend the application we built in Part 2 by exploring various options on how we can decompose this application iteratively into finer-grained components. We will also look at the implications of decomposition along both functional and cross-functional aspects.
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="decomposing-the-monolith-part-1"><a class="anchor" href="#decomposing-the-monolith-part-1"></a><a class="link" href="#decomposing-the-monolith-part-1">10. Decomposing the monolith: Part 1</a></h2>
+<h2 id="beginning-the-decomposition-journey"><a class="anchor" href="#beginning-the-decomposition-journey"></a><a class="link" href="#beginning-the-decomposition-journey">10. Beginning the decomposition journey</a></h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -10897,7 +10898,7 @@ The spring framework provides support for this style of behavior through the <co
 </div>
 </div>
 <div class="sect1 text-justify">
-<h2 id="decomposing-the-monolith-part-2"><a class="anchor" href="#decomposing-the-monolith-part-2"></a><a class="link" href="#decomposing-the-monolith-part-2">11. Decomposing the monolith: Part 2</a></h2>
+<h2 id="decomposing-into-finer-grained-components"><a class="anchor" href="#decomposing-into-finer-grained-components"></a><a class="link" href="#decomposing-into-finer-grained-components">11. Decomposing into finer-grained components</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the previous chapter, we decomposed the <em>LC Application Processing</em> functionality out of the monolith. In this chapter, we will further decompose these components into even more fine-grained components. In addition, we will examine if and when such a decomposition is justified.</p>
@@ -12255,7 +12256,7 @@ For more information on logging best practices, please refer to this logging che
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-04 13:07:13 UTC
+Last updated 2022-07-06 10:48:04 UTC
 </div>
 </div>
 </body>
