@@ -477,7 +477,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
-<li><a href="#questions">Questions</a></li>
 <li><a href="#further-reading">Further Reading</a></li>
 </ul>
 </li>
@@ -651,7 +650,7 @@ For a more comprehensive list of <a href="http://agilemodeling.com/essays/enterp
 <p>Stakeholders often want software teams to spend a majority (if not all) of their time working on features that provide enhanced functionality. This is understandable given that such features provide the highest ROI. These features are called functional requirements.</p>
 </div>
 <div class="paragraph">
-<p>Non-functional requirements, on the other hand, are those aspects of the system that do not affect functionality directly, but have a profound effect on the efficacy of those using these using and maintaining these systems. There are many kinds of NFRs. A partial list of common NFRs is depicted below:</p>
+<p>Non-functional requirements (also sometimes known as cross-functional requirements), on the other hand, are those aspects of the system that do not affect functionality directly, but have a profound effect on the efficacy of those using these using and maintaining these systems. There are many kinds of NFRs. A partial list of common NFRs is depicted below:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1044,7 +1043,7 @@ The problem domain expressed in the form of why, what and how is shown here:</p>
     Account openPremiumCheckingAccount(Applicant applicant,
                                        MonetaryAmount initialAmount) {
 
-        Salary salary = checkEmployed(applicant);
+        Salary salary = salaryFor(applicant);
 
         <span style="color:#080;font-weight:bold">if</span> (salary.isBelowThreshold()) {
             <span style="color:#080;font-weight:bold">throw</span> <span style="color:#080;font-weight:bold">new</span> InsufficientIncomeException(applicant);
@@ -1315,15 +1314,15 @@ It is common to collectively refer to entities and value objects as <em>domain o
 </pre></td>
   <td class="code"><pre><span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CheckingAccount</span> {
     <span style="color:#088;font-weight:bold">private</span> AccountHolder primaryHolder;                            <i class="conum" data-value="1"></i><b>(1)</b>
-<span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Transaction&gt; transactions;                       <i class="conum" data-value="1"></i><b>(1)</b>
+    <span style="color:#088;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">Collection</span>&lt;Transaction&gt; transactions;                   <i class="conum" data-value="1"></i><b>(1)</b>
     <span style="color:#088;font-weight:bold">private</span> MonetaryAmount currentBalance;                          <i class="conum" data-value="1"></i><b>(1)</b>
     <span style="color:#777">// Other code omitted for brevity</span>
 
     <span style="color:#339;font-weight:bold">void</span> tryWithdraw(MonetaryAmount amount) {                       <i class="conum" data-value="2"></i><b>(2)</b>
-        MonetaryAmount newBalance = <span style="color:#950">this</span>.currentBalance.subtract(amount);
-        Transaction transaction = add(Transaction.withdrawal(<span style="color:#950">this</span>.id, amount));
+        MonetaryAmount newBalance = currentBalance.subtract(amount);
+        Transaction transaction = add(Transaction.withdrawal(id, amount));
         <span style="color:#080;font-weight:bold">if</span> (primaryHolder.isNotHNI() &amp;&amp; newBalance.isOverdrawn()) { <i class="conum" data-value="3"></i><b>(3)</b>
-        transaction.rejected();
+            transaction.rejected();
         } <span style="color:#080;font-weight:bold">else</span> {
             transaction.approved();
             currentBalance = newBalance;
@@ -1485,19 +1484,6 @@ He who has a why to live for can bear almost anyhow.
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>What are the most common reasons for software projects to fail?</p>
-</li>
-<li>
-<p>Why is DDD relevant in today’s context?</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
 <h3 id="further-reading"><a class="anchor" href="#further-reading"></a>Further Reading</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1617,7 +1603,7 @@ He who has a why to live for can bear almost anyhow.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-06 10:48:04 UTC
+Last updated 2022-07-07 22:46:43 UTC
 </div>
 </div>
 </body>
