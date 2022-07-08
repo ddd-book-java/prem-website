@@ -518,10 +518,10 @@ Sometimes I feel like I am being forgotten.
 <div class="sect2">
 <h3 id="observability"><a class="anchor" href="#observability"></a>Observability</h3>
 <div class="paragraph">
-<p>In previous chapters, we have seen how it is possible break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection and more importantly attribution to specific components through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
+<p>In previous chapters, we have seen how it is possible to break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection and more importantly attribution to specific components through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
 </div>
 <div class="paragraph">
-<p>When it comes to monitoring, most teams seem to think of <strong>technology runtime metrics</strong> that one associates with components (like CPU utilization, memory consumed, queue depths, exception count, etc.).</p>
+<p>When it comes to monitoring, most teams seem to think of <strong>technology runtime metrics</strong> that one associates with components (such as CPU utilization, memory consumed, queue depths, exception count and so on).</p>
 </div>
 <div class="sect3">
 <h4 id="technology-metrics"><a class="anchor" href="#technology-metrics"></a>Technology metrics</h4>
@@ -531,44 +531,44 @@ Sometimes I feel like I am being forgotten.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>SLO</strong>: An agreement between provider and customer about a specific measurable metric. For example, 99.99% uptime, 100ms response time for 1000 concurrent users for 99%ile requests, etc.</p>
-</li>
-<li>
-<p><strong>SLI</strong>: The actual numbers against an SLO. For example, your system might have an uptime SLI of 99.95%</p>
+<p><strong>SLO</strong>: An agreement between provider and customer about a specific measurable metric. For example, 99.99% uptime, 100ms response time for 1000 concurrent users for requests in the 99th percentile, and so on.</p>
 </li>
 <li>
 <p><strong>SLA</strong>: A collection of SLOs.</p>
 </li>
+<li>
+<p><strong>SLI</strong>: The actual numbers against an SLO. For example, your system might have an uptime SLI of 99.95%</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
-<p>However, it is just as much if not more important to be able to associate a set of <strong>business</strong> relevant metrics (like the number of LC applications submitted in the last hour, the number of LC applications rejected, etc.) and <strong>devops</strong> metrics (like lead time, mean time to restore, etc.).</p>
+<p>However, it is just as much if not more important to be able to associate a set of <strong>business</strong> relevant metrics (such as the number of LC applications submitted in the last hour, the number of LC applications rejected, and so on) and <strong>devops</strong> metrics (such as lead time, mean time to restore, and so on).</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="business-metrics"><a class="anchor" href="#business-metrics"></a>Business metrics</h4>
 <div class="paragraph">
-<p>An inability to associate and monitor business SLIs with a component may be an indicator of the component being too fine-grained. On the flip side, if there are too many business SLIs associated with a single component that is of interest to a multitude of business stakeholder groups, it may be indicator that a more fine-grained decomposition may be justified. At the end of the day, the monitoring apparatus we have in place should be able to tell us if we are violating/meeting/exceeding SLOs.</p>
+<p>An inability to associate and monitor business SLIs with a component may be an indicator of the component being too fine-grained. On the flip side, if there are too many business SLIs associated with a single component that is of interest to a multitude of business stakeholder groups, it may be an indicator that a more fine-grained decomposition may be justified. At the end of the day, the monitoring apparatus we have in place should be able to tell us if we are violating/meeting/exceeding SLOs.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="devops-metrics"><a class="anchor" href="#devops-metrics"></a>Devops metrics</h4>
 <div class="paragraph">
-<p>The DORA research foundation has published an online <a href="https://www.devops-research.com/quickcheck.html">quickcheck</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> tool and <a href="https://www.devops-research.com/research.html">report</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> to quickly provide information on how organizations compare with industry peers and how to make progress towards elite status. While discussing the full nuance of what it takes to establish a long term culture of continuous improvement is out of scope for this book, we reference the four key metrics highlighted in the research paper as indicators of software delivery performance:</p>
+<p>The DORA research foundation has published an online <a href="https://www.devops-research.com/quickcheck.html">quickcheck</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> tool and <a href="https://www.devops-research.com/research.html">report</a><sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> to quickly provide information on how organizations compare with industry peers and how to make progress towards elite status. While discussing the full nuance of what it takes to establish a long-term culture of continuous improvement is out of scope for this book, we reference the four key metrics highlighted in the research paper as indicators of software delivery performance:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Lead time</strong>: how long does it take to go from code committed to code successfully running in production</p>
+<p><strong>Lead time</strong>: How long does it take to go from code committed to code successfully running in production?</p>
 </li>
 <li>
-<p><strong>Deployment frequency</strong>: how often does your organization deploy code to production or release it to end users</p>
+<p><strong>Deployment frequency</strong>: How often does your organization deploy code to production or release it to end users?</p>
 </li>
 <li>
-<p><strong>Time to restore</strong>: how long does it generally take to restore service when a service incident or a defect that impacts users occurs</p>
+<p><strong>Time to restore</strong>: How long does it generally take to restore service when a service incident or a defect that impacts users occurs?</p>
 </li>
 <li>
-<p><strong>Change failure percentage</strong>: what percentage of changes to production or releases to users result in degraded service</p>
+<p><strong>Change failure percentage</strong>: What percentage of changes to production or releases to users result in degraded service?</p>
 </li>
 </ol>
 </div>
@@ -580,10 +580,10 @@ Sometimes I feel like I am being forgotten.
 <p>In the previous chapters, we have spent a lot of energy splitting our system into multiple, fine-grained independent components. For example, the LC application is submitted against the command side component, whereas the status of the LC application is serviced by the query side. Because these are distinct components, there will be a time lag during which the two systems are not consistent with each other. So, querying the status of an LC application immediately after submitting may produce a stale response until the time that the query side processes the submit event and updates its internal state. In other words, the command side and the query side are considered to be <em>eventual consistent</em>. This is one of the trade-offs that we need to embrace when working with distributed systems.</p>
 </div>
 <div class="paragraph">
-<p>Eric Brewer formalized the trade-offs involved in building distributed systems in what is called the <em>CAP theorem</em>. The theorem postulates that distributed systems can either be highly <strong>a</strong>vailable or <strong>c</strong>onsistent in the event of a network <strong>p</strong>artition, not both at the same time. Given that we have chosen to go down the distributed application path, tolerance to network failures (partitions) is a necessity. This means that distributed applications that are expected to be highly available will have to forsake strong consistency.</p>
+<p>Eric Brewer (professor emeritus of computer science at University of California, Berkeley) formalized the trade-offs involved in building distributed systems in what is called the <em>CAP theorem</em>. Given the three characteristics: <strong>c</strong>onsistency, <strong>a</strong>vailability, and <strong>p</strong>artition tolerance, the theorem postulates that distributed systems can either be highly available or consistent in the event of a network partition, not both at the same time. This means that distributed applications that are expected to be highly available will have to forsake strong consistency.</p>
 </div>
 <div class="paragraph">
-<p>This may make it appear that this is a deal-breaker, but in reality most real-world business problems are tolerant to being eventually consistent. For example, there may be a requirement where an order cannot be canceled after it has shipped. In an eventually consistent system there may exist a time window (albeit small) where we may allow a shipped order to be canceled. To deal with such scenarios, we may need to enhance the business process to account for these inconsistencies. For example, before issuing a refund for a canceled order, we may need to validate that the order has not physically shipped or has been returned. Even in the extreme case where we may have erroneously issued a refund for a shipped order, we can request the customer to return it before an expiry period to avoid getting charged. If the customer fails to return the order, we may charge the customer or write-off the amount as lost business. Obviously, all this adds a level of complexity to the solution because we may need to account for edge conditions through a series of compensating actions. If none of this complexity is acceptable and strong consistency is non-negotiable, then shipping and order cancellation functionality will have to part of the same bounded context.</p>
+<p>This may make it appear that this is a deal-breaker, but in reality most real-world business problems are tolerant to being eventually consistent. For example, there may be a requirement that an order cannot be canceled after it has shipped. In an eventually consistent system there may exist a time window (albeit small) where we may allow a shipped order to be canceled. To deal with such scenarios, we may need to enhance the business process to account for these inconsistencies. For example, before issuing a refund for a canceled order, we may need to validate that the order has not physically shipped or has been returned. Even in the extreme case where we may have erroneously issued a refund for a shipped order, we can request the customer to return it before an expiry period to avoid getting charged. If the customer fails to return the order, we may charge the customer or write-off the amount as lost business. Obviously, all this adds a level of complexity to the solution because we may need to account for edge conditions through a series of compensating actions. If none of this complexity is acceptable and strong consistency is non-negotiable, then shipping and order cancellation functionality will have to part of the same bounded context.</p>
 </div>
 </div>
 <div class="sect2">
@@ -609,7 +609,7 @@ Sometimes I feel like I am being forgotten.
 <p><strong>Response Time</strong>: The total time taken by the system to respond to the user (A + B + C).</p>
 </li>
 <li>
-<p><strong>Bandwidth</strong>: The maximum capacity of the network.</p>
+<p><strong>Bandwidth</strong>: The maximum capacity of the network (D).</p>
 </li>
 <li>
 <p><strong>Throughput</strong>: The amount of data processed in a given amount of time.</p>
@@ -629,7 +629,7 @@ Sometimes I feel like I am being forgotten.
 <div class="sect2">
 <h3 id="trunk-based-development"><a class="anchor" href="#trunk-based-development"></a>Trunk-based development</h3>
 <div class="paragraph">
-<p>Eric Evans, the inventor of DDD, talks about how <strong>continuous integration</strong> (CI) helps preserve the sanctity of the domain model within a bounded context. When more than one person works on the same bounded context, it tends to fragment. Obviously, the bigger the team, the higher the likelihood of this problem occurring. Even a team as small as three or four people can encounter serious issues. We have also seen that beyond a point, there may be <a href="#_where_to_draw_the_line">diminishing returns</a> if we try to break the system into extremely fine-grained bounded contexts.</p>
+<p>Eric Evans, the inventor of DDD, talks about how <strong>continuous integration</strong> (CI) helps preserve the sanctity of the domain model within a bounded context. When more than one person works in the same bounded context, it tends to fragment. Obviously, the bigger the team, the higher the likelihood of this problem occurring. Even a team as small as three or four people can encounter serious issues. We have also seen that beyond a point, there may be <a href="#_where_to_draw_the_line">diminishing returns</a> if we try to break the system into extremely fine-grained bounded contexts.</p>
 </div>
 <div class="paragraph">
 <p>This makes it very important to institute a process of merging/integrating all code and other implementation artifacts frequently, aided by <strong>automated tests</strong> to flag such fragmentation. In addition, this allows the team to apply the ubiquitous language relentlessly, each time refining the domain model to represent the problem more accurately. In other words, it is critical to practice continuous integration. Many teams make use of a CI server to run tests, but tend to postpone integration until very late making use of an excessive number of long-living branches (popularized by <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">gitflow</a><sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>) and merge requests&#8201;&#8212;&#8201;practicing an anti-pattern known as <a href="https://www.gocd.org/2017/05/16/its-not-CI-its-CI-theatre.html">CI theatre</a><sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup>.</p>
@@ -638,16 +638,16 @@ Sometimes I feel like I am being forgotten.
 <p>An alternative to branch-based development is <strong><em>trunk-based development</em></strong> where each developer works in incremental batches and merges that work into the main (also called trunk) branch at least once (and potentially several times) a day. The State of DevOps Research and Assessment (DORA) team have published <a href="https://services.google.com/fh/files/misc/state-of-devops-2021.pdf#page=27">research</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> that shows that elite performers practice trunk-based development to maximize the effectiveness of their CI practice and by extension their ability to continuously enhance their domain models and keep up with changing business needs.</p>
 </div>
 <div class="paragraph">
-<p>In an ideal world, every commit to trunk would constitute finished, production-ready work. But it is also fairly normal for certain pieces of work to take longer to complete. This may make it appear that there is a need to forsake trunk-based development and resort to branch-based development. However, there is no need to compromise the continuous integration flow to accommodate for such eventualities. <a href="https://paulhammant.com/">Paul Hammant</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> talks about this technique called <a href="https://trunkbaseddevelopment.com/branch-by-abstraction/">branch by abstraction</a> where the effects of unfinished pieces of work are hidden behind an abstraction layer. This abstraction layer is typically implemented by either making the new piece of functionality hidden from the end user or in more sophisticated cases, using <a href="https://martinfowler.com/articles/feature-toggles.html">feature flags</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>.</p>
+<p>In an ideal world, every commit to trunk would constitute finished, production-ready work. But it is also fairly normal for certain pieces of work to take longer to complete. This may make it appear that there is a need to forsake trunk-based development and resort to branch-based development. However, there is no need to compromise the continuous integration flow to accommodate for such eventualities. <a href="https://paulhammant.com/">Paul Hammant</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> talks about this technique called <a href="https://trunkbaseddevelopment.com/branch-by-abstraction/">branch by abstraction</a> where the effects of unfinished pieces of work are hidden behind an abstraction layer. This abstraction layer is typically implemented by either making the new piece of functionality hidden from the end-user or in more sophisticated cases, using <a href="https://martinfowler.com/articles/feature-toggles.html">feature flags</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="continuous-testing"><a class="anchor" href="#continuous-testing"></a>Continuous testing</h3>
 <div class="paragraph">
-<p>In an ideal world, continuous integration will enable us to adopt continuous testing, which  provides us with constant and early feedback. This is essential because our bounded contexts and the resulting domain models are in a constant state of evolution. Without the bedrock of a stable suite of tests, it can become very hard to sustain a reliable process. Approaches such as the test pyramid, testing trophy, honeycomb, etc. are acknowledged as reasonable ways to implement a sound continuous testing strategy. All of these approaches are based on the premise that a large number of cheap (computationally and cognitively) unit tests form the foundation of the strategy, with the number of tests in other categories (service, UI, manual, etc.) reducing as we move through the chain.</p>
+<p>In an ideal world, continuous integration will enable us to adopt continuous testing, which  provides us with constant and early feedback. This is essential because our bounded contexts and the resulting domain models are in a constant state of evolution. Without the bedrock of a stable suite of tests, it can become very hard to sustain a reliable process. Approaches such as the test pyramid, testing trophy, honeycomb, and so on. are acknowledged as reasonable ways to implement a sound continuous testing strategy. All of these approaches are based on the premise that a large number of cheap (computationally and cognitively) unit tests form the foundation of the strategy, with the number of tests in other categories (service, UI, manual, and so on) reducing as we move through the chain.</p>
 </div>
 <div class="paragraph">
-<p>However, we are in this new world of fine-grained components that work by communicating with each other. Hence, there is a bigger need to verify interactions at the periphery in a robust manner. Unit tests alone that rely mostly on mocks and stubs may not suffice because the behavior of collaborators may change inadvertently. This may lead to a situation where unit tests may run successfully, but the overall functionality may be broken. This may cause teams to lose faith in the practice of unit testing as a whole and resort to using more end-to-end functional tests. However, these style of tests can be <a href="https://www.youtube.com/watch?v=VDfX44fZoMc">extremely expensive</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> to set up and maintain, especially when we are looking to automate them. Consequently, most teams ignore the results of a majority of automated testing methods and rely almost exclusively on manual testing to verify anything but the most trivial functionality.</p>
+<p>However, we are in this new world of fine-grained components that work by communicating with each other. Hence, there is a bigger need to verify interactions at the periphery in a robust manner. Unit tests alone that rely mostly on mocks and stubs may not suffice because the behavior of collaborators may change inadvertently. This may lead to a situation where unit tests may run successfully, but the overall functionality may be broken. This may cause teams to lose faith in the practice of unit testing as a whole and resort to using more end-to-end functional tests. However, this style of tests can be <a href="https://www.youtube.com/watch?v=VDfX44fZoMc">extremely expensive</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> to set up and maintain, especially when we are looking to automate them. Consequently, most teams ignore the results of a majority of automated testing methods and rely almost exclusively on manual testing to verify anything but the most trivial functionality.</p>
 </div>
 <div class="paragraph">
 <p>Any manual testing requires most if not all functionality to be ready before any meaningful testing can commence. Furthermore, It is time-consuming, error-prone and usually not repeatable. Consequently, almost all testing can be carried out only when it is very close to the end, rendering the idea of continuous testing to become a pipe dream. Despite all its limitations, teams continue to rely on manual testing because it seems to provide the most psychological safety in comparison to its automated counterparts.</p>
@@ -667,7 +667,7 @@ Sometimes I feel like I am being forgotten.
 <div class="title">Figure 2. Contract testing: high level flow</div>
 </div>
 <div class="paragraph">
-<p>This allows the consumers and the producers to work collaboratively, and get feedback a lot earlier in the cycle. For the consumer, they get to participate in sharing their expectations with the producer and make use of versioned, producer approved stubs for their own testing without having to depend on the producer&#8217;s real system. Likewise, producers gain a deeper understanding of how their services are consumed, setting them free to make bolder changes as long as they remain compatible.</p>
+<p>This allows the consumers and the producers to work collaboratively, and get feedback a lot earlier in the cycle. For the consumer, they get to participate in sharing their expectations with the producer and make use of versioned, producer-approved stubs for their own testing without having to depend on the producer&#8217;s real system. Likewise, producers gain a deeper understanding of how their services are consumed, setting them free to make bolder changes as long as they remain compatible.</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -681,25 +681,25 @@ Sometimes I feel like I am being forgotten.
 <div class="sect3">
 <h4 id="mutation-testing"><a class="anchor" href="#mutation-testing"></a>Mutation testing</h4>
 <div class="paragraph">
-<p>A lot of teams author a variety of tests to ensure that they are building a high quality solution. Test coverage is typically used as a quantitative measure to assess the quality of testing. However, test coverage is a necessary but not sufficient condition to establish test quality. Low test coverage almost definitely means there is a test quality problem, whereas high coverage does not imply better tests. In an ideal world, even a single line change in production code (caused by a change in business requirements), without changing test code, will result in a test failure. If this can be guaranteed for every single change across the codebase, one may be able to safely rely on such a test suite.</p>
+<p>A lot of teams author a variety of tests to ensure that they are building a high-quality solution. Test coverage is typically used as a quantitative measure to assess the quality of testing. However, test coverage is a necessary but not sufficient condition to establish test quality. Low test coverage almost definitely means there is a test quality problem, whereas high coverage does not imply better tests. In an ideal world, even a single line change in production code (caused by a change in business requirements), without changing test code, will result in a test failure. If this can be guaranteed for every single change across the codebase, one may be able to safely rely on such a test suite.</p>
 </div>
 <div class="paragraph">
 <p>Mutation testing is a practice that automatically inserts small bugs in production code (called <em>mutants</em>) and re-runs an existing suite of tests to ascertain the quality of tests. If your tests failed, the mutant is killed. Whereas if your tests passed, the mutant survives. The higher the number of mutants killed, the more effective your tests are.</p>
 </div>
 <div class="paragraph">
-<p>For example, it may apply mutations such as inverting conditionals, replacing relational operators, returning nulls from methods, etc. and then check the effect this has on your existing tests. If no tests fail despite these mutations, these tests may not be as helpful as you hoped them to be. This allows us to draw more objective conclusions about the quality of our tests. Given how it works (by mutating code), it is computationally intensive and hence may take a long time to run. If you employ test-first design and have a fast suite of unit tests, mutation testing can be a great compliment that can help discover missed requirements and/or test cases earlier in the development cycle. From that perspective, we see it as an invaluable tool to augment the adoption of DDD within teams. Tools like <a href="https://pitest.org/">PITest</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> is a great tool to perform mutation testing in your Java applications.</p>
+<p>For example, it may apply mutations such as inverting conditionals, replacing relational operators, returning nulls from methods and so on, and then check the effect this has on your existing tests. If no tests fail despite these mutations, these tests may not be as helpful as you hoped them to be. This allows us to draw more objective conclusions about the quality of our tests. Given how it works (by mutating code), it is computationally intensive and hence may take a long time to run. If you employ test-first design and have a fast suite of unit tests, mutation testing can be a great compliment that can help discover missed requirements and/or test cases earlier in the development cycle. From that perspective, we see it as an invaluable tool to augment the adoption of DDD within teams. Tools like <a href="https://pitest.org/">PITest</a><sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> are great choices to perform mutation testing in your Java applications.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="chaos-testing"><a class="anchor" href="#chaos-testing"></a>Chaos testing</h4>
 <div class="paragraph">
-<p>As we have seen earlier, mutation testing can help point out chinks in the functional aspects of your application. Chaos testing plays a similar role to help identify shortcomings in meeting non-functional requirements caused by a reliance on network and infrastructure. It started becoming popular through the use of large scale distributed, cloud-based architectures pioneered by companies like Amazon, Netflix, etc. Netflix initially released a tool called <a href="https://netflix.github.io/chaosmonkey/">Chaos Monkey</a><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup> that randomly terminated instances in production(!) to ensure that engineers implement services that are resilient to failure. They followed this by releasing a set of related tools, collectively called the <a href="https://netflixtechblog.com/the-netflix-simian-army-16e57fbab116">Simian Army</a> (which is now defunct) to test a variety of non-functional aspects such as latency, security compliance, unused resources, etc.</p>
+<p>As we have seen earlier, mutation testing can help point out chinks in the functional aspects of your application. Chaos testing plays a similar role to help identify shortcomings in meeting non-functional requirements caused by reliance on network and infrastructure. It started becoming popular through the use of large-scale distributed, cloud-based architectures pioneered by companies like Amazon, Netflix, and so on. Netflix initially released a tool called <a href="https://netflix.github.io/chaosmonkey/">Chaos Monkey</a><sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup> that randomly terminated instances in production(!) to ensure that engineers implement services that are resilient to failure. They followed this by releasing a set of related tools, collectively called the <a href="https://netflixtechblog.com/the-netflix-simian-army-16e57fbab116">Simian Army</a> (which is now defunct) to test a variety of non-functional aspects such as latency, security compliance, unused resources, and so on.</p>
 </div>
 <div class="paragraph">
-<p>While Netflix performs this style of testing in production, the rest of us will benefit immensely if we adopt these practices even in lower environments at the outset. From a strategic perspective, chaos testing can provide feedback on the amount of coupling between components and whether the boundaries of these components are appropriate. For example, if a component that you are dependent on goes down or experiences problems, does this take you down as well? If so, are there ways to mitigate this? It can also provide feedback about your monitoring and alerting apparatus. From a tactical perspective, it can provide insights about the shortcomings of the <a href="#_invocation_style">invocation style</a> being used to communicate among components.</p>
+<p>While Netflix performs this style of testing in production, the rest of us will benefit immensely if we adopt these practices even in lower environments at the outset. From a strategic perspective, chaos testing can provide feedback on the amount of coupling between components and whether the boundaries of these components are appropriate. For example, if a component that you are dependent on goes down or experiences problems, does this take you down as well? If so, are there ways to mitigate this? It can also provide feedback about your monitoring and alerting apparatus. From a tactical perspective, it can provide insights into the shortcomings of the <a href="#_invocation_style">invocation style</a> being used to communicate among components.</p>
 </div>
 <div class="paragraph">
-<p>In this section, we have chosen to highlight contract testing, mutation testing and chaos testing because we see them as game changers in the application of DDD. Teams will benefit by looking at these methods as augments to other testing methods when coming up with a well-rounded testing strategy.</p>
+<p>In this section, we have chosen to highlight contract testing, mutation testing and chaos testing because we see them as game-changers in the application of DDD. Teams will benefit by looking at these methods as augments to other testing methods when coming up with a well-rounded testing strategy.</p>
 </div>
 </div>
 </div>
@@ -711,13 +711,13 @@ Sometimes I feel like I am being forgotten.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Single process monolith</strong>: where large portions of the application are deployed as a single unit, with all components that are included in the deployment running in a single process.</p>
+<p><strong>Single process monolith</strong>: Where large portions of the application are deployed as a single unit, with all components that are included in the deployment running in a single process.</p>
 </li>
 <li>
-<p><strong>Distributed monolith</strong>: where the application is split into multiple components with each running in its own process and/or host, but deployed as a single unit and/or requiring non-trivial amounts of coordination and tight coupling among components and their owners.</p>
+<p><strong>Distributed monolith</strong>: Where the application is split into multiple components with each running in its own process and/or host, but deployed as a single unit and/or requiring non-trivial amounts of coordination and tight coupling among components and their owners.</p>
 </li>
 <li>
-<p><strong>Independent components</strong>: where the application is split into multiple components with each running in its own process and/or host, deployed independently of each other and requiring minimal to no coordination among component owners.</p>
+<p><strong>Independent components</strong>: Where the application is split into multiple components with each running in its own process and/or host, deployed independently of each other and requiring minimal to no coordination among component owners.</p>
 </li>
 </ul>
 </div>
@@ -727,33 +727,33 @@ Sometimes I feel like I am being forgotten.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime. This is a fairly common deployment strategy for those applications where a certain amount of downtime is acceptable. This may include non-business critical applications and/or third party packages where we do not have a say in how those applications manage their deployments. In the case of certain monoliths, this may be the only feasible option due to the overall complexity of the system as a whole. This style of deployment typically starts out being fairly simple and well understood and may suffice for non-critical applications. On the flip side, it requires deployment and release to happen in one single tightly coupled step and may involve some amount of downtime.</p>
+<p><strong>Basic</strong>: Likely the oldest style of deployment where the newer version of the application replaces the old, usually with some amount of downtime. Rollback typically means redeploying the previously live version, again taking some amount of downtime. This is a fairly common deployment strategy for those applications where a certain amount of downtime is acceptable. This may include non-business critical applications and/or third-party packages where we do not have a say in how those applications manage their deployments. In the case of certain monoliths, this may be the only feasible option due to the overall complexity of the system as a whole. This style of deployment typically starts out being fairly simple and well understood and may suffice for non-critical applications. On the flip side, it requires the deployment and release to happen in one single tightly coupled step and may involve some amount of downtime.</p>
 </li>
 <li>
-<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version without exposing it to end users. User traffic is switched to the newer version once testing activities are deemed to be successfully completed. It is pertinent to note that live user traffic is directed only to one environment at any given time. This style of deployment enables deployment with (near) zero downtime and also allows decoupling the process of deployment and release. Rollbacks are easier because it simply means redirecting traffic to the older version. On the other hand, it requires double the amount of capacity at least during the time of deployment. This may make it cost prohibitive for monolithic applications.</p>
+<p><strong>Blue Green</strong>: A deployment strategy that makes use of two identical environments, a "blue" and a "green" environment, with one representing the current production and another representing the newer version. The current version continues to service traffic, while testing and acceptance are carried out on the new version without exposing it to end-users. User traffic is switched to the newer version once testing activities are deemed to be successfully completed. It is pertinent to note that live user traffic is directed only to one environment at any given time. This style of deployment enables deployment with (near) zero downtime and also allows decoupling of the process of deployment and release. Rollbacks are easier because it simply means redirecting traffic to the older version. On the other hand, it requires double the amount of capacity at least during the time of deployment. This may make it cost-prohibitive for monolithic applications.</p>
 </li>
 <li>
-<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances are incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback typically means replacing the newer version instances with older ones. This style of deployment also enables zero downtime deployment, while also allowing side by side testing of old and new versions with real users. Rolling deployments can make rollbacks relatively easy by aborting the introduction of instances of the new version and re-introducing the old version and hence can reduce the <em>blast radius</em> of a bad release. Unlike the case with blue-green deployments, here deployment and release cannot be decoupled. Deployment means that the system is released (at least for a subset of users).</p>
+<p><strong>Rolling</strong>: A deployment strategy where a small subset of current version instances is incrementally replaced by newer version instances. Both old and new versions of the software continue to run in parallel until all instances of the old are replaced with new ones. In simple cases, rollback typically means replacing the newer version instances with older ones. This style of deployment also enables zero-downtime deployment, while also allowing side-by-side testing of old and new versions with real users. Rolling deployments can make rollbacks relatively easy by aborting the introduction of instances of the new version and re-introducing the old version and hence can reduce the <em>blast radius</em> of a bad release. Unlike the case with blue-green deployments, here deployment and release cannot be decoupled. Deployment means that the system is released (at least for a subset of users).</p>
 </li>
 <li>
 <p><strong>Canary</strong>: A variation of the rolling deployment where traffic is routed to newer instances in a controlled and phased manner, typically an increasing proportion of request volume (for example, 2% &#8594; 25% &#8594; 75% &#8594; 100% of users). This deployment style enables more fine-grained control of the extent of the release as compared to rolling deployment.</p>
 </li>
 <li>
-<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users. It allows testing more than two combinations at the same time with real users.</p>
+<p><strong>A/B deployment</strong>: A variation of the canary deployment where multiple versions (with one or more variations) of new functionality may run simultaneously as "experiments" along with the current version. Further, these variations may be targeted to specific sets of users. It allows for testing more than two combinations at the same time with real users.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>When working with monolithic applications, teams are usually forced to restrict themselves to either basic or at the most blue-green deployments because the cost and complexity involved in adopting more sophisticated deployment strategies is a lot higher. On the other hand, distributed monoliths make this even more complicated because it now requires coordination among physically disparate components and teams. As long as we are able to maintain a balance between component granularity and coupling, we should be able to support a variety of advanced deployment strategies.</p>
+<p>When working with monolithic applications, teams are usually forced to restrict themselves to either basic or at the most blue-green deployments because the cost and complexity involved in adopting more sophisticated deployment strategies are a lot higher. On the other hand, distributed monoliths make this even more complicated because it now requires coordination among physically disparate components and teams. As long as we are able to maintain a balance between component granularity and coupling, we should be able to support a variety of advanced deployment strategies.</p>
 </div>
 <div class="paragraph">
-<p>In today&#8217;s modern ecosystem where there is a tremendous amount of competition to deliver new features and innovate faster, there is a need to support more complex forms of deployment with the least amount of risk and disruption to business. If supporting flexible deployment strategies proves to be too hard, there is very likely a need to re-examine your context boundaries.</p>
+<p>In today&#8217;s modern ecosystem where there is a tremendous amount of competition to deliver new features and innovate faster, there is a need to support more complex forms of deployment with the least amount of risk and disruption to the business. If supporting flexible deployment strategies proves to be too hard, there is very likely a need to re-examine your context boundaries.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="refactoring"><a class="anchor" href="#refactoring"></a>Refactoring</h3>
 <div class="paragraph">
-<p>Over a period of time, there will be a need to realign context boundaries, domain events, APIs, etc. There tends to be a stigma associated with things not working perfectly the first time and justifying the need for refactoring at the inter-component scale. However, this may be required for multiple reasons outside our control, ranging from competitor ecosystem changes, evolving/misunderstood requirements, inability to meet non-functional requirements, organizational and team responsibility changes, etc. Hence, refactoring is a core discipline that software teams will need to embrace as a first class practice.</p>
+<p>Over a period of time, there will be a need to realign context boundaries, domain events, APIs, and so on. There tends to be a stigma associated with things not working perfectly the first time and justifying the need for refactoring at the inter-component scale. However, this may be required for multiple reasons outside our control, ranging from competitor ecosystem changes, evolving/misunderstood requirements, inability to meet non-functional requirements, organizational and team responsibility changes, and so on. Hence, refactoring is a core discipline that software teams will need to embrace as a first-class practice.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -778,7 +778,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Perform tactical refactorings</strong>: This will allow you to gain a better understanding of the existing system. To do this, start with a set of <a href="https://en.wikipedia.org/wiki/Fitness_function">fitness functions</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> and a set of black box functional tests, perform a refactor and then replace the functional tests with faster running unit tests. Finally, use the fitness functions to evaluate the success of the effort. Repeat this process until there is a level of comfort to attempt more complex refactorings.</p>
+<p><strong>Perform tactical refactorings</strong>: This will allow you to gain a better understanding of the existing system. To do this, start with a set of <a href="https://en.wikipedia.org/wiki/Fitness_function">fitness functions</a><sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup> and a set of black-box functional tests, perform a refactor and then replace the functional tests with faster running unit tests. Finally, use the fitness functions to evaluate the success of the effort. Repeat this process until there is a level of comfort to attempt more complex refactorings following a process depicted here:</p>
 </li>
 </ol>
 </div>
@@ -807,10 +807,10 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Unification of the ubiquitous language</strong>: In chapter 9, we examined a variety of ways in which bounded contexts can integrate with each other. If the relationship between these bounded was symmetric, there may be less work to do. This is because in a symmetric relationship, there likely exists a lot of synergies in the first place. However, if the relationship is asymmetric, for example, through an open-host service on the producer side and an anti-corruption layer on the consuming side, it means that there possibly two varying ubiquitous languages that and likely distinct domain models at play. Careful thought will need to be applied to arrive at a ubiquitous language that is applicable across the newly merged bounded context.</p>
+<p><strong>Unification of the ubiquitous language</strong>: In chapter 9, we examined a variety of ways in which bounded contexts can integrate with each other. If the relationship between these bounded was symmetric, there may be less work to do. This is because in a symmetric relationship, there likely exists a lot of synergies in the first place. However, if the relationship is asymmetric, for example, through an open-host service on the producer side and an anti-corruption layer on the consuming side, it means that there are possibly two varying ubiquitous languages and likely distinct domain models at play. Careful thought will need to be applied to arrive at a ubiquitous language that is applicable across the newly merged bounded context.</p>
 </li>
 <li>
-<p><strong>Adjust internal domain models</strong>: Adoption of a common ubiquitous language, primarily means making use of a common domain model across the newly merged bounded context. This means that the aggregates, entities and value objects will need to be unified, which may then require changes at the persistence layer as well. If there are domain events that published and consumed exclusively between these components, those domain events may be candidates to be retired. At this stage, it may not be prudent to make any changes to any public interfaces&#8201;&#8212;&#8201;specifically those exposed using an open-host service (for example, public HTTP APIs and other domain events).</p>
+<p><strong>Adjust internal domain models</strong>: Adoption of a common ubiquitous language, primarily means making use of a common domain model across the newly merged bounded context. This means that the aggregates, entities and value objects will need to be unified, which may then require changes at the persistence layer as well. If there are domain events that are published and consumed exclusively between these components, those domain events may be candidates to be retired. At this stage, it may not be prudent to make any changes to any public interfaces&#8201;&#8212;&#8201;specifically those exposed using an open-host service (for example, public HTTP APIs and other domain events).</p>
 </li>
 <li>
 <p><strong>Adjust public API design</strong>: As a final step, it will be prudent to refactor redundant and/or inefficient public interfaces to conclude the exercise and derive the intended benefits.</p>
@@ -818,7 +818,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 </ol>
 </div>
 <div class="paragraph">
-<p>It is pertinent to note that this style of continuous improvement can be extremely challenging to adopt without the solid bedrock of a sound set of engineering practices, specifically testing and deployment automation practices that we discussed above.</p>
+<p>It is pertinent to note that this style of continuous improvement can be extremely challenging to adopt without the solid bedrock of a sound set of engineering practices, specifically the testing and deployment automation practices that we discussed in this section.</p>
 </div>
 </div>
 </div>
@@ -830,7 +830,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="sect3">
 <h4 id="synchronous-invocation"><a class="anchor" href="#synchronous-invocation"></a>Synchronous invocation</h4>
 <div class="paragraph">
-<p>The client blocks until the server provides a response. Optionally, implementations can choose to wait for an amount of time for the invoked operation to complete before timing out. An example of such an interaction is a blocking HTTP call made to start new LC application like so:</p>
+<p>The client blocks until the server provides a response. Optionally, implementations can choose to wait for an amount of time for the invoked operation to complete before timing out. An example of such an interaction is a blocking HTTP call made to start a new LC application like so:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -839,7 +839,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="title">Figure 4. Synchronous invocation</div>
 </div>
 <div class="paragraph">
-<p>When the call returns successfully, the client is sure that their request to create a new LC application has worked. If the server is slow to respond, it can result in a performance bottleneck, especially in high scale scenarios. To cope with this, the client and the server may agree on a response time SLO for that interaction. The client can choose to wait for a response from the server for the agreed amount of time after which the client times out the request and considers it a failure. Given that the client blocks on a server response, it is not able to do anything else while it waits, even though it may have the resources to do other things. To deal with this, the client can employ an asynchronous invocation.</p>
+<p>When the call returns successfully, the client is sure that their request to create a new LC application has worked. If the server is slow to respond, it can result in a performance bottleneck, especially in high-scale scenarios. To cope with this, the client and the server may agree on a response time SLO for that interaction. The client can choose to wait for a response from the server for the agreed amount of time after which the client times out the request and considers it a failure. Given that the client blocks on a server response, it is not able to do anything else while it waits, even though it may have the resources to do other things. To deal with this, the client can employ an asynchronous invocation.</p>
 </div>
 </div>
 <div class="sect3">
@@ -850,7 +850,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Fire and forget</strong>: The client initiates a request with the server, but does not wait for a response from the server and also does not care about the outcome. Such a style of interaction may suffice for <em>low priority</em> activities such as logging to a remote server, push notifications, etc.</p>
+<p><strong>Fire and forget</strong>: The client initiates a request with the server, but does not wait for a response from the server and also does not care about the outcome. Such a style of interaction may suffice for <em>low priority</em> activities such as logging to a remote server, push notifications, and so on.</p>
 </li>
 </ul>
 </div>
@@ -858,6 +858,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="content">
 <img src="./images/fire-and-forget-invocation.png" alt="fire and forget invocation" width="221" height="212">
 </div>
+<div class="title">Figure 5. Fire and forget</div>
 </div>
 <div class="ulist">
 <ul>
@@ -870,7 +871,7 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="content">
 <img src="./images/deferred-response-invocation.png" alt="deferred response invocation" width="238" height="375">
 </div>
-<div class="title">Figure 5. Deferred response using poll</div>
+<div class="title">Figure 6. Deferred response using poll</div>
 </div>
 <div class="ulist">
 <ul>
@@ -883,10 +884,10 @@ We are covering only the strategic (inter-component) aspects of refactoring in t
 <div class="content">
 <img src="./images/request-callback-invocation.png" alt="request callback invocation" width="317" height="340">
 </div>
-<div class="title">Figure 6. Deferred response using callback</div>
+<div class="title">Figure 7. Deferred response using callback</div>
 </div>
 <div class="paragraph">
-<p>Given that these interactions happen over a network that can be unreliable, clients and servers need to employ a variety of techniques to achieve some semblance of reliability. For example, clients may need to implement support for timeouts, retries, compensating transactions, client-side load balancing etc. Similarly, the server may need to protect itself from errant clients by making use of techniques such as rate limiters, circuit breakers, bulkheads, fallbacks, health endpoints, etc.</p>
+<p>Given that these interactions happen over a network that can be unreliable, clients and servers need to employ a variety of techniques to achieve some semblance of reliability. For example, clients may need to implement support for timeouts, retries, compensating transactions, client-side load balancing and so on. Similarly, the server may need to protect itself from errant clients by making use of techniques such as rate limiters, circuit breakers, bulkheads, fallbacks, health endpoints, and so on.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1024,36 +1025,36 @@ Elaborating on the specific techniques mentioned here is out of scope for this t
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A pointcut defining an <em>around</em> aspect for all methods annotate with the <code>@CommandHandler</code> annotation. In this example, we are using compile-time weaving as opposed to runtime weaving available through the Spring framework, to inject execution time logic using AspectJ. You can find more details on the pros and cons of using specific weaving techniques in this <a href="https://www.baeldung.com/spring-aop-vs-aspectj">article</a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup>.</td>
+<td>A pointcut defining an <em>around</em> aspect for all methods annotated with the <code>@CommandHandler</code> annotation. In this example, we are using compile-time weaving as opposed to runtime weaving available through the Spring framework, to inject execution time logic using AspectJ. You can find more details on the pros and cons of using specific weaving techniques in this <a href="https://www.baeldung.com/spring-aop-vs-aspectj">article</a><sup class="footnote">[<a id="_footnoteref_18" class="footnote" href="#_footnotedef_18" title="View footnote.">18</a>]</sup>.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>In the style shown above, we have separated logging code from application code through the use of aspect-oriented programming. In the example above, the logging code applies to all methods annotated with the <code>@CommandHandler</code> annotation. This has the advantage that all such methods will now produce consistent entry/exit logging statements. On the flip side, if there is a need for additional logging for a specific command handler, it will still have to be done within the body of that method. If you see yourself requiring lots of adhoc logging statements in addition to simple entry/exit logs, it might be a smell and a sign that your methods may need to be refactored.</p>
+<p>In the style shown here, we have separated logging code from application code through the use of aspect-oriented programming. In the example, the logging code applies to all methods annotated with the <code>@CommandHandler</code> annotation. This has the advantage that all such methods will now produce consistent entry/exit logging statements. On the flip side, if there is a need for additional logging for a specific command handler, it will still have to be done within the body of that method. If you see yourself requiring lots of adhoc logging statements in addition to simple entry/exit logs, it might be a smell and a sign that your methods may need to be refactored.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="dealing-with-sensitive-data"><a class="anchor" href="#dealing-with-sensitive-data"></a>Dealing with sensitive data</h4>
 <div class="paragraph">
-<p>In general, when adding logging code, it helps to include as much context as possible. This can be challenging in certain domains like healthcare or finance where there may be legal/regulatory requirements to restrict access to sensitive information. For example, during the LC application process, we may need to perform a credit check for the applicant using their government issued identifier such as social security number (SSN) in the USA. In such cases, it is common to <strong>mask</strong> a significant portion of this information in the logs to maintain a balance between privacy and debuggability. Implementing such masking logic is a domain concern. This accentuates the need to use value types (as opposed to primitives) to control the appropriate behavior. For example, overriding the <code>toString</code> method of an <code>SSN</code> value type can ensure that the sanctity of the business need is met uniformly within the bounded context.</p>
+<p>In general, when adding logging code, it helps to include as much context as possible. This can be challenging in certain domains like healthcare or finance where there may be legal/regulatory requirements to restrict access to sensitive information. For example, during the LC application process, we may need to perform a credit check for the applicant using their government-issued identifier such as social security number (SSN) in the USA. In such cases, it is common to <strong>mask</strong> a significant portion of this information in the logs to maintain a balance between privacy and debuggability. Implementing such masking logic is a domain concern. This accentuates the need to use value types (as opposed to primitives) to control the appropriate behavior. For example, overriding the <code>toString</code> method of an <code>SSN</code> value type can ensure that the sanctity of the business need is met uniformly within the bounded context.</p>
 </div>
 <div class="paragraph">
-<p>While masking may suffice in a majority of use cases, it suffers from the limitation of not being able to access the original information even by authorized users. If this is a requirement, it may be necessary to make use of a <em>tokenization</em> (the process of replacing a sensitive piece of information with a non-sensitive placeholder value called a <em>token</em>) solution. This can allow logging tokenized values in an unrestricted manner within the bounded context and in general can be a lot more secure. But this can mean having to deal with additional complexity of another bounded context to provide tokenized values and authorization controls when the real value needs to be accessed.</p>
+<p>While masking may suffice in a majority of use cases, it suffers from the limitation of not being able to access the original information even by authorized users. If this is a requirement, it may be necessary to make use of a <em>tokenization</em> (the process of replacing a sensitive piece of information with a non-sensitive placeholder value called a <em>token</em>) solution. This can allow logging tokenized values in an unrestricted manner within the bounded context and in general can be a lot more secure. But this can mean having to deal with the additional complexity of another bounded context to provide tokenized values and authorization controls when the real value needs to be accessed.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="log-format"><a class="anchor" href="#log-format"></a>Log format</h4>
 <div class="paragraph">
-<p>Thus far we have focused on just the log message. However, logging is more than just that. It is typical to include additional information such as the time of occurrence, log level, etc. to aid in rapid troubleshooting. For example, spring boot uses the following log format by default:</p>
+<p>Thus far we have focused on just the log message. However, logging is more than just that. It is typical to include additional information such as the time of occurrence, log level, and so on to aid in rapid troubleshooting. For example, spring boot uses the following log format by default:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock text-left">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">2022-06-05 10:57:51.253  INFO 45469 --- [ost-startStop-1] c.p.lc.app.domain.LCApplication            : Root WebApplicationContext: Ending StartNewLCApplication in 1200495 ns.</code></pre>
+<pre class="CodeRay highlight"><code data-lang="shell">2022-06-05 10:57:51.253 INFO 45469 --- [ost-startStop-1] c.p.lc.app.domain.LCApplication: Root WebApplicationContext: Ending StartNewLCApplication in 1200495 ns.</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>While this is an excellent default, it still is primarily unstructured text with certain information being lost in order to improve readability (for example, the logger name is abbreviated).
-While logs are primarily meant to be consumed by humans, a large volume of logs can get in the way of being able to locate the relevant logs. So it is important to produce logs that are also machine-friendly so that they can be easily indexed, searched, filtered, etc. In other words, using a <em>structured logging</em> format like the one shown below can go a long way towards meeting the goals both machine and human readability.</p>
+While logs are primarily meant to be consumed by humans, a large volume of logs can get in the way of being able to locate the relevant logs. So it is important to produce logs that are also machine-friendly so that they can be easily indexed, searched, filtered, and so on. In other words, using a <em>structured logging</em> format like the one shown here can go a long way towards meeting the goals of both machine and human readability.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1101,7 +1102,7 @@ While it may be tempting to pick a custom log format, we strongly recommend pick
 <div class="sect3">
 <h4 id="log-aggregation"><a class="anchor" href="#log-aggregation"></a>Log aggregation</h4>
 <div class="paragraph">
-<p>The fact that our applications are decomposed into multiple components with each usually running multiple instances, means that this can produce a lot of logs which are disconnected from each other. To be able to work with these logs meaningfully, we need to aggregate and sequence them chronologically. It may be worth considering the use of a formal log aggregation solution for this purpose. Using a structured logging solution as previously discussed can go a long way when working with logs from multiple systems.</p>
+<p>The fact that our applications are decomposed into multiple components with each usually running multiple instances, means that this can produce a lot of logs that are disconnected from each other. To be able to work with these logs meaningfully, we need to aggregate and sequence them chronologically. It may be worth considering the use of a formal log aggregation solution for this purpose. Using a structured logging solution as previously discussed can go a long way when working with logs from multiple systems.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1128,23 +1129,23 @@ For more information on logging best practices, please refer to this logging che
 <div class="content">
 <img src="./images/lc-submit-sequence.png" alt="lc submit sequence" width="583" height="503">
 </div>
-<div class="title">Figure 7. Submit LC application flow</div>
+<div class="title">Figure 8. Submit LC application flow</div>
 </div>
 <div class="paragraph">
-<p>Even in this simple example, there are several components involved, each of which produce logs of their own. When an engineer is looking to diagnose an issue, there is a need to correlate log entries from multiple components. In order to accomplish this, there is a need to introduce a correlation identifier as close to the start of the interaction and propagate it across component boundaries. Furthermore, log entries in each component need to carry this correlation identifier as they produce logs. Doing this will allow us to view log entries spanning process boundaries using the correlation identifier as a unifying thread. In technical terms, the entire flow is called a <strong><em>trace</em></strong>, and each segment within the flow is called a <strong><em>span</em></strong>. This process of instrumenting log entries with such information is termed <em>distributed tracing</em>.</p>
+<p>Even in this simple example, there are several components involved, each of which produces logs of its own. When an engineer is looking to diagnose an issue, there is a need to correlate log entries from multiple components. In order to accomplish this, there is a need to introduce a correlation identifier as close to the start of the interaction and propagate it across component boundaries. Furthermore, log entries in each component need to carry this correlation identifier as they produce logs. Doing this will allow us to view log entries spanning process boundaries using the correlation identifier as a unifying thread. In technical terms, the entire flow is called a <strong><em>trace</em></strong>, and each segment within the flow is called a <strong><em>span</em></strong>. This process of instrumenting log entries with such information is termed <em>distributed tracing</em>.</p>
 </div>
 <div class="paragraph">
 <p>As is evident here, user flows may and usually span more than one bounded context. For this to work effectively, bounded contexts need to agree on propagating trace and span identifiers uniformly. Tools like <a href="https://spring.io/projects/spring-cloud-sleuth">spring cloud sleuth</a> and <a href="https://opentracing.io/">open tracing</a> can help simplify implementation for teams using disparate technology stacks.</p>
 </div>
 <div class="paragraph">
-<p>Fundamentally, distributed tracing visualizations can aid in diagnosing performance bottlenecks and chattiness between components. But what may not be obvious is the insights it can provide in gaining a richer understanding of how components interact in an end-to-end user journey. In a lot of ways, this can be thought of a near real-time context map visualization of your system, and how components are coupled with each other. From a DDD perspective, this can provide greater insights into re-evaluating bounded context boundaries if necessary. For this reason, we strongly recommend making it easy to set up and configure distributed tracing apparatus painlessly right from the outset.</p>
+<p>Fundamentally, distributed tracing visualizations can aid in diagnosing performance bottlenecks and chattiness between components. But what may not be obvious is the insights it can provide in gaining a richer understanding of how components interact in an end-to-end user journey. In a lot of ways, this can be thought of as a near real-time context map visualization of your system, and how components are coupled with each other. From a DDD perspective, this can provide greater insights into re-evaluating bounded context boundaries if necessary. For this reason, we strongly recommend making it easy to set up and configure distributed tracing apparatus painlessly right from the outset.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="versioning"><a class="anchor" href="#versioning"></a>Versioning</h3>
 <div class="paragraph">
-<p>When we are working with a monolithic application, we have large portions bundled as a single cohesive unit. This means that other than third party dependencies, we don&#8217;t have to worry about explicitly versioning our own components. However, when we start breaking components into their individual deployable units, there is a need to pay careful attention to how the components, APIs and data elements of our solution are versioned. Let&#8217;s look at each in turn.</p>
+<p>When we are working with a monolithic application, we have large portions bundled as a single cohesive unit. This means that other than third-party dependencies, we don&#8217;t have to worry about explicitly versioning our own components. However, when we start breaking components into their individual deployable units, there is a need to pay careful attention to how the components, APIs and data elements of our solution are versioned. Let&#8217;s look at each in turn.</p>
 </div>
 <div class="sect3">
 <h4 id="component"><a class="anchor" href="#component"></a>Component</h4>
@@ -1168,7 +1169,7 @@ For more information on logging best practices, please refer to this logging che
 </ol>
 </div>
 <div class="paragraph">
-<p>In addition, we can make use of optional extensions to indicate pre-release and build metadata. For example, the version identifier for our component might read 3.4.1-RC1 to reflect that this is a release candidate for version 3.4.1 of our component. Using a standard versioning scheme enables the use of build tools like maven and gradle to declare fine-grained upgrade rules and constraints for direct and transitive dependencies. A good practice here is to declare dependencies without versions and make use of <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management">dependency management</a><sup class="footnote">[<a id="_footnoteref_24" class="footnote" href="#_footnotedef_24" title="View footnote.">24</a>]</sup> or <a href="https://docs.gradle.org/current/userguide/dependency_constraints.html#sec:adding-constraints-transitive-deps">dependency constraints</a><sup class="footnote">[<a id="_footnoteref_25" class="footnote" href="#_footnotedef_25" title="View footnote.">25</a>]</sup> to centralize version management of dependent components.</p>
+<p>In addition, we can make use of optional extensions to indicate pre-release and build metadata. For example, the version identifier for our component might read 3.4.1-RC1 to reflect that this is a release candidate for version 3.4.1 of our component. Using a standard versioning scheme enables the use of build tools like Maven and Gradle to declare fine-grained upgrade rules and constraints for direct and transitive dependencies. A good practice here is to declare dependencies without versions and make use of <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management">dependency management</a><sup class="footnote">[<a id="_footnoteref_24" class="footnote" href="#_footnotedef_24" title="View footnote.">24</a>]</sup> or <a href="https://docs.gradle.org/current/userguide/dependency_constraints.html#sec:adding-constraints-transitive-deps">dependency constraints</a><sup class="footnote">[<a id="_footnoteref_25" class="footnote" href="#_footnotedef_25" title="View footnote.">25</a>]</sup> to centralize version management of dependent components.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1202,10 +1203,10 @@ For more information on logging best practices, please refer to this logging che
 <div class="sect3">
 <h4 id="data"><a class="anchor" href="#data"></a>Data</h4>
 <div class="paragraph">
-<p>In a world of well-defined bounded contexts, we should no longer be in a situation where we need to expose data directly to our consumers. However, there may be situations where we may need to integrate by directly exposing data to our consumers. For example, we may have to expose a reporting database for analytical purposes. All the good practices that we outlined for APIs, applies to data as well.</p>
+<p>In a world of well-defined bounded contexts, we should no longer be in a situation where we need to expose data directly to our consumers. However, there may be situations where we may need to integrate by directly exposing data to our consumers. For example, we may have to expose a reporting database for analytical purposes. All the good practices that we outlined for APIs, apply to data as well.</p>
 </div>
 <div class="paragraph">
-<p>In addition, from a producer&#8217;s perspective, there will be a need to evolve the data schema to accommodate for changing business requirements. When working with relational databases, using a good schema migration tools like <a href="https://liquibase.org/">Liquibase</a><sup class="footnote">[<a id="_footnoteref_27" class="footnote" href="#_footnotedef_27" title="View footnote.">27</a>]</sup> or <a href="https://flywaydb.org/">Flyway</a><sup class="footnote">[<a id="_footnoteref_28" class="footnote" href="#_footnotedef_28" title="View footnote.">28</a>]</sup> can go a long way. NoSQL databases also have similar tools like <a href="https://github.com/mongobee/mongobee">MongoBee</a><sup class="footnote">[<a id="_footnoteref_29" class="footnote" href="#_footnotedef_29" title="View footnote.">29</a>]</sup> and <a href="https://cassandra.tools/cassandra-migration">Cassandra-Migration</a><sup class="footnote">[<a id="_footnoteref_30" class="footnote" href="#_footnotedef_30" title="View footnote.">30</a>]</sup>.</p>
+<p>In addition, from a producer&#8217;s perspective, there will be a need to evolve the data schema to accommodate for changing business requirements. When working with relational databases, using good schema migration tools such as <a href="https://liquibase.org/">Liquibase</a><sup class="footnote">[<a id="_footnoteref_27" class="footnote" href="#_footnotedef_27" title="View footnote.">27</a>]</sup> or <a href="https://flywaydb.org/">Flyway</a><sup class="footnote">[<a id="_footnoteref_28" class="footnote" href="#_footnotedef_28" title="View footnote.">28</a>]</sup> can go a long way. NoSQL databases also have similar tools like <a href="https://github.com/mongobee/mongobee">MongoBee</a><sup class="footnote">[<a id="_footnoteref_29" class="footnote" href="#_footnotedef_29" title="View footnote.">29</a>]</sup> and <a href="https://cassandra.tools/cassandra-migration">Cassandra-Migration</a><sup class="footnote">[<a id="_footnoteref_30" class="footnote" href="#_footnotedef_30" title="View footnote.">30</a>]</sup>.</p>
 </div>
 <div class="paragraph">
 <p>In this context, it is pertinent to think about data as a product and apply product thinking to domain-aligned data. For more information, please refer to this article on how to move from a <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html#DomainDataAsAProduct">monolithic data lake to a distributed data mesh</a><sup class="footnote">[<a id="_footnoteref_31" class="footnote" href="#_footnotedef_31" title="View footnote.">31</a>]</sup>.</p>
@@ -1218,7 +1219,7 @@ For more information on logging best practices, please refer to this logging che
 <div class="sect2">
 <h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
 <div class="paragraph">
-<p>In this chapter, we looked at aspects purely beyond  functional requirements&#8201;&#8212;&#8201;each of which can have a profound impact on our ability to apply domain-driven design effectively. Specifically, we looked at how each of these are inter-related and have to be looked at holistically to achieve and sustain high levels of success.</p>
+<p>In this chapter, we looked at aspects purely beyond  functional requirements&#8201;&#8212;&#8201;each of which can have a profound impact on our ability to apply domain-driven design effectively. Specifically, we looked at how each of these is inter-related and have to be looked at holistically to achieve and sustain high levels of success.</p>
 </div>
 </div>
 </div>
@@ -1323,7 +1324,7 @@ For more information on logging best practices, please refer to this logging che
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-07 22:46:43 UTC
+Last updated 2022-07-08 21:27:23 UTC
 </div>
 </div>
 </body>
