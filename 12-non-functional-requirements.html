@@ -492,6 +492,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
+<li><a href="#closing-thoughts">Closing thoughts</a></li>
 </ul>
 </li>
 </ul>
@@ -518,15 +519,13 @@ Sometimes I feel like I am being forgotten.
 <div class="sect2">
 <h3 id="observability"><a class="anchor" href="#observability"></a>Observability</h3>
 <div class="paragraph">
-<p>In previous chapters, we have seen how it is possible to break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Obviously, early detection and more importantly attribution to specific components through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
+<p>In previous chapters, we have seen how it is possible to break down an existing application along bounded context boundaries. We also saw how it is possible to split bounded contexts to be extremely fine-grained, often as physically disparate components. Failure in any of these components can cause disruptions in others that are dependent on them. Observability means having the ability to measure the internal state of the system by examining its outputs. Obviously, early detection and more importantly attribution to specific components through a combination of proactive and reactive monitoring can ideally prevent or at the very least, minimize business disruption.</p>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Lending objectivity to metrics</div>
 <div class="paragraph">
-<p>When it comes to monitoring, most teams seem to think of <strong>technology runtime metrics</strong> that one associates with components (such as CPU utilization, memory consumed, queue depths, exception count and so on).</p>
-</div>
-<div class="sect3">
-<h4 id="technology-metrics"><a class="anchor" href="#technology-metrics"></a>Technology metrics</h4>
-<div class="paragraph">
-<p>To make it more formal, we use the terms SLO and SLI within an SLA to mean the following:</p>
+<p>To make it more formal, we use the terms Service Level Objectives (SLOs) and Service Level Indicators (SLIs) specified within an Service Level Agreement (SLA) to mean the following:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -540,6 +539,13 @@ Sometimes I feel like I am being forgotten.
 <p><strong>SLI</strong>: The actual numbers against an SLO. For example, your system might have an uptime SLI of 99.95%</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="technology-metrics"><a class="anchor" href="#technology-metrics"></a>Technology metrics</h4>
+<div class="paragraph">
+<p>When it comes to monitoring, most teams seem to think of <strong>technology runtime metrics</strong> that one associates with components (such as CPU utilization, memory consumed, queue depths, exception count and so on).</p>
 </div>
 <div class="paragraph">
 <p>However, it is just as much if not more important to be able to associate a set of <strong>business</strong> relevant metrics (such as the number of LC applications submitted in the last hour, the number of LC applications rejected, and so on) and <strong>devops</strong> metrics (such as lead time, mean time to restore, and so on).</p>
@@ -572,6 +578,44 @@ Sometimes I feel like I am being forgotten.
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>When it comes to observability, there is the risk of focusing on specific metrics in isolation and missing the forest for the trees. To avoid metrics being misused and more importantly running the risk of drawing incorrect conclusions, we recommend:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Take a holistic view</strong>: Focus more or less equally on all aspects of the delivery lifecycle as opposed to focusing on just a particular area can go a long way. If one is able to include information from planning, requirements intake, development, build, test, deploy, and feedback from running production systems, then one may be able to conclude reasonably that you have a high performing team.</p>
+</li>
+<li>
+<p><strong>Employ Ratcheting</strong>: Having recognized an improvement area, how does one go about setting oneself up for improvement? Setting clear, objective goals, measurable, trackable (no pun intended) for improvement is paramount to be able to subsequently meet them. In order to ensure that there is continuous incremental improvement, ratcheting is a technique that can be employed. A ratchet is a device that resembles a wrench, but is unique in that it only turns in only one direction. In this context, ratcheting involves doing the following:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Set the current level as the minimum starting point</p>
+</li>
+<li>
+<p>Make a small incremental improvement in a relatively small amount of time</p>
+</li>
+<li>
+<p>Re-adjust the baseline to the new level attained as part of step 2 above</p>
+</li>
+<li>
+<p>If levels descend below baseline, take stop-the-line action until baselines are restored</p>
+</li>
+<li>
+<p>Repeat from step 1</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ratcheting allows teams to set incremental milestones as intermediate goals while moving closer to a much better place all the time.</p>
+</div>
+<div class="paragraph">
+<p>Adopting an attitude of constant learning and incremental improvement through ratcheting as opposed to one that looks to police and penalize can go a long way towards instituting a system that can be effective.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -592,13 +636,16 @@ Sometimes I feel like I am being forgotten.
 <p>In previous chapters, we saw how it is possible and sometimes even necessary to functionality down into fine-grained components that are physically separated from each other&#8201;&#8212;&#8201;requiring a network to collaborate. Let&#8217;s assume that this collaboration is achieved in a loosely coupled manner&#8201;&#8212;&#8201;justifying the need for disparate bounded contexts from a logical perspective.</p>
 </div>
 <div class="paragraph">
-<p>Performance is a very important SLO that is typically associated with most applications. When it comes to performance, it is essential to understand the basic terms. This is best illustrated using an example as shown here:</p>
+<p>Performance is a very important SLO that is typically associated with most applications. When it comes to performance, it is essential to understand the basic terms. This is best illustrated as shown here:</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="./images/performance.png" alt="performance" width="75%">
 </div>
 <div class="title">Figure 1. The elements of network performance.</div>
+</div>
+<div class="paragraph">
+<p>As shown here, the following terms are relevant in the context of performance:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1222,6 +1269,12 @@ For more information on logging best practices, please refer to this logging che
 <p>In this chapter, we looked at aspects purely beyond  functional requirements&#8201;&#8212;&#8201;each of which can have a profound impact on our ability to apply domain-driven design effectively. Specifically, we looked at how each of these is inter-related and have to be looked at holistically to achieve and sustain high levels of success.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="closing-thoughts"><a class="anchor" href="#closing-thoughts"></a>Closing thoughts</h3>
+<div class="paragraph">
+<p>Domain-driven design, although conceived in the early 2000s, was way ahead of its time. We are in the age of solving for the most complex problems yet. Given the advancements in technology there is the expectation to build these solutions a lot faster. While  the overall cognitive complexity of the solution is directly proportional to the complexity of the problem, there is a need to effectively manage this complexity. DDD and its principles, enables us to achieve this by breaking down complex problems into smaller, manageable parts. In this book, we have made an attempt to distill our experiences and provide a set of concrete techniques to apply DDD in your respective contexts.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1324,7 +1377,7 @@ For more information on logging best practices, please refer to this logging che
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-08 21:27:23 UTC
+Last updated 2022-07-09 12:21:21 UTC
 </div>
 </div>
 </body>
