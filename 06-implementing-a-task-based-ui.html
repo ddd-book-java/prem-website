@@ -461,7 +461,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
-<li><a href="#questions">Questions</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
 </li>
@@ -484,12 +483,15 @@ To accomplish a difficult task, one must first make it easy.
 <p>The essence of Domain Driven Design(DDD) is a lot about capturing the business process and user intent a lot more closely. In the previous chapter, we designed a set of APIs without paying a lot of attention to how those APIs would get consumed by its eventual users. In this chapter, we will design the GUI for the LC application using the <a href="https://openjfx.com/">JavaFX</a><sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> framework. As part of that, we will examine how this approach of designing APIs in isolation can cause an impedance mismatch between the producers and the consumers. We will examine the consequences of this <em>impedance mismatch</em> and how task-based UIs can help cope with this mismatch a lot better.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter, we will implement the UI for LC Application and wire up the integration to the backend APIs.  The list of topics to be covered is as follows:</p>
+<p>In this chapter, we will implement the UI for LC Application and wire up the integration to the backend APIs.  We will cover the following topics:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>API styles</p>
+</li>
+<li>
+<p>Bootstrapping the UI</p>
 </li>
 <li>
 <p>Implementing the UI</p>
@@ -693,7 +695,7 @@ To accomplish a difficult task, one must first make it easy.
 <div class="sect3">
 <h4 id="task-based-apis"><a class="anchor" href="#task-based-apis"></a>Task-based APIs</h4>
 <div class="paragraph">
-<p>In a typical organization, individuals perform tasks relevant to their specialization. The bigger the organization, the higher the degree of specialization. This approach of segregating tasks according to one&#8217;s specialization makes sense, because it mitigates the possibility of stepping on each others' shoes, especially when getting complex pieces of work done. For example, in the LC application process, there is a need to establish the value/legality of the product while also determining the credit worthiness of the applicant. It makes sense that each of these tasks are usually performed by individuals in unrelated departments. It also follows that these tasks can be performed independently from the other.</p>
+<p>In a typical organization, individuals perform tasks relevant to their specialization. The bigger the organization, the higher the degree of specialization. This approach of segregating tasks according to one&#8217;s specialization makes sense, because it mitigates the possibility of stepping on each others' shoes, especially when getting complex pieces of work done. For example, in the LC application process, there is a need to establish the value/legality of the product while also determining the credit worthiness of the applicant. It makes sense that each of these tasks are usually performed by individuals in unrelated departments. It also follows that these tasks can be performed independently of the other.</p>
 </div>
 <div class="paragraph">
 <p>In terms of a business process, if we have a single <code>CreateLCApplicationCommand</code> that precedes these operations, individuals in both departments firstly have to wait for the entire application to be filled out before either can commence their work. Secondly, if either piece of information is updated through a single <code>UpdateLCApplicationCommand</code>, it is unclear what changed. This can result in a spurious notification being sent to at least one department because of this lack of clarity in the process.</p>
@@ -759,7 +761,7 @@ To accomplish a difficult task, one must first make it easy.
 </div>
 </div>
 <div class="paragraph">
-<p>In our current design, the implications of this change are far reaching for both the provider and the consumer(s). Let&#8217;s look at some of the consequences in more detail:</p>
+<p>In our current design, the implications of this change are far-reaching for both the provider and the consumer(s). Let&#8217;s look at some consequences in more detail:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2352,22 +2354,6 @@ This may feel contrary to the notion of centralizing business validations on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions"><a class="anchor" href="#questions"></a>Questions</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>What kind of APIs do you come up with in your domain? CRUD-based? Task-based? Something else?</p>
-</li>
-<li>
-<p>How do consumers find your APIs? Do they have to implement further translations of your APIs to consume them meaningfully?</p>
-</li>
-<li>
-<p>Are you able to test-drive your front-end functionality? Do you see merit in this approach?</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
 <h3 id="further-reading"><a class="anchor" href="#further-reading"></a>Further reading</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2430,7 +2416,7 @@ This may feel contrary to the notion of centralizing business validations on the
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-09 12:21:21 UTC
+Last updated 2022-07-09 13:01:14 UTC
 </div>
 </div>
 </body>
