@@ -2126,8 +2126,10 @@ Wheat bread</p></td>
 18
 19
 20
+21
 </pre></td>
   <td class="code"><pre><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.springframework.stereotype.Service</span>;
+<span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">org.axonframework.modelling.command.Repository</span>;
 
 <span style="color:#007">@Service</span>                                                         <i class="conum" data-value="1"></i><b>(1)</b>
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CreateLCApplicationCommandHandler</span> {
@@ -2159,6 +2161,10 @@ Wheat bread</p></td>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Do note that the validation for the beneficiary&#8217;s country being sanctioned could have been performed on line 18 as well. Some would argue that this would be ideal because we could avoid a potentially unnecessary invocation of the Axon <code>Repository</code> method if we did that. However, we prefer encapsulating business validations within the confines of the aggregate as much as possible&#8201;&#8212;&#8201;so that we don&#8217;t suffer from the problem of creating an <a href="https://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic domain model</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We use an aggregate repository to act as a factory to create a new instance of the <code>LCApplication</code> domain object.</td>
 </tr>
 </table>
 </div>
@@ -2291,7 +2297,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-15 14:18:09 UTC
+Last updated 2022-07-15 20:53:31 UTC
 </div>
 </div>
 </body>
