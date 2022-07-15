@@ -541,7 +541,7 @@ Both teams are in a position to and indeed, do contribute more or less equally t
 <div class="title">Figure 2. Both teams have an equal say in influencing the solution</div>
 </div>
 <div class="paragraph">
-<p>There are three variations of symmetric relationships, each of which we outline in more detail in the following sub-sections.</p>
+<p>There are three variations of symmetric relationships, each of which we outline in more detail in the following subsections.</p>
 </div>
 <div class="sect4">
 <h5 id="partnership"><a class="anchor" href="#partnership"></a>Partnership</h5>
@@ -681,7 +681,7 @@ It is also likely that the customer and the supplier do not share common goals. 
 <div class="title">Figure 6. One of the teams has a dominant say in influencing the solution</div>
 </div>
 <div class="paragraph">
-<p>There are at least three solution patterns when teams are in an asymmetric relationship, each of which we outline in more detail in the following sub-sections.</p>
+<p>There are at least three solution patterns when teams are in an asymmetric relationship, each of which we outline in more detail in the following subsections.</p>
 </div>
 <div class="sect4">
 <h5 id="_conformist"><a class="anchor" href="#_conformist"></a>Conformist (CF)</h5>
@@ -1077,7 +1077,7 @@ Please take a look at the HTTP APIs for the commands used during LC application 
 <div class="sect5">
 <h6 id="when-to-use-11"><a class="anchor" href="#when-to-use-11"></a>When to use</h6>
 <div class="paragraph">
-<p>This form of integration is used when the customer is interested in the supplier&#8217;s response to the request. The response is then used to determine whether the request was successful or not. Given that the customer needs to wait for the response, it is advisable to use this style of messaging for low latency operations. This form of integration is popular when exposing public APIs over the internet (for example, <a href="https://docs.github.com/en/rest">Github&#8217;s REST API</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>).</p>
+<p>This form of integration is used when the customer is interested in the supplier&#8217;s response to the request. The response is then used to determine whether the request was successful or not. Given that the customer needs to wait for the response, it is advisable to use this style of messaging for low latency operations. This form of integration is popular when exposing public APIs over the internet (for example, <a href="https://docs.github.com/en/rest">GitHub&#8217;s REST API</a><sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup>).</p>
 </div>
 </div>
 <div class="sect5">
@@ -1146,7 +1146,7 @@ Please take a look at the event APIs for the commands used during LC application
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Typed protocols</strong>: When working with this form of integration, it is important to minimize the amount of time taken to gather feedback on structural validations. This is especially important given that the supplier and the customer may be in a constant state of independent evolution. The use of typed protocols such as protocol buffers, Avro, Netflix&#8217;s Falcor, GraphQL, and so on. can make it easier for customers to interact with suppliers while maintaining a lightweight mechanism to validate correctness of requests.</p>
+<p><strong>Typed protocols</strong>: When working with this form of integration, it is important to minimize the amount of time taken to gather feedback on structural validations. This is especially critical given that the supplier and the customer may be in a constant state of independent evolution. The use of typed protocols such as protocol buffers, Avro, Netflix&#8217;s Falcor, GraphQL, and so on. can make it easier for customers to interact with suppliers while maintaining a lightweight mechanism to validate correctness of requests.</p>
 </li>
 </ol>
 </div>
@@ -1165,7 +1165,7 @@ The operative word here is <strong>lightweight</strong>. It is pertinent to note
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p><strong>Self discovery</strong>: As outlined above, when working with a IPC-based integration mechanism, we should look to reduce the barrier to entry. When working with RESTful APIs, the use of <a href="https://restfulapi.net/hateoas">HATEOAS</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>, although difficult for suppliers to implement, can make it easier for customers to understand and consume APIs. In addition, making use of a service registry and/or a schema registry can further reduce consumption friction.</p>
+<p><strong>Self discovery</strong>: As outlined above, when working with an IPC-based integration mechanism, we should look to reduce the barrier to entry. When working with RESTful APIs, the use of <a href="https://restfulapi.net/hateoas">HATEOAS</a><sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>, although difficult for suppliers to implement, can make it easier for customers to understand and consume APIs. In addition, making use of a service registry and/or a schema registry can further reduce consumption friction.</p>
 </li>
 <li>
 <p><strong>Contract tests</strong>: In the spirit of failing fast and shifting left, the practice of contract testing and <a href="https://martinfowler.com/articles/consumerDrivenContracts.html">consumer-driven contracts</a> can further increase the quality and speed of integration. Tools such as <a href="https://pact.io/">Pact</a><sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup> and <a href="https://spring.io/projects/spring-cloud-contract">Spring Cloud Contract</a><sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> make the adoption of these practices relatively simple.</p>
@@ -1252,7 +1252,7 @@ The operative word here is <strong>lightweight</strong>. It is pertinent to note
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-09 13:10:04 UTC
+Last updated 2022-07-15 14:18:14 UTC
 </div>
 </div>
 </body>
