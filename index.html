@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author2" class="author">Karthik Krishnan</span><br>
 <span id="email2" class="email"><a href="mailto:me@karthiks.in">me@karthiks.in</a></span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">Jul 18 2022 06:14 PM UTC</span>
+<span id="revdate">Jul 26 2022 03:04 PM UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -457,6 +457,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#who-this-book-is-for">Who This Book Is For</a></li>
 <li><a href="#what-this-book-covers">What this book covers</a></li>
+<li><a href="#foreword">Foreword</a></li>
 <li><a href="#acknowledgements">Acknowledgements</a></li>
 </ul>
 </li>
@@ -522,7 +523,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#summary-2">2.3. Summary</a></li>
-<li><a href="#questions">2.4. Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -652,7 +652,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#summary-7">7.5. Summary</a></li>
-<li><a href="#questions-2">7.6. Questions</a></li>
+<li><a href="#questions">7.6. Questions</a></li>
 </ul>
 </li>
 <li><a href="#implementing-long-running-workflows">8. Implementing long-running workflows</a>
@@ -863,6 +863,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="paragraph">
 <p><strong><em>Chapter 12, Beyond functional requirements</em></strong>, looks at factors beyond business requirements that can play a significant role in how applications are decomposed. Specifically, we will examine the effect that cross-functional requirements play when applying DDD.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="foreword"><a class="anchor" href="#foreword"></a><a class="link" href="#foreword">Foreword</a></h3>
+<div class="paragraph">
+<p>The early 2000’s were a dynamic time in the software industry. A number of luminaries were exploring lightweight “agile” processes that had the effect of converting software engineering from a paint-by-numbers activity into first class knowledge work. Agile methodologies like eXtreme Programming were natural extensions of arguments put forth by Jack Reeves in his 1992 C++ Journal article What is Software Design, which claimed that source code – not design docs or architecture diagrams – was the only equivalent to design specifications found in other engineering disciplines. The split between design and manufacturing still exists, of course, but with software, we don’t need people for manufacturing. The compiler does it for us, which means that all work the people do is design work, and agile processes pushed the new generation of software engineers into messy design conversations with “the business.”</p>
+</div>
+<div class="paragraph">
+<p>The turn of the century also corresponded with the dotcom boom (and subsequent bust) as user interactions shifted from desktop applications to the web, creating technical scaling problems orders of magnitude beyond what the industry had faced up to that point. Distributed technologies weren’t exactly new, but the ever-increasing technical complexity needed to solve problems of scale required new architectural approaches and created a demand for software engineering talent.</p>
+</div>
+<div class="paragraph">
+<p>It was in that environment that Eric Evans published his famous “blue book,” introducing the concept of domain-driven design (DDD) in 2003. In it, Evans gave us a set of techniques that directly mapped the design aspects of software development onto the way we wrote source code, and patterns that helped us manage technical complexity at scale.</p>
+</div>
+<div class="paragraph">
+<p>It is precisely because DDD has aged so well that we forget how much the world has changed since it was first published. User behavior changes triggered by the introduction of the smartphones pushed organizations to externalize integration interfaces that had previously been hidden inside an internal network, previously accessed perhaps by a public website hosted in a DMZ but not by external users directly. Continuous delivery accelerated the pace of software change and, as a consequence, the pace of the design process. Microservices and modern event-driven architectures created architectural patterns that enabled more software design activities to happen in parallel as organizations looked to scale the throughput of delivery. Prem and Karthik have been on the leading edge of many of these changes, well-networked in the innovation crucible of Thoughtworks that helped name and evangelize some of these techniques, and directly applying them in large organizations eager to modernize.</p>
+</div>
+<div class="paragraph">
+<p>DDD remains as relevant today as it did when Evans published his blue book because it directly confronts the root causes of why software design is hard: creating a shared understanding of the problem and modularizing the architecture in a way that communicates that understanding in code. Karthik and Prem share important updates on both fronts: techniques like Wardley mapping, EventStorming, and domain storytelling to create the shared understanding, and an updated view of how DDD patterns apply with modern architectural approaches. This is a book full of lessons learned in the trenches from experienced practitioners, with practical lessons for us all. I’ve personally sharpened my own understanding while reviewing the book, and I’m confident you will too.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Brandon Byars</em>&#8201;&#8212;&#8201;<em>Head of Technology, Thoughtworks</em></strong></p>
 </div>
 </div>
 <div class="sect2">
@@ -2638,25 +2659,6 @@ A BIG BALL OF MUD is haphazardly structured, sprawling, sloppy, duct-tape and ba
 </div>
 <div class="paragraph">
 <p>In the next section, we will look to apply all the learnings in this and previous chapters against a real-world business use case. We will apply both the strategic and tactical patterns of DDD to break a complex domain into subdomains, bounded contexts and iteratively build a solution using technologies that are based on the Java programming language.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="questions"><a class="anchor" href="#questions"></a><a class="link" href="#questions">2.4. Questions</a></h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>What architecture style(s) are you using in your current ecosystem? Are you seeing any of the common pitfalls that we have covered in this chapter?</p>
-</li>
-<li>
-<p>Do you see merit in employing a hybrid of the architecture approaches covered here?</p>
-</li>
-<li>
-<p>What programming paradigms are you employing in your current ecosystem?</p>
-</li>
-<li>
-<p>Are there areas where you have had to violate principles that are strictly aligned with any given paradigm or approach? Are these deviations well understood and documented?</p>
-</li>
-</ol>
 </div>
 </div>
 </div>
@@ -8004,7 +8006,7 @@ Do note that the <strong>distinct datastores</strong> approach for replays is us
 </div>
 </div>
 <div class="sect2">
-<h3 id="questions-2"><a class="anchor" href="#questions-2"></a><a class="link" href="#questions-2">7.6. Questions</a></h3>
+<h3 id="questions"><a class="anchor" href="#questions"></a><a class="link" href="#questions">7.6. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -10080,6 +10082,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 23
 24
 25
+26
 </pre></td>
   <td class="code"><pre><span style="color:#007">@Service</span>
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BackendService</span> {
@@ -10093,7 +10096,8 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
         <span style="color:#950">this</span>.commandGateway = commandGateway;
     }
 
-    <span style="color:#088;font-weight:bold">public</span> LCApplicationId startNewLC(ApplicantId applicantId, <span style="color:#0a8;font-weight:bold">String</span> clientReference) {
+    <span style="color:#088;font-weight:bold">public</span> LCApplicationId startNewLC(ApplicantId applicantId,
+                                      <span style="color:#0a8;font-weight:bold">String</span> clientReference) {
         <span style="color:#080;font-weight:bold">return</span> commandGateway.sendAndWait(
                 startApplication(applicantId, clientReference));
     }
@@ -12119,7 +12123,7 @@ For more information on logging best practices, please refer to this logging che
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-18 18:14:31 UTC
+Last updated 2022-07-26 15:04:02 UTC
 </div>
 </div>
 </body>

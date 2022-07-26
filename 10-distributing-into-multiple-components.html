@@ -549,6 +549,7 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
 23
 24
 25
+26
 </pre></td>
   <td class="code"><pre><span style="color:#007">@Service</span>
 <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BackendService</span> {
@@ -562,7 +563,8 @@ A distributed system is one in which the failure of a computer you didn&#8217;t 
         <span style="color:#950">this</span>.commandGateway = commandGateway;
     }
 
-    <span style="color:#088;font-weight:bold">public</span> LCApplicationId startNewLC(ApplicantId applicantId, <span style="color:#0a8;font-weight:bold">String</span> clientReference) {
+    <span style="color:#088;font-weight:bold">public</span> LCApplicationId startNewLC(ApplicantId applicantId,
+                                      <span style="color:#0a8;font-weight:bold">String</span> clientReference) {
         <span style="color:#080;font-weight:bold">return</span> commandGateway.sendAndWait(
                 startApplication(applicantId, clientReference));
     }
@@ -1210,7 +1212,7 @@ The spring framework provides support for this style of behavior through the <co
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-07-18 18:14:31 UTC
+Last updated 2022-07-26 15:04:02 UTC
 </div>
 </div>
 </body>
