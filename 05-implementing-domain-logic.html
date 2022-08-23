@@ -658,8 +658,8 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
   <td class="code"><pre>spring init \
       --dependencies 'web,data-jpa,lombok,validation,h2,actuator' \
       --name lc-issuance-api \
-      --artifactId lc-issuance-api \
-      --groupId com.example.api \
+      --artifact-id lc-issuance-api \
+      --group-id com.example.api \
       --packaging jar \
       --description 'LC Issuance API' \
       --package-name com.example.api \
@@ -674,7 +674,7 @@ To install the <code>spring</code> CLI for your platform, please refer to the de
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The entire command is split into multiple lines for better readability. Unix based operating systems requires us to use backslash [ \ ] character to split the command into multiple lines. If you are using Windows OS, then please make sure to replace the backslash character with back-tick [ ` &nbsp; ] character before running the command.
+The entire command is split into multiple lines for better readability. Unix based operating systems requires us to use backslash [ \ ] character to split the command into multiple lines. If you are using Windows OS, then please make sure to replace the backslash character with back-tick <strong>`</strong> character before running the command.
 </td>
 </tr>
 </table>
@@ -730,7 +730,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 </div>
 </div>
 <div class="paragraph">
-<p>With the above set up, you should be able to run the application and start implementing the LC issuance functionality.</p>
+<p>With the above set-up, you should be able to run the application and start implementing the LC issuance functionality.</p>
 </div>
 </div>
 <div class="sect3">
@@ -783,7 +783,7 @@ The entire command is split into multiple lines for better readability. Unix bas
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="./images/lc-application.png" alt="lc application" width="410" height="251">
+<img src="./images/lc-application-subdomains.png" alt="lc application subdomains" width="410" height="251">
 </div>
 </div>
 <div class="paragraph">
@@ -1503,13 +1503,13 @@ Wheat bread</p></td>
 <p>We get to use the events as a <strong>natural audit log</strong> in high compliance scenarios.</p>
 </li>
 <li>
-<p>It provides the ability to perform <strong>more insightful analytics</strong> on the basis of the fine-grained events data.</p>
+<p>It provides the ability to perform <strong>more insightful analytics</strong> on the basis of the fine-grained events' data.</p>
 </li>
 <li>
-<p>It arguably produces more flexible designs when we work with an system based on <strong>immutable events</strong>&#8201;&#8212;&#8201;because the complexity of the persistence model is capped. Also, there is no need to deal with complex ORM impedance mismatch problems.</p>
+<p>It arguably produces more flexible designs when we work with a system based on <strong>immutable events</strong>&#8201;&#8212;&#8201;because the complexity of the persistence model is capped. Also, there is no need to deal with complex ORM impedance mismatch problems.</p>
 </li>
 <li>
-<p>The domain model is much more <strong>loosely coupled</strong> with the persistence model&#8201;&#8212;&#8201;enabling it to evolve mostly independently from the persistence model.</p>
+<p>The domain model is much more <strong>loosely coupled</strong> with the persistence model&#8201;&#8212;&#8201;enabling it to evolve mostly independently of the persistence model.</p>
 </li>
 <li>
 <p>Enables going back in time to be able to create <strong>adhoc views and reports</strong> without having to deal with upfront complexity.</p>
@@ -1665,7 +1665,7 @@ Wheat bread</p></td>
 <div class="sect3">
 <h4 id="business-rule-enforcements"><a class="anchor" href="#business-rule-enforcements"></a>Business rule enforcements</h4>
 <div class="paragraph">
-<p>Structural validations can be accomplished using information that is already available in the command. However, there is another class of validations that requires information that is not present in the incoming command itself. This kind of information can be present in one of two places: within the aggregate that we are operating on or outside of the aggregate itself, but made available within the bounded context.</p>
+<p>Structural validations can be accomplished using information that is already available in the command. However, there is another class of validations that requires information that is not present in the incoming command itself. This kind of information can be present in one of two places: within the aggregate that we are operating on or outside the aggregate itself, but made available within the bounded context.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s look at an example of a validation that requires state present within the aggregate. Consider the example of submitting an LC. While we can make several edits to the LC when it is in draft state, no changes can be made after it is submitted. This means that we can only submit an LC once. This act of submitting the LC is achieved by issuing the <code>SubmitLCApplicationCommand</code> as shown in the artifact from the eventstorming session:</p>
@@ -1674,7 +1674,7 @@ Wheat bread</p></td>
 <div class="content">
 <img src="./images/aggregate-state-validation.png" alt="aggregate state validation">
 </div>
-<div class="title">Figure 10. Validations during the submit LC process</div>
+<div class="title">Figure 10. Validations during the <em>submit LC</em> process</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s begin with a test to express our intent:</p>
@@ -1879,7 +1879,7 @@ Wheat bread</p></td>
 </table>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s also look at an example where information needed to perform the validation is not part of either the command or the aggregate. Let&#8217;s consider the scenario where country regulations prohibit transacting with a set of so called <em>sanctioned</em> countries. Changes to this list of countries may be affected by external factors. Hence it does not make sense to pass this list of sanctioned countries as part of the command payload. Neither does it make sense to maintain it as part of every single aggregate&#8217;s state&#8201;&#8212;&#8201;given that it can change (albeit very infrequently). In such a case, we may want to consider making use of a command handler that is outside the confines of the aggregate class. Thus far, we have only seen examples of <code>@CommandHandler</code> methods within the aggregate. But the <code>@CommandHandler</code> annotation can appear on any other class external to the aggregate. However, in such a case, we need to load the aggregate ourselves. The Axon framework provides a <code>org.axonframework.modelling.command. Repository</code> interface to allow us to do that. It is important to note that this <code>Repository</code> is distinct from spring framework&#8217;s interface that is part of the spring data libraries. An example of how this works is shown below:</p>
+<p>Let&#8217;s also look at an example where information needed to perform the validation is not part of either the command or the aggregate. Let&#8217;s consider the scenario where country regulations prohibit transacting with a set of so-called <em>sanctioned</em> countries. Changes to this list of countries may be affected by external factors. Hence, it does not make sense to pass this list of sanctioned countries as part of the command payload. Neither does it make sense to maintain it as part of every single aggregate&#8217;s state&#8201;&#8212;&#8201;given that it can change (albeit very infrequently). In such a case, we may want to consider making use of a command handler that is outside the confines of the aggregate class. Thus far, we have only seen examples of <code>@CommandHandler</code> methods within the aggregate. But the <code>@CommandHandler</code> annotation can appear on any other class external to the aggregate. However, in such a case, we need to load the aggregate ourselves. The Axon framework provides a <code>org.axonframework.modelling.command. Repository</code> interface to allow us to do that. It is important to note that this <code>Repository</code> is distinct from spring framework&#8217;s interface that is part of the spring data libraries. An example of how this works is shown below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2297,7 +2297,7 @@ Wheat bread</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-08-17 11:44:34 UTC
+Last updated 2022-08-23 17:45:05 UTC
 </div>
 </div>
 </body>
